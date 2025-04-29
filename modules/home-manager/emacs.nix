@@ -18,12 +18,12 @@ in {
   options.modules.editors.emacs = {
     enable = true;
   };
-  config = {
+  
 #    nixpkgs.overlays = [
 #      hey.inputs.emacs-overlay.overlays.default
 #    ];
 
-    home.packages = with pkgs; [
+    config.home.packages = with pkgs; [
 #      (mkLauncherEntry "Emacs (Debug Mode)" {
 #        description = "Start Emacs in debug mode";
 #        icon = "emacs";
@@ -65,6 +65,7 @@ in {
       fava
       # :lang nix
       age
+      nil
     ];
 
 #    environment.variables.PATH = [ "$XDG_CONFIG_HOME/emacs/bin" ];
@@ -74,5 +75,5 @@ in {
 #    fonts.packages = [
 #      (pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
 #    ];
-  };
+  
 }

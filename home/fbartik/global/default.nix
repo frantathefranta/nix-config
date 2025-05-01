@@ -46,6 +46,11 @@
     };
   };
 
+  services.home-manager.autoExpire = {
+    enable = true;
+    frequency = "weekly";
+    timestamp = "-7 days";
+  };
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 

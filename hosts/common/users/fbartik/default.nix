@@ -26,14 +26,14 @@ in {
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (builtins.readFile ../../../../home/fbartik/ssh.pub);
-    # hashedPasswordFile = config.sops.secrets.fbartik-password.path;
+    hashedPasswordFile = config.sops.secrets.fbartik-password.path;
     packages = [pkgs.home-manager];
   };
 
-  # sops.secrets.gabriel-password = {
-  #   sopsFile = ../../secrets.yaml;
-  #   neededForUsers = true;
-  # };
+  sops.secrets.fbartik-password = {
+    sopsFile = ../../secrets.yaml;
+    neededForUsers = true;
+  };
 
   home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
 

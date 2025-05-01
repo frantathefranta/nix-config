@@ -7,7 +7,12 @@
   # at the same time. Here's an working example:
   inputs.nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
-
+  # sops-nix - secrets with mozilla sops
+  # https://github.com/Mic92/sops-nix
+  inputs.sops-nix = {
+    url = "github:Mic92/sops-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
   # Home manager
   inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";

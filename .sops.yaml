@@ -4,9 +4,11 @@ keys:
     - &franta age1dvj29v7swu6e0pw5t5mwpjscktts4d676a8lre7vpf995qf58aqqqy6c32
   - &hosts:
     - &nix-bastion age1ngm6ndcccuaefntyzyh233r37zm9fw8ryy7t5xlvud0s3lyeqfpq7s5tgv
+    - &qotom age1y7g2ktmqz2nwxsa0qpuny6tg5vq5zl7thrlp30h8eggkuupx0gjs5xe3ap
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
       - age:
           - *franta
           - *nix-bastion
+          - *qotom

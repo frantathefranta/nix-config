@@ -75,7 +75,7 @@
             # > Our main nixos configuration file <
             ./hosts/nix-bastion
           ];
-
+        };
         qotom = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
@@ -84,7 +84,6 @@
           ];
         };
       };
-    };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'

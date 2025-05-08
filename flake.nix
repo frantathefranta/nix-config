@@ -17,20 +17,22 @@
   inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  # Home manager diff
-  inputs.home-manager-diff.url = "github:pedorich-n/home-manager-diff";
-  # inputs.home-manager-diff.inputs.nixpkgs.follows = "nixpkgs";
-
   # Emacs
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs = {
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
   outputs =
     {
       self,
       nixpkgs,
       home-manager,
-      home-manager-diff,
       ...
     }@inputs:
     let
@@ -73,8 +75,16 @@
             # > Our main nixos configuration file <
             ./hosts/nix-bastion
           ];
+
+        qotom = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            # > Our main nixos configuration file <
+            ./hosts/qotom
+          ];
         };
       };
+    };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'

@@ -5,15 +5,13 @@
   config,
   outputs,
   ...
-}: {
-  imports =
-    [
-      #inputs.impermanence.nixosModules.home-manager.impermanence
-      inputs.home-manager-diff.nixosModules.home-manager-diff.hmModules.default
-      ../features/cli
-      #../features/helix
-    ]
-    ++ (builtins.attrValues outputs.homeManagerModules);
+}:
+{
+  imports = [
+    #inputs.impermanence.nixosModules.home-manager.impermanence
+    ../features/cli
+    #../features/helix
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   nix = {
     package = lib.mkDefault pkgs.nix;
@@ -46,10 +44,6 @@
       init.defaultBranch = "main";
     };
   };
-  programs.hmd = {
-    enable = true;
-    runOnSwitch = true;
-  };
   services.home-manager.autoExpire = {
     enable = true;
     frequency = "weekly";
@@ -61,4 +55,3 @@
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.11";
 }
-

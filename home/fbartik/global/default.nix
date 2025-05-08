@@ -42,7 +42,7 @@
     userName = "frantathefranta";
     userEmail = "fb@franta.us";
     extraConfig = {
-      init.defaultBrnach = "main";
+      init.defaultBranch = "main";
     };
   };
 

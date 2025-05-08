@@ -9,6 +9,7 @@
   imports =
     [
       #inputs.impermanence.nixosModules.home-manager.impermanence
+      inputs.home-manager-diff.nixosModules.home-manager-diff.hmModules.default
       ../features/cli
       #../features/helix
     ]
@@ -45,7 +46,10 @@
       init.defaultBranch = "main";
     };
   };
-
+  programs.hmd = {
+    enable = true;
+    runOnSwitch = true;
+  };
   services.home-manager.autoExpire = {
     enable = true;
     frequency = "weekly";

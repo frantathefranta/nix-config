@@ -17,6 +17,10 @@
   inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+  # Home manager diff
+  inputs.home-manager-diff.url = "github:pedorich-n/home-manager-diff";
+  inputs.home-manager-diff.inputs.nixpkgs.follows = "nixpkgs";
+
   # Emacs
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";

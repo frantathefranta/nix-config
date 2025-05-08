@@ -19,7 +19,7 @@
 
   # Home manager diff
   inputs.home-manager-diff.url = "github:pedorich-n/home-manager-diff";
-  inputs.home-manager-diff.inputs.nixpkgs.follows = "nixpkgs";
+  # inputs.home-manager-diff.inputs.nixpkgs.follows = "nixpkgs";
 
   # Emacs
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -30,6 +30,7 @@
       self,
       nixpkgs,
       home-manager,
+      home-manager-diff,
       ...
     }@inputs:
     let

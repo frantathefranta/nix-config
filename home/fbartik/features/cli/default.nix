@@ -3,6 +3,7 @@
     ./fish
 
     ./fzf.nix
+    ./zoxide.nix
     # ./bash.nix
     # ./bat.nix
     # ./direnv.nix

@@ -17,6 +17,7 @@ in {
     ./bindings.nix
   ];
   home.packages = [pkgs.bash-completion];
+  programs.zoxide.enableFishIntegration = true;
   programs.fish = {
     enable = true;
     shellAbbrs = rec {

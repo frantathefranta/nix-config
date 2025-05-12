@@ -11,6 +11,7 @@
       # ./auto-upgrade.nix
       ./fish.nix
       ./locale.nix
+      ./nh.nix
       ./nix.nix
       ./openssh.nix
       # ./optin-persistence.nix

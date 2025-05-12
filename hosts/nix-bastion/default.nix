@@ -2,6 +2,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common/global
+    ../common/optional/qemu-guest-agent.nix
     ../common/users/fbartik
   ];
   networking = {

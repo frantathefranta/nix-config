@@ -9,20 +9,12 @@ in {
     shell = pkgs.fish;
     extraGroups = ifTheyExist [
       "audio"
-      "deluge"
-      "docker"
       "git"
       "i2c"
-      "libvirtd"
-      "lxd"
-      "minecraft"
-      "mysql"
       "network"
       "plugdev"
-      "podman"
       "video"
       "wheel"
-      "wireshark"
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (builtins.readFile ../../../../home/fbartik/ssh.pub);

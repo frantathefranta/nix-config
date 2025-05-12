@@ -3,6 +3,7 @@
     ./fish
 
     ./fzf.nix
+    ./tmux.nix
     ./zoxide.nix
     # ./bash.nix
     # ./bat.nix

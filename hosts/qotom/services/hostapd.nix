@@ -13,6 +13,7 @@
         countryCode = "US";
         networks.wlp2s0 = {
           ssid = "qotom";
+          ignoreBroadcastSsid = "empty"; # Hides the SSID
           authentication = {
             wpaPasswordFile = config.sops.secrets.wpa-password.path;
             mode = "wpa2-sha256";

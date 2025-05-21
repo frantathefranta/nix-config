@@ -23,7 +23,7 @@
       # ./tailscale.nix
       # ./gamemode.nix
       # ./nix-ld.nix
-      # ./prometheus-node-exporter.nix
+      ./prometheus-node-exporter.nix
       # ./kdeconnect.nix
       # ./upower.nix
     ]

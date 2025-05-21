@@ -1,3 +1,6 @@
 {pkgs, ...}: {
-  imports = [./global];
+  imports = [
+    ./global
+    ./features/kubectl
+  ];
 }

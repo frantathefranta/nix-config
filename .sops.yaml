@@ -17,3 +17,8 @@ creation_rules:
       - age:
           - *franta
           - *qotom
+  - path_regex: hosts/nix-bastion/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *nix-bastion

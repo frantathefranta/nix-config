@@ -11,6 +11,7 @@
     dhcpcd.IPv6rs = true;
     interfaces.ens18 = {
       useDHCP = true;
+      tempAddress = "disabled";
     };
   };
   system.stateVersion = "24.11";

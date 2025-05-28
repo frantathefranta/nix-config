@@ -25,6 +25,7 @@
 
     bc # Calculator
     bottom # System viewer
+    btop # better top
     ncdu # TUI disk usage
     eza # Better ls
     ripgrep # Better grep

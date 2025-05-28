@@ -5,9 +5,25 @@
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
       sensible
-      tmux-thumbs
+      {
+        plugin = tmux-thumbs;
+        extraConfig = ''
+          set -g @thumbs-key 'F'
+          set -g @thumbs-regexp-1 '[A-Za-z]\[[^\]]*\]' # Regex for node groups
+          set -g @thumbs-regexp-2 '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}' # Regex for ISO date format
+          set -g @thumbs-contrast 1
+        '';
+      }
+      {
+        plugin = extrakto;
+        extraConfig = ''
+          set -g @extrakto_copy_key "ctrl-p"
+          set -g @extrakto_insert_key "enter"
+        '';
+      }
       yank
       prefix-highlight
+      tmux-nova
       {
         plugin = resurrect; # Used by tmux-continuum
 
@@ -37,6 +53,15 @@
 
       # Enable full mouse support
       set -g mouse on
+
+      # Start index of window/pane with 1, because we're humans, not computers
+      set -g base-index 1
+      setw -g pane-base-index 1
+
+      set -g renumber-windows on    # renumber windows when a window is closed
+
+      # Prefer vi style key table
+      setw -g mode-keys vi
 
       # -----------------------------------------------------------------------------
       # Key bindings
@@ -128,6 +153,21 @@
       bind-key -T copy-mode-vi 'C-l' select-pane -R
       bind-key -T copy-mode-vi 'C-\' select-pane -l
 
+      # trigger copy mode by
+      bind Enter copy-mode
+      run -b 'tmux bind -t vi-copy v begin-selection 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi v send -X begin-selection 2> /dev/null || true'
+      run -b 'tmux bind -t vi-copy C-v rectangle-toggle 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi C-v send -X rectangle-toggle 2> /dev/null || true'
+      run -b 'tmux bind -t vi-copy y copy-selection 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi y send -X copy-selection-and-cancel 2> /dev/null || true'
+      run -b 'tmux bind -t vi-copy Escape cancel 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi Escape send -X cancel 2> /dev/null || true'
+      run -b 'tmux bind -t vi-copy H start-of-line 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi H send -X start-of-line 2> /dev/null || true'
+      run -b 'tmux bind -t vi-copy L end-of-line 2> /dev/null || true'
+      run -b 'tmux bind -T copy-mode-vi L send -X end-of-line 2> /dev/null || true'
+
       # Scroll up/down by 1 line, half screen, whole screen
       bind -T copy-mode-vi M-Up              send-keys -X scroll-up
       bind -T copy-mode-vi M-Down            send-keys -X scroll-down
@@ -145,7 +185,7 @@
       set -g status-justify centre
       set -g status-right-length 100
       set -g status-position bottom
-      '';
-    };
+    '';
+  };
 
 }

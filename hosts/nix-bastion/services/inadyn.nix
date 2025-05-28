@@ -4,21 +4,26 @@
   services = {
     inadyn = {
       enable = true;
-      logLevel = "debug";
       settings = {
         provider = {
-          "cloudflare.com" = {
-            include = config.sops.secrets."inadyn-secret/cloudflare".path;
+          "cloudflare.com:1" = {
+            include = config.sops.secrets."inadyn-secret/cloudflare-ipv4".path;
+          };
+          "cloudflare.com:2" = {
+            include = config.sops.secrets."inadyn-secret/cloudflare-ipv6".path;
           };
         };
       };
     };
   };
-  sops.secrets = {
-    "inadyn-secret/cloudflare" = {
-      sopsFile = ../secrets.yaml;
-      owner = "inadyn";
-      group = "inadyn";
-    };
+  sops.secrets."inadyn-secret/cloudflare-ipv4" = {
+    sopsFile = ../secrets.yaml;
+    owner = "inadyn";
+    group = "inadyn";
+  };
+  sops.secrets."inadyn-secret/cloudflare-ipv6" = {
+    sopsFile = ../secrets.yaml;
+    owner = "inadyn";
+    group = "inadyn";
   };
 }

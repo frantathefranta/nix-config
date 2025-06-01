@@ -6,6 +6,7 @@
       enable = true;
       settings = {
         provider = {
+          # Cloudflare needs IPv4 and IPv6 be done separately: https://github.com/troglobit/inadyn/blob/master/examples/cloudflare-ipv4-ipv6.conf
           "cloudflare.com:1" = {
             include = config.sops.secrets."inadyn-secret/cloudflare-ipv4".path;
           };

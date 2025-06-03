@@ -27,6 +27,13 @@ in {
     sopsFile = ../../secrets.yaml;
     neededForUsers = true;
   };
+  sops.secrets."ssh/brocade_2048" = {
+    sopsFile = ../../secrets.yaml;
+    mode = "0600";
+    owner = "fbartik";
+    group = "users";
+    path = "/home/fbartik/.ssh/brocade_2048";
+  };
 
   home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
 

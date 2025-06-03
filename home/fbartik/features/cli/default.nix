@@ -16,7 +16,7 @@
     # ./nushell.nix
     # ./nix-index.nix
     # ./pfetch.nix
-    # ./ssh.nix
+    ./ssh.nix
     # ./xpo.nix
     # ./jira.nix
   ];

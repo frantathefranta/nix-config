@@ -9,6 +9,7 @@ in {
     shell = pkgs.fish;
     extraGroups = ifTheyExist [
       "audio"
+      "dialout"
       "git"
       "i2c"
       "network"

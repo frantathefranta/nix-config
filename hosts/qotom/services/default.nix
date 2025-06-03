@@ -2,5 +2,8 @@
   imports = [
     ./hostapd.nix
   ];
-  services.lldpd.enable = true;
+  services = {
+    lldpd.enable = true;
+    atftpd.enable = true;
+  };
 }

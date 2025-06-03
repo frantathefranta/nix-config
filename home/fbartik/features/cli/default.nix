@@ -31,9 +31,11 @@
     ripgrep # Better grep
     fd # Better find
     httpie # Better curl
+    nmap
     jq # JSON pretty printer and manipulator
     mise
     sops
+    screen
     # trekscii # Cute startrek cli printer
     timer # To help with my ADHD paralysis
     viddy # Better watch

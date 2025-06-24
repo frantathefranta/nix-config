@@ -1,8 +1,9 @@
-{ modulesPath, ... }:
+{ inputs, modulesPath, ... }:
 
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
+    inputs.disko.nixosModules.disko
   ];
   boot.kernelModules = [ "kvm-intel" ];
   #boot.extraModulePackages = [ ];
@@ -12,8 +13,8 @@
       grub = {
         enable = true;
         device = "nodev";
-        efiSupport = true;
-        efiInstallAsRemovable = true;
+        # efiSupport = true;
+        # efiInstallAsRemovable = true;
       };
     };
     initrd = {
@@ -38,15 +39,46 @@
     tmp.cleanOnBoot = true;
   };
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
+  disko.devices.disk.main = {
+    device = "/dev/vda";
+    type = "disk";
+    content = {
+      type = "gpt";
+      partitions = {
+        boot = {
+          size = "1M";
+          type = "EF02"; # for grub MBR
+        };
+        ESP = {
+          size = "1G";
+          type = "EF00";
+          content = {
+            type = "filesystem";
+            format = "vfat";
+            mountpoint = "/boot";
+            mountOptions = [ "umask=0077" ];
+          };
+        };
+        root = {
+          size = "100%";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/";
+          };
+        };
+      };
+    };
   };
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-label/nixos";
+  #   fsType = "ext4";
+  # };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/ESP";
-    fsType = "vfat";
-  };
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-label/ESP";
+  #   fsType = "vfat";
+  # };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 }

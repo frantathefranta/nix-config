@@ -24,6 +24,9 @@ in
           PubkeyAcceptedAlgorithms = "+ssh-rsa";
         };
       };
+      "github.com" = {
+        identityFile = "~/.ssh/git_key";
+      };
       net = {
         host = lib.concatStringsSep " " (
           lib.flatten (

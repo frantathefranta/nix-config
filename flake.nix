@@ -1,5 +1,15 @@
 {
   description = "My nix config";
+  nixConfig = {
+    extra-substituters = [
+      "https://frantathefranta.cachix.org"
+      "https://nix-gaming.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I="
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+    ];
+  };
   inputs = {
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";

@@ -16,6 +16,7 @@ in {
       "plugdev"
       "video"
       "wheel"
+      "_lldp"
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (builtins.readFile ../../../../home/fbartik/ssh.pub);

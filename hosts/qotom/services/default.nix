@@ -1,6 +1,7 @@
 {
   imports = [
     ./hostapd.nix
+    ./syslog.nix
   ];
   services = {
     lldpd.enable = true;
@@ -8,6 +9,7 @@
   };
   networking.firewall.interfaces.enp1s0.allowedUDPPorts =
     [
-      69
+      69 # TFTP
+      514 # Syslog
     ];
 }

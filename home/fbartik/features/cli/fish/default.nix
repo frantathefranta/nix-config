@@ -99,6 +99,16 @@ in {
       set -x fish_pager_color_description   yellow
       set -x fish_pager_color_prefix        'white' '--bold' '--underline'
       set -x fish_pager_color_progress      'brwhite' '--background=cyan'
+
+      if test "$TERM" = "dumb"
+        function fish_prompt
+          echo "\$ "
+        end
+
+        function fish_right_prompt; end
+        function fish_greeting; end
+        function fish_title; end
+      end
     '';
   };
 }

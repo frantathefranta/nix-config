@@ -28,7 +28,17 @@
   programs = {
     dconf.enable = true;
   };
-  hardware.graphics.enable = true;
+  hardware = {
+    graphics.enable = true;
+    nvidia.modesetting.enable = true;
+    nvidia.open = true;
+    nvidia.powerManagement.enable = true;
+    nvidia.nvidiaPersistenced = true;
 
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+  };
   system.stateVersion = "24.11";
 }

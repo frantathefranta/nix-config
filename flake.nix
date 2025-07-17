@@ -21,6 +21,7 @@
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
     systems.url = "github:nix-systems/default-linux";
+    hardware.url = "github:nixos/nixos-hardware";
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -85,6 +86,12 @@
             ./hosts/nix-bastion
           ];
         };
+        lanthanum = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/lanthanum
+          ];
+        };
         qotom = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
@@ -102,6 +109,15 @@
           modules = [
             # > Our main home-manager configuration file <
             ./home/fbartik/nix-bastion.nix
+            ./home/fbartik/nixpkgs.nix
+          ];
+        };
+        "fbartik@lanthanum" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            # > Our main home-manager configuration file <
+            ./home/fbartik/lanthanum.nix
             ./home/fbartik/nixpkgs.nix
           ];
         };

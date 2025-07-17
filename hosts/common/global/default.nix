@@ -67,5 +67,5 @@
   ];
 
   # Cleanup stuff included by default
-  services.speechd.enable = false;
+  # services.speechd.enable = false;
 }

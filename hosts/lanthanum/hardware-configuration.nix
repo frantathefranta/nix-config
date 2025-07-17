@@ -35,7 +35,7 @@
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
   };
-  disko.devices.disk.main = {
+  disko.devices = {
     disk = {
       main = {
         device = "/dev/nvme0n1";

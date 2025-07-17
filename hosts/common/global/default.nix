@@ -65,7 +65,4 @@
       value = "1048576";
     }
   ];
-
-  # Cleanup stuff included by default
-  # services.speechd.enable = false;
 }

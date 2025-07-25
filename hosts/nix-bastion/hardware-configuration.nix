@@ -35,6 +35,8 @@
         "virtio_rng"
       ];
     };
+    # ensures rpc-statsd is running for on demand mounting
+    supportedFilesystems = [ "nfs" ];
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
   };
@@ -70,15 +72,11 @@
       };
     };
   };
-  # fileSystems."/" = {
-  #   device = "/dev/disk/by-label/nixos";
-  #   fsType = "ext4";
-  # };
-
-  # fileSystems."/boot" = {
-  #   device = "/dev/disk/by-label/ESP";
-  #   fsType = "vfat";
-  # };
+  fileSystems."/mnt/media" = { # TODO: This should probably be a global optional option
+    device = "actinium-nfs.infra.franta.us:/emc1/media";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" ];
+  };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 }

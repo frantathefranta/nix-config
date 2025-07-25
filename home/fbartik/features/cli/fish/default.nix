@@ -21,6 +21,7 @@ in {
   programs.fish = {
     enable = true;
     shellAbbrs = rec {
+      doom = "~/.config/emacs/bin/doom";
       jqless = "jq -C | less -r";
 
       n = "nix";

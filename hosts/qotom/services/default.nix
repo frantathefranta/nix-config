@@ -2,6 +2,7 @@
   imports = [
     ./hostapd.nix
     ./syslog.nix
+    ./conman.nix
   ];
   services = {
     lldpd.enable = true;

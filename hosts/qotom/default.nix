@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   imports = [
     ./services
@@ -18,5 +19,8 @@
       ];
     };
   };
+  environment.systemPackages = with pkgs; [
+    conman
+  ];
   system.stateVersion = "24.11";
 }

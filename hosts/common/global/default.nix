@@ -2,6 +2,7 @@
 {
   inputs,
   outputs,
+  pkgs,
   ...
 }: {
   imports =
@@ -46,6 +47,10 @@
   environment.profileRelativeSessionVariables = {
     QT_PLUGIN_PATH = ["/lib/qt-6/plugins"];
   };
+
+  environment.systemPackages = with pkgs; [
+    neovim
+  ];
 
   # hardware.enableRedistributableFirmware = true;
   networking.domain = "infra.franta.us";

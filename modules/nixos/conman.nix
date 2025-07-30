@@ -63,7 +63,7 @@ in
             The default is OFF.
         '';
       };
-      disableKeepAlive = mkOption {
+      disableKeepalive = mkOption {
         type = types.bool;
         default = false;
         description = ''

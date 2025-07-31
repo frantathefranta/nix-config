@@ -18,10 +18,10 @@ let
     ) "server coredumpdir=${toString cfg.coreDumpDir}"}
     ${optionalString (cfg.disableKeepalive) "server keepalive=off"}
     ${optionalString (cfg.disableOnlyLoopback) "server loopback=on"}
-    ${optionalString (cfg.listeningPort) "server port ${toString cfg.listeningPort}"}
+    ${optionalString (cfg.listeningPort != 7890) "server port=${toString cfg.listeningPort}"}
 
-    ${optionalString (cfg.globalSerOpts) "global seropts=${toString cfg.globalSerOpts}"}
-    ${optionalString (cfg.globalLogDir) "global log=${cfg.globalLogDir}"}
+    ${optionalString (cfg.globalSerOpts != "") "global seropts=${toString cfg.globalSerOpts}"}
+    ${optionalString (cfg.globalLogDir != "") "global log=${cfg.globalLogDir}"}
 
     ${cfg.extraConfig}
   '';
@@ -122,7 +122,7 @@ in
     environment.systemPackages = [ conmanPkg ];
     systemd.services.conmand = {
       description = "serial console management program";
-      documentation = "man:conman(8)";
+      documentation = [ "man:conman(8)" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${conmanPkg}/bin/conmand ${builtins.toString conmandFlags}";

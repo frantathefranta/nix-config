@@ -6,14 +6,14 @@
 }:
 with lib;
 let cfg = config.modules.editors.emacs;
-#    emacs = with pkgs; (emacsPackagesFor
-#      (if config.modules.desktop.type == "wayland"
-#       then emacs-git-pgtk
-#       else emacs-git)).emacsWithPackages (epkgs: with epkgs; [
-#         treesit-grammars.with-all-grammars
-#         vterm
-#         mu4e
-#       ]);
+   # emacs = with pkgs; (emacsPackagesFor
+   #   (if config.monitors.primary == "true"
+   #    then emacs-git-pgtk
+   #    else emacs-git)).emacsWithPackages (epkgs: with epkgs; [
+   #      treesit-grammars.with-all-grammars
+   #      vterm
+   #      mu4e
+   #    ]);
 in {
   options.modules.editors.emacs = {
     enable = true;

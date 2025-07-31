@@ -3,6 +3,7 @@
     ./fish
 
     ./fzf.nix
+    ./mise.nix
     ./tmux.nix
     ./zoxide.nix
     # ./bash.nix
@@ -28,17 +29,18 @@
     btop # better top
     ncdu # TUI disk usage
     eza # Better ls
+    file
     ripgrep # Better grep
     fd # Better find
     httpie # Better curl
     nmap
     jq # JSON pretty printer and manipulator
-    mise
     sops
     screen
     # trekscii # Cute startrek cli printer
     timer # To help with my ADHD paralysis
     viddy # Better watch
+    wget # I will simply not learn curl syntax for downloading files
 
     nixd # Nix LSP
     alejandra # Nix formatter

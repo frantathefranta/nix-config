@@ -11,25 +11,6 @@ let
   cfg = config.services.conman;
   conmanPkg = cfg.package;
 
-  configFile = pkgs.writeText "conman.conf" ''
-    ${optionalString (cfg.enableCoreDump) "server coredump=yes"}
-    ${optionalString (
-      cfg.enableCoreDump && cfg.coreDumpDir
-    ) "server coredumpdir=${toString cfg.coreDumpDir}"}
-    ${optionalString (cfg.disableKeepalive) "server keepalive=off"}
-    ${optionalString (cfg.disableOnlyLoopback) "server loopback=on"}
-    ${optionalString (cfg.listeningPort != 7890) "server port=${toString cfg.listeningPort}"}
-
-    ${optionalString (cfg.globalSerOpts != "") "global seropts=${toString cfg.globalSerOpts}"}
-    ${optionalString (cfg.globalLogDir != "") "global log=${cfg.globalLogDir}"}
-
-    ${cfg.extraConfig}
-  '';
-  conmandFlags = [
-    "-F"
-    "-c"
-    "${configFile}"
-  ];
 in
 {
   options = {
@@ -38,78 +19,45 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable the conman Console manager
+          Enable the conman Console manager.
+
+          Either `configFile` or `config` must be specified.
         '';
       };
       package = mkPackageOption pkgs "conman" { };
 
-      enableCoreDump = mkOption {
-        type = types.bool;
-        default = false;
+      configFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/secrets/conman.conf";
         description = ''
-          The daemon's COREDUMP keyword specifies whether the daemon should generate a
-            core dump file.  This file will be created in the current working directory
-            (or '/' when running in the background) unless you also set COREDUMPDIR.
-            The default is OFF.
-        '';
-      };
-      coreDumpDir = mkOption {
-        type = types.strings;
-        default = "";
-        description = ''
-          The daemon's COREDUMP keyword specifies whether the daemon should generate a
-            core dump file.  This file will be created in the current working directory
-            (or '/' when running in the background) unless you also set COREDUMPDIR.
-            The default is OFF.
-        '';
-      };
-      disableKeepalive = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          The daemon's KEEPALIVE keyword specifies whether the daemon will use
-            TCP keep-alives for detecting dead connections.  The default is ON.
-        '';
-      };
+          The absolute path to the configuration file.
 
-      disableOnlyLoopback = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          # TODO: Add description
+          Either `configFile` or `config` must be specified.
+
+          See <https://github.com/dun/conman/wiki/Man-5-conman.conf#files>.
         '';
       };
+      config = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        example = ''
+          server coredump=off
+          server keepalive=on
+          server loopback=off
+          server timestamp=1h
 
-      listeningPort = mkOption {
-        type = types.ints.positive;
-        default = 7890;
-        description = ''
-          # TODO: Add description
+          # global config
+          global log="/var/log/conman/%N.log"
+          global seropts="9600,8n1"
+          global ipmiopts="U:<user>,P:<password>"
         '';
-      };
-
-      globalSerOpts = mkOption {
-        type = types.string;
-        default = "";
         description = ''
-          # TODO: Add description
-        '';
-      };
+          The configuration object.
 
-      globalLogDir = mkOption {
-        type = types.string;
-        default = "";
-        description = ''
-          # TODO: Add description
-        '';
-      };
+          Either `configFile` or `config` must be specified.
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Extra configuration directives that should be added to
-          `conman.conf`
+          See <https://github.com/dun/conman/wiki/Man-5-conman.conf#files>.
         '';
       };
     };
@@ -118,18 +66,37 @@ in
     frantathefranta
   ];
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ conmanPkg ];
-    systemd.services.conmand = {
-      description = "serial console management program";
-      documentation = [ "man:conman(8)" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${conmanPkg}/bin/conmand ${builtins.toString conmandFlags}";
-        KillMode = "process";
-      };
+  config =
+    let
+      cfg = config.services.conman;
+      configFile =
+        if cfg.configFile != null then
+          cfg.configFile
+        else
+          pkgs.writeTextFile {
+            name = "conman.conf";
+            text = cfg.config;
+          };
+    in
+    mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = (cfg.configFile == null) != (cfg.config == null);
+          message = "Either but not both `configFile` and `config` must be specified for conman.";
+        }
+      ];
+      environment.systemPackages = [ conmanPkg ];
+      # environment.etc."conman.conf".source = configFile;
+      systemd.services.conmand = {
+        description = "serial console management program";
+        documentation = [ "man:conman(8)" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${conmanPkg}/bin/conmand -F -c ${configFile}";
+          KillMode = "process";
+        };
 
+      };
     };
-  };
 
 }

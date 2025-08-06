@@ -1,8 +1,10 @@
+{ config, ... }:
 {
   services.conman = {
     enable = true;
-    extraConfig = ''
-      console name="opnsense" dev="/dev/ttyS5" seropts="115200,8n1"
-    '';
+    configFile = config.sops.secrets."conman.conf".path;
+  };
+  sops.secrets."conman.conf" = {
+    sopsFile = ../secrets.yaml;
   };
 }

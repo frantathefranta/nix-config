@@ -54,19 +54,19 @@
       forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
       pkgsFor = lib.genAttrs (import systems) (
         system:
-          import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          }
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
       );
     in
     {
       inherit lib;
       # Your custom packages
       # Accessible through 'nix build', 'nix shell', etc
-      packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+      packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
       formatter = forEachSystem (pkgs: pkgs.alejandra);
-      devShells = forEachSystem (pkgs: import ./shell.nix {inherit pkgs;});
+      devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs outputs; };
@@ -102,7 +102,7 @@
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = {
+      homeConfigurations = { # TODO: Follow example of having home-manager managed by OS
         "fbartik@nix-bastion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };

@@ -7,16 +7,15 @@
   tcp_wrappers,
   stdenv,
   expect,
-  ...
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conman";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dun";
     repo = "conman";
-    tag = "conman-${version}";
+    tag = "conman-${finalAttrs.version}";
     hash = "sha256-CHWvHYTmTiEpEfHm3TF5aCKBOW2GsT9Vv4ehpj775NQ=";
   };
 
@@ -31,12 +30,14 @@ stdenv.mkDerivation rec {
     expect # For conman/*.exp scripts
   ];
 
-  meta = with lib; {
-    description = "ConMan: The Console Manager";
+  meta = {
+    description = "The Console Manager";
     homepage = "https://github.com/dun/conman";
-    license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.frantathefranta ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      frantathefranta
+    ];
   };
 
-}
+})

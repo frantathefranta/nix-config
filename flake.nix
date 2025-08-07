@@ -80,19 +80,19 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        nix-bastion = nixpkgs.lib.nixosSystem {
+        nix-bastion = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/nix-bastion
           ];
         };
-        lanthanum = nixpkgs.lib.nixosSystem {
+        lanthanum = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/lanthanum
           ];
         };
-        qotom = nixpkgs.lib.nixosSystem {
+        qotom = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/qotom
@@ -102,7 +102,8 @@
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = { # TODO: Follow example of having home-manager managed by OS
+      homeConfigurations = {
+        # TODO: Follow example of having home-manager managed by OS
         "fbartik@nix-bastion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };

@@ -5,29 +5,18 @@
   ...
 }:
 
-with lib;
-
-let
-  cfg = config.services.conman;
-  conmanPkg = cfg.package;
-
-in
 {
   options = {
     services.conman = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the conman Console manager.
+      enable = lib.mkEnableOption ''
+        Enable the conman Console manager.
 
-          Either `configFile` or `config` must be specified.
-        '';
-      };
-      package = mkPackageOption pkgs "conman" { };
+        Either `configFile` or `config` must be specified.
+      '';
+      package = lib.mkPackageOption pkgs "conman" { };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/secrets/conman.conf";
         description = ''
@@ -38,8 +27,8 @@ in
           See <https://github.com/dun/conman/wiki/Man-5-conman.conf#files>.
         '';
       };
-      config = mkOption {
-        type = types.nullOr types.lines;
+      config = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         example = ''
           server coredump=off
@@ -78,25 +67,25 @@ in
             text = cfg.config;
           };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         {
-          assertion = (cfg.configFile == null) != (cfg.config == null);
+          assertion = (
+            ((cfg.configFile == null) != (cfg.config == null))
+            && ((cfg.configFile == { }) != (cfg.config == { }))
+          );
           message = "Either but not both `configFile` and `config` must be specified for conman.";
         }
       ];
-      environment.systemPackages = [ conmanPkg ];
-      # environment.etc."conman.conf".source = configFile;
+      environment.systemPackages = [ cfg.package ];
       systemd.services.conmand = {
         description = "serial console management program";
         documentation = [ "man:conman(8)" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${conmanPkg}/bin/conmand -F -c ${configFile}";
+          ExecStart = "${cfg.package}/bin/conmand -F -c ${configFile}";
           KillMode = "process";
         };
-
       };
     };
-
 }

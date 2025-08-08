@@ -39,6 +39,7 @@
     jq # JSON pretty printer and manipulator
     sops
     screen
+    s5cmd
     # trekscii # Cute startrek cli printer
     timer # To help with my ADHD paralysis
     viddy # Better watch

@@ -70,10 +70,8 @@
     lib.mkIf cfg.enable {
       assertions = [
         {
-          assertion = (
-            ((cfg.configFile == null) != (cfg.config == null))
-            && ((cfg.configFile == { }) != (cfg.config == { }))
-          );
+          assertion =
+            (cfg.configFile != null) && (cfg.config == null) || (cfg.configFile == null && cfg.config != null);
           message = "Either but not both `configFile` and `config` must be specified for conman.";
         }
       ];

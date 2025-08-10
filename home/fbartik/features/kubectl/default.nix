@@ -59,30 +59,37 @@
   home.packages = with pkgs; [
     unstable.fluxcd
     unstable.talosctl
-    stern # Logs
     go-task
     jq
+    krew
+    kubecolor
     kubectl
     kubernetes-helm
-    kubecolor
     kustomize
+    stern # Logs
   ];
-  programs.fish.shellAbbrs = {
-    k = {
-      position = "anywhere";
-      expansion = "kubectl";
-    };
-    kubectl = {
-      position = "anywhere";
-      expansion = "kubecolor";
-    };
-    kd = {
-      position = "anywhere";
-      expansion = "kubectl describe";
-    };
-    kg = {
-      position = "anywhere";
-      expansion = "kubectl get";
+  programs.fish = {
+    interactiveShellInit = # fish
+      ''
+        set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+      '';
+    shellAbbrs = {
+      k = {
+        position = "anywhere";
+        expansion = "kubectl";
+      };
+      kubectl = {
+        position = "anywhere";
+        expansion = "kubecolor";
+      };
+      kd = {
+        position = "anywhere";
+        expansion = "kubectl describe";
+      };
+      kg = {
+        position = "anywhere";
+        expansion = "kubectl get";
+      };
     };
   };
 }

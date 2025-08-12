@@ -39,6 +39,7 @@
       enable = true;
       powerOnBoot = true;
     };
+    enableAllFirmware = true;
   };
   system.stateVersion = "24.11";
 }

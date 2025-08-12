@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, config, ... }:
 
 {
   imports = [
@@ -28,17 +28,19 @@
     kernelModules = [
       "uinput"
       "kvm-amd"
+      "8852bu"
     ];
     extraModprobeConfig = ''
       options nvidia_modeset vblank_sem_control=0 nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp
     '';
+    extraModulePackages = with config.boot.kernelPackages; [ rtl8852bu ];
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
   };
   disko.devices = {
     disk = {
       main = {
-        device = "/dev/nvme0n1";
+        device = "/dev/disk/by-id/nvme-PCIe_SSD_25031320800278";
         type = "disk";
         content = {
           type = "gpt";
@@ -58,6 +60,24 @@
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
+              };
+            };
+          };
+        };
+      };
+      secondary = {
+
+        device = "/dev/disk/by-id/nvme-Dell_Express_Flash_NVMe_P4510_4TB_SFF_PHLJ030201EM4P0DGN";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            root = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/nvme";
               };
             };
           };

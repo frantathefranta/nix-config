@@ -41,5 +41,9 @@
     };
     enableAllFirmware = true;
   };
+  services.udev.packages = with pkgs; [
+    vial
+    via
+  ];
   system.stateVersion = "24.11";
 }

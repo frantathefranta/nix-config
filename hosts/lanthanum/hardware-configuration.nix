@@ -37,6 +37,7 @@
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
   };
+  hardware.cpu.amd.updateMicrocode = true;
   disko.devices = {
     disk = {
       main = {
@@ -45,6 +46,11 @@
         content = {
           type = "gpt";
           partitions = {
+            MBR = {
+              priority = 0;
+              size = "1M";
+              type = "EF02";
+            };
             ESP = {
               type = "EF00";
               size = "1000M";

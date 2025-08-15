@@ -52,7 +52,7 @@
     neovim
   ];
 
-  # hardware.enableRedistributableFirmware = true;
+  hardware.enableRedistributableFirmware = true;
   networking.domain = "infra.franta.us";
 
   # Increase open file limit for sudoers

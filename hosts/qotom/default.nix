@@ -2,12 +2,12 @@
 {
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
+    inputs.hardware.nixosModules.common-pc-ssd
     ./services
     ./hardware-configuration.nix
 
     ../common/global
     ../common/users/fbartik
-    ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "qotom";
@@ -21,8 +21,8 @@
       ];
     };
   };
-  environment.systemPackages = with pkgs; [
-    conman
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   conman
+  # ];
   system.stateVersion = "24.11";
 }

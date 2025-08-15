@@ -1,6 +1,5 @@
 {
   inputs,
-  config,
   ...
 }:
 {
@@ -55,6 +54,5 @@
       };
     };
   };
-  hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
 
 }

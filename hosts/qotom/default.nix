@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
+    inputs.hardware.nixosModules.common-cpu-intel
     ./services
     ./hardware-configuration.nix
 

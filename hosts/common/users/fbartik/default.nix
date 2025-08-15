@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-in {
+in
+{
   users.mutableUsers = false;
   users.users.fbartik = {
     isNormalUser = true;
@@ -19,9 +25,11 @@ in {
       "_lldp"
     ];
 
-    openssh.authorizedKeys.keys = lib.splitString "\n" (builtins.readFile ../../../../home/fbartik/ssh.pub);
+    openssh.authorizedKeys.keys = lib.splitString "\n" (
+      builtins.readFile ../../../../home/fbartik/ssh.pub
+    );
     hashedPasswordFile = config.sops.secrets.fbartik-password.path;
-    packages = [pkgs.home-manager];
+    packages = [ pkgs.home-manager ];
   };
 
   sops.secrets.fbartik-password = {
@@ -45,6 +53,6 @@ in {
   home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
 
   security.pam.services = {
-    swaylock = {};
+    swaylock = { };
   };
 }

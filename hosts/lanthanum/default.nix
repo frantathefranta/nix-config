@@ -16,6 +16,7 @@
 
     ../common/optional/kde.nix
     ../common/optional/1password.nix
+    ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "lanthanum";

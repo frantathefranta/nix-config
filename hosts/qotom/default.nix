@@ -6,6 +6,7 @@
 
     ../common/global
     ../common/users/fbartik
+    ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "qotom";

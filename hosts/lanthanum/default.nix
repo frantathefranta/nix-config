@@ -27,6 +27,7 @@
   };
   programs = {
     dconf.enable = true;
+    steam.enable = true;
   };
   hardware = {
     graphics.enable = true;

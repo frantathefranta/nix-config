@@ -10,7 +10,7 @@
   imports = [
     #inputs.impermanence.nixosModules.home-manager.impermanence
     ../features/cli
-    ./steam-hardware.nix
+    # ./steam-hardware.nix
     #../features/helix
   ] ++ (builtins.attrValues outputs.homeManagerModules);
 

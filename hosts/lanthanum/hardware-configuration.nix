@@ -37,7 +37,6 @@
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
   };
-  hardware.cpu.amd.updateMicrocode = true;
   disko.devices = {
     disk = {
       main = {

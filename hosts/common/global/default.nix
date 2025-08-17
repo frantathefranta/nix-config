@@ -53,7 +53,10 @@
   ];
 
   hardware.enableRedistributableFirmware = true;
-  networking.domain = "infra.franta.us";
+  networking = {
+    firewall.enable = true;
+    domain = "infra.franta.us";
+  };
 
   # Increase open file limit for sudoers
   security.pam.loginLimits = [

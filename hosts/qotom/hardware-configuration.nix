@@ -18,6 +18,9 @@
       "sd_mod"
     ];
     kernelModules = [ "kvm-intel" ];
+    kernel.sysctl = {
+      "net.ipv4.conf.wlp2s0.forwarding" = 1;
+    };
 
   };
 

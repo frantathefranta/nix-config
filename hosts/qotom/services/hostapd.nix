@@ -40,6 +40,7 @@
         subnet4 = [
           {
             id = 1;
+            interface = "wlp2s0";
             pools = [
               {
                 pool = "172.32.254.16 - 172.32.254.31";

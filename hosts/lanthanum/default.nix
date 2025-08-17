@@ -24,7 +24,15 @@
     interfaces.eno1 = {
       useDHCP = true;
     };
+    firewall.interfaces.enp1s0.allowedTCPPorts = [
+      22000
+    ];
+    firewall.interfaces.enp1s0.allowedUDPPorts = [
+      21027
+      22000
+    ];
   };
+
   programs = {
     dconf.enable = true;
     steam.enable = true;

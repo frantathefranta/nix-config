@@ -6,5 +6,7 @@
         localAnnounceEnabled = true;
       };
     };
+    overrideDevices = false;
+    overrideFolders = false;
   };
 }

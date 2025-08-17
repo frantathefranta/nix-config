@@ -52,6 +52,9 @@
       };
     };
   };
+  networking.firewall.interfaces.wlp2s0.allowedUDPPorts = [
+    67 # DHCP server
+  ];
 
   sops.secrets.wpa-password = {
     sopsFile = ../secrets.yaml;

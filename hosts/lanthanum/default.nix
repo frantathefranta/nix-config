@@ -21,7 +21,7 @@
     hostName = "lanthanum";
     useDHCP = true;
     dhcpcd.IPv6rs = true;
-    interfaces.ens18 = {
+    interfaces.eno1 = {
       useDHCP = true;
     };
   };

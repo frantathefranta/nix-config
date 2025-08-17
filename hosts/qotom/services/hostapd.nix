@@ -27,7 +27,7 @@
       settings = {
         interfaces-config = {
           interfaces = [
-            "wlp2s0"
+            "wlp2s0/172.32.254.1"
           ];
         };
         lease-database = {

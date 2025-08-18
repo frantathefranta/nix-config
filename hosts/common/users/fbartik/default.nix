@@ -11,6 +11,7 @@ in
 {
   users.mutableUsers = false;
   users.users.fbartik = {
+    description = "Franta Bartik";
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = ifTheyExist [

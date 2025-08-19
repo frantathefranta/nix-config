@@ -7,4 +7,5 @@ rec {
   # You can build them using 'nix build .#example'
   # example = pkgs.callPackage ./example { };
   # conman = pkgs.callPackage ./conman { };
+  etBembo = pkgs.callPackage ./etbembo {  };
 }

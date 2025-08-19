@@ -54,5 +54,8 @@
     vial
     via
   ];
+  fonts.packages = with pkgs; [
+    etBembo
+  ];
   system.stateVersion = "24.11";
 }

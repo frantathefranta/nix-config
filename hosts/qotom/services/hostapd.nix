@@ -46,6 +46,12 @@
                 pool = "172.32.254.16 - 172.32.254.31";
               }
             ];
+            option-data = [
+              {
+                name = "routers";
+                data = "172.32.254.1";
+              }
+            ];
             subnet = "172.32.254.0/27";
           }
         ];
@@ -53,9 +59,16 @@
       };
     };
   };
-  networking.firewall.interfaces.wlp2s0.allowedUDPPorts = [
-    67 # DHCP server
-  ];
+  networking = {
+    firewall.interfaces.wlp2s0.allowedUDPPorts = [
+      67 # DHCP server
+    ];
+    nat = {
+      enable = true;
+      internalInterfaces = [ "wlp2s0" ];
+      externalInterface = "enp1s0";
+    };
+  };
 
   sops.secrets.wpa-password = {
     sopsFile = ../secrets.yaml;

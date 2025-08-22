@@ -98,6 +98,12 @@
             ./hosts/qotom
           ];
         };
+        nixos-firewall = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/nixos-firewall
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

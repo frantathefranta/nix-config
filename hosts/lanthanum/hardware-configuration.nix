@@ -22,9 +22,6 @@
       "usb_storage"
       "sd_mod"
     ];
-    # Uncomment for AMD GPU
-    # initrd.kernelModules = [ "amdgpu" ];
-    # kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [
       "uinput"
       "kvm-amd"

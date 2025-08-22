@@ -8,6 +8,8 @@
 
     ../common/global
     ../common/users/fbartik
+
+    ../common/optional/smartd.nix
   ];
   networking = {
     hostName = "qotom";

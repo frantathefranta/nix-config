@@ -17,6 +17,7 @@
     ./nh.nix
     ./nix.nix
     ./openssh.nix
+    ./postfix.nix
     # ./optin-persistence.nix
     # ./podman.nix
     ./sops.nix

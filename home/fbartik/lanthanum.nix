@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./global
@@ -6,6 +6,9 @@
     ./features/productivity
     ./features/games
     ./features/desktop/common
+  ];
+  home.packages = [
+    pkgs.unstable.prusa-slicer
   ];
   monitors = [
     {

@@ -57,6 +57,7 @@
     };
   };
   home.packages = with pkgs; [
+    akeyless
     unstable.fluxcd
     unstable.talosctl
     go-task

@@ -8,4 +8,5 @@ rec {
   # example = pkgs.callPackage ./example { };
   # conman = pkgs.callPackage ./conman { };
   etBembo = pkgs.callPackage ./etbembo {  };
+  akeyless = pkgs.callPackage ./akeyless-cli {  };
 }

@@ -56,7 +56,7 @@
 
   hardware.enableRedistributableFirmware = lib.mkIf (config.services.qemuGuest.enable != true) true;
   networking = {
-    firewall.enable = true;
+    firewall.enable = lib.mkDefault true;
     domain = "infra.franta.us";
   };
 

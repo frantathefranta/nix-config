@@ -46,7 +46,7 @@
       # VLANs
       "20-lan0.20" = {
         netdevConfig = {
-          Name = "lan0.50";
+          Name = "lan0.20";
           Description = "WiFi";
           Kind = "vlan";
         };

@@ -52,6 +52,8 @@
 
   environment.systemPackages = with pkgs; [
     neovim
+    traceroute
+    inetutils
   ];
 
   hardware.enableRedistributableFirmware = lib.mkIf (config.services.qemuGuest.enable != true) true;

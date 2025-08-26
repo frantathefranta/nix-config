@@ -27,10 +27,8 @@ in
       "github.com" = {
         identityFile = "~/.ssh/git_key";
       };
-      "*" = {
-        identityAgent = "~/.1password/agent.sock";
-      };
       net = {
+        forwardAgent = true;
         host = lib.concatStringsSep " " (
           lib.flatten (
             map (host: [

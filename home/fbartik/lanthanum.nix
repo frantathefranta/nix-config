@@ -10,6 +10,14 @@
   home.packages = [
     pkgs.unstable.prusa-slicer
   ];
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      nix-bastion = {
+        identityAgent = "~/.1password/agent.sock";
+      };
+    };
+  };
   monitors = [
     {
       name = "DP-1";

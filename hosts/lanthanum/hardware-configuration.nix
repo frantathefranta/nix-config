@@ -33,6 +33,7 @@
     extraModulePackages = with config.boot.kernelPackages; [ rtl8852bu ];
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
+    supportedFilesystems = [ "nfs" ];
   };
   disko.devices = {
     disk = {
@@ -86,6 +87,11 @@
         };
       };
     };
+  };
+  fileSystems."/mnt/music" = { # TODO: This should probably be a global optional option
+    device = "actinium-nfs.infra.franta.us:/emc1/music";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "noauto" ];
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";

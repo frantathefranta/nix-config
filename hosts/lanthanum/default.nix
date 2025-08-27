@@ -51,6 +51,7 @@
     enableAllFirmware = true;
   };
   environment.systemPackages = with pkgs; [
+    nvme-cli
     vial
     via
   ];

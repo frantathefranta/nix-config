@@ -31,3 +31,8 @@ creation_rules:
       - age:
           - *franta
           - *nix-bastion
+  - path_regex: hosts/lanthanum/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *lanthanum

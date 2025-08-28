@@ -60,7 +60,7 @@
       setw -q -g utf8 on
 
       # So tmux always knows about SSH_AUTH_SOCK
-      setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+      setenv -g SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
       # -----------------------------------------------------------------------------
       # Key bindings
       # -----------------------------------------------------------------------------

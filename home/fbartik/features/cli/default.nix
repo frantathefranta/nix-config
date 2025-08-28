@@ -36,6 +36,7 @@
     fd # Better find
     httpie # Better curl
     minijinja
+    ipmitool # IPMI management
     nmap
     jq # JSON pretty printer and manipulator
     sops

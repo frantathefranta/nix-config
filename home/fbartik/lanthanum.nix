@@ -15,6 +15,7 @@
     matchBlocks = {
       nix-bastion = {
         identityAgent = "~/.1password/agent.sock";
+        forwardAgent = true;
       };
     };
   };

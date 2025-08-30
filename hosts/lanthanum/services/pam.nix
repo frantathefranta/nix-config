@@ -8,8 +8,13 @@
         cue = true;
       };
     };
+    services.kde = {
+      u2fAuth = false;
+    };
   };
   sops.secrets."u2f_keys" = {
     sopsFile = ../secrets.yaml;
+    # If the file is not world-readable, kscreenlocker will not trigger the pam_u2f module
+    mode = "0644";
   };
 }

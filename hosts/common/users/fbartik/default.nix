@@ -53,9 +53,9 @@ in
 
   home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
 
-  security.pam = {
-    # rssh allows approving sudo using the ssh-agent (in my case 1password)
-    rssh.enable = true;
-    services.sudo.rssh = true;
-  };
+  # security.pam = {
+  #   # rssh allows approving sudo using the ssh-agent (in my case 1password)
+  #   rssh.enable = true;
+  #   services.sudo.rssh = true;
+  # };
 }

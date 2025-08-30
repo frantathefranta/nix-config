@@ -24,6 +24,7 @@
     # ./jira.nix
   ];
   home.packages = with pkgs; [
+    act # Run GitHub actions locally
     cachix # Cachix CLI client
     comma # Install and run programs by sticking a , before them
 

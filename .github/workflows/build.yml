@@ -124,8 +124,8 @@ jobs:
           # Run the build and capture output to both stdout and a file
           start_time=$(date +%s)
 
-          cachix watch-exec rishabh5321 -- \
-            nix build .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel \
+          cachix watch-exec frantathefranta -- \
+            nix build --accept-flake-config .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel \
             -v --show-trace --out-link result-${{ matrix.hostname }} 2>&1 | tee logs/build_${{ matrix.hostname }}.log
 
           BUILD_EXIT_CODE=${PIPESTATUS[0]}  # Get the exit code of nix build, not tee

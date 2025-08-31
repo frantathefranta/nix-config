@@ -7,7 +7,7 @@
 in {
   nix = {
     settings = {
-      extra-substituters = lib.mkAfter ["https://frantathefranta.cachix.org" "https://cache.nixos.org"];
+      extra-substituters = lib.mkAfter ["https://frantathefranta.cachix.org" "https://cache.nixos.org" "https://nix-community.cachix.org"];
       # extra-trusted-public-keys = ["cache.m7.rs:kszZ/NSwE/TjhOcPPQ16IuUiuRSisdiIwhKZCxguaWg="];
       trusted-users = [
         "root"

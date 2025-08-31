@@ -3,10 +3,12 @@
   nixConfig = {
     extra-substituters = [
       "https://frantathefranta.cachix.org"
+      "https://nix-community.cachix.org"
       "https://nix-gaming.cachix.org"
     ];
     extra-trusted-public-keys = [
       "frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
     ];
   };

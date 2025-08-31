@@ -19,6 +19,7 @@
       };
     };
   };
+  # emacs.enable = true;
   monitors = [
     {
       name = "DP-1";

@@ -4,7 +4,7 @@ let
   emacs =
     with pkgs;
     (emacsPackagesFor (
-      if builtins.isNull config.monitors then emacsPkg.emacs-git else emacsPkg.emacs-git-pgtk
+      if (builtins.length config.monitors != 0) then emacsPkg.emacs-git-pgtk else emacsPkg.emacs-git
     )).emacsWithPackages
       (
         epkgs: with epkgs; [

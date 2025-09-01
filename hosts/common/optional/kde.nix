@@ -19,6 +19,7 @@
     kdePackages.kcalc
     kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
     kdePackages.ksystemlog
+    kdePackages.powerdevil # Configuration module for SDDM
     kdePackages.sddm-kcm # Configuration module for SDDM
     # krohnkite # Dynamic tiling manager
     (where-is-my-sddm-theme.override {

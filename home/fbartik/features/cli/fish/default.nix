@@ -9,7 +9,7 @@
   hasPackage = name: lib.any (x: x == name) packageNames;
   hasEza = hasPackage "eza";
   hasSpecialisationCli = hasPackage "specialisation";
-  hasAwsCli = hasPackage "awscli2";
+  # hasAwsCli = hasPackage "awscli2";
   hasNeomutt = config.programs.neomutt.enable;
 in {
   imports = [
@@ -24,6 +24,7 @@ in {
       doom = "~/.config/emacs/bin/doom";
       jqless = "jq -C | less -r";
 
+      em = "emacsclient -nw";
       n = "nix";
       nd = "nix develop -c $SHELL";
       ns = "nix shell";
@@ -47,8 +48,8 @@ in {
       mutt = mkIf hasNeomutt "neomutt";
       m = mutt;
 
-      aws-switch = mkIf hasAwsCli "export AWS_PROFILE=(aws configure list-profiles | fzf)";
-      awssw = aws-switch;
+      # aws-switch = mkIf hasAwsCli "export AWS_PROFILE=(aws configure list-profiles | fzf)";
+      # awssw = aws-switch;
     };
     shellAliases = {
       # Clear screen and scrollback

@@ -43,6 +43,12 @@
     userEmail = "fb@franta.us";
     extraConfig = {
       init.defaultBranch = "main";
+      # fish takes these options and adds them to the prompt
+      bash = {
+        showInformativeStatus = true;
+        showDirtyState = true;
+        showUntrackedFiles = true;
+      };
     };
   };
   services.home-manager.autoExpire = {

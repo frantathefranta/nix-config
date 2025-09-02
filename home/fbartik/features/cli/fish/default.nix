@@ -73,6 +73,8 @@ in {
       # Open command buffer in editor when alt+e is pressed
       bind \ee edit_command_buffer
 
+      set -g __fish_git_prompt_showcolorhints true
+
       # Use terminal colors
       set -x fish_color_autosuggestion      brblack
       set -x fish_color_cancel              -r

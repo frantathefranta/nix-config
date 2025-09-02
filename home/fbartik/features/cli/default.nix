@@ -39,6 +39,7 @@
     httpie # Better curl
     minijinja
     ipmitool # IPMI management
+    unstable.managarr # Sonarr/Radarr TUI
     nmap
     jq # JSON pretty printer and manipulator
     sops

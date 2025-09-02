@@ -10,16 +10,23 @@
         confirm = false;
         description = "Flux reconcile";
         scopes = [ "gitrepositories" ];
-        command = "bash";
+        command = "${pkgs.bash}/bin/bash";
         background = false;
         args = [
           "-c"
-          ">-"
-          "flux"
-          "--context $CONTEXT"
-          "reconcile source git"
-          "-n $NAMESPACE $NAME"
-          "| less -K"
+          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile source git -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
+        ];
+      };
+      reconcile-ks = {
+        shortCut = "Shift-R";
+        confirm = false;
+        description = "Flux reconcile";
+        scopes = [ "kustomizations" ];
+        command = "${pkgs.bash}/bin/bash";
+        background = false;
+        args = [
+          "-c"
+          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile kustomization -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };
       reconcile-hr = {
@@ -27,16 +34,12 @@
         confirm = false;
         description = "Flux reconcile";
         scopes = [ "helmreleases" ];
-        command = "bash";
+        command = "${pkgs.bash}/bin/bash";
         background = false;
         args = [
           "-c"
           ">-"
-          "flux"
-          "--context $CONTEXT"
-          "reconcile helmrelease"
-          "-n $NAMESPACE $NAME"
-          "| less -K"
+          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile helmrelease -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };
       stern = {
@@ -47,11 +50,7 @@
         command = "${pkgs.stern}/bin/stern";
         background = false;
         args = [
-          "--tail"
-          "50"
-          "$FILTER"
-          "-n $NAMESPACE"
-          "--context $CONTEXT"
+          "--tail 50 $FILTER -n $NAMESPACE --context $CONTEXT"
         ];
       };
     };

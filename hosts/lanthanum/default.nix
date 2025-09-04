@@ -24,12 +24,12 @@
     interfaces.eno1 = {
       useDHCP = true;
     };
-    vlans = {
-      vlan33 = { id=33; interface="eno1"; };
-    };
-    interfaces.vlan33 = {
-      useDHCP = true;
-    };
+    # vlans = {
+    #   vlan33 = { id=33; interface="eno1"; };
+    # };
+    # interfaces.vlan33 = {
+    #   useDHCP = true;
+    # };
     firewall.interfaces.enp1s0.allowedTCPPorts = [
       22000
     ];

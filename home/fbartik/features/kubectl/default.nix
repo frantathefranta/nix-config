@@ -38,7 +38,6 @@
         background = false;
         args = [
           "-c"
-          ">-"
           ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile helmrelease -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };

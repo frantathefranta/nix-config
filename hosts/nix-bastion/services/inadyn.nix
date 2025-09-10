@@ -1,6 +1,8 @@
 { config, ... }:
 
 {
+  # If IPv6 temp addresses are enabled, the wrong IP gets added as AAAA record
+  networking.tempAddresses = "disabled";
   services = {
     inadyn = {
       enable = true;

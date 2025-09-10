@@ -53,6 +53,7 @@
 
   environment.systemPackages = with pkgs; [
     neovim
+    tcpdump
     traceroute
     inetutils
   ];

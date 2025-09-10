@@ -16,6 +16,7 @@
       nix-bastion = {
         identityAgent = "~/.1password/agent.sock";
         forwardAgent = true;
+        hostname = "nix-bastion.franta.us";
       };
     };
   };

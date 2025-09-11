@@ -23,4 +23,8 @@ in
     enable = true;
     defaultEditor = true;
   };
+  home.packages = with pkgs; [
+    # For installing LSP servers
+    nodePackages.npm
+  ];
 }

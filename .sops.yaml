@@ -6,6 +6,7 @@ keys:
     - &nix-bastion age1an8jkd67y34aa3fzejsdcq27lfzsn74kn2qdnpzsjyhc9wcw5dqqhc7rhr
     - &qotom age1fku3as83dv8fcm0vm0ka2z7ckpcegvp4xanl8fjndmkprxfn54nsdrfc97
     - &lanthanum age1xc4sgp7yt7j0hy842kffqy2hpjxpwdn6f235l42s7tmdu0qkx4cs8uxxyc
+    - &work-vm age1e92fuks6vgqm6a9su747uku690t7t4uv8ghtm7rrajak026z8dqssam0ut
     - &nixos-firewall age186pyjl3l9q9lx9rk63y3qmsj8f0w6q7hudygkgh75a0c6g898grqwyhgme
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
@@ -15,6 +16,7 @@ creation_rules:
           - *nix-bastion
           - *qotom
           - *lanthanum
+          - *work-vm
           - *nixos-firewall
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:

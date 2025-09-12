@@ -100,6 +100,12 @@
             ./hosts/qotom
           ];
         };
+        work-vm = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/work-vm
+          ];
+        };
         nixos-firewall = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [

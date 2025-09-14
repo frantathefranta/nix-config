@@ -19,44 +19,48 @@
   ];
   networking = {
     hostName = "lanthanum";
-    # useDHCP = true;
+    useDHCP = false;
     # dhcpcd.IPv6rs = true;
-    interfaces.eno1 = {
-      ipv4 = {
-        addresses = [
-          {
-            address = "10.254.0.2";
-            prefixLength = 30;
-          }
-        ];
-        routes = [
-          {
-            address = "0.0.0.0";
-            prefixLength = 0;
-            via = "10.254.0.1";
-          }
-        ];
-      };
-      ipv6 = {
-        addresses = [
-          {
-            address = "2600:1702:6630:3fec::254:1";
-            prefixLength = 127;
-          }
-        ];
-        routes = [
-          {
-            address = "::";
-            prefixLength = 0;
-            via = "2600:1702:6630:3fec::254:0";
-          }
-        ];
-      };
+    # defaultGateway = {
+    #   metric = 2147483648;
+    #   address = "10.254.0.1";
+    #   interface = "eno1";
+    # };
+    interfaces = {
+      # eno1 = {
+      #   mtu = 9000;
+      #   ipv4 = {
+      #     addresses = [
+      #       {
+      #         address = "10.254.0.2";
+      #         prefixLength = 30;
+      #       }
+      #     ];
+      #     # routes = [
+      #   {
+      #     address = "0.0.0.0";
+      #     prefixLength = 0;
+      #     via = "10.254.0.1";
+      #   }
+      # ];     #
+      #   };
+      #   ipv6 = {
+      #     addresses = [
+      #       {
+      #         address = "2600:1702:6630:3fec::254:1";
+      #         prefixLength = 127;
+      #       }
+      #     ];
+      #     routes = [
+      #       {
+      #         address = "::";
+      #         prefixLength = 0;
+      #         via = "2600:1702:6630:3fec::254:0";
+      #       }
+      #     ];
+      #   };
+      # };
     };
-    nameservers = [
-      "10.33.10.0"
-      "10.33.10.1"
-    ];
     # vlans = {
     #   vlan33 = { id=33; interface="eno1"; };
     # };
@@ -71,18 +75,89 @@
       22000
     ];
   };
-  # services.frr = {
-  #   ospf6d = {
-  #     enable = true;
-  #   };
-  #   config = ''
-  #     interface eno1
-  #       ipv6 ospf6 area 0.0.0.0
-  #       ipv6 ospf6 instance-id 0
-  #     router ospf6
-  #       ospf6 router-id 10.254.0.2
-  #   '';
-  # };
+  systemd.network = {
+    enable = true;
+    netdevs."50-vxlan200" = {
+      netdevConfig = {
+        Name = "vxlan200";
+        Kind = "vxlan";
+      };
+      vxlanConfig = {
+        VNI = 200;
+        Local = "10.0.0.99";
+        MacLearning = false;
+        Independent = true;
+      };
+    };
+    networks."10-lo" = {
+      matchConfig.Name = "lo";
+      address = [ "10.0.0.99/32" ];
+    };
+    networks."10-eno1" = {
+      matchConfig.Name = "eno1";
+      networkConfig = {
+        IPv6AcceptRA = false;
+      };
+      dns = [
+        "10.33.10.0"
+        "10.33.10.1"
+      ];
+      addresses = [
+        { Address = "10.254.0.2/30"; }
+        {
+          Address = "2600:1702:6630:3fec::254:1/127";
+          AddPrefixRoute = false;
+        }
+      ];
+      routes = [
+        {
+          Gateway = "10.254.0.1";
+          Metric = 2147483648;
+        }
+        {
+          Gateway = "2600:1702:6630:3fec::254:0";
+          Metric = 2147483648;
+        }
+      ];
+      # gateway = [
+      #   "10.254.0.1"
+      #   "2600:1702:6630:3fec::254:0"
+      # ];
+      linkConfig.MTUBytes = "9000";
+    };
+  };
+  services.frr = {
+    ospfd.enable = true;
+    ospf6d.enable = true;
+    config = ''
+      interface lo
+        ip ospf passive
+      exit
+      !
+      interface eno1
+        ip ospf bfd
+        ipv6 ospf6 area 0.0.0.0
+        ipv6 ospf6 instance-id 0
+      exit
+      !
+      router ospf
+        ospf router-id 10.0.0.99
+        auto-cost reference-bandwidth 200000
+        max-metric router-lsa administrative
+        network 10.0.0.0/8 area 0.0.0.0
+      exit
+      !
+      router ospf6
+        ospf6 router-id 10.0.0.99
+      exit
+      !
+      route-map SETSOURCE permit 10
+        set src 10.0.0.30
+      exit
+      !
+      ip protocol ospf route-map SETSOURCE
+    '';
+  };
 
   programs = {
     dconf.enable = true;

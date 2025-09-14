@@ -15,6 +15,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    kdePackages.konversation # IRC client
     kdePackages.kcalc
     kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
     kdePackages.ksystemlog

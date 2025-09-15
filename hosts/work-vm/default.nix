@@ -19,7 +19,7 @@
   nixpkgs.config.allowUnsupportedSystem = true;
 
   # This works through our custom module imported above
-  virtualisation.vmware.guest.enable = true;
+  # virtualisation.vmware.guest.enable = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages =

@@ -116,13 +116,10 @@
         }
         {
           Gateway = "2600:1702:6630:3fec::254:0";
+          GatewayOnLink = "yes";
           Metric = 2147483648;
         }
       ];
-      # gateway = [
-      #   "10.254.0.1"
-      #   "2600:1702:6630:3fec::254:0"
-      # ];
       linkConfig.MTUBytes = "9000";
     };
   };
@@ -163,7 +160,7 @@
     dconf.enable = true;
     steam.enable = true;
   };
-  services.xserver.videoDrivers = [ "nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
     graphics.enable = true;
     nvidia.modesetting.enable = true;

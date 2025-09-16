@@ -36,7 +36,9 @@
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
     supportedFilesystems = [ "nfs" ];
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
+  nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
   disko.devices = {
     disk = {
       main = {

@@ -6,20 +6,22 @@
 
     ../common/global
     ../common/optional/kde.nix
-    # ../common/optional/1password.nix
+    # ../common/optional/gnome.nix
+    ../common/optional/1password.nix
     ../common/users/fbartik
   ];
   # Interface is this on M1
   networking.interfaces.ens160.useDHCP = true;
   networking.firewall.enable = false;
   networking.hostName = "work-vm";
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 
   # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnsupportedSystem = true;
 
   # This works through our custom module imported above
-  # virtualisation.vmware.guest.enable = true;
+  virtualisation.vmware.guest.enable = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [

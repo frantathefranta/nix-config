@@ -26,7 +26,8 @@ in
         };
       };
       "github.com" = {
-        identityFile = "~/.ssh/git_key";
+        # identityFile = "~/.ssh/git_key";
+        identityAgent = "~/.1password/agent.sock";
       };
       net = {
         forwardAgent = true;

@@ -1,3 +1,7 @@
 { ...}: {
-  imports = [./global];
+  imports = [
+    ./global
+    ./features/productivity
+    ./features/desktop/common
+    ];
 }

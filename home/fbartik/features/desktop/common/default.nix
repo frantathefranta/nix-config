@@ -5,7 +5,7 @@
     ./font.nix
   ];
   home.packages = with pkgs; [
-    discord
+    # discord
     plexamp
   ];
 }

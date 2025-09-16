@@ -26,5 +26,11 @@ in
   home.packages = with pkgs; [
     # For installing LSP servers
     nodePackages.npm
+    ispell # Spelling
+    # :tools editorconfig
+    editorconfig-core-c # per-project style config
+    # :tools lookup & :lang org +roam
+    sqlite
+    nil
   ];
 }

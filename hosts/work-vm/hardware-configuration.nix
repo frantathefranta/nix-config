@@ -53,5 +53,5 @@
     };
   };
 
-  nixpkgs.hostPlatform = "aarch64-linux";
+  nixpkgs.hostPlatform.system = "aarch64-linux";
 }

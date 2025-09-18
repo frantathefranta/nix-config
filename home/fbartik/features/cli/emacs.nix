@@ -32,5 +32,7 @@ in
     # :tools lookup & :lang org +roam
     sqlite
     nil
+    xclip
+    python3Minimal
   ];
 }

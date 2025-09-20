@@ -28,11 +28,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1758189093,
-        "narHash": "sha256-mqnpD7B2FTTCnQtOQNEuE0h4D7v5uhlgIDdzk9ryntA=",
+        "lastModified": 1758385130,
+        "narHash": "sha256-c69uNgLT76H3FmQZ+Kx3yPB4WLl153jsAUZ7XhXjbos=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "b4ffd36bc464accccc8868d7ec498eeb21c6d272",
+        "rev": "6459b6ce561e84c2874b708b7aeb2b0a6e3799d8",
         "type": "github"
       },
       "original": {

@@ -75,7 +75,12 @@
       22000
     ];
     firewall.extraCommands = ''
-      iptables -A nixos-fw -p 89 -j ACCEPT
+      iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+      iptables -A nixos-fw -p udp --dport 3784 -j nixos-fw-accept -m comment --comment "Allow BFD messages"
+      iptables -A nixos-fw -p udp --dport 3785 -j nixos-fw-accept -m comment --comment "Allow BFD messages"
+      ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+      ip6tables -A nixos-fw -p udp --dport 3784 -j nixos-fw-accept -m comment --comment "Allow BFD messages"
+      ip6tables -A nixos-fw -p udp --dport 3785 -j nixos-fw-accept -m comment --comment "Allow BFD messages"
     '';
   };
   systemd.network = {
@@ -127,6 +132,7 @@
     };
   };
   services.frr = {
+    bfdd.enable = true;
     ospfd.enable = true;
     ospf6d.enable = true;
     config = ''
@@ -135,31 +141,24 @@
       frr defaults datacenter
       interface lo
         ip ospf passive
-      exit
-      !
       interface eno1
+        ip ospf area 0.0.0.0
         ip ospf bfd
         ip ospf network point-to-point
+        ipv6 ospf6 bfd
         ipv6 ospf6 area 0.0.0.0
+        ipv6 ospf6 network point-to-point
         ipv6 ospf6 instance-id 0
-      exit
-      !
       router ospf
         ospf router-id 10.0.0.99
         auto-cost reference-bandwidth 200000
         max-metric router-lsa administrative
-        network 10.0.0.0/24 area 0.0.0.0
-      exit
-      !
+        network 10.0.0.0/8 area 0.0.0.0
       router ospf6
         ospf6 router-id 10.0.0.99
-      exit
-      !
-      route-map SETSOURCE permit 10
-        set src 10.0.0.30
-      exit
-      !
-      ip protocol ospf route-map SETSOURCE
+      # route-map SETSOURCE permit 10
+      #   set src 10.0.0.99
+      # ip protocol ospf route-map SETSOURCE
     '';
   };
 

@@ -74,6 +74,9 @@
       21027
       22000
     ];
+    firewall.extraCommands = ''
+      iptables -A nixos-fw -p 89 -j ACCEPT
+    '';
   };
   systemd.network = {
     enable = true;
@@ -127,12 +130,16 @@
     ospfd.enable = true;
     ospf6d.enable = true;
     config = ''
+      log syslog
+      debug ospf event
+      frr defaults datacenter
       interface lo
         ip ospf passive
       exit
       !
       interface eno1
         ip ospf bfd
+        ip ospf network point-to-point
         ipv6 ospf6 area 0.0.0.0
         ipv6 ospf6 instance-id 0
       exit
@@ -141,7 +148,7 @@
         ospf router-id 10.0.0.99
         auto-cost reference-bandwidth 200000
         max-metric router-lsa administrative
-        network 10.0.0.0/8 area 0.0.0.0
+        network 10.0.0.0/24 area 0.0.0.0
       exit
       !
       router ospf6

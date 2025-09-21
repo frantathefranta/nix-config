@@ -136,19 +136,16 @@
     ospfd.enable = true;
     ospf6d.enable = true;
     config = ''
-      log syslog
       debug ospf event
-      frr defaults datacenter
+      debug ospf zebra
       interface lo
         ip ospf passive
       interface eno1
-        ip ospf area 0.0.0.0
         ip ospf bfd
         ip ospf network point-to-point
         ipv6 ospf6 bfd
         ipv6 ospf6 area 0.0.0.0
         ipv6 ospf6 network point-to-point
-        ipv6 ospf6 instance-id 0
       router ospf
         ospf router-id 10.0.0.99
         auto-cost reference-bandwidth 200000
@@ -156,9 +153,9 @@
         network 10.0.0.0/8 area 0.0.0.0
       router ospf6
         ospf6 router-id 10.0.0.99
-      # route-map SETSOURCE permit 10
-      #   set src 10.0.0.99
-      # ip protocol ospf route-map SETSOURCE
+      route-map SETSOURCE permit 10
+        set src 10.0.0.99
+      ip protocol ospf route-map SETSOURCE
     '';
   };
 

@@ -99,7 +99,7 @@
         no bgp graceful-restart notification
         no bgp network import-check
         neighbor fabric peer-group
-        neighbor fabric update-source 10.0.0.99
+        neighbor fabric update-source lo
         neighbor 10.0.0.2 remote-as 65033
         neighbor 10.0.0.2 peer-group fabric
       route-map SETSOURCE permit 10

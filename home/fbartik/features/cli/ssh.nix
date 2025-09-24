@@ -18,7 +18,7 @@ in
     matchBlocks = {
       "brocade*" = {
         user = "admin";
-        identityFile = "~/.ssh/brocade_2048";
+        identityFile = config.sops.secrets."ssh/brocade_2048".path;
         extraOptions = {
           KexAlgorithms = "+diffie-hellman-group1-sha1";
           HostKeyAlgorithms = "+ssh-rsa";
@@ -26,7 +26,7 @@ in
         };
       };
       "github.com" = {
-        identityFile = "~/.ssh/git_key";
+        identityFile = config.sops.secrets."ssh/git_key".path;
       };
       net = {
         forwardAgent = true;
@@ -54,8 +54,12 @@ in
       fi
     '';
   };
-  sops.secrets."ssh/brocade_2048" = {
-    sopsFile = ../../secrets.yml;
-    path = "/home/fbartik/.ssh/brocade_2048";
+  sops.secrets = {
+    "ssh/brocade_2048" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "ssh/git_key" = {
+      sopsFile = ../../secrets.yml;
+    };
   };
 }

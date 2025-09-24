@@ -1,11 +1,13 @@
 {
   lib,
   pkgs,
+  inputs,
   outputs,
   ...
 }:
 {
   imports = [
+    inputs.sops-nix.homeManagerModules.sops
     #inputs.impermanence.nixosModules.home-manager.impermanence
     ../features/cli
     # ./steam-hardware.nix
@@ -27,6 +29,10 @@
   home = {
     username = "fbartik";
     homeDirectory = "/home/fbartik";
+  };
+
+  sops = {
+    age.keyFile = "/home/fbartik/.config/sops/age/keys.txt";
   };
 
   # Add stuff for your user as you see fit:

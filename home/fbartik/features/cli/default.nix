@@ -3,6 +3,7 @@
   imports = [
     ./fish
 
+    ./atuin.nix
     ./emacs.nix
     ./fzf.nix
     ./mise.nix

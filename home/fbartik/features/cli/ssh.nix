@@ -54,4 +54,8 @@ in
       fi
     '';
   };
+  sops.secrets."ssh/brocade_2048" = {
+    sopsFile = ../../secrets.yml;
+    path = "/home/fbartik/.ssh/brocade_2048";
+  };
 }

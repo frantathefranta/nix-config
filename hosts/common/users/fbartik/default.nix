@@ -37,13 +37,6 @@ in
     sopsFile = ../../secrets.yaml;
     neededForUsers = true;
   };
-  sops.secrets."ssh/brocade_2048" = {
-    sopsFile = ../../secrets.yaml;
-    mode = "0600";
-    owner = "fbartik";
-    group = "users";
-    path = "/home/fbartik/.ssh/brocade_2048";
-  };
   sops.secrets.kubeconfig = {
     sopsFile = ../../secrets.yaml;
     owner = "fbartik";

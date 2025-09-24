@@ -12,7 +12,8 @@
     ../features/cli
     # ./steam-hardware.nix
     #../features/helix
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  ]
+  ++ (builtins.attrValues outputs.homeManagerModules);
 
   nix = {
     package = lib.mkDefault pkgs.nix;
@@ -32,7 +33,7 @@
   };
 
   sops = {
-    age.keyFile = "/home/fbartik/.config/sops/age/keys.txt";
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   };
 
   # Add stuff for your user as you see fit:

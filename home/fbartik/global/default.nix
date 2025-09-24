@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -33,7 +34,7 @@
   };
 
   sops = {
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   };
 
   # Add stuff for your user as you see fit:

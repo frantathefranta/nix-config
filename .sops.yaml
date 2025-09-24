@@ -43,8 +43,3 @@ creation_rules:
     key_groups:
       - age:
           - *franta
-          - *nix-bastion
-          - *qotom
-          - *lanthanum
-          - *work-vm
-          - *nixos-firewall

@@ -38,3 +38,13 @@ creation_rules:
       - age:
           - *franta
           - *lanthanum
+
+  - path_regex: home/fbartik/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *nix-bastion
+          - *qotom
+          - *lanthanum
+          - *work-vm
+          - *nixos-firewall

@@ -17,6 +17,7 @@ in
     extraGroups = ifTheyExist [
       "audio"
       "dialout"
+      "frrvty" # For inspecting vtysh
       "git"
       "i2c"
       "network"

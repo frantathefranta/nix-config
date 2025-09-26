@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   imports = [
     ./services
@@ -44,6 +45,15 @@
     #   10.33.35.21 talos-g3-mini.infra.franta.us
     #   10.33.35.22 talos-n150-01.infra.franta.us
     # '';
+  };
+  services.frr = {
+    bgpd.enable = true;
+    config = ''
+      router bgp 65032
+        no bgp ebgp-requires-policy
+        bgp router-id 10.32.10.11
+        neighbor 10.32.10.254 remote-as 65033
+    '';
   };
   system.stateVersion = "24.11";
 }

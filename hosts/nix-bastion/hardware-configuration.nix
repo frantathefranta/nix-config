@@ -6,6 +6,7 @@
     inputs.disko.nixosModules.disko
   ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
   #boot.extraModulePackages = [ ];
   boot.growPartition = true;
   boot = {
@@ -13,6 +14,11 @@
       grub = {
         enable = true;
         device = "nodev";
+        extraConfig = ''
+          serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+          terminal_input --append serial
+          terminal_output --append serial
+        '';
         # efiSupport = true;
         # efiInstallAsRemovable = true;
       };
@@ -72,10 +78,14 @@
       };
     };
   };
-  fileSystems."/mnt/media" = { # TODO: This should probably be a global optional option
+  fileSystems."/mnt/media" = {
+    # TODO: This should probably be a global optional option
     device = "actinium-nfs.infra.franta.us:/emc1/media";
     fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" ];
+    options = [
+      "x-systemd.automount"
+      "noauto"
+    ];
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";

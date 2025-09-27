@@ -115,6 +115,12 @@
             ./hosts/nixos-firewall
           ];
         };
+        r2s = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/r2s
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

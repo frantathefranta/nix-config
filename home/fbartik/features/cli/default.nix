@@ -51,6 +51,7 @@
     viddy # Better watch
     wget # I will simply not learn curl syntax for downloading files
 
+    mtr # traceroute replacement
     nixd # Nix LSP
     alejandra # Nix formatter
     nixfmt-rfc-style

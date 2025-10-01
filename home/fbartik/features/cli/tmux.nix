@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs.tmux = {
     enable = true;
@@ -60,7 +60,8 @@
       setw -q -g utf8 on
 
       # So tmux always knows about SSH_AUTH_SOCK
-      setenv -g SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+      set-environment -g SSH_AUTH_SOCK ${config.home.homeDirectory}/.ssh/ssh_auth_sock
+      set -g update-environment -r
       # -----------------------------------------------------------------------------
       # Key bindings
       # -----------------------------------------------------------------------------

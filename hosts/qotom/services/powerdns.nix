@@ -1,0 +1,5 @@
+{
+  services.powerdns = {
+    enable = true;
+  }; 
+}

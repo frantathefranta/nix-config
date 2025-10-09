@@ -10,4 +10,5 @@
   };
   system.stateVersion = "25.05";
   system.enableExtlinuxTarball = true;
+  documentation.man.generateCaches = false;
 }

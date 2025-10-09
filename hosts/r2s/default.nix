@@ -1,6 +1,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../common/global
     # ../common/users/fbartik
   ];
   networking = {

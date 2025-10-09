@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  nixpkgs,
+  inputs,
   ...
 }:
 with lib;
@@ -15,7 +15,7 @@ in
   };
 
   config = mkIf enableExtlinuxTarball {
-    system.build.tarball = pkgs.callPackage "${nixpkgs}/nixos/lib/make-system-tarball.nix" {
+    system.build.tarball = pkgs.callPackage "${inputs.nixpkgs}/nixos/lib/make-system-tarball.nix" {
       contents = [ ];
       storeContents = [
         {

@@ -3,6 +3,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 {
@@ -95,7 +96,7 @@
 
   services.udev.extraRules =
     ''ACTION=="add" SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="8153", ''
-    + ''RUN+="${pkgs.rtl8152-led-ctrl}/bin/rtl8152-led-ctrl set --device %s{busnum}:%s{devnum}"'';
+    + ''RUN+="${inputs.eh5.packages.aarch64-linux.rtl8152-led-ctrl}/bin/rtl8152-led-ctrl set --device %s{busnum}:%s{devnum}"'';
 
   services.lvm.enable = false;
 
@@ -151,4 +152,5 @@
       echo default-on > /sys/class/leds/nanopi-r2s:red:sys/trigger
     '';
   };
+  nixpkgs.hostPlatform.system = "aarch64-linux";
 }

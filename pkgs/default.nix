@@ -9,6 +9,6 @@ rec {
   # conman = pkgs.callPackage ./conman { };
   etBembo = pkgs.callPackage ./etbembo { };
   akeyless = pkgs.callPackage ./akeyless-cli { };
-  rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
-  ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
+  # rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
+  # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

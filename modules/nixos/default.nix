@@ -3,5 +3,6 @@
 {
   # List your module files here
   # my-module = import ./my-module.nix;
+  system-tarball-extlinux = import ./system-tarball-extlinux.nix;
   # conman = import ./conman.nix;
 }

@@ -7,6 +7,8 @@ rec {
   # You can build them using 'nix build .#example'
   # example = pkgs.callPackage ./example { };
   # conman = pkgs.callPackage ./conman { };
-  etBembo = pkgs.callPackage ./etbembo {  };
-  akeyless = pkgs.callPackage ./akeyless-cli {  };
+  etBembo = pkgs.callPackage ./etbembo { };
+  akeyless = pkgs.callPackage ./akeyless-cli { };
+  # rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
+  # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

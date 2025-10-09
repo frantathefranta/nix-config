@@ -41,6 +41,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    eh5 = {
+      url = "github:EHfive/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -111,6 +115,12 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/nixos-firewall
+          ];
+        };
+        r2s = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/r2s
           ];
         };
       };

@@ -49,6 +49,7 @@
   services.udev.packages = with pkgs; [
     vial
     via
+    f2fs-tools # Interacting with R2s filesystem
   ];
   fonts.packages = with pkgs; [
     etBembo

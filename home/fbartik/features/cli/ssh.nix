@@ -14,6 +14,9 @@ let
 in
 {
   programs.ssh = {
+    includes = [
+      "${config.home.homeDirectory}/.ssh/ephemeral_config"
+    ];
     enable = true;
     matchBlocks = {
       "brocade*" = {

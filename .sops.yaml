@@ -8,6 +8,7 @@ keys:
     - &lanthanum age1xc4sgp7yt7j0hy842kffqy2hpjxpwdn6f235l42s7tmdu0qkx4cs8uxxyc
     - &work-vm age1u2z93gyp7zek6cy5tuva3n4lm825rd3au8aqralx409jh9wm9gfsdsgdq3
     - &nixos-firewall age186pyjl3l9q9lx9rk63y3qmsj8f0w6q7hudygkgh75a0c6g898grqwyhgme
+    - &r2s age1k4jcr5vnrvwl2s2sh2p3flejdcte0dsdt9daj6kwpwsc6r5t3sasuh33l4
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
@@ -18,6 +19,7 @@ creation_rules:
           - *lanthanum
           - *work-vm
           - *nixos-firewall
+          - *r2s
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:
       - age:

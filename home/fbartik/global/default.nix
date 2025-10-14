@@ -41,6 +41,8 @@
   programs.neovim.enable = true;
   home.packages = with pkgs; [
     ethtool
+    gparted
+    f2fs-tools
   ];
 
   # Enable home-manager and git

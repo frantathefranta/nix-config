@@ -21,6 +21,12 @@
   networking = {
     hostName = "lanthanum";
     useDHCP = false;
+    hosts = {
+      "10.254.0.63" = [
+        "r2s"
+        "r2s.infra.franta.us"
+      ];
+    };
   };
 
   programs = {

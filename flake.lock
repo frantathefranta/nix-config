@@ -61,11 +61,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1760556116,
-        "narHash": "sha256-MUPwkW2VTZnpKYohS11VK28Zoy3TzodImRP94Cp7vN4=",
+        "lastModified": 1760642492,
+        "narHash": "sha256-pP21RJbHqbCPC5d2ME45QNedJKPVgWcCp7lmpkDATsQ=",
         "owner": "EHfive",
         "repo": "flakes",
-        "rev": "8f5fc10f51de68659cd660aa2333cbc576ac7d6c",
+        "rev": "820702433073ca17e1a0c767c931c32c246aaf00",
         "type": "github"
       },
       "original": {
@@ -152,11 +152,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760500983,
-        "narHash": "sha256-zfY4F4CpeUjTGgecIJZ+M7vFpwLc0Gm9epM/iMQd4w8=",
+        "lastModified": 1760641408,
+        "narHash": "sha256-Y086n2U0kN9HjOo+UScwQDS27gKMiIlT6vDehvlmdAg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "c53e65ec92f38d30e3c14f8d628ab55d462947aa",
+        "rev": "847669dabf374d32a072bdab3f08cae7296ac011",
         "type": "github"
       },
       "original": {

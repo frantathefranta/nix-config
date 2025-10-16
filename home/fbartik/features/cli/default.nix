@@ -4,7 +4,6 @@
     ./fish
 
     ./atuin.nix
-    ./emacs.nix
     ./fzf.nix
     ./mise.nix
     ./tmux.nix
@@ -25,7 +24,6 @@
     # ./jira.nix
   ];
   home.packages = with pkgs; [
-    act # Run GitHub actions locally
     cachix # Cachix CLI client
     comma # Install and run programs by sticking a , before them
 
@@ -53,7 +51,6 @@
 
     mtr # traceroute replacement
     iperf3
-    nixd # Nix LSP
     alejandra # Nix formatter
     nixfmt-rfc-style
     nvd # Differ

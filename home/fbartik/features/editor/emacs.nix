@@ -32,6 +32,7 @@ in
     # :tools lookup & :lang org +roam
     sqlite
     nil
+    nixd # Nix LSP
     xclip
     python3Minimal
   ];

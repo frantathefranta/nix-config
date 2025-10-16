@@ -5,6 +5,7 @@
     ./features/kubectl
     ./features/productivity
     ./features/games
+    ./features/editor
     ./features/desktop/common
   ];
   home.packages = [

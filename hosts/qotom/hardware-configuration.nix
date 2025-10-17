@@ -21,7 +21,7 @@
     kernel.sysctl = {
       "net.ipv4.conf.wlp2s0.forwarding" = 1;
     };
-
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   disko.devices.disk.main = {

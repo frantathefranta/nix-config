@@ -10,7 +10,7 @@
     ./zoxide.nix
     # ./bash.nix
     # ./bat.nix
-    # ./direnv.nix
+    ./direnv.nix
     # ./gh.nix
     # ./git.nix
     # ./gpg.nix
@@ -26,6 +26,7 @@
   home.packages = with pkgs; [
     cachix # Cachix CLI client
     comma # Install and run programs by sticking a , before them
+    devenv
 
     bc # Calculator
     bottom # System viewer

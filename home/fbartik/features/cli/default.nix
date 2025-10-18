@@ -30,6 +30,7 @@
     bc # Calculator
     bottom # System viewer
     btop # better top
+    cyme # Modern lsusb
     ncdu # TUI disk usage
     eza # Better ls
     file

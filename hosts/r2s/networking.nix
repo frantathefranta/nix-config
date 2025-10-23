@@ -145,7 +145,7 @@
         auto-cost reference-bandwidth 200000
         max-metric router-lsa administrative
         network 10.0.0.0/8 area 0.0.0.0
-      router bgp 65033
+      router bgp 65412
         bgp router-id 10.0.0.200
         bgp log-neighbor-changes
         no bgp ebgp-requires-policy

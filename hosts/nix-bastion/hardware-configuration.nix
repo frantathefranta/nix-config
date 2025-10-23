@@ -45,6 +45,7 @@
     supportedFilesystems = [ "nfs" ];
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   disko.devices.disk.main = {

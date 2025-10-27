@@ -2,21 +2,23 @@
 {
   networking.useDHCP = false;
   networking = {
-    firewall.interfaces.lo.allowedTCPPorts = [
-      179
-    ];
+    # firewall.interfaces.lo.allowedTCPPorts = [
+    #   179
+    # ];
     firewall.interfaces.eth0.allowedUDPPorts = [
+      179
       3784 # BFD messages
       3785 # BFD messages
     ];
     firewall.interfaces.eth1.allowedUDPPorts = [
+      179
       3784 # BFD messages
       3785 # BFD messages
     ];
-    firewall.extraCommands = ''
-      iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
-      ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
-    '';
+    # firewall.extraCommands = ''
+    #   iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+    #   ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+    # '';
   };
 
   systemd.network.enable = true;
@@ -79,25 +81,7 @@
     networkConfig = {
       Address = "10.254.0.63/31";
       ConfigureWithoutCarrier = true;
-      # DHCPServer = true;
-      # IPv6SendRA = true;
-      # DHCPPrefixDelegation = true;
     };
-    # dhcpServerConfig = {
-    #   PoolOffset = 2;
-    #   DefaultLeaseTimeSec = "12h";
-    #   MaxLeaseTimeSec = "24h";
-    #   UplinkInterface = "extern0";
-    #   DNS = [ "_server_address" ];
-    # };
-    # dhcpPrefixDelegationConfig = {
-    #   UplinkInterface = "extern0";
-    #   Token = "static:::1";
-    # };
-    # ipv6SendRAConfig = {
-    #   EmitDNS = true;
-    #   DNS = [ "_link_local" ];
-    # };
     linkConfig.ActivationPolicy = "always-up";
     routes = [
       {
@@ -125,26 +109,9 @@
   services.frr = {
     bfdd.enable = true;
     bgpd.enable = true;
-    ospfd.enable = true;
+    # ospfd.enable = true;
     # ospf6d.enable = true;
     config = ''
-      # debug ospf event
-      # debug ospf zebra
-      ${lib.optionalString config.virtualisation.multipass.enable ''
-        interface mpqemubr0
-          ip ospf prefix-suppression
-      ''}
-      interface lo
-        ip ospf passive
-      interface eth0
-        ip ospf bfd
-      interface eth1
-        ip ospf bfd
-      router ospf
-        ospf router-id 10.0.0.200
-        auto-cost reference-bandwidth 200000
-        max-metric router-lsa administrative
-        network 10.0.0.0/8 area 0.0.0.0
       router bgp 65412
         bgp router-id 10.0.0.200
         bgp log-neighbor-changes
@@ -152,13 +119,16 @@
         no bgp hard-administrative-reset
         no bgp graceful-restart notification
         no bgp network import-check
-        neighbor fabric peer-group
-        neighbor fabric update-source lo
-        neighbor 10.0.0.2 remote-as 65033
-        neighbor 10.0.0.2 peer-group fabric
-      route-map SETSOURCE permit 10
+        neighbor eth0 arista01
+        neighbor eth0 interface v6only remote-as 65033
+        address-family ipv4 unicast
+          network 10.0.0.200/32
+        exit-address-family
+      ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
+      route-map correct_src permit 1
+        match ip address prefix-list loopbacks_ips
         set src 10.0.0.200
-      ip protocol ospf route-map SETSOURCE
+      ip protocol bgp route-map correct_src
     '';
   };
 }

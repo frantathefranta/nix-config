@@ -62,6 +62,10 @@
   networking = {
     firewall.enable = lib.mkDefault true;
     domain = "infra.franta.us";
+    nameservers = [
+      "10.33.10.0"
+      "10.33.10.1"
+    ];
   };
 
   # Increase open file limit for sudoers

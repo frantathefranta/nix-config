@@ -30,7 +30,7 @@ hosts/qotom
 nix-shell -p ssh-to-age --run "ssh-to-age -i /etc/ssh/ssh_host_ed25519_key.pub"
 ```
 4. Add public key to `.sops.yaml`
-5. Run `nixos-anywhere` with the `--copy-host-keys` option, which will preserver the SSH keys (if you don't do that, you'll lock yourself out)
+5. Run `nixos-anywhere` with the `--copy-host-keys` option, which will preserve the SSH keys (if you don't do that, you'll lock yourself out)
 
 ``` sh
 nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nixos@10.32.10.10 --copy-host-keys

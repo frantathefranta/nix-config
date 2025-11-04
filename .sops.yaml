@@ -9,6 +9,7 @@ keys:
     - &work-vm age1u2z93gyp7zek6cy5tuva3n4lm825rd3au8aqralx409jh9wm9gfsdsgdq3
     - &nixos-firewall age186pyjl3l9q9lx9rk63y3qmsj8f0w6q7hudygkgh75a0c6g898grqwyhgme
     - &r2s age1k4jcr5vnrvwl2s2sh2p3flejdcte0dsdt9daj6kwpwsc6r5t3sasuh33l4
+    - &molybdenum age1en9r5jtv5cl7vfwlt9pjj5cmwck2uydnhscmydtncg9xaqt7l5msyg52u3
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
@@ -20,6 +21,7 @@ creation_rules:
           - *work-vm
           - *nixos-firewall
           - *r2s
+          - *molybdenum
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:
       - age:
@@ -41,6 +43,11 @@ creation_rules:
           - *franta
           - *lanthanum
 
+  - path_regex: hosts/molybdenum/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *molybdenum
   - path_regex: home/fbartik/secrets.ya?ml$
     key_groups:
       - age:

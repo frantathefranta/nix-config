@@ -1,10 +1,10 @@
 { pkgs, config, ... }:
 let
-  emacsPkg = pkgs.inputs.emacs-overlay;
+  # emacsPkg = pkgs.inputs.emacs-overlay;
   emacs =
     with pkgs;
     (emacsPackagesFor (
-      if (builtins.length config.monitors != 0) then emacsPkg.emacs-git-pgtk else emacsPkg.emacs-git
+      if (builtins.length config.monitors != 0) then emacs-gtk else emacs-nox
     )).emacsWithPackages
       (
         epkgs: with epkgs; [

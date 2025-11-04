@@ -117,6 +117,12 @@
             ./hosts/nixos-firewall
           ];
         };
+        molybdenum = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/molybdenum
+          ];
+        };
         r2s = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [

@@ -49,6 +49,25 @@ in
           ${pkgs.iproute2}/bin/ip -6 addr add "fe80::ade1/64" peer "fe80::ade0/64" dev wg4242423914
         '';
     };
+    wg4242421588 = {
+      listenPort = 21588;
+      privateKeyFile = config.sops.secrets."wireguard/tech9-private-key".path;
+      allowedIPsAsRoutes = false;
+      peers = [
+          {
+            publicKey = "0kb8ffMcbx8oXZ3Ii5khOuCzmRqM2Cy0IslmrWtRGSk=";
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "us-chi01.dn42.tech9.io:52581";
+            dynamicEndpointRefreshSeconds = 5;
+          }
+      ];
+        postSetup = ''
+          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::100/64" peer "fe80::1588/64" dev wg4242421588
+        '';
+    };
   };
 
   # TODO: Make a NixOS module out of this
@@ -97,6 +116,9 @@ in
       sopsFile = ../secrets.yaml;
     };
     "wireguard/kioubit-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/tech9-private-key" = {
       sopsFile = ../secrets.yaml;
     };
   };

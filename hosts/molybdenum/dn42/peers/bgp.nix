@@ -16,6 +16,13 @@
       as = "4242420207";
       link = "3";
     }
+    {
+      multi = true;
+      name = "TECH9";
+      neigh = "fe80::1588%wg4242421588";
+      as = "4242421588";
+      link = "3";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

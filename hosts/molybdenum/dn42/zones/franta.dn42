@@ -1,0 +1,21 @@
+$TTL 1d
+franta.dn42. IN SOA ns0.franta.dn42. admin.franta.us. (
+		5; Serial
+		2h		; Refresh
+		1h		; Retry
+		2w		; Expire
+		1d )		; Negative caching of TTL
+
+; Name servers
+franta.dn42.                  IN   NS   ns0.franta.dn42.
+
+; Host addresses
+franta.dn42.                  IN   A   172.23.234.30
+us-cmh.franta.dn42.           IN   A   172.23.234.17
+ns0.franta.dn42.              IN   A   172.23.234.30
+
+; Host addresses
+franta.dn42.                  IN   AAAA   fdb7:c21f:f30f:53::
+us-cmh.franta.dn42.           IN   AAAA   fdb7:c21f:f30f::
+ns0.franta.dn42.              IN   AAAA   fdb7:c21f:f30f:53::
+

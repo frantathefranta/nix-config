@@ -32,6 +32,8 @@
     bottom # System viewer
     btop # better top
     cyme # Modern lsusb
+    dig # DNS
+    doggo # Better DNS
     ncdu # TUI disk usage
     eza # Better ls
     file

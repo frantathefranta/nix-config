@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   script = pkgs.writeShellScriptBin "update-roa" ''
@@ -9,6 +9,8 @@ let
     ${pkgs.bird2}/bin/birdc reload in all
   '';
   bgp = import peers/bgp.nix { };
+  hostIPv4 = builtins.elemAt config.networking.interfaces.ens18.ipv4.addresses 0;
+  address = hostIPv4.address;
 in
 {
 
@@ -35,8 +37,27 @@ in
       };
     };
   };
-
   services = {
+    bird-lg = {
+      # package = unstable.bird-lg;
+      proxy = {
+        enable = true;
+        listenAddress = "0.0.0.0:8000";
+        allowedIPs = [
+          "172.23.234.17"
+          "fdb7:c21f:f30f::"
+        ];
+        birdSocket = "/var/run/bird/bird.ctl";
+      };
+      frontend = {
+        enable = true;
+        servers = [
+          "us-cmh"
+        ];
+        domain = "franta.dn42";
+        listenAddress = "${address}:5000";
+      };
+    };
     bird = {
       enable = true;
       checkConfig = false;
@@ -80,7 +101,13 @@ in
         )
         + bgp.extraConfig;
     };
+    prometheus.exporters.bird = {
+      enable = true;
+      openFirewall = false;
+      listenAddress = address;
+    };
   };
+
 
   users.users.fbartik.extraGroups = [ "bird" ];
 }

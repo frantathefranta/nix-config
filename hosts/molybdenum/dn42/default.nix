@@ -1,7 +1,9 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     ./wireguard.nix
     ./bird2.nix
+    ./bind.nix
   ];
 
   boot.kernel.sysctl = {
@@ -16,15 +18,33 @@
     firewall = {
       checkReversePath = false;
       extraCommands = ''
+        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.33.00.0/16 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.32.10.0/24 -j ACCEPT
         ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
       '';
     };
     interfaces.lo = {
-      ipv4.addresses = [{ address = "172.23.234.17"; prefixLength = 32; }];
+      ipv4.addresses = [
+        {
+          address = "172.23.234.17";
+          prefixLength = 32;
+        }
+        {
+          address = "172.23.234.30";
+          prefixLength = 32;
+        }
+      ];
       ipv6.addresses = [
-        { address = "fdb7:c21f:f30f::"; prefixLength = 128; }
+        {
+          address = "fdb7:c21f:f30f::";
+          prefixLength = 128;
+        }
+        {
+          address = "fdb7:c21f:f30f:53::";
+          prefixLength = 128;
+        }
         # { address = "fe80::1"; prefixLength = 128; }
       ];
     };

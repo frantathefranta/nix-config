@@ -1,0 +1,13 @@
+$TTL 1d
+16/28.234.23.172.in-addr.arpa. IN SOA ns0.franta.dn42. admin.franta.us. (
+		5; Serial
+		2h		; Refresh
+		1h		; Retry
+		2w		; Expire
+		60s )		; Negative caching of TTL
+
+; Name servers
+16/28.234.23.172.in-addr.arpa.      IN   NS   ns0.franta.dn42.
+
+; Addresses point to hosts
+17.16/28.234.23.172.in-addr.arpa.      IN   PTR   us-cmh.franta.dn42.

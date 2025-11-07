@@ -1,7 +1,8 @@
+{ lib, ... }:
 {
   services.prometheus.exporters.node = {
     enable = true;
     enabledCollectors = [ "systemd" ];
-    openFirewall = true;
+    openFirewall = lib.mkDefault true;
   };
 }

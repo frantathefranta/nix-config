@@ -1,3 +1,7 @@
+{ lib, ... }:
+let
+  hostIPv4 = "10.32.10.242";
+in
 {
   imports = [
     #./services
@@ -16,7 +20,7 @@
       useDHCP = false;
       ipv4.addresses = [
         {
-          address = "10.32.10.242";
+          address = hostIPv4;
           prefixLength = 24;
         }
       ];
@@ -31,6 +35,20 @@
       address = "10.32.10.254";
       interface = "ens18";
     };
+    defaultGateway6 = {
+      address = "fe80::464c:a8ff:fede:3cf7";
+      interface = "ens18";
+    };
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+      "2606:4700:4700::1111"
+      "2606:4700:4700::1001"
+    ];
+  };
+  services.prometheus.exporters.node = {
+    openFirewall = false;
+    listenAddress = hostIPv4;
   };
   system.stateVersion = "25.05";
 }

@@ -18,6 +18,7 @@ in
       "audio"
       "dialout"
       "frrvty" # For inspecting vtysh
+      "ftdi"
       "git"
       "i2c"
       "network"

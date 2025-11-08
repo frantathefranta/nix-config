@@ -46,11 +46,17 @@
       powerOnBoot = true;
     };
     enableAllFirmware = true;
+    libftdi.enable = false;
+    keyboard.qmk.enable = true;
   };
   environment.systemPackages = with pkgs; [
     nvme-cli
     vial
     via
+    qmk
+    # lattice-diamond
+    #    libusb1
+    #    libusb-compat-0_1
   ];
   services.udev.packages = with pkgs; [
     vial

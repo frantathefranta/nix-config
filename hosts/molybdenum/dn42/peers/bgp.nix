@@ -23,6 +23,13 @@
       as = "4242421588";
       link = "3";
     }
+    {
+      multi = true;
+      name = "moe233";
+      neigh = "fe80::0253%wg4242420253";
+      as = "4242420253";
+      link = "5";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

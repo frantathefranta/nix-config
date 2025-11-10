@@ -30,6 +30,25 @@ in
           ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0207/64" dev wg4242420207
         '';
     };
+    wg4242420253 = {
+      listenPort = 20253;
+      privateKeyFile = config.sops.secrets."wireguard/moe233-private-key".path;
+      allowedIPsAsRoutes = false;
+      peers = [
+          {
+            publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "lv.dn42.moe233.net:21033";
+            dynamicEndpointRefreshSeconds = 5;
+          }
+      ];
+        postSetup = ''
+          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0253/64" dev wg4242420253
+        '';
+    };
     wg4242423914 = {
       listenPort = 23914;
       privateKeyFile = config.sops.secrets."wireguard/kioubit-private-key".path;
@@ -113,6 +132,9 @@ in
   # };
   sops.secrets = {
     "wireguard/routed-bits-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/moe233-private-key" = {
       sopsFile = ../secrets.yaml;
     };
     "wireguard/kioubit-private-key" = {

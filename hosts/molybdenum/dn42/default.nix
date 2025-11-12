@@ -31,22 +31,36 @@
           address = "172.23.234.17";
           prefixLength = 32;
         }
-        {
-          address = "172.23.234.30";
-          prefixLength = 32;
-        }
       ];
       ipv6.addresses = [
         {
           address = "fdb7:c21f:f30f::";
           prefixLength = 128;
         }
-        {
-          address = "fdb7:c21f:f30f:53::";
-          prefixLength = 128;
-        }
-        # { address = "fe80::1"; prefixLength = 128; }
       ];
+    };
+  };
+  systemd.network.enable = true;
+  systemd.network.netdevs."10-dummy53" = {
+    netdevConfig = {
+      Name = "dummy53";
+      Kind = "dummy";
+    };
+  };
+  systemd.network.networks."10-dummy53" = {
+    matchConfig.Name = "dummy53";
+    address = [
+      "172.23.234.30/32"
+      "fdb7:c21f:f30f:53::/128"
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+      # IPv6LinkLocalAddressGenerationMode = "none";
+      # DNS = "fdb7:c21f:f30f:53::";
+      # DNS="172.23.234.17 fdb7:c21f:f30f:53::";
+      # DNS="fd42:d42:d42:54::1";
+      DNSDefaultRoute = false;
+      # Domains = "dn42";
     };
   };
 }

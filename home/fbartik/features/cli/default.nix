@@ -26,7 +26,7 @@
   home.packages = with pkgs; [
     cachix # Cachix CLI client
     comma # Install and run programs by sticking a , before them
-    unstable.devenv
+    devenv
 
     bc # Calculator
     bottom # System viewer

@@ -104,7 +104,7 @@
         import none;
         export filter {
           # export all valid routes
-          if ( is_self_net_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
           then {
             accept;
           }

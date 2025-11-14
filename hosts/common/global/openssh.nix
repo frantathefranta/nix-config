@@ -4,7 +4,8 @@
   config,
   ...
 }: let
-  hosts = lib.attrNames outputs.nixosConfigurations;
+  fqdnList = builtins.attrNames outputs.nixosConfigurations;
+  hosts = map (fqdn: builtins.head (lib.strings.splitString "." fqdn)) fqdnList;
 
   # Sops needs acess to the keys before the persist dirs are even mounted; so
   # just persisting the keys won't work, we must point at /persist

@@ -21,6 +21,7 @@
 
     systems.url = "github:nix-systems/default-linux";
     hardware.url = "github:nixos/nixos-hardware";
+    srvos.url = "github:nix-community/srvos";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
@@ -127,6 +128,12 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/r2s
+          ];
+        };
+        "hetzner.vm.franta.us" = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/hetzner
           ];
         };
       };

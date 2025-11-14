@@ -3,6 +3,7 @@
 *.log
 tmp/
 
+.direnv/
 result*
 ssl/*pem
 **/**.key

@@ -14,6 +14,7 @@
   networking = {
     hostName = "qotom";
     useDHCP = false;
+    enableIPv6 = true;
     interfaces.enp1s0 = {
       ipv4.addresses = [
         {
@@ -45,9 +46,6 @@
       interface = "enp1s0";
     };
   };
-  # networking.resolvconf.extraOptions = [
-  #   "nameserver ::1"
-  # ];
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
     "net.ipv4.conf.all.forwarding" = 1;
@@ -55,29 +53,27 @@
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
+  # systemd-resolved binds to same IP as dnsmasq, this disables it
   services.resolved.extraConfig = ''
-    DNSStubListenerExtra=[::1]:53
+    DNSStubListener=no
   '';
-  environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/stub-resolv-custom.conf";
-  systemd.tmpfiles.settings.custom-resolvconf."/run/systemd/resolve/stub-resolv-custom.conf" = {
-    f = {
-      argument = "nameserver ::1 \n nameserver 127.0.0.53\n options edns0 trust-ad\n search .";
-      user = "systemd-resolve";
-      group = "systemd-resolve";
-      mode = "0644";
-      type = "f";
+   
+  # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
+  networking.nameservers = [];
+
+  services.dnsmasq = {
+    enable = true;
+    resolveLocalQueries = true;
+    settings = {
+      server = [
+        "/dn42/fdb7:c21f:f30f:53::"
+        "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"
+        "10.33.10.0"
+        "10.33.10.1"
+      ];
     };
   };
-  # systemd.tmpfiles.rules = [
-  #     "f /run/systemd/resolve/stub-resolv-custom.conf 0644 systemd-resolve systemd-resolve - nameserver ::1
-  #           nameserver 127.0.0.53
-  #           options edns0 trust-ad
-  #           search ."
-  # ];
   systemd.network.enable = true;
-  systemd.services.systemd-resolved.serviceConfig = {
-    Environment = "SYSTEMD_LOG_LEVEL=debug";
-  };
   systemd.network.netdevs."10-dummy42" = {
     netdevConfig = {
       Name = "dummy42";
@@ -87,18 +83,32 @@
   systemd.network.networks."10-dummy42" = {
     matchConfig.Name = "dummy42";
     address = [
-      "172.23.234.20/32"
       "fdb7:c21f:f30f:10::10/128"
     ];
     networkConfig = {
       LinkLocalAddressing = false;
       IPv6LinkLocalAddressGenerationMode = "none";
-      DNS = "fdb7:c21f:f30f:53::";
-      # DNS="172.23.234.17 fdb7:c21f:f30f:53::";
-      # DNS="fd42:d42:d42:54::1";
-      DNSDefaultRoute = false;
-      Domains = "dn42";
     };
+  };
+  services.frr = {
+    bgpd.enable = true;
+    config = ''
+      router bgp 65032
+        no bgp ebgp-requires-policy
+        bgp router-id 10.32.10.10
+        neighbor 2600:1702:6630:3fed::1 remote-as 65033
+        address-family ipv6
+          network fdb7:c21f:f30f:10::10/128 
+          neighbor 2600:1702:6630:3fed::1 activate
+      ipv6 prefix-list dn42_ips seq 10 permit fd00::/8 ge 48
+      route-map correct_src permit 1
+        match ipv6 address prefix-list dn42_ips
+        set src fdb7:c21f:f30f:10::10
+      ipv6 protocol bgp route-map correct_src
+    '';
+  };
+  services.prometheus.exporters.node = {
+    listenAddress = "10.32.10.10";
   };
   system.stateVersion = "24.11";
 }

@@ -62,7 +62,7 @@
   networking = {
     firewall.enable = lib.mkDefault true;
     domain = "infra.franta.us";
-    nameservers = [
+    nameservers = lib.mkDefault [
       "10.33.10.0"
       "10.33.10.1"
     ];

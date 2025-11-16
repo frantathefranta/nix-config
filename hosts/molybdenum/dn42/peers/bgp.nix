@@ -25,6 +25,13 @@
     }
     {
       multi = true;
+      name = "iedon.net";
+      neigh = "fe80::2189:124%wg4242422189";
+      as = "4242422189";
+      link = "3";
+    }
+    {
+      multi = true;
       name = "moe233";
       neigh = "fe80::0253%wg4242420253";
       as = "4242420253";

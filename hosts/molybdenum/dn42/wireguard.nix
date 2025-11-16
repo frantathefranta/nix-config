@@ -49,25 +49,6 @@ in
           ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0253/64" dev wg4242420253
         '';
     };
-    wg4242423914 = {
-      listenPort = 23914;
-      privateKeyFile = config.sops.secrets."wireguard/kioubit-private-key".path;
-      allowedIPsAsRoutes = false;
-      peers = [
-          {
-            publicKey = "6Cylr9h1xFduAO+5nyXhFI1XJ0+Sw9jCpCDvcqErF1s=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "us2.g-load.eu:21033";
-            dynamicEndpointRefreshSeconds = 5;
-          }
-      ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::ade1/64" peer "fe80::ade0/64" dev wg4242423914
-        '';
-    };
     wg4242421588 = {
       listenPort = 21588;
       privateKeyFile = config.sops.secrets."wireguard/tech9-private-key".path;
@@ -85,6 +66,44 @@ in
       ];
         postSetup = ''
           ${pkgs.iproute2}/bin/ip -6 addr add "fe80::100/64" peer "fe80::1588/64" dev wg4242421588
+        '';
+    };
+    wg4242422189 = {
+      listenPort = 22189;
+      privateKeyFile = config.sops.secrets."wireguard/iedon-private-key".path;
+      allowedIPsAsRoutes = false;
+      peers = [
+          {
+            publicKey = "2Wmv10a9eVSni9nfZ7YPsyl3ZC5z7vHq0sTZGgk5WGo=";
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "us-nyc.dn42.iedon.net:46161";
+            dynamicEndpointRefreshSeconds = 5;
+          }
+      ];
+        postSetup = ''
+          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::2189:124/64" dev wg4242421588
+        '';
+    };
+    wg4242423914 = {
+      listenPort = 23914;
+      privateKeyFile = config.sops.secrets."wireguard/kioubit-private-key".path;
+      allowedIPsAsRoutes = false;
+      peers = [
+          {
+            publicKey = "6Cylr9h1xFduAO+5nyXhFI1XJ0+Sw9jCpCDvcqErF1s=";
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "us2.g-load.eu:21033";
+            dynamicEndpointRefreshSeconds = 5;
+          }
+      ];
+        postSetup = ''
+          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::ade1/64" peer "fe80::ade0/64" dev wg4242423914
         '';
     };
   };
@@ -141,6 +160,9 @@ in
       sopsFile = ../secrets.yaml;
     };
     "wireguard/tech9-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/iedon-private-key" = {
       sopsFile = ../secrets.yaml;
     };
   };

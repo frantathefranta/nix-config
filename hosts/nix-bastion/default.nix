@@ -123,8 +123,10 @@
         bgp router-id 10.32.10.11
         neighbor ens18 arista01
         neighbor ens18 interface v6only remote-as 65033
+        neighbor ens18 capability extended-nexthop
         address-family ipv6
           network fdb7:c21f:f30f:10::11/128 
+          neighbor ens18 activate
       ipv6 prefix-list dn42_ips seq 10 permit fd00::/8 ge 48
       route-map correct_src permit 1
         match ipv6 address prefix-list dn42_ips

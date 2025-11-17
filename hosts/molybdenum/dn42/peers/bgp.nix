@@ -25,10 +25,10 @@
     }
     {
       multi = true;
-      name = "iedon.net";
+      name = "iedon";
       neigh = "fe80::2189:124%wg4242422189";
       as = "4242422189";
-      link = "3";
+      link = "4";
     }
     {
       multi = true;

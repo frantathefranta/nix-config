@@ -61,6 +61,10 @@
   hardware.enableRedistributableFirmware = lib.mkIf (config.services.qemuGuest.enable != true) true;
   networking = {
     firewall.enable = lib.mkDefault true;
+    search = [
+      "franta.us"
+      "infra.franta.us"
+    ];
     domain = "infra.franta.us";
     nameservers = lib.mkDefault [
       "10.33.10.0"

@@ -84,7 +84,7 @@ in
           }
       ];
         postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::2189:124/64" dev wg4242421588
+          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::2189:124/64" dev wg4242422189
         '';
     };
     wg4242423914 = {

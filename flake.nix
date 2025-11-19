@@ -130,12 +130,12 @@
             ./hosts/r2s
           ];
         };
-        # "hetzner.vm.franta.us" = lib.nixosSystem {
-        #   specialArgs = { inherit inputs outputs; };
-        #   modules = [
-        #     ./hosts/hetzner
-        #   ];
-        # };
+        hetzner = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/hetzner
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

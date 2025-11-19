@@ -91,4 +91,8 @@
       };
     };
   };
+  sops.secrets.kubeconfig = {
+    sopsFile = ../../secrets.yml;
+    path = "/home/fbartik/.kube/config";
+  };
 }

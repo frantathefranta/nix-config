@@ -39,12 +39,6 @@ in
     sopsFile = ../../secrets.yaml;
     neededForUsers = true;
   };
-  sops.secrets.kubeconfig = {
-    sopsFile = ../../secrets.yaml;
-    owner = "fbartik";
-    group = "users";
-    path = "/home/fbartik/.kube/config";
-  };
 
   home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
 

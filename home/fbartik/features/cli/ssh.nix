@@ -31,6 +31,9 @@ in
       "github.com" = {
         identityFile = config.sops.secrets."ssh/git_key".path;
       };
+      "hetzner.vm.franta.us" = {
+        user = "root";
+      };
       net = {
         forwardAgent = true;
         host = lib.concatStringsSep " " (

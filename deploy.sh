@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
+set -x
 export NIX_SSHOPTS="-A"
 
 build_remote=false
 
-hosts="$1"
-shift
-
-if [ -z "$hosts" ]; then
-    echo "No hosts to deploy"
-    exit 2
+if [[ "$1" == *.* ]]; then
+    hostname=$(echo $1 | sed 's/\..*$//')
+    fqdn="$1"
+else
+    hostname="$1"
+    fqdn="$1"
 fi
 
-for host in ${hosts//,/ }; do
-    nh os switch .\#nixosConfigurations.$host --target-host $host --ask
-    # nixos-rebuild --flake .\#$host switch --target-host $host --use-remote-sudo --use-substitutes $@
-done
+# if [ -z "$1" ]; then
+#     echo "No hosts to deploy"
+#     exit 2
+# fi
+
+# for host in ${hosts//,/ }; do
+    nh os switch .\#nixosConfigurations.$hostname --target-host $fqdn --ask
+# done

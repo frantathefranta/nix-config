@@ -6,6 +6,7 @@
     ./github.nix
   ];
   home.packages = with pkgs; [
+    hcloud # Hetzner Cloud CLI
     zola
   ];
 }

@@ -1,0 +1,16 @@
+#+title: Hetzner VM setup
+* Steps
+1. Deploy a Cloud VM with Ubuntu 24.04 (works with this one, others might as well). *Include an IPv4 address* for easier setup. 
+2. SSH to the VM and run ~nixos-infect~ command:
+   #+BEGIN_SRC
+   curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-25.05 bash 2>&1 | tee /tmp/infect.log
+   #+END_SRC
+3. Once infecting is finished, create a minimal NixOS config (as seen in ~./default.nix~).
+4. Run ~nixos-rebuild~ to deploy config:
+   #+BEGIN_SRC
+   nixos-rebuild --flake .#hetzner switch --target-host hetzner.vm.franta.us --use-remote-sudo --use-substitutes
+   #+END_SRC
+   ~nh~ doesn't quite know what to do with deploying to remote ~root~ AFAICT (for now).
+
+
+

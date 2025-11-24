@@ -42,7 +42,7 @@
     protocol bgp ROUTE_COLLECTOR
     {
       local as 4242421033;
-      neighbor fd42:4242:2601:ac12::1 as 4242422602;
+      neighbor fd42:d42:d42:179::1 as 4242422602;
 
       # enable multihop as the collector is not locally connected
       multihop;

@@ -10,6 +10,7 @@ keys:
     - &nixos-firewall age186pyjl3l9q9lx9rk63y3qmsj8f0w6q7hudygkgh75a0c6g898grqwyhgme
     - &r2s age1k4jcr5vnrvwl2s2sh2p3flejdcte0dsdt9daj6kwpwsc6r5t3sasuh33l4
     - &molybdenum age1en9r5jtv5cl7vfwlt9pjj5cmwck2uydnhscmydtncg9xaqt7l5msyg52u3
+    - &hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
@@ -48,6 +49,11 @@ creation_rules:
       - age:
           - *franta
           - *molybdenum
+  - path_regex: hosts/hetzner/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *hetzner
   - path_regex: home/fbartik/secrets.ya?ml$
     key_groups:
       - age:

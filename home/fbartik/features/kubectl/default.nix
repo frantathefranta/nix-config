@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   programs.k9s = {
@@ -71,6 +71,7 @@
     interactiveShellInit = # fish
       ''
         set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+        set -x KUBECONFIG ${config.sops.secrets.kubeconfig.path}
       '';
     shellAbbrs = {
       k = {
@@ -93,6 +94,5 @@
   };
   sops.secrets.kubeconfig = {
     sopsFile = ../../secrets.yml;
-    path = "/home/fbartik/.kube/config";
   };
 }

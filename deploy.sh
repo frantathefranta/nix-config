@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 export NIX_SSHOPTS="-A"
 
 build_remote=false

@@ -149,6 +149,47 @@ in
   #       ULAIPv6
   #       true;
   # };
+  systemd.services.systemd-networkd.serviceConfig = {
+    LoadCredential = [
+      "network.wireguard.private.42-wg4242421033:${
+        config.sops.secrets."wireguard/hetzner-private-key".path
+      }"
+    ];
+    # ReadOnlyPaths = "/run/secrets/wireguard";
+  };
+  systemd.network.netdevs."42-wg4242421033" = {
+    netdevConfig = {
+      Name = "wg4242421033";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242421033";
+      ListenPort = 21033;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "pdx.dn42.franta.us:21033";
+        PersistentKeepalive = 5;
+        PublicKey = "scXOalWiEmQsUqsSOENVUso7omWtNprwMJYotWMgV2I=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242421033" = {
+    matchConfig.Name = "wg4242421033";
+    addresses = [
+      {
+        Address = "fe80::1033/64";
+        Peer = "fe80::1:1033/64";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   sops.secrets = {
     "wireguard/routed-bits-private-key" = {
       sopsFile = ../secrets.yaml;
@@ -163,6 +204,9 @@ in
       sopsFile = ../secrets.yaml;
     };
     "wireguard/iedon-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/hetzner-private-key" = {
       sopsFile = ../secrets.yaml;
     };
   };

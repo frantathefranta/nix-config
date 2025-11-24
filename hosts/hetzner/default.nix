@@ -4,6 +4,8 @@
   imports = [
     inputs.srvos.nixosModules.server
     inputs.srvos.nixosModules.hardware-hetzner-cloud
+    ../../hosts/common/global/sops.nix
+    ./dn42
   ];
   networking = {
     hostName = "nixos-hetzner";

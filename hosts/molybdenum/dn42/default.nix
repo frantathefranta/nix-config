@@ -34,7 +34,7 @@
       ];
       ipv6.addresses = [
         {
-          address = "fdb7:c21f:f30f::";
+          address = "fdb7:c21f:f30f::1";
           prefixLength = 128;
         }
       ];
@@ -55,12 +55,22 @@
     ];
     networkConfig = {
       LinkLocalAddressing = false;
-      # IPv6LinkLocalAddressGenerationMode = "none";
-      # DNS = "fdb7:c21f:f30f:53::";
-      # DNS="172.23.234.17 fdb7:c21f:f30f:53::";
-      # DNS="fd42:d42:d42:54::1";
       DNSDefaultRoute = false;
-      # Domains = "dn42";
     };
   };
+  # systemd.network.netdevs."10-dummy_ospf" = {
+  #   netdevConfig = {
+  #     Name = "dummy_ospf";
+  #     Kind = "dummy";
+  #   };
+  # };
+  # systemd.network.networks."10-dummy_ospf" = {
+  #   matchConfig.Name = "dummy_ospf";
+  #   address = [
+  #     "fdb7:c21f:f30f::89/128"
+  #   ];
+  #   networkConfig = {
+  #     LinkLocalAddressing = false;
+  #   };
+  # };
 }

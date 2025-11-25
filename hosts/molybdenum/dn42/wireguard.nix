@@ -151,19 +151,18 @@ in
   # };
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
-      "network.wireguard.private.42-wg4242421033:${
+      "network.wireguard.private.89-ospf_wg:${
         config.sops.secrets."wireguard/hetzner-private-key".path
       }"
     ];
-    # ReadOnlyPaths = "/run/secrets/wireguard";
   };
-  systemd.network.netdevs."42-wg4242421033" = {
+  systemd.network.netdevs."89-ospf_wg" = {
     netdevConfig = {
-      Name = "wg4242421033";
+      Name = "ospf_wg";
       Kind = "wireguard";
     };
     wireguardConfig = {
-      PrivateKey = "@network.wireguard.private.42-wg4242421033";
+      PrivateKey = "@network.wireguard.private.89-ospf_wg";
       ListenPort = 21033;
     };
     wireguardPeers = [
@@ -178,13 +177,14 @@ in
       }
     ];
   };
-  systemd.network.networks."42-wg4242421033" = {
-    matchConfig.Name = "wg4242421033";
+  systemd.network.networks."89-ospf_wg" = {
+    matchConfig.Name = "ospf_wg";
     addresses = [
       {
         Address = "fe80::1033/64";
         Peer = "fe80::1:1033/64";
       }
+      { Address = "fdb7:c21f:f30f:ffff::1/64"; }
     ];
     networkConfig = {
       LinkLocalAddressing = false;

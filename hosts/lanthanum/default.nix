@@ -27,6 +27,7 @@
         "r2s.infra.franta.us"
       ];
     };
+    interfaces.wlp9s0.useDHCP = true;
   };
 
   programs = {

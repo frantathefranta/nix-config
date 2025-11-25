@@ -10,6 +10,8 @@
   ];
   home.packages = [
     pkgs.unstable.prusa-slicer
+    pkgs.wpa_supplicant_gui
+    pkgs.winbox4
   ];
   programs.ssh = {
     enable = true;

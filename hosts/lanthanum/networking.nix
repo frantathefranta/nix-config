@@ -16,6 +16,17 @@
       ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
     '';
   };
+  networking.wireless = {
+    enable = true;
+    # Imperative
+    allowAuxiliaryImperativeNetworks = true;
+    extraConfig = ''
+      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${config.users.groups.network.name}
+      update_config=1
+    '';
+  };
+  # Ensure group exists
+  users.groups.network = { };
   systemd.network = {
     enable = true;
     networks."10-lo" = {
@@ -44,7 +55,7 @@
           Metric = 2147483648;
         }
         {
-          Gateway = "2600:1702:6630:3fec::254:0";
+          Gateway = "fe80::464c:a8ff:fede:3cf7";
           GatewayOnLink = "yes";
           Metric = 2147483648;
         }

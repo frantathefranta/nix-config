@@ -46,6 +46,7 @@ in
             ]) hostnames
           )
         );
+        identityAgent = lib.mkIf (builtins.length config.monitors != 0) "~/.1password/agent.sock";
       };
     };
   };

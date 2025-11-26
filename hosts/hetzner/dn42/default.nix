@@ -19,6 +19,7 @@
     firewall = {
       checkReversePath = false;
       extraCommands = ''
+        ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
       '';
@@ -61,6 +62,10 @@
         Peer = "fe80::1033/64";
       }
       { Address = "fdb7:c21f:f30f:ffff::2/64"; }
+      {
+        Address = "169.254.1.2/16";
+        Peer = "169.254.1.1/16";
+      }
     ];
     networkConfig = {
       LinkLocalAddressing = false;

@@ -16,95 +16,95 @@ in
       privateKeyFile = config.sops.secrets."wireguard/routed-bits-private-key".path;
       allowedIPsAsRoutes = false;
       peers = [
-          {
-            publicKey = "89xUzROs3l/KNPLxDTJz4l5aEH1cmLb22bNgChhRiQo=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "router.chi1.routedbits.com:51033";
-            dynamicEndpointRefreshSeconds = 5;
-          }
+        {
+          publicKey = "89xUzROs3l/KNPLxDTJz4l5aEH1cmLb22bNgChhRiQo=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "router.chi1.routedbits.com:51033";
+          dynamicEndpointRefreshSeconds = 5;
+        }
       ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0207/64" dev wg4242420207
-        '';
+      postSetup = ''
+        ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0207/64" dev wg4242420207
+      '';
     };
     wg4242420253 = {
       listenPort = 20253;
       privateKeyFile = config.sops.secrets."wireguard/moe233-private-key".path;
       allowedIPsAsRoutes = false;
       peers = [
-          {
-            publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "lv.dn42.moe233.net:21033";
-            dynamicEndpointRefreshSeconds = 5;
-          }
+        {
+          publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "lv.dn42.moe233.net:21033";
+          dynamicEndpointRefreshSeconds = 5;
+        }
       ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0253/64" dev wg4242420253
-        '';
+      postSetup = ''
+        ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::0253/64" dev wg4242420253
+      '';
     };
     wg4242421588 = {
       listenPort = 21588;
       privateKeyFile = config.sops.secrets."wireguard/tech9-private-key".path;
       allowedIPsAsRoutes = false;
       peers = [
-          {
-            publicKey = "0kb8ffMcbx8oXZ3Ii5khOuCzmRqM2Cy0IslmrWtRGSk=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "us-chi01.dn42.tech9.io:52581";
-            dynamicEndpointRefreshSeconds = 5;
-          }
+        {
+          publicKey = "0kb8ffMcbx8oXZ3Ii5khOuCzmRqM2Cy0IslmrWtRGSk=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "us-chi01.dn42.tech9.io:52581";
+          dynamicEndpointRefreshSeconds = 5;
+        }
       ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::100/64" peer "fe80::1588/64" dev wg4242421588
-        '';
+      postSetup = ''
+        ${pkgs.iproute2}/bin/ip -6 addr add "fe80::100/64" peer "fe80::1588/64" dev wg4242421588
+      '';
     };
     wg4242422189 = {
       listenPort = 22189;
       privateKeyFile = config.sops.secrets."wireguard/iedon-private-key".path;
       allowedIPsAsRoutes = false;
       peers = [
-          {
-            publicKey = "2Wmv10a9eVSni9nfZ7YPsyl3ZC5z7vHq0sTZGgk5WGo=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "us-nyc.dn42.iedon.net:46161";
-            dynamicEndpointRefreshSeconds = 5;
-          }
+        {
+          publicKey = "2Wmv10a9eVSni9nfZ7YPsyl3ZC5z7vHq0sTZGgk5WGo=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "us-nyc.dn42.iedon.net:46161";
+          dynamicEndpointRefreshSeconds = 5;
+        }
       ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::2189:124/64" dev wg4242422189
-        '';
+      postSetup = ''
+        ${pkgs.iproute2}/bin/ip -6 addr add "fe80::1033/64" peer "fe80::2189:124/64" dev wg4242422189
+      '';
     };
     wg4242423914 = {
       listenPort = 23914;
       privateKeyFile = config.sops.secrets."wireguard/kioubit-private-key".path;
       allowedIPsAsRoutes = false;
       peers = [
-          {
-            publicKey = "6Cylr9h1xFduAO+5nyXhFI1XJ0+Sw9jCpCDvcqErF1s=";
-            allowedIPs = [
-              "0.0.0.0/0"
-              "::/0"
-            ];
-            endpoint = "us2.g-load.eu:21033";
-            dynamicEndpointRefreshSeconds = 5;
-          }
+        {
+          publicKey = "6Cylr9h1xFduAO+5nyXhFI1XJ0+Sw9jCpCDvcqErF1s=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "us2.g-load.eu:21033";
+          dynamicEndpointRefreshSeconds = 5;
+        }
       ];
-        postSetup = ''
-          ${pkgs.iproute2}/bin/ip -6 addr add "fe80::ade1/64" peer "fe80::ade0/64" dev wg4242423914
-        '';
+      postSetup = ''
+        ${pkgs.iproute2}/bin/ip -6 addr add "fe80::ade1/64" peer "fe80::ade0/64" dev wg4242423914
+      '';
     };
   };
 
@@ -151,9 +151,7 @@ in
   # };
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
-      "network.wireguard.private.89-ospf_wg:${
-        config.sops.secrets."wireguard/hetzner-private-key".path
-      }"
+      "network.wireguard.private.89-ospf_wg:${config.sops.secrets."wireguard/hetzner-private-key".path}"
     ];
   };
   systemd.network.netdevs."89-ospf_wg" = {
@@ -185,6 +183,10 @@ in
         Peer = "fe80::1:1033/64";
       }
       { Address = "fdb7:c21f:f30f:ffff::1/64"; }
+      {
+        Address = "169.254.1.1/16";
+        Peer = "169.254.1.2/16";
+      }
     ];
     networkConfig = {
       LinkLocalAddressing = false;

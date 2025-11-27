@@ -12,7 +12,7 @@
     pkgs.unstable.prusa-slicer
     pkgs.wpa_supplicant_gui
     pkgs.winbox4
-    pkgs.minecraft
+    pkgs.prismlauncher
   ];
   programs.ssh = {
     enable = true;
@@ -20,7 +20,7 @@
       nix-bastion = {
         identityAgent = "~/.1password/agent.sock";
         forwardAgent = true;
-        hostname = "nix-bastion.franta.us";
+        hostname = "nix-bastion.infra.franta.us";
       };
     };
   };

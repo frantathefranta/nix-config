@@ -31,6 +31,9 @@
       "network.wireguard.private.89-ospf_wg:${
         config.sops.secrets."wireguard/home-private-key".path
       }"
+      "network.wireguard.private.42-wg4242423914:${
+        config.sops.secrets."wireguard/kioubit-private-key".path
+      }"
     ];
   };
   systemd.network.netdevs."89-ospf_wg" = {
@@ -71,6 +74,39 @@
       LinkLocalAddressing = false;
     };
   };
+  systemd.network.netdevs."42-wg4242423914" = {
+    netdevConfig = {
+      Name = "wg4242423914";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242423914";
+      ListenPort = 23914;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "us3.g-load.eu:21033";
+        PersistentKeepalive = 5;
+        PublicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242423914" = {
+    matchConfig.Name = "wg4242423914";
+    addresses = [
+      {
+        Address = "fe80::ade1/64";
+        Peer = "fe80::ade0/64";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   systemd.network.netdevs."10-dummy_ospf" = {
     netdevConfig = {
       Name = "dummy_ospf";
@@ -93,6 +129,12 @@
       mode = "0640";
       owner = "systemd-network";
       group = "systemd-network";
+    };
+    "wireguard/kioubit-private-key" = {
+      sopsFile = ../secrets.yaml;
+      # mode = "0640";
+      # owner = "systemd-network";
+      # group = "systemd-network";
     };
   };
 }

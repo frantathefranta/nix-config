@@ -1,6 +1,14 @@
 { ... }:
 {
-  sessions = [];
+  sessions = [
+    {
+      multi = true;
+      name = "Kioubit";
+      neigh = "fe80::ade0%wg4242423914";
+      as = "4242423914";
+      link = "4";
+    }
+  ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v4 from dnpeers {
             #disabled;

@@ -69,10 +69,6 @@
     ospfd.enable = true;
     ospf6d.enable = true;
     config = ''
-      ${lib.optionalString config.virtualisation.multipass.enable ''
-        interface mpqemubr0
-          ip ospf prefix-suppression
-      ''}
       router bgp 65033
         bgp router-id 10.0.0.99
         bgp log-neighbor-changes

@@ -42,7 +42,7 @@ in
       # package = unstable.bird-lg;
       proxy = {
         enable = true;
-        listenAddress = "0.0.0.0:8000";
+        listenAddresses = "0.0.0.0:8000";
         allowedIPs = [
           "172.23.234.17"
           "fdb7:c21f:f30f::"
@@ -55,7 +55,7 @@ in
           "us-cmh"
         ];
         domain = "franta.dn42";
-        listenAddress = "${address}:5000";
+        listenAddresses = "${address}:5000";
       };
     };
     bird = {

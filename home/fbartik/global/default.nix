@@ -47,9 +47,11 @@
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName = "frantathefranta";
-    userEmail = "fb@franta.us";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "frantathefranta";
+        email = "fb@franta.us";
+      };
       init.defaultBranch = "main";
       # fish takes these options and adds them to the prompt
       bash = {

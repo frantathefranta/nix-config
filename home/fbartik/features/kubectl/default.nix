@@ -4,7 +4,7 @@
   programs.k9s = {
     enable = true;
     package = pkgs.unstable.k9s;
-    plugin = {
+    plugins = {
       reconcile-git = {
         shortCut = "Shift-R";
         confirm = false;

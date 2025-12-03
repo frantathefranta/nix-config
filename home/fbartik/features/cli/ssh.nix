@@ -17,6 +17,7 @@ in
     includes = [
       "${config.home.homeDirectory}/.ssh/ephemeral_config"
     ];
+    enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
       "brocade*" = {

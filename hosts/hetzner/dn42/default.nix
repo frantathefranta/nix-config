@@ -34,6 +34,9 @@
       "network.wireguard.private.42-wg4242423914:${
         config.sops.secrets."wireguard/kioubit-private-key".path
       }"
+      "network.wireguard.private.42-wg4242420207:${
+        config.sops.secrets."wireguard/routed-bits-private-key".path
+      }"
     ];
   };
   systemd.network.netdevs."89-ospf_wg" = {
@@ -106,6 +109,39 @@
       LinkLocalAddressing = false;
     };
   };
+  systemd.network.netdevs."42-wg4242420207" = {
+    netdevConfig = {
+      Name = "wg4242420207";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242420207";
+      ListenPort = 20207;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "router.sea1.routedbits.com:51033";
+        PersistentKeepalive = 5;
+        PublicKey = "/aY73VNAGQ7W+GersZUSO6PqHJV8nWKb12Op9EQzY3k=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242420207" = {
+    matchConfig.Name = "wg4242420207";
+    addresses = [
+      {
+        Address = "fe80::1033/64";
+        Peer = "fe80::0207/64";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   systemd.network.netdevs."10-dummy_ospf" = {
     netdevConfig = {
       Name = "dummy_ospf";
@@ -125,15 +161,12 @@
   sops.secrets = {
     "wireguard/home-private-key" = {
       sopsFile = ../secrets.yaml;
-      mode = "0640";
-      owner = "systemd-network";
-      group = "systemd-network";
     };
     "wireguard/kioubit-private-key" = {
       sopsFile = ../secrets.yaml;
-      # mode = "0640";
-      # owner = "systemd-network";
-      # group = "systemd-network";
+    };
+    "wireguard/routed-bits-private-key" = {
+      sopsFile = ../secrets.yaml;
     };
   };
 }

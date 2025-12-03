@@ -8,6 +8,13 @@
       as = "4242423914";
       link = "4";
     }
+    {
+      multi = true;
+      name = "RoutedBits";
+      neigh = "fe80::0207%wg4242420207";
+      as = "4242420207";
+      link = "2";
+    }
   ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v4 from dnpeers {

@@ -55,6 +55,8 @@
     ];
     networkConfig = {
       LinkLocalAddressing = false;
+      DNS = "fdb7:c21f:f30f:53::";
+      Domains = "~dn42";
       DNSDefaultRoute = false;
     };
   };

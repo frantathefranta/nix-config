@@ -45,7 +45,8 @@ in
         listenAddresses = "0.0.0.0:8000";
         allowedIPs = [
           "172.23.234.17"
-          "fdb7:c21f:f30f::"
+          "fdb7:c21f:f30f::1"
+          "fdb7:c21f:f30f:1::1"
         ];
         birdSocket = "/var/run/bird/bird.ctl";
       };
@@ -53,6 +54,7 @@ in
         enable = true;
         servers = [
           "us-cmh"
+          "us-pdx"
         ];
         domain = "franta.dn42";
         listenAddresses = "${address}:5000";

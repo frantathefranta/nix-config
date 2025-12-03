@@ -35,6 +35,25 @@ in
     };
   };
   services = {
+    bird-lg = {
+      proxy = {
+        enable = true;
+        listenAddresses = "[fdb7:c21f:f30f:1::1]:8000";
+        allowedIPs = [
+          "fdb7:c21f:f30f::1"
+          "fdb7:c21f:f30f:1::1"
+        ];
+        birdSocket = "/var/run/bird/bird.ctl";
+      };
+      # frontend = {
+      #   enable = true;
+      #   servers = [
+      #     "us-cmh"
+      #   ];
+      #   domain = "franta.dn42";
+      #   listenAddresses = "${address}:5000";
+      # };
+    };
     bird = {
       enable = true;
       checkConfig = false;

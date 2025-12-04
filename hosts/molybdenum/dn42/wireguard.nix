@@ -152,6 +152,9 @@ in
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
       "network.wireguard.private.89-ospf_wg:${config.sops.secrets."wireguard/hetzner-private-key".path}"
+      "network.wireguard.private.42-wg4242423035:${
+        config.sops.secrets."wireguard/larecc-private-key".path
+      }"
     ];
   };
   systemd.network.netdevs."89-ospf_wg" = {
@@ -191,6 +194,39 @@ in
       LinkLocalAddressing = false;
     };
   };
+  systemd.network.netdevs."42-wg4242423035" = {
+    netdevConfig = {
+      Name = "wg4242423035";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242423035";
+      ListenPort = 23035;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "use2.dn42.lare.cc:21033";
+        PersistentKeepalive = 5;
+        PublicKey = "AREskFoxP2cd6DXoJ7druDsiWKX+8TwrkQqfi4JxRRw=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242423035" = {
+    matchConfig.Name = "wg4242423035";
+    addresses = [
+      {
+        Address = "fe80::1033:3035/64";
+        Peer = "fe80::3035:137";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   sops.secrets = {
     "wireguard/routed-bits-private-key" = {
       sopsFile = ../secrets.yaml;
@@ -205,6 +241,9 @@ in
       sopsFile = ../secrets.yaml;
     };
     "wireguard/iedon-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/larecc-private-key" = {
       sopsFile = ../secrets.yaml;
     };
     "wireguard/hetzner-private-key" = {

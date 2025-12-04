@@ -4,6 +4,7 @@
   imports = [
     inputs.srvos.nixosModules.server
     inputs.srvos.nixosModules.hardware-hetzner-cloud
+    ../../hosts/common/global/nix.nix
     ../../hosts/common/global/sops.nix
     ./dn42
   ];

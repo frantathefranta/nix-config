@@ -37,6 +37,13 @@
       as = "4242420253";
       link = "5";
     }
+    {
+      multi = true;
+      name = "larecc";
+      neigh = "fe80::3035:137%wg4242423035";
+      as = "4242423035";
+      link = "3";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

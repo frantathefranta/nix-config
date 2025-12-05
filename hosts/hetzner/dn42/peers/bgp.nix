@@ -15,6 +15,13 @@
       as = "4242420207";
       link = "2";
     }
+    {
+      multi = true;
+      name = "larecc";
+      neigh = "fe80::3035:132%wg4242423035";
+      as = "4242423035";
+      link = "4";
+    }
   ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v4 from dnpeers {

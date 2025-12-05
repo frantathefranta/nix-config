@@ -52,6 +52,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    dig #DNS
     neovim
     tcpdump
     traceroute

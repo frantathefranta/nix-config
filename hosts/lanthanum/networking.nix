@@ -52,12 +52,12 @@
       routes = [
         {
           Gateway = "10.254.0.1";
-          Metric = 2147483648;
+          Metric = 20;
         }
         {
           Gateway = "fe80::464c:a8ff:fede:3cf7";
           GatewayOnLink = "yes";
-          Metric = 2147483648;
+          Metric = 20;
         }
       ];
       linkConfig.MTUBytes = "9000";

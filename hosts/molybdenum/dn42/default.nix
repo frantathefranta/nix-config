@@ -4,6 +4,7 @@
     ./wireguard.nix
     ./bird2.nix
     ./bind.nix
+    ./caddy.nix
   ];
 
   boot.kernel.sysctl = {

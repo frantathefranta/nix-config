@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   script = pkgs.writeShellScriptBin "update-roa" ''
@@ -52,12 +57,17 @@ in
       };
       frontend = {
         enable = true;
+        whois = "whois.dn42";
+        netSpecificMode = "dn42";
         servers = [
           "us-cmh"
           "us-pdx"
         ];
         domain = "franta.dn42";
-        listenAddresses = "${address}:5000";
+        listenAddresses = [
+          "${address}:5000"
+          "[fdb7:c21f:f30f::1]:5000"
+        ];
       };
     };
     bird = {
@@ -109,7 +119,6 @@ in
       listenAddress = address;
     };
   };
-
 
   users.users.fbartik.extraGroups = [ "bird" ];
 }

@@ -44,6 +44,13 @@
       as = "4242423035";
       link = "3";
     }
+    {
+      multi = true;
+      name = "burble";
+      neigh = "fe80::42:2601:29:1%wg4242422601";
+      as = "4242422601";
+      link = "4";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

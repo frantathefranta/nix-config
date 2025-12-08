@@ -7,6 +7,7 @@
 {
   imports = [
     ./bird.nix
+    # ./wireguard.nix
   ];
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
@@ -39,6 +40,9 @@
       }"
       "network.wireguard.private.42-wg4242423035:${
         config.sops.secrets."wireguard/larecc-private-key".path
+      }"
+      "network.wireguard.private.42-wg4242422601:${
+        config.sops.secrets."wireguard/burble-private-key".path
       }"
     ];
   };
@@ -79,20 +83,20 @@
       LinkLocalAddressing = false;
     };
   };
-  systemd.network.netdevs."42-wg4242423914" = {
+  systemd.network.netdevs."42-wg4242422601" = {
     netdevConfig = {
-      Name = "wg4242423914";
+      Name = "wg4242422601";
       Kind = "wireguard";
     };
     wireguardConfig = {
-      PrivateKey = "@network.wireguard.private.42-wg4242423914";
-      ListenPort = 23914;
+      PrivateKey = "@network.wireguard.private.42-wg4242422601";
+      ListenPort = 22601;
     };
     wireguardPeers = [
       {
-        Endpoint = "us3.g-load.eu:21033";
+        Endpoint = "dn42-us-fre1.burble.com:21033";
         PersistentKeepalive = 5;
-        PublicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+        PublicKey = "aBSm40KZbXnzbZNDGgPgqxONrmDmO0iMbkJ10ZJ9rR4=";
         AllowedIPs = [
           "0.0.0.0/0"
           "::/0"
@@ -100,12 +104,12 @@
       }
     ];
   };
-  systemd.network.networks."42-wg4242423914" = {
-    matchConfig.Name = "wg4242423914";
+  systemd.network.networks."42-wg4242422601" = {
+    matchConfig.Name = "wg4242422601";
     addresses = [
       {
-        Address = "fe80::ade1/64";
-        Peer = "fe80::ade0/64";
+        Address = "fe80::1033:2601/64";
+        Peer = "fe80::42:2601:36:1/64";
       }
     ];
     networkConfig = {
@@ -139,6 +143,40 @@
       {
         Address = "fe80::1033/64";
         Peer = "fe80::0207/64";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
+
+  systemd.network.netdevs."42-wg4242423914" = {
+    netdevConfig = {
+      Name = "wg4242423914";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242423914";
+      ListenPort = 23914;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "us3.g-load.eu:21033";
+        PersistentKeepalive = 5;
+        PublicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242423914" = {
+    matchConfig.Name = "wg4242423914";
+    addresses = [
+      {
+        Address = "fe80::ade1/64";
+        Peer = "fe80::ade0/64";
       }
     ];
     networkConfig = {
@@ -205,6 +243,9 @@
       sopsFile = ../secrets.yaml;
     };
     "wireguard/larecc-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/burble-private-key" = {
       sopsFile = ../secrets.yaml;
     };
   };

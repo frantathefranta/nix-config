@@ -22,6 +22,13 @@
       as = "4242423035";
       link = "4";
     }
+    {
+      multi = true;
+      name = "burble";
+      neigh = "fe80::42:2601:36:1%wg4242422601";
+      as = "4242422601";
+      link = "3";
+    }
   ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v4 from dnpeers {

@@ -155,6 +155,9 @@ in
       "network.wireguard.private.42-wg4242423035:${
         config.sops.secrets."wireguard/larecc-private-key".path
       }"
+      "network.wireguard.private.42-wg4242422601:${
+        config.sops.secrets."wireguard/burble-private-key".path
+      }"
     ];
   };
   systemd.network.netdevs."89-ospf_wg" = {
@@ -215,6 +218,39 @@ in
       }
     ];
   };
+  systemd.network.netdevs."42-wg4242422601" = {
+    netdevConfig = {
+      Name = "wg4242422601";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.42-wg4242422601";
+      ListenPort = 22601;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "dn42-us-nyc1.burble.com:21033";
+        PersistentKeepalive = 5;
+        PublicKey = "38UOrMy2cr8fnn/tMn/uk2c6fE6JsdU0tjCQG4g1ey0=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."42-wg4242422601" = {
+    matchConfig.Name = "wg4242422601";
+    addresses = [
+      {
+        Address = "fe80::1033:2601/64";
+        Peer = "fe80::42:2601:29:1/64";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   systemd.network.networks."42-wg4242423035" = {
     matchConfig.Name = "wg4242423035";
     addresses = [
@@ -247,6 +283,9 @@ in
       sopsFile = ../secrets.yaml;
     };
     "wireguard/hetzner-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/burble-private-key" = {
       sopsFile = ../secrets.yaml;
     };
   };

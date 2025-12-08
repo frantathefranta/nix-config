@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, outputs, ... }:
 
 {
   imports = [
@@ -8,6 +8,7 @@
     ../../hosts/common/global/sops.nix
     ./dn42
   ];
+  # ++ (builtins.attrValues outputs.nixosModules);
   networking = {
     hostName = "nixos-hetzner";
   };

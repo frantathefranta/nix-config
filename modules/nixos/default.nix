@@ -4,5 +4,6 @@
   # List your module files here
   # my-module = import ./my-module.nix;
   system-tarball-extlinux = import ./system-tarball-extlinux.nix;
+  # custom-wireguard = import ./custom-wireguard.nix;
   # conman = import ./conman.nix;
 }

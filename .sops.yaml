@@ -23,6 +23,7 @@ creation_rules:
           - *nixos-firewall
           - *r2s
           - *molybdenum
+          - *hetzner
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:
       - age:

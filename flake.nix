@@ -130,10 +130,10 @@
             ./hosts/r2s
           ];
         };
-        hetzner = lib.nixosSystem {
+        nix-hetzner = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/hetzner
+            ./hosts/nix-hetzner
           ];
         };
       };

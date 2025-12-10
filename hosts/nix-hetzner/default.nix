@@ -7,10 +7,10 @@
     ../../hosts/common/global/nix.nix
     ../../hosts/common/global/sops.nix
     ./dn42
-  ];
-  # ++ (builtins.attrValues outputs.nixosModules);
+  ]
+  ++ (builtins.attrValues outputs.nixosModules);
   networking = {
-    hostName = "nixos-hetzner";
+    hostName = "nix-hetzner";
   };
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {

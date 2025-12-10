@@ -18,7 +18,7 @@ in
           options = {
             listenPort = mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = types.nullOr types.int;
               description = ''
                 Wireguard port
               '';
@@ -37,6 +37,20 @@ in
                 Wireguard peer endpoint
               '';
             };
+            peerAddress = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                Wireguard peer link-local address
+              '';
+            };
+            localAddress = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                Wireguard local link-local address
+              '';
+            };
           };
         });
       # name = lib.mkOption {
@@ -46,28 +60,38 @@ in
     };
   };
   config =
-    let
-      name = builtins.toString cfg.interfaces;
-      privateKeyName = "${config.networking.hostName}/${name}";
-    in
+    # let
+    #   name = builtins.toString cfg.interfaces;
+    #   privateKeyName = "${config.networking.hostName}/${name}";
+    # in
     {
-      sops.secrets = {
-        "wireguard/${privateKeyName}" = {
-          sopsFile = ../../hosts/common/secrets.yaml;
-        };
-      };
+      sops.secrets = fold (a: b: a // b) { } (
+        flip mapAttrsToList cfg.interfaces (
+          interface: data: {
+            "wireguard/${interface}" = {
+              sopsFile = ../../hosts/${config.networking.hostName}/secrets.yaml;
+            };
+          }
+        )
+      );
 
-      systemd.services.systemd-networkd.serviceConfig = {
-        LoadCredential =
+      systemd.services.systemd-networkd.serviceConfig = fold (a: b: a // b) { } (
+        flip mapAttrsToList cfg.interfaces (
+          interface: data:
           let
-            secretPath = config.sops.secrets."wireguard/${privateKeyName}".path;
+            secretName = "wireguard/${interface}";
+            secretPath = config.sops.secrets.${secretName}.path;
           in
-          [
-            "network.wireguard.private.${name}:${secretPath}"
-          ];
-      };
+          {
+            LoadCredential = [
+              "network.wireguard.private.${interface}:${secretPath}"
+            ];
+          }
+        )
+      );
       systemd.network.netdevs = builtins.mapAttrs (interface: data: {
         netdevConfig = {
+          # TODO: This needs to be able to remove any "integer-" prefix
           Name = lib.strings.removePrefix "50-" interface;
           Kind = "wireguard";
         };
@@ -86,6 +110,20 @@ in
             ];
           }
         ];
+      }) cfg.interfaces;
+
+      systemd.network.networks = builtins.mapAttrs (interface: data: {
+        # TODO: Same as above
+        matchConfig.Name = lib.strings.removePrefix "50-" interface;
+        addresses = [
+          {
+            Address = data.localAddress;
+            Peer = data.peerAddress;
+          }
+        ];
+        networkConfig = {
+          LinkLocalAddressing = false;
+        };
       }) cfg.interfaces;
     };
 

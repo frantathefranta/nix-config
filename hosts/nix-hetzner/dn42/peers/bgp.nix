@@ -3,30 +3,37 @@
   sessions = [
     {
       multi = true;
-      name = "Kioubit";
+      name = "dn42_Kioubit";
       neigh = "fe80::ade0%wg4242423914";
       as = "4242423914";
       link = "4";
     }
     {
       multi = true;
-      name = "RoutedBits";
+      name = "dn42_RoutedBits";
       neigh = "fe80::0207%wg4242420207";
       as = "4242420207";
       link = "2";
     }
     {
       multi = true;
-      name = "larecc";
+      name = "dn42_larecc";
       neigh = "fe80::3035:132%wg4242423035";
       as = "4242423035";
       link = "4";
     }
     {
       multi = true;
-      name = "burble";
+      name = "dn42_burble";
       neigh = "fe80::42:2601:36:1%wg4242422601";
       as = "4242422601";
+      link = "3";
+    }
+    {
+      multi = true;
+      name = "dn42_nedifinita";
+      neigh = "fe80::454%wg4242420454";
+      as = "4242420454";
       link = "3";
     }
   ];

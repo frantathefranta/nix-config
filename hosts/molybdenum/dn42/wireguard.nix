@@ -10,6 +10,15 @@ let
 in
 {
   environment.systemPackages = [ pkgs.wireguard-tools ];
+  services.custom-wireguard.interfaces = {
+    "50-wg4242420454" = {
+      listenPort = 20454;
+      peerEndpoint = "dn42b.nedifinita.com:55965";
+      peerPublicKey = "W4yTKYVWin9xkSDgGRKA6DlGADOMZADGR6OaJZgV1UI=";
+      peerAddressV6 = "fe80::454:2";
+      localAddressV6 = "fe80::1033:0454/64";
+    };
+  };
   networking.wireguard.interfaces = {
     wg4242420207 = {
       listenPort = 20207;

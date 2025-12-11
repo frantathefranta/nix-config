@@ -51,6 +51,13 @@
       as = "4242422601";
       link = "4";
     }
+    {
+      multi = true;
+      name = "dn42_nedifinita";
+      neigh = "fe80::454:2%wg4242420454";
+      as = "4242420454";
+      link = "4";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

@@ -56,7 +56,7 @@ in
     };
   };
   config = {
-    sops.secrets = fold (a: b: a // b) { } (
+    sops.secrets = lib.mkMerge (
       flip mapAttrsToList cfg.interfaces (
         interface: data: {
           "wireguard/${interface}" = {
@@ -65,8 +65,7 @@ in
         }
       )
     );
-
-    systemd.services.systemd-networkd.serviceConfig = fold (a: b: a // b) { } (
+    systemd.services.systemd-networkd.serviceConfig = lib.mkMerge (
       flip mapAttrsToList cfg.interfaces (
         interface: data:
         let

@@ -74,7 +74,10 @@
 
   systemd.network.networks."10-lo" = {
     matchConfig.Name = "lo";
-    address = [ "10.0.0.200/32" ];
+    address = [
+      "10.0.0.200/32"
+      "2600:1702:6630:3fec::200/128"
+    ];
   };
   systemd.network.networks."11-eth0" = {
     name = "eth0";
@@ -119,10 +122,17 @@
         no bgp hard-administrative-reset
         no bgp graceful-restart notification
         no bgp network import-check
-        neighbor eth0 arista01
+        neighbor eth0 arista01p31
         neighbor eth0 interface v6only remote-as 65033
+        neighbor eth0 capability extended-nexthop
+        neighbor eth1 arista01p32
+        neighbor eth1 interface v6only remote-as 65033
+        neighbor eth1 capability extended-nexthop
         address-family ipv4 unicast
           network 10.0.0.200/32
+        exit-address-family
+        address-family ipv6 unicast
+          network 2600:1702:6630:3fec::200/128
         exit-address-family
       ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
       route-map correct_src permit 1

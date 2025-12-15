@@ -7,6 +7,13 @@
       peerAddressV6 = "fe80::454";
       localAddressV6 = "fe80::1033:0454/64";
     };
+    "50-wg4242421588" = {
+      listenPort = 21588;
+      peerEndpoint = "us-dal01.dn42.tech9.io:57500";
+      peerPublicKey = "iEZ71NPZge6wHKb6q4o2cvCopZ7PBDqn/b3FO56+Hkc=";
+      peerAddressV6 = "fe80::1588/64";
+      localAddressV6 = "fe80::100";
+    };
     "50-wg4242422601" = {
       listenPort = 22601;
       peerEndpoint = "dn42-us-fre1.burble.com:21033";

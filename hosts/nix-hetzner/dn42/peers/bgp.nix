@@ -36,6 +36,13 @@
       as = "4242420454";
       link = "3";
     }
+    {
+      multi = true;
+      name = "dn42_tech9";
+      neigh = "fe80::1588%wg4242421588";
+      as = "4242421588";
+      link = "4";
+    }
   ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v4 from dnpeers {

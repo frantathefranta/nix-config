@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   imports = [
-    ./services
     ./hardware-configuration.nix
 
     ../common/global

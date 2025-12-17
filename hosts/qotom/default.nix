@@ -1,4 +1,4 @@
-{ lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 {
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
@@ -9,6 +9,7 @@
     ../common/global
     ../common/users/fbartik
 
+    ../common/optional/dn42.nix
     ../common/optional/smartd.nix
   ];
   networking = {
@@ -88,6 +89,48 @@
     networkConfig = {
       LinkLocalAddressing = false;
       IPv6LinkLocalAddressGenerationMode = "none";
+    };
+  };
+  systemd.services.systemd-networkd.serviceConfig = {
+    LoadCredential = [
+      "network.wireguard.private.50-wg_mikrotik:${config.sops.secrets."wireguard/mikrotik-private-key".path}"
+    ];
+  };
+  systemd.network.netdevs."50-wg_mikrotik" = {
+    netdevConfig = {
+      Name = "wg_mikrotik";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.50-wg_mikrotik";
+      ListenPort = 44069;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "10.32.10.108:44068";
+        PersistentKeepalive = 5;
+        PublicKey = "E/zt3wlE3yKum2CBlakSCUXGTTLZOoI4giAlKOCk0mY=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."50-wg_mikrotik" = {
+    matchConfig.Name = "wg_mikrotik";
+    addresses = [
+      {
+        Address = "169.254.1.1/16";
+        Peer = "169.254.1.2/16";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };  sops.secrets = {
+    "wireguard/mikrotik-private-key" = {
+      sopsFile = ./secrets.yaml;
     };
   };
   services.frr = {

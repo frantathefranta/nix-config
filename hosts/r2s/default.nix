@@ -2,6 +2,7 @@
   imports = [
     ./hardware-configuration.nix
     ./networking.nix
+    # ./services
     ../common/global
     ../common/users/fbartik
   ];

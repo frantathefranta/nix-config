@@ -130,6 +130,12 @@
             ./hosts/r2s
           ];
         };
+        radxa-eu = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/radxa-eu
+          ];
+        };
         hetzner = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [

@@ -9,6 +9,7 @@ keys:
     - &work-vm age1u2z93gyp7zek6cy5tuva3n4lm825rd3au8aqralx409jh9wm9gfsdsgdq3
     - &nixos-firewall age186pyjl3l9q9lx9rk63y3qmsj8f0w6q7hudygkgh75a0c6g898grqwyhgme
     - &r2s age1k4jcr5vnrvwl2s2sh2p3flejdcte0dsdt9daj6kwpwsc6r5t3sasuh33l4
+    - &radxa-eu age13823m6h5wvuyqaxy5hg3rs64zy3th0pzv9vwmrn3jxscwlkl3gaqg8y2p7
     - &molybdenum age1en9r5jtv5cl7vfwlt9pjj5cmwck2uydnhscmydtncg9xaqt7l5msyg52u3
     - &hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
 creation_rules:
@@ -22,6 +23,7 @@ creation_rules:
           - *work-vm
           - *nixos-firewall
           - *r2s
+          - *radxa-eu
           - *molybdenum
           - *hetzner
   - path_regex: hosts/qotom/secrets.ya?ml$

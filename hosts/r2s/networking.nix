@@ -122,10 +122,10 @@
         no bgp hard-administrative-reset
         no bgp graceful-restart notification
         no bgp network import-check
-        neighbor eth0 arista01p31
+        neighbor eth0 description arista01p31
         neighbor eth0 interface v6only remote-as 65033
         neighbor eth0 capability extended-nexthop
-        neighbor eth1 arista01p32
+        neighbor eth1 description arista01p32
         neighbor eth1 interface v6only remote-as 65033
         neighbor eth1 capability extended-nexthop
         address-family ipv4 unicast

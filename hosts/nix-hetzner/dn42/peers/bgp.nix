@@ -45,6 +45,46 @@
     }
   ];
   extraConfig = ''
+    protocol bgp ROUTE_COLLECTOR
+    {
+      local as 4242421033;
+      neighbor fd42:d42:d42:179::1 as 4242422602;
+
+      # enable multihop as the collector is not locally connected
+      multihop;
+
+      ipv4 {
+        # export all available paths to the collector    
+        add paths tx;
+
+        # import/export filters
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+
+      ipv6 {
+        # export all available paths to the collector    
+        add paths tx;
+
+        # import/export filters
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+    }
       protocol bgp iBGP_cmh_v4 from dnpeers {
             #disabled;
             neighbor 172.23.234.17 as 4242421033;

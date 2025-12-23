@@ -51,6 +51,13 @@ in
                 Wireguard local link-local IPv6 address
               '';
             };
+            vrf = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                Which VRF this interface should be added to
+              '';
+            };
           };
         });
     };
@@ -113,6 +120,7 @@ in
       ];
       networkConfig = {
         LinkLocalAddressing = false;
+        VRF = data.vrf;
       };
     }) cfg.interfaces;
   };

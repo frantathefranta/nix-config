@@ -16,6 +16,7 @@ in
     shell = pkgs.fish;
     extraGroups = ifTheyExist [
       "audio"
+      "bird"
       "dialout"
       "frrvty" # For inspecting vtysh
       "ftdi"

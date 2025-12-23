@@ -56,5 +56,12 @@
       localAddressV6 = "fe80::1033/64";
       peerAddressV6 = "fe80::2189:124";
     };
+    "50-wg_qotom" = {
+      listenPort = 40001;
+      peerEndpoint = "qotom.infra.franta.us:40001";
+      peerPublicKey = "nVTI9kySAfJGAAEVjrVLLbWVESNVgl+n1d7RJzMyqRw=";
+      localAddressV6 = "fe80::1033:6:5032/64";
+      peerAddressV6 = "fe80::6:5032:1033";
+    };
   };
 }

@@ -119,6 +119,4 @@ in
       listenAddress = address;
     };
   };
-
-  users.users.fbartik.extraGroups = [ "bird" ];
 }

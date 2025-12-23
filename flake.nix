@@ -22,6 +22,7 @@
     systems.url = "github:nix-systems/default-linux";
     hardware.url = "github:nixos/nixos-hardware";
     srvos.url = "github:nix-community/srvos";
+    gobgp.url = "github:wavelens/gobgp.nix";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix

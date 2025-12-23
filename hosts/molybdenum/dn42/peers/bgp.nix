@@ -133,6 +133,42 @@
                     import keep filtered;
             };
     }
+    protocol bgp qotom
+    {
+      local as 4242421033;
+      neighbor fe80::6:5032:1033%wg_qotom as 65032;
+      ipv4 {
+        extended next hop on;
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+
+      ipv6 {
+        extended next hop on;
+        import filter {
+          if ( is_loopback_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+        reject; 
+        };
+        export filter {
+          # export all valid routes
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+    }
     protocol bgp arista
     {
       local as 4242421033;

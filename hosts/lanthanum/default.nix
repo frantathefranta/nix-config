@@ -62,8 +62,6 @@
   services.udev.packages = with pkgs; [
     vial
     via
-    f2fs-tools # Interacting with R2s filesystem
-    rkdeveloptool # Interacting with Rockchip SBCs
   ];
   fonts.packages = with pkgs; [
     etBembo

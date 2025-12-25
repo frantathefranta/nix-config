@@ -8,11 +8,13 @@
     ./features/editor
     ./features/desktop/common
   ];
-  home.packages = [
-    pkgs.unstable.prusa-slicer
-    pkgs.wpa_supplicant_gui
-    pkgs.winbox4
-    pkgs.prismlauncher
+  home.packages = with pkgs; [
+    unstable.prusa-slicer
+    wpa_supplicant_gui
+    winbox4
+    prismlauncher
+    f2fs-tools # Interacting with R2s filesystem
+    rkdeveloptool # Interacting with Rockchip SBCs
   ];
   programs.ssh = {
     enable = true;

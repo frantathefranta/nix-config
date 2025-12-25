@@ -97,16 +97,16 @@
   systemd.network.networks."11-eth1" = {
     name = "eth1";
     networkConfig = {
-      Address = "10.254.0.65/31";
+      # Address = "10.254.0.65/31";
       ConfigureWithoutCarrier = true;
-      DHCP = "yes";
+      DHCP = "no";
     };
-    routes = [
-      {
-        Gateway = "10.254.0.64";
-        Metric = 2147483648;
-      }
-    ];
+    # routes = [
+    #   {
+    #     Gateway = "10.254.0.64";
+    #     Metric = 2147483648;
+    #   }
+    # ];
     linkConfig.ActivationPolicy = "always-up";
   };
   services.frr = {
@@ -122,21 +122,22 @@
         no bgp hard-administrative-reset
         no bgp graceful-restart notification
         no bgp network import-check
-        neighbor eth0 description arista01p31
+        neighbor unnumbered peer-group
+        neighbor unnumbered remote-as auto
+        neighbor unnumbered capability extended-nexthop
+        neighbor fe80::de2c:6eff:fe7e:66d4 peer-group unnumbered
+        neighbor fe80::de2c:6eff:fe7e:66d4 interface eth1
         neighbor eth0 interface v6only remote-as 65033
-        neighbor eth0 capability extended-nexthop
-        neighbor eth1 description arista01p32
-        neighbor eth1 interface v6only remote-as 65033
-        neighbor eth1 capability extended-nexthop
+        neighbor eth0 description arista01p31
         address-family ipv4 unicast
           network 10.0.0.200/32
         exit-address-family
         address-family ipv6 unicast
           network 2600:1702:6630:3fec::200/128
+          neighbor fe80::de2c:6eff:fe7e:66d4 activate
         exit-address-family
-      ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
+      ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 ge 32
       route-map correct_src permit 1
-        match ip address prefix-list loopbacks_ips
         set src 10.0.0.200
       ip protocol bgp route-map correct_src
     '';

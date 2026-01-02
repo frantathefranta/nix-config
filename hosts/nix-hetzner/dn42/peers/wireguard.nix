@@ -16,10 +16,10 @@
     };
     "50-wg4242422601" = {
       listenPort = 22601;
-      peerEndpoint = "dn42-us-fre1.burble.com:21033";
-      peerPublicKey = "aBSm40KZbXnzbZNDGgPgqxONrmDmO0iMbkJ10ZJ9rR4=";
+      peerEndpoint = "dn42-us-lax1.burble.com:21033";
+      peerPublicKey = "WqJjS3x+L802AuMvpfeiVZNUCm1WxbYd+kBPx+2suDs=";
       localAddressV6 = "fe80::1033:2601/64";
-      peerAddressV6 = "fe80::42:2601:36:1";
+      peerAddressV6 = "fe80::42:2601:2a:1";
     };
     "50-wg4242420207" = {
       listenPort = 20207;

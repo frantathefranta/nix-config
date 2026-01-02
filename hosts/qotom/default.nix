@@ -67,6 +67,11 @@
     };
     firewall = {
       checkReversePath = false;
+      interfaces = {
+        enp1s0 = {
+          allowedUDPPorts = [ 44069 ];
+        };
+      };
       extraCommands = ''
         ${pkgs.iptables}/bin/iptables -A INPUT -s 10.33.00.0/16 -j ACCEPT
         ${pkgs.iptables}/bin/iptables -A INPUT -s 10.32.10.0/24 -j ACCEPT

@@ -152,9 +152,9 @@ in
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
       "network.wireguard.private.89-ospf_wg:${config.sops.secrets."wireguard/hetzner-private-key".path}"
-      # "network.wireguard.private.42-wg4242423035:${
-      #   config.sops.secrets."wireguard/larecc-private-key".path
-      # }"
+      "network.wireguard.private.50-wg_radxa-eu:${
+        config.sops.secrets."wireguard/50-wg_radxa-eu".path
+      }"
       # "network.wireguard.private.42-wg4242422601:${
       #   config.sops.secrets."wireguard/burble-private-key".path
       # }"
@@ -197,27 +197,39 @@ in
       LinkLocalAddressing = false;
     };
   };
-  # systemd.network.netdevs."42-wg4242423035" = {
-  #   netdevConfig = {
-  #     Name = "wg4242423035";
-  #     Kind = "wireguard";
-  #   };
-  #   wireguardConfig = {
-  #     PrivateKey = "@network.wireguard.private.42-wg4242423035";
-  #     ListenPort = 23035;
-  #   };
-  #   wireguardPeers = [
-  #     {
-  #       Endpoint = "use2.dn42.lare.cc:21033";
-  #       PersistentKeepalive = 5;
-  #       PublicKey = "AREskFoxP2cd6DXoJ7druDsiWKX+8TwrkQqfi4JxRRw=";
-  #       AllowedIPs = [
-  #         "0.0.0.0/0"
-  #         "::/0"
-  #       ];
-  #     }
-  #   ];
-  # };
+  systemd.network.netdevs."50-wg_radxa-eu" = {
+    netdevConfig = {
+      Name = "wg_radxa-eu";
+      Kind = "wireguard";
+    };
+    wireguardConfig = {
+      PrivateKey = "@network.wireguard.private.50-wg_radxa-eu";
+      ListenPort = 51820;
+    };
+    wireguardPeers = [
+      {
+        Endpoint = "10.32.10.119:51821";
+        PersistentKeepalive = 5;
+        PublicKey = "Cgseg7RDeS4hDU1L8kj4yfxqvSGC3/l84NkUORz5DRo=";
+        AllowedIPs = [
+          "0.0.0.0/0"
+          "::/0"
+        ];
+      }
+    ];
+  };
+  systemd.network.networks."50-wg_radxa-eu" = {
+    matchConfig.Name = "wg_radxa-eu";
+    addresses = [
+      {
+        Address = "fe80::faaa:1/64";
+        Peer = "fe80::faaa:2";
+      }
+    ];
+    networkConfig = {
+      LinkLocalAddressing = false;
+    };
+  };
   # systemd.network.netdevs."42-wg4242422601" = {
   #   netdevConfig = {
   #     Name = "wg4242422601";
@@ -251,18 +263,6 @@ in
   #     LinkLocalAddressing = false;
   #   };
   # };
-  # systemd.network.networks."42-wg4242423035" = {
-  #   matchConfig.Name = "wg4242423035";
-  #   addresses = [
-  #     {
-  #       Address = "fe80::1033:3035/64";
-  #       Peer = "fe80::3035:137";
-  #     }
-  #   ];
-  #   networkConfig = {
-  #     LinkLocalAddressing = false;
-  #   };
-  # };
   sops.secrets = {
     # "wireguard/routed-bits-private-key" = {
     #   sopsFile = ../secrets.yaml;
@@ -283,6 +283,9 @@ in
     #   sopsFile = ../secrets.yaml;
     # };
     "wireguard/hetzner-private-key" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "wireguard/50-wg_radxa-eu" = {
       sopsFile = ../secrets.yaml;
     };
     # "wireguard/burble-private-key" = {

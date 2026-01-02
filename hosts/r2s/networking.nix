@@ -82,16 +82,16 @@
   systemd.network.networks."11-eth0" = {
     name = "eth0";
     networkConfig = {
-      Address = "10.254.0.63/31";
+      # Address = "10.254.0.63/31";
       ConfigureWithoutCarrier = true;
     };
     linkConfig.ActivationPolicy = "always-up";
-    routes = [
-      {
-        Gateway = "10.254.0.62";
-        Metric = 2147483647;
-      }
-    ];
+    # routes = [
+    #   {
+    #     Gateway = "10.254.0.62";
+    #     Metric = 2147483647;
+    #   }
+    # ];
   };
 
   systemd.network.networks."11-eth1" = {
@@ -127,14 +127,15 @@
         neighbor unnumbered capability extended-nexthop
         neighbor fe80::de2c:6eff:fe7e:66d4 peer-group unnumbered
         neighbor fe80::de2c:6eff:fe7e:66d4 interface eth1
-        neighbor eth0 interface v6only remote-as 65033
-        neighbor eth0 description arista01p31
+        neighbor fe80::4 peer-group unnumbered
+        neighbor fe80::4 interface eth0
         address-family ipv4 unicast
           network 10.0.0.200/32
         exit-address-family
         address-family ipv6 unicast
           network 2600:1702:6630:3fec::200/128
           neighbor fe80::de2c:6eff:fe7e:66d4 activate
+          neighbor fe80::4 activate
         exit-address-family
       ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 ge 32
       route-map correct_src permit 1

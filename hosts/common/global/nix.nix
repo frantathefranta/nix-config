@@ -2,12 +2,22 @@
   inputs,
   lib,
   ...
-}: let
+}:
+let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-in {
+in
+{
   nix = {
     settings = {
-      extra-substituters = lib.mkAfter ["https://frantathefranta.cachix.org" "https://cache.nixos.org" "https://nix-community.cachix.org"];
+      extra-substituters = lib.mkAfter [
+        "https://frantathefranta.cachix.org"
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+        "https://eh5.cachix.org"
+      ];
+      extra-trusted-public-keys = lib.mkAfter [
+        "eh5.cachix.org-1:pNWZ2OMjQ8RYKTbMsiU/AjztyyC8SwvxKOf6teMScKQ="
+      ];
       trusted-users = [
         "root"
         "@wheel"
@@ -32,7 +42,7 @@ in {
       options = "--delete-older-than 14d";
     };
     # Add each flake input as a registry and nix_path
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 }

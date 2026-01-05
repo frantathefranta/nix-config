@@ -99,6 +99,7 @@
     + ''RUN+="${inputs.eh5.packages.aarch64-linux.rtl8152-led-ctrl}/bin/rtl8152-led-ctrl set --device %s{busnum}:%s{devnum}"'';
 
   services.lvm.enable = false;
+  services.fake-hwclock.enable = true;
 
   systemd.services."wait-system-running" = {
     description = "Wait system running";

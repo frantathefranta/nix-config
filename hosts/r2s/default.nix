@@ -1,5 +1,7 @@
+{ inputs, ... }:
 {
   imports = [
+    inputs.eh5.nixosModules.fake-hwclock
     ./hardware-configuration.nix
     ./networking.nix
     # ./services

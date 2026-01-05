@@ -174,9 +174,6 @@
       local as 4242421033;
       neighbor fe80::464c:a8ff:fede:3cf7%ens18 as 65033;
 
-      # enable multihop as the collector is not locally connected
-      #multihop;
-
       ipv4 {
         # export all available paths to the collector    
         add paths tx;

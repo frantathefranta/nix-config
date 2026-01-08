@@ -10,8 +10,11 @@
   ];
   networking = {
     hostName = "r2s";
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
   system.stateVersion = "25.05";
   system.enableExtlinuxTarball = true;
   documentation.man.generateCaches = false;
+  time.timeZone = "Europe/Prague";
+
 }

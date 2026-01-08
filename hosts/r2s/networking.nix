@@ -21,12 +21,16 @@
     # '';
   };
 
+  services.timesyncd = {
+    servers = [ "0.nixos.pool.ntp.org" ];
+    # fallbackServers are 0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org
+  };
   systemd.network.enable = true;
   systemd.network.config = {
     networkConfig = {
       ManageForeignRoutingPolicyRules = false;
       # SpeedMeter = true;
-      # ManageForeignNextHops = false;
+      ManageForeignNextHops = false;
       ManageForeignRoutes = false;
     };
   };
@@ -82,16 +86,16 @@
   systemd.network.networks."11-eth0" = {
     name = "eth0";
     networkConfig = {
-      # Address = "10.254.0.63/31";
+      Address = "192.168.15.10/24";
       ConfigureWithoutCarrier = true;
     };
     linkConfig.ActivationPolicy = "always-up";
-    # routes = [
-    #   {
-    #     Gateway = "10.254.0.62";
-    #     Metric = 2147483647;
-    #   }
-    # ];
+    routes = [
+      {
+        Gateway = "192.168.15.1";
+        # Metric = 2147483647;
+      }
+    ];
   };
 
   systemd.network.networks."11-eth1" = {
@@ -109,6 +113,30 @@
     # ];
     linkConfig.ActivationPolicy = "always-up";
   };
+  # systemd.network.netdevs."60-he-ipv6" = {
+  #   netdevConfig = {
+  #     Name = "he-ipv6";
+  #     Kind = "sit";
+  #     MTUBytes = "1412";
+  #   };
+  #   tunnelConfig = {
+  #     Local = "91.139.115.41";
+  #     Remote = "216.66.86.122";
+  #     TTL = 255;
+  #   };
+  # };
+
+  # systemd.network.networks."60-he-ipv6" = {
+  #   matchConfig = { Name = "he-ipv6"; };
+  #   networkConfig = {
+  #     Address = "2001:470:6e:1e8::2/64";
+  #   };
+  #   routes = [{
+  #     Destination = "2000::/3";
+  #     Source = "2001:470:6f:1e8::/64";
+  #     Metric = 50;
+  #   }];
+  # };
   services.frr = {
     bfdd.enable = true;
     bgpd.enable = true;
@@ -127,15 +155,14 @@
         neighbor unnumbered capability extended-nexthop
         neighbor fe80::de2c:6eff:fe7e:66d4 peer-group unnumbered
         neighbor fe80::de2c:6eff:fe7e:66d4 interface eth1
-        neighbor fe80::4 peer-group unnumbered
-        neighbor fe80::4 interface eth0
+        # neighbor fe80::4 peer-group unnumbered
+        # neighbor fe80::4 interface eth0
         address-family ipv4 unicast
           network 10.0.0.200/32
         exit-address-family
         address-family ipv6 unicast
-          network 2600:1702:6630:3fec::200/128
           neighbor fe80::de2c:6eff:fe7e:66d4 activate
-          neighbor fe80::4 activate
+          # neighbor fe80::4 activate
         exit-address-family
       ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 ge 32
       route-map correct_src permit 1

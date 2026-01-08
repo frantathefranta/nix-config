@@ -51,6 +51,12 @@
       interface = "ens18";
       metric = 2147483647;
     };
+    firewall.interfaces.ens18 = {
+      allowedTCPPorts = [
+        80
+        443
+      ];
+    };
   };
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
@@ -59,43 +65,43 @@
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
-    # hosts = {
-    #   "10.33.35.1" = [
-    #     "talos-actinium"
-    #     "talos-actinium.infra.franta.us"
-    #   ];
-    #   "10.33.35.2" = [
-    #     "talos-thorium"
-    #     "talos-thorium.infra.franta.us"
-    #   ];
-    #   "10.33.35.3" = [
-    #     "talos-protactinium"
-    #     "talos-protactinium.infra.franta.us"
-    #   ];
-    #   "10.33.35.21" = [
-    #     "talos-g3-mini"
-    #     "talos-g3-mini.infra.franta.us"
-    #   ];
-    #   "10.33.35.22" = [
-    #     "talos-n150-01"
-    #     "talos-n150-01.infra.franta.us"
-    #   ];
-    # };
-    # extraHosts = ''
-    #   10.33.35.1 talos-actinium.infra.franta.us
-    #   10.33.35.2 talos-thorium.infra.franta.us
-    #   10.33.35.3 talos-actinium.infra.franta.us
-    #   10.33.35.21 talos-g3-mini.infra.franta.us
-    #   10.33.35.22 talos-n150-01.infra.franta.us
-    # '';
+  # hosts = {
+  #   "10.33.35.1" = [
+  #     "talos-actinium"
+  #     "talos-actinium.infra.franta.us"
+  #   ];
+  #   "10.33.35.2" = [
+  #     "talos-thorium"
+  #     "talos-thorium.infra.franta.us"
+  #   ];
+  #   "10.33.35.3" = [
+  #     "talos-protactinium"
+  #     "talos-protactinium.infra.franta.us"
+  #   ];
+  #   "10.33.35.21" = [
+  #     "talos-g3-mini"
+  #     "talos-g3-mini.infra.franta.us"
+  #   ];
+  #   "10.33.35.22" = [
+  #     "talos-n150-01"
+  #     "talos-n150-01.infra.franta.us"
+  #   ];
   # };
-  
+  # extraHosts = ''
+  #   10.33.35.1 talos-actinium.infra.franta.us
+  #   10.33.35.2 talos-thorium.infra.franta.us
+  #   10.33.35.3 talos-actinium.infra.franta.us
+  #   10.33.35.21 talos-g3-mini.infra.franta.us
+  #   10.33.35.22 talos-n150-01.infra.franta.us
+  # '';
+  # };
+
   # systemd-resolved binds to same IP as dnsmasq, this disables it
   services.resolved.extraConfig = ''
     DNSStubListener=no
   '';
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
-  networking.nameservers = [];
+  networking.nameservers = [ ];
 
   services.dnsmasq = {
     enable = true;
@@ -130,108 +136,113 @@
   services.bird = {
     enable = true;
     config = ''
-      router id 10.0.10.11;
-      protocol device {
-          scan time 10;
-      }
-      protocol direct {
-        interface "lo";
-        ipv4;
-        ipv6;
-      }
-      protocol kernel {
-          scan time 20;
+        router id 10.0.10.11;
+        protocol device {
+            scan time 10;
+        }
+        protocol direct {
+          interface "lo";
+          ipv4;
+          ipv6;
+        }
+        protocol kernel {
+            scan time 20;
 
-          ipv6 {
-              export filter {
-                  if source = RTS_STATIC then reject;
-                  krt_prefsrc = 2600:1702:6630:3fec::10:11;
-                  accept;
-              };
-          };
-      };
-      protocol kernel {
-          scan time 20;
+            ipv6 {
+                export filter {
+                    if source = RTS_STATIC then reject;
+                    krt_prefsrc = 2600:1702:6630:3fec::10:11;
+                    accept;
+                };
+            };
+        };
+        protocol kernel {
+            scan time 20;
 
-          ipv4 {
-              export filter {
-                  if source = RTS_STATIC then reject;
-                  krt_prefsrc = 10.0.10.11;
-                  accept;
-              };
-          };
-      };
-    function is_loopback_v4() -> bool {
-      return net ~ [
-        10.0.0.0/8{32,32}
-      ];
-    }
-     protocol bgp mikrotik {
-       local fe80::2 as 65032;
-       neighbor fe80::1%wg_mikrotik as 65534;
-       strict bind yes;
-       ipv4 {
-         extended next hop on;
-         table master4;
-         import all;
-         export filter {
-           if ( is_loopback_v4() ) 
-           then {
-             accept;
-           }
-           reject;
+            ipv4 {
+                export filter {
+                    if source = RTS_STATIC then reject;
+                    krt_prefsrc = 10.0.10.11;
+                    accept;
+                };
+            };
+        };
+      function is_loopback_v4() -> bool {
+        return net ~ [
+          10.0.0.0/8{32,32}
+        ];
+      }
+      function is_loopback_v6() -> bool {
+        return net ~ [
+          ::/0{128,128}
+        ];
+      }
+       protocol bgp mikrotik {
+         local fe80::2 as 65032;
+         neighbor fe80::1%wg_mikrotik as 65534;
+         strict bind yes;
+         ipv4 {
+           extended next hop on;
+           table master4;
+           import all;
+           export filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
          };
-       };
-       ipv6 {
-         extended next hop on;
-         table master6;
-         import all;
-         export none;
-         # export filter {
-         #   if ( is_loopback_v6() ) 
-         #   then {
-         #     accept;
-         #   }
-         # reject;
-         # };
-       };
-       vrf "default";
-     }
-     # protocol bgp arista {
-     #   local fe80::20e:c4ff:fed3:d40b as 65032;
-     #   neighbor fe80::464c:a8ff:fede:3cf7%enp1s0 as 65033;
-     #   strict bind yes;
-     #   ipv4 {
-     #     extended next hop on;
-     #     import all;
-     #     import filter {
-     #       if ( is_loopback_v4() ) 
-     #       then {
-     #         accept;
-     #       }
-     #       reject;
-     #     };
-     #     export filter {
-     #       if ( is_loopback_v4() ) 
-     #       then {
-     #         accept;
-     #       }
-     #       reject;
-     #     };
-     #   };
-     #   ipv6 {
-     #     extended next hop on;
-     #     import all;
-     #     export filter {
-     #       if ( is_loopback_v6() ) 
-     #       then {
-     #         accept;
-     #       }
-     #       reject;
-     #     };
-     #   };
-     #  vrf "default";
-     # }
+         ipv6 {
+           extended next hop on;
+           table master6;
+           import all;
+           export none;
+           # export filter {
+           #   if ( is_loopback_v6() ) 
+           #   then {
+           #     accept;
+           #   }
+           # reject;
+           # };
+         };
+         vrf "default";
+       }
+       protocol bgp arista {
+         local fe80::be24:11ff:fe2a:28f1 as 65032;
+         neighbor fe80::464c:a8ff:fede:3cf7%ens18 as 65033;
+         strict bind yes;
+         ipv4 {
+           extended next hop on;
+           import all;
+           import filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
+           export filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
+         };
+         ipv6 {
+           extended next hop on;
+           import all;
+           export filter {
+             if ( is_loopback_v6() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
+         };
+        vrf "default";
+       }
     '';
   };
   # services.frr = {
@@ -256,7 +267,7 @@
   #         network 10.0.10.11/32
   #       address-family ipv6
   #         network 2600:1702:6630:3fec::10:11/128
-  #         network fdb7:c21f:f30f:10::11/128 
+  #         network fdb7:c21f:f30f:10::11/128
   #         neighbor ens18 activate
   #         neighbor ens18 route-map correct_src_v6 in
   #         neighbor fe80::1 activate

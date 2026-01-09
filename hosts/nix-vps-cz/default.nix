@@ -1,4 +1,4 @@
-{ outputs, ... }:
+{ pkgs, outputs, ... }:
 
 {
   imports = [
@@ -19,6 +19,13 @@
     # Needed for public keys deployed through vpsAdmin, can be disabled if you
     # authorize your keys in configuration
     authorizedKeysInHomedir = true;
+  };
+  environment.systemPackages = with pkgs; [
+    vim
+    unstable.iperf3
+  ];
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
   };
 
   users.users.root.openssh.authorizedKeys.keys = [

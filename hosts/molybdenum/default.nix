@@ -48,7 +48,10 @@ in
     ];
   };
   services.prometheus.exporters.node = {
-    openFirewall = false;
+    openFirewall = true;
+    firewallRules = ''
+      iifname "ens18" tcp dport 9100 counter accept
+    '';
     listenAddress = hostIPv4;
   };
   system.stateVersion = "25.05";

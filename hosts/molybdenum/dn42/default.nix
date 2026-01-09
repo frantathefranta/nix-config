@@ -19,12 +19,34 @@
   networking = {
     firewall = {
       checkReversePath = false;
-      extraCommands = ''
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.33.00.0/16 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.32.10.0/24 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
+      interfaces.ens18.allowedUDPPortRanges = [
+        {
+          from = 20000;
+          to = 30000;
+        }
+      ];
+    };
+    nftables = {
+      enable = true;
+      ruleset = ''
+        table inet dn42filter {
+          chain input {
+            type filter hook input priority filter; policy accept;
+            
+            # Accept DN42 traffic
+            ip saddr 172.20.0.0/14 accept
+            ip6 saddr fd00::/8 accept
+            ip6 saddr fe80::/64 accept
+          }
+        }
+        table inet local_subnets {
+          chain input {
+            type filter hook input priority filter; policy accept;
+            ip saddr 10.33.0.0/16 accept
+            ip saddr 10.32.10.0/24 accept
+            ip6 saddr 2600:1702:6630:3fec::/63 accept
+          }
+        }
       '';
     };
     interfaces.lo = {

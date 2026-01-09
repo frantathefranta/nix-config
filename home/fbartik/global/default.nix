@@ -9,6 +9,7 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    inputs.snitch.homeManagerModules.snitch
     #inputs.impermanence.nixosModules.home-manager.impermanence
     ../features/cli
   ]
@@ -37,6 +38,10 @@
 
   # Add stuff for your user as you see fit:
   programs.neovim.enable = true;
+  programs.snitch = {
+    enable = true;
+    package = pkgs.unstable.snitch;
+  };
   home.packages = with pkgs; [
     ethtool
     gparted

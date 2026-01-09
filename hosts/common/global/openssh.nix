@@ -16,7 +16,7 @@ in {
     settings = {
       # Harden
       PasswordAuthentication = false;
-      PermitRootLogin = "no";
+      PermitRootLogin = lib.mkDefault "no";
 
       # Automatically remove stale sockets
       StreamLocalBindUnlink = "yes";

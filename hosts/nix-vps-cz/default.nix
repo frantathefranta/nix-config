@@ -1,14 +1,15 @@
-{ pkgs, outputs, ... }:
+{ pkgs, inputs, outputs, ... }:
 
 {
   imports = [
     ./vpsadminos.nix
-    ../../hosts/common/global/nix.nix
-    ../../hosts/common/global/sops.nix
-  ]
-  ++ (builtins.attrValues outputs.nixosModules);
+    ../common/users/fbartik
+    ../common/global
+    ./dn42
+  ];
   networking = {
     hostName = "nix-vps-cz";
+    domain = "eu.franta.us";
   };
   services.openssh = {
     enable = true;

@@ -21,6 +21,7 @@
       checkReversePath = false;
       extraCommands = ''
         ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -A INPUT -s 169.254.0.0/16 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
         ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
       '';

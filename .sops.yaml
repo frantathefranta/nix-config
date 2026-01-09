@@ -11,6 +11,7 @@ keys:
     - &r2s age1k4jcr5vnrvwl2s2sh2p3flejdcte0dsdt9daj6kwpwsc6r5t3sasuh33l4
     - &molybdenum age1en9r5jtv5cl7vfwlt9pjj5cmwck2uydnhscmydtncg9xaqt7l5msyg52u3
     - &nix-hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
+    - &nix-vps-cz age1zqggxdatjwcryu5qgr9ge0gewzvvfpjv630h4mmc9d6xunufcayq3xvg02
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
@@ -24,6 +25,7 @@ creation_rules:
           - *r2s
           - *molybdenum
           - *nix-hetzner
+          - *nix-vps-cz
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:
       - age:

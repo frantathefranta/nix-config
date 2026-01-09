@@ -137,6 +137,12 @@
             ./hosts/nix-hetzner
           ];
         };
+        nix-vps-cz = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/nix-vps-cz
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

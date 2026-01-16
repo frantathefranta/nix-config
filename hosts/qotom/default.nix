@@ -28,12 +28,6 @@
           prefixLength = 32;
         }
       ];
-      ipv6.addresses = [
-        {
-          address = "2600:1702:6630:3fec::10:10";
-          prefixLength = 128;
-        }
-      ];
     };
     interfaces.enp1s0 = {
       ipv4.addresses = [
@@ -69,7 +63,10 @@
       checkReversePath = false;
       interfaces = {
         enp1s0 = {
-          allowedUDPPorts = [ 44069 ];
+          allowedUDPPorts = [
+            40002
+            44069
+          ];
         };
       };
       extraCommands = ''
@@ -150,6 +147,13 @@
       localAddressV6 = "fe80::6:5032:1033/64";
       peerAddressV6 = "fe80::1033:6:5032";
       vrf = "dn42";
+    };
+    "50-wg_r2s" = {
+      listenPort = 40002;
+      peerEndpoint = "mikrotik.eu.franta.us:40002";
+      peerPublicKey = "zJOgRXgMFeWN/8Zpy6QDa6Ba6H+ud+Vex8Ey/gWE2X8=";
+      localAddressV6 = "fe80::1/64";
+      peerAddressV6 = "fe80::2";
     };
   };
   # services.gobgpd = {
@@ -241,162 +245,162 @@
   services.bird = {
     enable = true;
     config = ''
-      router id 10.0.10.10;
-      protocol device {
-          scan time 10;
-      }
-      protocol direct {
-        interface "lo";
-        ipv4;
-        ipv6;
-      }
-     ipv4 table DN42v4;
-     ipv6 table DN42v6;
-     protocol static S_VRF_DN42v6 {
-       vrf "dn42";
-       route fdb7:c21f:f30f:10::10/128 reject;
-       ipv6 { table DN42v6; };
-     }
-     protocol kernel K_VRF_DN42v4 {
-       vrf "dn42";
-       kernel table 4242;
-       ipv4 {
-         table DN42v4;
-         export all;
-       };
-     }
-     protocol kernel K_VRF_DN42v6 {
-       vrf "dn42";
-       kernel table 4242;
-       ipv6 {
-         table DN42v6;
-          export filter {
-              if source = RTS_STATIC then reject;
-              krt_prefsrc = fdb7:c21f:f30f:10::10;
-              accept;
-          };
-       };
-     }
-      protocol kernel {
-          scan time 20;
+        router id 10.0.10.10;
+        protocol device {
+            scan time 10;
+        }
+        protocol direct {
+          interface "lo";
+          ipv4;
+          ipv6;
+        }
+       ipv4 table DN42v4;
+       ipv6 table DN42v6;
+       protocol static S_VRF_DN42v6 {
+         vrf "dn42";
+         route fdb7:c21f:f30f:10::10/128 reject;
+         ipv6 { table DN42v6; };
+       }
+       protocol kernel K_VRF_DN42v4 {
+         vrf "dn42";
+         kernel table 4242;
+         ipv4 {
+           table DN42v4;
+           export all;
+         };
+       }
+       protocol kernel K_VRF_DN42v6 {
+         vrf "dn42";
+         kernel table 4242;
+         ipv6 {
+           table DN42v6;
+            export filter {
+                if source = RTS_STATIC then reject;
+                krt_prefsrc = fdb7:c21f:f30f:10::10;
+                accept;
+            };
+         };
+       }
+        protocol kernel {
+            scan time 20;
 
-          ipv6 {
-              export filter {
-                  if source = RTS_STATIC then reject;
-                  krt_prefsrc = 2600:1702:6630:3fec::10:10;
-                  accept;
-              };
-          };
-      };
-      protocol kernel {
-          scan time 20;
+            ipv6 {
+                export filter {
+                    if source = RTS_STATIC then reject;
+                    krt_prefsrc = 2600:1702:6630:3fec::10:10;
+                    accept;
+                };
+            };
+        };
+        protocol kernel {
+            scan time 20;
 
-          ipv4 {
-              export filter {
-                  if source = RTS_STATIC then reject;
-                  krt_prefsrc = 10.0.10.10;
-                  accept;
-              };
-          };
-      };
-    function is_loopback_v4() -> bool {
-      return net ~ [
-        10.0.0.0/8{32,32}
-      ];
-    }
-    function is_loopback_v6() -> bool {
-      return net ~ [
-        fd00::/8{128,128}
-      ];
-    }
-     protocol bgp molybdenum {
-       local as 65032;
-       neighbor fe80::1033:6:5032%wg_molybdenum as 4242421033;
-       ipv4 {
-         extended next hop on;
-         table DN42v4;
-         import all;
-         export none;
-       };
-       ipv6 {
-         extended next hop on;
-         table DN42v6;
-         import all;
-         export filter {
-           if ( is_loopback_v6() ) 
-           then {
-             accept;
-           }
-         reject;
+            ipv4 {
+                export filter {
+                    if source = RTS_STATIC then reject;
+                    krt_prefsrc = 10.0.10.10;
+                    accept;
+                };
+            };
+        };
+      function is_loopback_v4() -> bool {
+        return net ~ [
+          10.0.0.0/8{32,32}
+        ];
+      }
+      function is_loopback_v6() -> bool {
+        return net ~ [
+          fd00::/8{128,128}
+        ];
+      }
+       protocol bgp molybdenum {
+         local as 65032;
+         neighbor fe80::1033:6:5032%wg_molybdenum as 4242421033;
+         ipv4 {
+           extended next hop on;
+           table DN42v4;
+           import all;
+           export none;
          };
-       };
-       vrf "dn42";
-     }
-     protocol bgp mikrotik {
-       local fe80::aaaa:1 as 65032;
-       neighbor fe80::aaaa:2%wg_mikrotik as 65534;
-       strict bind yes;
-       ipv4 {
-         extended next hop on;
-         table master4;
-         import all;
-         export filter {
-           if ( is_loopback_v4() ) 
-           then {
-             accept;
-           }
+         ipv6 {
+           extended next hop on;
+           table DN42v6;
+           import all;
+           export filter {
+             if ( is_loopback_v6() ) 
+             then {
+               accept;
+             }
            reject;
+           };
          };
-       };
-       ipv6 {
-         extended next hop on;
-         table master6;
-         import all;
-         export filter {
-           if ( is_loopback_v6() ) 
-           then {
-             accept;
-           }
-         reject;
+         vrf "dn42";
+       }
+       protocol bgp mikrotik {
+         local fe80::aaaa:1 as 65032;
+         neighbor fe80::aaaa:2%wg_mikrotik as 65534;
+         strict bind yes;
+         ipv4 {
+           extended next hop on;
+           table master4;
+           import all;
+           export filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
          };
-       };
-       vrf "default";
-     }
-     protocol bgp arista {
-       local fe80::20e:c4ff:fed3:d40b as 65032;
-       neighbor fe80::464c:a8ff:fede:3cf7%enp1s0 as 65033;
-       strict bind yes;
-       ipv4 {
-         extended next hop on;
-         import all;
-         import filter {
-           if ( is_loopback_v4() ) 
-           then {
-             accept;
-           }
+         ipv6 {
+           extended next hop on;
+           table master6;
+           import all;
+           export filter {
+             if ( is_loopback_v6() ) 
+             then {
+               accept;
+             }
            reject;
+           };
          };
-         export filter {
-           if ( is_loopback_v4() ) 
-           then {
-             accept;
-           }
-           reject;
+         vrf "default";
+       }
+       protocol bgp arista {
+         local fe80::20e:c4ff:fed3:d40b as 65032;
+         neighbor fe80::464c:a8ff:fede:3cf7%enp1s0 as 65033;
+         strict bind yes;
+         ipv4 {
+           extended next hop on;
+           import all;
+           import filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
+           export filter {
+             if ( is_loopback_v4() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
          };
-       };
-       ipv6 {
-         extended next hop on;
-         import all;
-         export filter {
-           if ( is_loopback_v6() ) 
-           then {
-             accept;
-           }
-           reject;
+         ipv6 {
+           extended next hop on;
+           import all;
+           export filter {
+             if ( is_loopback_v6() ) 
+             then {
+               accept;
+             }
+             reject;
+           };
          };
-       };
-      vrf "default";
-     }
+        vrf "default";
+       }
     '';
   };
   services.prometheus.exporters.node = {

@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ inputs, ... }:
 {
   imports = [
+    inputs.srvos.nixosModules.server
     ./hardware-configuration.nix
 
     ../common/global
@@ -65,37 +66,7 @@
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
-  # hosts = {
-  #   "10.33.35.1" = [
-  #     "talos-actinium"
-  #     "talos-actinium.infra.franta.us"
-  #   ];
-  #   "10.33.35.2" = [
-  #     "talos-thorium"
-  #     "talos-thorium.infra.franta.us"
-  #   ];
-  #   "10.33.35.3" = [
-  #     "talos-protactinium"
-  #     "talos-protactinium.infra.franta.us"
-  #   ];
-  #   "10.33.35.21" = [
-  #     "talos-g3-mini"
-  #     "talos-g3-mini.infra.franta.us"
-  #   ];
-  #   "10.33.35.22" = [
-  #     "talos-n150-01"
-  #     "talos-n150-01.infra.franta.us"
-  #   ];
-  # };
-  # extraHosts = ''
-  #   10.33.35.1 talos-actinium.infra.franta.us
-  #   10.33.35.2 talos-thorium.infra.franta.us
-  #   10.33.35.3 talos-actinium.infra.franta.us
-  #   10.33.35.21 talos-g3-mini.infra.franta.us
-  #   10.33.35.22 talos-n150-01.infra.franta.us
-  # '';
-  # };
-
+  time.timeZone = "America/Detroit";
   # systemd-resolved binds to same IP as dnsmasq, this disables it
   services.resolved.extraConfig = ''
     DNSStubListener=no

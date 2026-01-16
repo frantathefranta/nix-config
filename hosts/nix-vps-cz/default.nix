@@ -1,7 +1,13 @@
-{ pkgs, inputs, outputs, ... }:
+{
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
 
 {
   imports = [
+    inputs.srvos.nixosModules.server
     ./vpsadminos.nix
     ../common/users/fbartik
     ../common/global
@@ -10,6 +16,18 @@
   networking = {
     hostName = "nix-vps-cz";
     domain = "eu.franta.us";
+    nftables = {
+      enable = true;
+    };
+    firewall = {
+      checkReversePath = false;
+      interfaces.venet0.allowedUDPPortRanges = [
+        {
+          from = 20000;
+          to = 30000;
+        }
+      ];
+    };
   };
   services.openssh = {
     enable = true;

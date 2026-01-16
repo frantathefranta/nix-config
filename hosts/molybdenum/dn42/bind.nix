@@ -67,14 +67,23 @@
       "franta.dn42" = {
         file = "/etc/zones/franta.dn42";
         master = true;
+        extraConfig = ''
+          update-policy local;
+        '';
       };
       "16/28.234.23.172.in-addr.arpa" = {
         file = "/etc/zones/ipv4.reverse";
         master = true;
+        extraConfig = ''
+          update-policy local;
+        '';
       };
       "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
         file = "/etc/zones/ipv6.reverse";
         master = true;
+        extraConfig = ''
+          update-policy local;
+        '';
       };
     };
   };

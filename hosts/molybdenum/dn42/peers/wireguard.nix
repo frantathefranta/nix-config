@@ -1,5 +1,15 @@
 {
   services.custom-wireguard.interfaces = {
+    "50-ospf_nix-vps-cz" = {
+      listenPort = 24001;
+      peerEndpoint = "prg.dn42.franta.us:24001";
+      peerPublicKey = "NDQyX3K9piwzVi30GDqudZLjgDsAZsBIndtqI4I5k2A=";
+      localAddressV6 = "fe80::1033";
+      peerAddressV6 = "fe80::2:1033/64";
+      isOSPF = true;
+      peerAddressV4 = "169.254.2.0/31";
+      localAddressV4 = "169.254.2.1/31";
+    };
     "50-wg4242420454" = {
       listenPort = 20454;
       peerEndpoint = "dn42b.nedifinita.com:55965";

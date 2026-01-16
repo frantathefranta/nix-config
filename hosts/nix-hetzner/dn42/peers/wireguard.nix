@@ -42,5 +42,17 @@
       localAddressV6 = "fe80::1033:3035/64";
       peerAddressV6 = "fe80::3035:132";
     };
+    "50-ospf_nix-vps-cz" = {
+      listenPort = 24002;
+      peerEndpoint = "prg.dn42.franta.us:24002";
+      peerPublicKey = "I9U/GISDI42GHTv9CtDSmaoJTxzx1BQnrmFQcL/wazo=";
+      peerAddressV6 = "fe80::2:1033/128";
+      localAddressV6 = "fe80::1:1033/128";
+      isOSPF = true;
+      peerAddressV4 = "169.254.1.0/31";
+      localAddressV4 = "169.254.1.1/31";
+      vrf = "dn42";
+    };
+
   };
 }

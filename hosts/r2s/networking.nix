@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, lib, ... }:
 {
   networking.useDHCP = false;
   networking = {
@@ -9,6 +9,7 @@
       179
       3784 # BFD messages
       3785 # BFD messages
+      40002
     ];
     firewall.interfaces.eth1.allowedUDPPorts = [
       179
@@ -80,7 +81,6 @@
     matchConfig.Name = "lo";
     address = [
       "10.0.0.200/32"
-      "2600:1702:6630:3fec::200/128"
     ];
   };
   systemd.network.networks."11-eth0" = {
@@ -137,6 +137,16 @@
   #     Metric = 50;
   #   }];
   # };
+  environment.systemPackages = [ pkgs.wireguard-tools ];
+  services.custom-wireguard.interfaces = {
+    "50-wg_qotom" = {
+      listenPort = 40002;
+      peerEndpoint = "qotom.infra.franta.us:40002";
+      peerPublicKey = "IMDiPwuS1xN7c5dyrnlihZVmuJYb81YO1m23K1vKRXU=";
+      localAddressV6 = "fe80::2/64";
+      peerAddressV6 = "fe80::1";
+    };
+  };
   services.frr = {
     bfdd.enable = true;
     bgpd.enable = true;

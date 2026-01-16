@@ -25,7 +25,7 @@
           to = 30000;
         }
       ];
-      extraInputRules = ''
+      extraInputRules = /* nftables */ ''
         ip saddr 172.20.0.0/14 counter accept
         ip6 saddr fd00::/8 counter accept
         ip6 saddr fe80::/64 counter accept
@@ -36,28 +36,6 @@
     };
     nftables = {
       enable = true;
-      # ruleset = ''
-      #   table inet dn42filter {
-      #     chain input {
-      #       type filter hook input priority filter; policy accept;
-            
-      #       # Accept DN42 traffic
-      #       ip saddr 172.20.0.0/14 accept
-      #       ip6 saddr fd00::/8 accept
-      #       ip6 saddr fe80::/64 counter accept
-      #       ip protocol 89 counter accept
-      #       ip6 nexthdr 89 counter accept
-      #     }
-      #   }
-      #   table inet local_subnets {
-      #     chain input {
-      #       type filter hook input priority filter; policy accept;
-      #       ip saddr 10.33.0.0/16 accept
-      #       ip saddr 10.32.10.0/24 accept
-      #       ip6 saddr 2600:1702:6630:3fec::/63 accept
-      #     }
-      #   }
-      # '';
     };
     interfaces.lo = {
       ipv4.addresses = [
@@ -90,9 +68,17 @@
     networkConfig = {
       LinkLocalAddressing = false;
       DNS = "fdb7:c21f:f30f:53::";
-      Domains = "~dn42";
       DNSDefaultRoute = false;
     };
+    domains = [
+      "~dn42"
+      "~20.172.in-addr.arpa"
+      "~21.172.in-addr.arpa"
+      "~22.172.in-addr.arpa"
+      "~23.172.in-addr.arpa"
+      "~10.in-addr.arpa"
+      "~d.f.ip6.arpa"
+    ];
   };
   # systemd.network.netdevs."10-dummy_ospf" = {
   #   netdevConfig = {

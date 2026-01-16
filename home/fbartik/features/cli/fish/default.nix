@@ -25,6 +25,15 @@ in {
       jqless = "jq -C | less -r";
 
       em = "emacsclient -nw";
+
+      bsp = "birdc show protocols";
+
+      ctl = "systemctl";
+      ctlrt = "systemctl restart";
+      ctls = "systemctl status";
+
+      jc = "journalctl";
+      
       n = "nix";
       nd = "nix develop -c $SHELL";
       ns = "nix shell";

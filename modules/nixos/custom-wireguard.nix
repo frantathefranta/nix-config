@@ -51,6 +51,27 @@ in
                 Wireguard local link-local IPv6 address
               '';
             };
+            peerAddressV4 = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                Wireguard peer link-local IPv4 address
+              '';
+            };
+            localAddressV4 = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                Wireguard local link-local IPv4 address
+              '';
+            };
+            isOSPF = mkOption {
+              default = null;
+              type = types.nullOr types.bool;
+              description = ''
+                Is Wireguard interface used for OSPF
+              '';
+            };
             vrf = mkOption {
               default = null;
               type = types.nullOr types.str;
@@ -117,6 +138,11 @@ in
           Address = data.localAddressV6;
           Peer = data.peerAddressV6;
         }
+        (lib.mkIf (data.isOSPF == true)
+        {
+          Address = data.localAddressV4;
+          Peer = data.peerAddressV4;
+        })
       ];
       networkConfig = {
         LinkLocalAddressing = false;

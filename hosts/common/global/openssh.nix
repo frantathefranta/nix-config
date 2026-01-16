@@ -19,12 +19,12 @@ in {
       PermitRootLogin = lib.mkDefault "no";
 
       # Automatically remove stale sockets
-      StreamLocalBindUnlink = "yes";
+      StreamLocalBindUnlink = true;
       # Allow forwarding ports to everywhere
       GatewayPorts = "clientspecified";
       # Let WAYLAND_DISPLAY be forwarded
       AcceptEnv = "WAYLAND_DISPLAY";
-      X11Forwarding = true;
+      X11Forwarding = lib.mkIf (config.services.xserver.enable == true) true;
     };
 
     hostKeys = [

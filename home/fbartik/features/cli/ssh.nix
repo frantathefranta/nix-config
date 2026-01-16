@@ -20,18 +20,22 @@ in
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
-      "brocade*" = {
-        user = "admin";
-        identityFile = config.sops.secrets."ssh/brocade_2048".path;
-        extraOptions = {
-          KexAlgorithms = "+diffie-hellman-group1-sha1";
-          HostKeyAlgorithms = "+ssh-rsa";
-          PubkeyAcceptedAlgorithms = "+ssh-rsa";
-        };
-      };
-      "github.com" = {
-        identityFile = config.sops.secrets."ssh/git_key".path;
-      };
+      "brocade*" = (
+        lib.mkIf (builtins.hasAttr "ssh/brocade_2048" config.sops.secrets) {
+          user = "admin";
+          identityFile = config.sops.secrets."ssh/brocade_2048".path;
+          extraOptions = {
+            KexAlgorithms = "+diffie-hellman-group1-sha1";
+            HostKeyAlgorithms = "+ssh-rsa";
+            PubkeyAcceptedAlgorithms = "+ssh-rsa";
+          };
+        }
+      );
+      "github.com" = (
+        lib.mkIf (builtins.hasAttr "ssh/git_key" config.sops.secrets) {
+          identityFile = config.sops.secrets."ssh/git_key".path;
+        }
+      );
       "hetzner.vm.franta.us" = {
         user = "root";
       };
@@ -53,7 +57,7 @@ in
   };
   home.file.".ssh/rc" = lib.mkIf (config.programs.tmux.enable) {
     executable = true;
-    text = ''
+    text = /* bash */ ''
       #!/usr/bin/env bash
 
       # Fix SSH auth socket location so agent forwarding works with tmux.
@@ -62,12 +66,14 @@ in
       fi
     '';
   };
-  sops.secrets = {
-    "ssh/brocade_2048" = {
-      sopsFile = ../../secrets.yml;
-    };
-    "ssh/git_key" = {
-      sopsFile = ../../secrets.yml;
+  sops = lib.mkIf (config.sops.age.keyFile != null) {
+    secrets = {
+      "ssh/brocade_2048" = {
+        sopsFile = ../../secrets.yml;
+      };
+      "ssh/git_key" = {
+        sopsFile = ../../secrets.yml;
+      };
     };
   };
 }

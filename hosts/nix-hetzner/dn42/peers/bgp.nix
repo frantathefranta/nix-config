@@ -118,5 +118,23 @@
                     import keep filtered;
             };
     }
+      protocol bgp iBGP_prg_v6 from dnpeers {
+            neighbor fdb7:c21f:f30f:2::1 as 4242421033;
+            ipv4 {
+                    extended next hop on;
+                    next hop self;
+                    import all;
+                    export where dn42_export_filter(6,25,34);
+                    import keep filtered;
+            };
+
+            ipv6 {
+                    extended next hop on;
+                    next hop self;
+                    import all;
+                    export where dn42_export_filter(6,25,34);
+                    import keep filtered;
+            };
+    }
   '';
 }

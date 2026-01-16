@@ -46,7 +46,11 @@ creation_rules:
       - age:
           - *franta
           - *lanthanum
-
+  - path_regex: hosts/r2s/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *r2s
   - path_regex: hosts/molybdenum/secrets.ya?ml$
     key_groups:
       - age:
@@ -57,6 +61,11 @@ creation_rules:
       - age:
           - *franta
           - *nix-hetzner
+  - path_regex: hosts/nix-vps-cz/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *nix-vps-cz
   - path_regex: home/fbartik/secrets.ya?ml$
     key_groups:
       - age:

@@ -33,7 +33,7 @@
   };
 
   sops = {
-    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   };
 
   # Add stuff for your user as you see fit:
@@ -42,11 +42,11 @@
     enable = true;
     package = pkgs.unstable.snitch;
   };
-  home.packages = with pkgs; [
-    ethtool
-    gparted
-    f2fs-tools
-  ];
+  # home.packages = with pkgs; [
+  #   ethtool
+  #   gparted
+  #   f2fs-tools
+  # ];
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
@@ -75,5 +75,5 @@
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "24.11";
+  home.stateVersion = lib.mkDefault "24.11";
 }

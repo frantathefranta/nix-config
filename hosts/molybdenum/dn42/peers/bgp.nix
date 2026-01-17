@@ -100,10 +100,12 @@
         };
       };
     }
-      protocol bgp iBGP_pdx_v4 from dnpeers {
-            #disabled;
-            neighbor 172.23.234.18 as 4242421033;
+      protocol bgp iBGP_pdx from dnpeers {
+            neighbor fdb7:c21f:f30f:1::1 as 4242421033;
+            bfd on;
+            source address OWNIPv6;
             ipv4 {
+                    extended next hop on;
                     next hop self;
                     import all;
                     export where dn42_export_filter(4,25,34);
@@ -112,43 +114,28 @@
 
             ipv6 {
                     next hop self;
-                    import none;
-                    export none;
-            };
-      }
-
-      protocol bgp iBGP_pdx_v6 from dnpeers {
-            #disabled;
-            neighbor fdb7:c21f:f30f:1::1 as 4242421033;
-            ipv4 {
-                    next hop self;
-                    import none;
-                    export none;
-            };
-
-            ipv6 {
-                    next hop self;
                     import all;
-                    export where dn42_export_filter(4,25,34);
+                    export where ibgp_export_filter(4,25,34);
                     import keep filtered;
             };
     }
-      protocol bgp iBGP_prg_v6 from dnpeers {
+      protocol bgp iBGP_prg from dnpeers {
             neighbor fdb7:c21f:f30f:2::1 as 4242421033;
             bfd on;
             source address OWNIPv6;
             ipv4 {
                     extended next hop on;
                     next hop self;
-                    import none;
-                    export none;
+                    import all;
+                    export where dn42_export_filter(5,25,34);
+                    import keep filtered;
             };
 
             ipv6 {
                     extended next hop on;
                     next hop self;
                     import all;
-                    export where dn42_export_filter(5,25,34);
+                    export where ibgp_export_filter(5,25,34);
                     import keep filtered;
             };
     }
@@ -194,9 +181,6 @@
       neighbor fe80::464c:a8ff:fede:3cf7%ens18 as 65033;
 
       ipv4 {
-        # export all available paths to the collector    
-        add paths tx;
-
         # import/export filters
         import none;
         export filter {
@@ -210,11 +194,14 @@
       };
 
       ipv6 {
-        # export all available paths to the collector    
-        add paths tx;
-
         # import/export filters
-        import none;
+        import filter {
+          if ( is_loopback_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+        reject; 
+        };
         export filter {
           # export all valid routes
           if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )

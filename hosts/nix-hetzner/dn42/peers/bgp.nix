@@ -85,41 +85,29 @@
         };
       };
     }
-      protocol bgp iBGP_cmh_v4 from dnpeers {
-            #disabled;
-            neighbor 172.23.234.17 as 4242421033;
+      protocol bgp iBGP_cmh from dnpeers {
+            neighbor fdb7:c21f:f30f::1 as 4242421033;
+            bfd on;
+            source address OWNIPv6;
             ipv4 {
+                    extended next hop on;
                     next hop self;
                     import all;
                     export where dn42_export_filter(4,25,34);
                     import keep filtered;
             };
-
             ipv6 {
-                    next hop self;
-                    import none;
-                    export none;
-            };
-      }
-
-      protocol bgp iBGP_cmh_v6 from dnpeers {
-            #disabled;
-            neighbor fdb7:c21f:f30f::1 as 4242421033;
-            ipv4 {
-                    next hop self;
-                    import none;
-                    export none;
-            };
-
-            ipv6 {
+                    extended next hop on;
                     next hop self;
                     import all;
                     export where dn42_export_filter(4,25,34);
                     import keep filtered;
             };
     }
-      protocol bgp iBGP_prg_v6 from dnpeers {
+      protocol bgp iBGP_prg from dnpeers {
             neighbor fdb7:c21f:f30f:2::1 as 4242421033;
+            bfd on;
+            source address OWNIPv6;
             ipv4 {
                     extended next hop on;
                     next hop self;

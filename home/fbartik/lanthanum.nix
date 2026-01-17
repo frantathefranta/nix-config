@@ -26,6 +26,17 @@
       };
     };
   };
+  programs.ghostty = {
+    enable = true;
+    enableFishIntegration = true;
+    systemd.enable = true;
+    settings = {
+      theme = "Earthsong";
+      font-size = "10";
+      initial-command = "tmux attach";
+      # theme = "light:Belafonte Day,dark:Belafonte Night";
+    };
+  };
   # emacs.enable = true;
   monitors = [
     {

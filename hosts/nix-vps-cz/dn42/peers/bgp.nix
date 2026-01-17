@@ -60,5 +60,47 @@
                     import keep filtered;
             };
     }
+    protocol bgp ROUTE_COLLECTOR {
+        vrf "dn42";
+      local as 4242421033;
+      neighbor fd42:d42:d42:179::1 as 4242422602;
+
+      # enable multihop as the collector is not locally connected
+      multihop;
+
+      ipv4 {
+        table DN42v4;
+        # export all available paths to the collector    
+        add paths tx;
+
+        # import/export filters
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+
+      ipv6 {
+        table DN42v6;
+        # export all available paths to the collector    
+        add paths tx;
+
+        # import/export filters
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+    }
   '';
 }

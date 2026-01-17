@@ -1,4 +1,8 @@
 { inputs, ... }:
+let
+  lo_ipv6 = "2600:1702:6630:3fec::10:11";
+  dn42_ipv6 = "fdb7:c21f:f30f:10::11";
+in
 {
   imports = [
     inputs.srvos.nixosModules.server
@@ -23,7 +27,7 @@
       ];
       ipv6.addresses = [
         {
-          address = "2600:1702:6630:3fec::10:11";
+          address = lo_ipv6;
           prefixLength = 128;
         }
       ];
@@ -97,7 +101,7 @@
   systemd.network.networks."10-dummy42" = {
     matchConfig.Name = "dummy42";
     address = [
-      "fdb7:c21f:f30f:10::11/128"
+      "${dn42_ipv6}/128"
     ];
     networkConfig = {
       LinkLocalAddressing = false;
@@ -113,8 +117,14 @@
         }
         protocol direct {
           interface "lo";
+          interface "dummy42";
           ipv4;
           ipv6;
+        }
+        function is_dn42_network_v6() -> bool {
+            return net ~ [
+                fd00::/8{8,8} 
+            ];
         }
         protocol kernel {
             scan time 20;
@@ -122,7 +132,8 @@
             ipv6 {
                 export filter {
                     if source = RTS_STATIC then reject;
-                    krt_prefsrc = 2600:1702:6630:3fec::10:11;
+                    if is_dn42_network_v6() then krt_prefsrc = ${dn42_ipv6};
+                    krt_prefsrc = ${lo_ipv6};
                     accept;
                 };
             };

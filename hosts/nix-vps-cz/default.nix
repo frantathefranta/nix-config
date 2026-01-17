@@ -42,6 +42,7 @@
   environment.systemPackages = with pkgs; [
     vim
     unstable.iperf3
+    unstable.iproute2
   ];
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
@@ -54,7 +55,10 @@
   systemd.settings.Manager = {
     DefaultTimeoutStartSec = "900s";
   };
-
+  # Thought this might be necessary to help with eBPF VRF functions but it's not
+  # security.pam.loginLimits = [
+  #   { domain = "*"; item = "memlock"; type = "-"; value = 8192; }
+  # ];
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "25.11";
   nixpkgs.hostPlatform = "x86_64-linux";

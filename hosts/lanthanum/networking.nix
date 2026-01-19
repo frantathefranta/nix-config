@@ -1,6 +1,7 @@
 { config, lib, ... }:
 {
   networking = {
+    nftables.enable = true;
     firewall.interfaces.eno1.allowedTCPPorts = [
       179
       22000
@@ -11,10 +12,10 @@
       3784 # BFD messages
       3785 # BFD messages
     ];
-    firewall.extraCommands = ''
-      iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
-      ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
-    '';
+    # firewall.extraCommands = ''
+    #   iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+    #   ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
+    # '';
   };
   networking.wireless = {
     enable = true;

@@ -22,6 +22,7 @@ in
       "ftdi"
       "git"
       "i2c"
+      "incus-admin"
       "network"
       "plugdev"
       "video"

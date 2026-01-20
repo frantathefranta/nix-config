@@ -17,6 +17,13 @@
       peerAddressV6 = "fe80::454:2";
       localAddressV6 = "fe80::1033:0454/64";
     };
+    "50-wg4242420263" = {
+      listenPort = 20263;
+      peerEndpoint = "us-nyc1.flap42.eu:52022";
+      peerPublicKey = "uY0GCV3adypvnCWtWcm10PCrJ/OWeplmgL64WWlqZFY=";
+      peerAddressV6 = "fe80:3263::1:16/128";
+      localAddressV6 = "fe80:3263::2:16/128";
+    };
     "50-wg4242422601" = {
       listenPort = 22601;
       peerEndpoint = "dn42-us-nyc1.burble.com:21033";

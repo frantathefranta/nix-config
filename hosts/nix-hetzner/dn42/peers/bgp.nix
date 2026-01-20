@@ -43,6 +43,13 @@
       as = "4242421588";
       link = "4";
     }
+    {
+      multi = true;
+      name = "dn42_sunnet";
+      neigh = "fe80::3088:191%wg4242423088";
+      as = "4242423088";
+      link = "3";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

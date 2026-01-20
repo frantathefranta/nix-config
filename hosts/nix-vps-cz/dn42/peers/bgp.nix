@@ -15,6 +15,27 @@
       as = "4242420207";
       link = "3";
     }
+    {
+      multi = true;
+      name = "dn42_flipflap";
+      neigh = "fe80:4263::1:1a%wg4242420263";
+      as = "4242420263";
+      link = "2";
+    }
+    {
+      multi = true;
+      name = "dn42_datenfass";
+      neigh = "fe80::2884%wg4242422884";
+      as = "4242422884";
+      link = "3";
+    }
+    {
+      multi = true;
+      name = "dn42_sunnet";
+      neigh = "fe80::3088:194%wg4242423088";
+      as = "4242423088";
+      link = "3";
+    }
   ];
   extraConfig = ''
       protocol bgp iBGP_cmh_v6 from dnpeers {

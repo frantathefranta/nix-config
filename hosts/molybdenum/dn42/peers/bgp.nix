@@ -1,5 +1,16 @@
 { ... }:
 
+# (64511, 1) :: latency \in (0, 2.7ms]
+# (64511, 2) :: latency \in (2.7ms, 7.3ms]
+# (64511, 3) :: latency \in (7.3ms, 20ms]
+# (64511, 4) :: latency \in (20ms, 55ms]
+# (64511, 5) :: latency \in (55ms, 148ms]
+# (64511, 6) :: latency \in (148ms, 403ms]
+# (64511, 7) :: latency \in (403ms, 1097ms]
+# (64511, 8) :: latency \in (1097ms, 2981ms]
+# (64511, 9) :: latency > 2981ms
+# (64511, x) :: latency \in [exp(x-1), exp(x)] ms (for x < 10)
+ 
 {
   sessions = [
     {
@@ -57,6 +68,13 @@
       neigh = "fe80::454:2%wg4242420454";
       as = "4242420454";
       link = "4";
+    }
+    {
+      multi = true;
+      name = "dn42_flipflap";
+      neigh = "fe80:3263::1:16%wg4242420263";
+      as = "4242420263";
+      link = "3";
     }
   ];
   extraConfig = ''

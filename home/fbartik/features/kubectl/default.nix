@@ -68,7 +68,7 @@
     stern # Logs
   ];
   programs.fish = {
-    interactiveShellInit = # fish
+    interactiveShellInit = /* fish */ 
       ''
         set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
         set -x KUBECONFIG ${config.sops.secrets.kubeconfig.path}

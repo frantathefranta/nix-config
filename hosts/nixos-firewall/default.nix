@@ -12,11 +12,10 @@
     ../common/global
     ../common/users/fbartik
 
-    ../common/optional/qemu-guest-agent.nix
     ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "nixos-firewall";
   };
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }

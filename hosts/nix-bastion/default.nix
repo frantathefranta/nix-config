@@ -133,7 +133,7 @@ in
                 export filter {
                     if source = RTS_STATIC then reject;
                     if is_dn42_network_v6() then krt_prefsrc = ${dn42_ipv6};
-                    krt_prefsrc = ${lo_ipv6};
+                    # krt_prefsrc = ${lo_ipv6};
                     accept;
                 };
             };

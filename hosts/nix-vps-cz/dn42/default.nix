@@ -13,6 +13,8 @@
     "net.ipv4.conf.default.rp_filter" = 0;
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
+    "net.ipv4.tcp_l3mdev_accept" = 1;
+    "net.ipv4.udp_l3mdev_accept" = 1;
   };
   systemd.network.enable = true;
   systemd.network.netdevs."20-vrf_dn42" = {

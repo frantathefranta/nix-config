@@ -12,8 +12,8 @@
     };
     "50-wg4242420454" = {
       listenPort = 20454;
-      peerEndpoint = "dn42b.nedifinita.com:55965";
-      peerPublicKey = "W4yTKYVWin9xkSDgGRKA6DlGADOMZADGR6OaJZgV1UI=";
+      peerEndpoint = "dn42b.nedifinita.com:44280";
+      peerPublicKey = "q9+7MHvWmWO18uZ0RfNNLNAgUWhqs+zA1zBoWv9r23U=";
       peerAddressV6 = "fe80::454:2";
       localAddressV6 = "fe80::1033:0454/64";
     };

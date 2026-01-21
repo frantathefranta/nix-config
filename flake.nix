@@ -24,6 +24,7 @@
     srvos.url = "github:nix-community/srvos";
     gobgp.url = "github:wavelens/gobgp.nix";
     snitch.url = "github:karol-broda/snitch";
+    vpsadminos.url = "github:vpsfreecz/vpsadminos";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix

@@ -342,7 +342,8 @@
         "snitch": "snitch",
         "sops-nix": "sops-nix_2",
         "srvos": "srvos",
-        "systems": "systems_4"
+        "systems": "systems_4",
+        "vpsadminos": "vpsadminos"
       }
     },
     "search": {
@@ -502,6 +503,21 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-linux",
+        "type": "github"
+      }
+    },
+    "vpsadminos": {
+      "locked": {
+        "lastModified": 1768986148,
+        "narHash": "sha256-tXcMo11TVlfPh4V+X8vlPKwZ/Ecz9Eb6xMt0EOoLlVE=",
+        "owner": "vpsfreecz",
+        "repo": "vpsadminos",
+        "rev": "3749bf1435a7188826366b91702070574d3d226f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vpsfreecz",
+        "repo": "vpsadminos",
         "type": "github"
       }
     }

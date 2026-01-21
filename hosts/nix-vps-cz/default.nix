@@ -8,7 +8,7 @@
 {
   imports = [
     inputs.srvos.nixosModules.server
-    ./vpsadminos.nix
+    inputs.vpsadminos.nixosConfigurations.container
     ../common/users/fbartik
     ../common/global
     ./dn42

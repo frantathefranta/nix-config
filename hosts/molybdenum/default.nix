@@ -11,6 +11,7 @@ in
     ../common/global
     ../common/optional/dn42.nix
     ../common/optional/qemu-guest-agent.nix
+    ../common/optional/autoupgrade.nix
     #../common/optional/1password.nix
     ../common/users/fbartik
   ];

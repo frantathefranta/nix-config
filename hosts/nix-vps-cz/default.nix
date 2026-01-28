@@ -11,6 +11,8 @@
     inputs.vpsadminos.nixosConfigurations.container
     ../common/users/fbartik
     ../common/global
+    ../common/optional/autoupgrade.nix
+
     ./dn42
   ];
   networking = {

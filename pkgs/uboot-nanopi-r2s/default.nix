@@ -1,5 +1,5 @@
 # Source: https://github.com/EHfive/flakes/blob/main/packages/rtl8152-led-ctrl/default.nix
-{ buildUBoot, armTrustedFirmwareRK3328 }@args:
+{ buildUBoot }@args:
 let
   armTrustedFirmwareRK3328 = args.armTrustedFirmwareRK3328.overrideAttrs (_: {
     NIX_LDFLAGS = "--no-warn-execstack --no-warn-rwx-segments";

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 {
   networking = {
     nftables.enable = true;

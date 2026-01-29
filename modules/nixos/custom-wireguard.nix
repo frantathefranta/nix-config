@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -86,7 +85,7 @@ in
   config = {
     sops.secrets = lib.mkMerge (
       flip mapAttrsToList cfg.interfaces (
-        interface: data: {
+        interface: _data: {
           "wireguard/${interface}" = {
             sopsFile = ../../hosts/${config.networking.hostName}/secrets.yaml;
           };
@@ -95,7 +94,7 @@ in
     );
     systemd.services.systemd-networkd.serviceConfig = lib.mkMerge (
       flip mapAttrsToList cfg.interfaces (
-        interface: data:
+        interface: _data:
         let
           secretName = "wireguard/${interface}";
           secretPath = config.sops.secrets.${secretName}.path;

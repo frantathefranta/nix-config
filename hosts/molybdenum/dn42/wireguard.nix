@@ -1,13 +1,8 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }:
-let
-  defaultLocalIPv4 = "172.23.234.17/32";
-  defaultLocalIPv6 = "fe80::1723:234/64";
-in
 {
   environment.systemPackages = [ pkgs.wireguard-tools ];
   # networking.wireguard.interfaces = {

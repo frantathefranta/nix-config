@@ -1,6 +1,5 @@
 # Source: https://github.com/EHfive/flakes/blob/main/packages/rtl8152-led-ctrl/default.nix
 {
-  lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,

@@ -1,6 +1,5 @@
 # Source: https://github.com/EHfive/flakes/blob/main/machines/r2s/hardware.nix
 {
-  config,
   pkgs,
   lib,
   inputs,

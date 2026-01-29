@@ -4,8 +4,9 @@
   imports = [
     inputs.srvos.nixosModules.server
     inputs.srvos.nixosModules.hardware-hetzner-cloud
-    ../../hosts/common/global/nix.nix
-    ../../hosts/common/global/sops.nix
+    ../common/global/nix.nix
+    ../common/global/sops.nix
+    ../common/optional/autoupgrade.nix
     ./dn42
   ]
   ++ (builtins.attrValues outputs.nixosModules);

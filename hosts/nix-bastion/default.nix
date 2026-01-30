@@ -82,6 +82,7 @@ in
     enable = true;
     resolveLocalQueries = true;
     settings = {
+      clear-on-reload = true;
       server = [
         "/dn42/fdb7:c21f:f30f:53::"
         "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"

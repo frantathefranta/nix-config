@@ -63,8 +63,8 @@
   networking = {
     firewall.enable = lib.mkDefault true;
     search = lib.mkDefault [
-      "franta.us"
       "infra.franta.us"
+      "franta.us"
     ];
     domain = lib.mkDefault "infra.franta.us";
     nameservers = lib.mkDefault [

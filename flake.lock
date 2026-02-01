@@ -508,11 +508,11 @@
     },
     "vpsadminos": {
       "locked": {
-        "lastModified": 1768986148,
-        "narHash": "sha256-tXcMo11TVlfPh4V+X8vlPKwZ/Ecz9Eb6xMt0EOoLlVE=",
+        "lastModified": 1769877648,
+        "narHash": "sha256-x88d6NF0OztG4kLH6HMFUfmtdrghBO2pn3oiUHMUd+I=",
         "owner": "vpsfreecz",
         "repo": "vpsadminos",
-        "rev": "3749bf1435a7188826366b91702070574d3d226f",
+        "rev": "4fd1e5d588ff8bf9fcfa4c1f71fd856aa38a6a7a",
         "type": "github"
       },
       "original": {

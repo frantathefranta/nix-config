@@ -67,19 +67,23 @@ in
   #   '';
   # };
   services = {
-    # bird-lg = {
-    #   proxy = {
-    #     enable = true;
-    #     listenAddresses = "[fdb7:c21f:f30f:2::1]:8000";
-    #     allowedIPs = [
-    #       "172.23.234.17"
-    #       "fdb7:c21f:f30f::1"
-    #       "fdb7:c21f:f30f:1::1"
-    #       "fdb7:c21f:f30f:2::1"
-    #     ];
-    #     birdSocket = "/var/run/bird/bird.ctl";
-    #   };
-    # };
+    bird-lg = {
+      package = pkgs.bird-lg-custom;
+      proxy = {
+        enable = true;
+        listenAddresses = "[fdb7:c21f:f30f:2::1]:8000";
+        extraArgs = [
+          "--vrf=dn42"
+        ];
+        allowedIPs = [
+          "172.23.234.17"
+          "fdb7:c21f:f30f::1"
+          "fdb7:c21f:f30f:1::1"
+          "fdb7:c21f:f30f:2::1"
+        ];
+        birdSocket = "/var/run/bird/bird.ctl";
+      };
+    };
     bird = {
       enable = true;
       checkConfig = false;

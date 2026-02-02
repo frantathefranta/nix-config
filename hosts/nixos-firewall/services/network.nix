@@ -171,7 +171,7 @@
     };
     serviceConfig.BPFProgram = "sock_create:/sys/fs/bpf/pyvrf_mgmt";
   };
-  #   lib.mkForce "${pkgs.iproute2}/bin/ip vrf exec mgmt ${pkgs.openssh}/bin/sshd -D -f /etc/ssh/sshd_config";
+  # Taken from here: https://jerryxiao.cc/archives/1004
   systemd.services."pyvrf@" =
     let
       # python = pkgs.python3.withPackages (ps: with ps; [ libbpf ]);

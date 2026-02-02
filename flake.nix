@@ -103,6 +103,12 @@
             ./hosts/lanthanum
           ];
         };
+        silicium = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/silicium
+          ];
+        };
         qotom = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [

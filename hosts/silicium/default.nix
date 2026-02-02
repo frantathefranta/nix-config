@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports = [
@@ -15,8 +15,11 @@
   networking = {
     hostName = "silicium";
     useDHCP = true;
+    interfaces.wlp3s0.useDHCP = true;
   };
-  interfaces.wlp3s0.useDHCP = true;
+  # environment.systemPackages = [
+  #   (builtins.getFlake "github:jordond/jolt").packages.${pkgs.system}.default
+  # ];
   # hardware.enableAllFirmware = true;
   system.stateVersion = "25.11";
 }

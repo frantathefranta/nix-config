@@ -14,15 +14,19 @@
 
   networking.wireless = {
     enable = true;
-    fallbackToWPA2 = false;
     # Declarative
     secretsFile = config.sops.secrets.wireless.path;
     networks = {
       "VPWHBNCHzxLr" = {
         pskRaw = "ext:VPWHBNCHzxLr";
+	authProtocols = ["WPA-PSK"];
       };
     };
     allowAuxiliaryImperativeNetworks = true;
+    extraConfig = ''
+      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${config.users.groups.network.name}
+      update_config=1
+      '';
   };
   # Ensure group exists
   users.groups.network = {};

@@ -20,6 +20,8 @@
   # environment.systemPackages = [
   #   (builtins.getFlake "github:jordond/jolt").packages.${pkgs.system}.default
   # ];
-  # hardware.enableAllFirmware = true;
+  hardware.enableAllFirmware = true;
+  services.fprintd.enable = true;
+
   system.stateVersion = "25.11";
 }

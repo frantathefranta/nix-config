@@ -12,7 +12,7 @@ keys:
     - &molybdenum age1en9r5jtv5cl7vfwlt9pjj5cmwck2uydnhscmydtncg9xaqt7l5msyg52u3
     - &nix-hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
     - &nix-vps-cz age1zqggxdatjwcryu5qgr9ge0gewzvvfpjv630h4mmc9d6xunufcayq3xvg02
-    - &silicium age1ec2gcuwazljplfukrp87rfl6pg8d888p6zxk59juhne4emdsycxqdag0mu
+    - &silicium age1rtkde8zynkul4y7ufxwvs2axp842u4wexynn9ypf8zv7egzs8azs5ue8je
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:

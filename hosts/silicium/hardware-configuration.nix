@@ -19,6 +19,13 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "max";
+    };
+    efi.canTouchEfiVariables = true;
+  };
   disko.devices.disk.main = {
     device = "/dev/disk/by-id/nvme-WDC_PC_SN720_SDAQNTW-256G-1001_192846427976";
     type = "disk";

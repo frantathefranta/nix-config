@@ -3,9 +3,8 @@ let
   # emacsPkg = pkgs.inputs.emacs-overlay;
   emacs =
     with pkgs;
-    (emacsPackagesFor (
-      if (builtins.length config.monitors != 0) then emacs-gtk else emacs-nox
-    )).emacsWithPackages
+    (emacsPackagesFor (if (builtins.length config.monitors != 0) then emacs-gtk else emacs-nox))
+    .emacsWithPackages
       (
         epkgs: with epkgs; [
           treesit-grammars.with-all-grammars
@@ -35,5 +34,6 @@ in
     nixd # Nix LSP
     xclip
     python3Minimal
+    emacs-lsp-booster
   ];
 }

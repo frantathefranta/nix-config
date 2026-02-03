@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   ...
 }:
 {
@@ -17,5 +18,9 @@
   networking = {
     hostName = "nixos-firewall";
   };
+  environment.systemPackages = [
+    pkgs.i2c-tools
+    pkgs.vep14xx-diags
+  ];
   system.stateVersion = "25.11";
 }

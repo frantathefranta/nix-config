@@ -11,6 +11,7 @@ rec {
   akeyless = pkgs.callPackage ./akeyless-cli { };
   fake-hwclock = pkgs.callPackage ./fake-hwclock {  };
   bird-lg-custom = pkgs.callPackage ./bird-lg {  };
+  vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
   # rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

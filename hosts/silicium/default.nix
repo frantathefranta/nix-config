@@ -11,6 +11,7 @@
     ../common/optional/kde.nix
     ../common/optional/1password.nix
     ../common/optional/fwupd.nix
+    ../common/optional/evremap.nix
   ];
   networking = {
     hostName = "silicium";

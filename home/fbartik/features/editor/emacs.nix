@@ -35,5 +35,6 @@ in
     xclip
     python3Minimal
     emacs-lsp-booster
+    aporetic # fonts
   ];
 }

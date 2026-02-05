@@ -5,7 +5,6 @@
   setuptools,
 
   # dependencies
-  beets,
   confuse,
   jsonpath-rw,
   pyyaml,
@@ -25,8 +24,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # Note: beets is not included here to avoid duplicate derivations
+  # when the plugin is used with beets.override { pluginOverrides = ... }
   dependencies = [
-    beets
     confuse
     jsonpath-rw
     pyyaml
@@ -34,6 +34,9 @@ buildPythonPackage rec {
 
   # Plugin has no tests
   doCheck = false;
+
+  # Disable runtime dependency check since beets is provided by the parent package
+  dontCheckRuntimeDeps = true;
 
   meta = {
     description = "Beets plugin that improves album matching by reading origin metadata files";

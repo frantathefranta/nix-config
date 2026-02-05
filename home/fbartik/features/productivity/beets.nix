@@ -11,7 +11,10 @@
       pkgs.python313Packages.beets.override {
         pluginOverrides = {
           badfiles.enable = true;
-          beetcamp.enable = true;
+          beetcamp = {
+            enable = true;
+            propagatedBuildInputs = [ pkgs.beetcamp ];
+          };
           convert.disable = true;
           replaygain.disable = true;
           deezer.enable = true;
@@ -161,7 +164,7 @@
   };
 
   sops.secrets = {
-    "beets/musicbrainz" = {
+    "beets/musicbrainz.yaml" = {
       sopsFile = ../../secrets.yml;
     };
   };

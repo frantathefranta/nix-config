@@ -2,6 +2,7 @@
 {
   imports = [
     ./syncthing.nix
+    ./beets.nix
     ./aerc.nix
     ./github.nix
   ];

@@ -10,6 +10,7 @@ rec {
   etBembo = pkgs.callPackage ./etbembo { };
   akeyless = pkgs.callPackage ./akeyless-cli { };
   fake-hwclock = pkgs.callPackage ./fake-hwclock {  };
+  beets-originquery = pkgs.python3Packages.callPackage ./beets-originquery { };
   bird-lg-custom = pkgs.callPackage ./bird-lg {  };
   vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
   # rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };

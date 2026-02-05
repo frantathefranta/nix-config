@@ -75,7 +75,13 @@
       inherit lib;
       # Your custom packages
       # Accessible through 'nix build', 'nix shell', etc
-      packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
+      packages = forEachSystem (pkgs: import ./pkgs {
+        inherit pkgs;
+        pkgs-unstable = import inputs.nixpkgs-unstable {
+          inherit (pkgs) system;
+          config.allowUnfree = true;
+        };
+      });
       formatter = forEachSystem (pkgs: pkgs.alejandra);
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 

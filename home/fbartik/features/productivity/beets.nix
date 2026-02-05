@@ -8,12 +8,12 @@
   programs.beets = {
     enable = true;
     package = (
-      pkgs.python313Packages.beets.override {
+      pkgs.unstable.python3Packages.beets.override {
         pluginOverrides = {
           badfiles.enable = true;
           beetcamp = {
             enable = true;
-            propagatedBuildInputs = [ pkgs.python313Packages.beetcamp ];
+            propagatedBuildInputs = [ pkgs.unstable.python3Packages.beetcamp ];
           };
           convert.disable = true;
           replaygain.disable = true;
@@ -27,7 +27,9 @@
           plexupdate.enable = true;
           originquery = {
             enable = true;
-            propagatedBuildInputs = [ pkgs.beets-originquery ];
+            propagatedBuildInputs = [
+              (pkgs.unstable.python3Packages.callPackage ../../../../pkgs/beets-originquery { })
+            ];
           };
         };
       }

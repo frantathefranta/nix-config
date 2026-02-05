@@ -10,6 +10,7 @@ let
           treesit-grammars.with-all-grammars
           vterm
           mu4e
+          pbcopy
         ]
       );
 in

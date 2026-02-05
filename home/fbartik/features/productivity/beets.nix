@@ -149,7 +149,7 @@
       };
       fetchart = {
         auto = "yes";
-        minwidth = "600";
+        minwidth = 600;
         sources = "coverart itunes amazon albumart wikipedia lastfm fanarttv";
         # lastfm_key = "{{.LASTFM_API_KEY}}";
         # fanarttv_key = "{{.FANART_API_KEY}}";

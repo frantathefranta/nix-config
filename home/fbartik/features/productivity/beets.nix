@@ -11,6 +11,7 @@
       pkgs.python313Packages.beets.override {
         pluginOverrides = {
           badfiles.enable = true;
+          beetcamp.enable = true;
           convert.disable = true;
           replaygain.disable = true;
           deezer.enable = true;
@@ -32,6 +33,7 @@
       directory = "/music";
       # library = "/config/library.db";
       art_filename = "cover";
+      include = "${config.sops.secrets."beets/musicbrainz.yaml".path}";
       threaded = "yes";
       original_date = "yes";
       per_disc_numbering = "yes";
@@ -158,4 +160,9 @@
     };
   };
 
+  sops.secrets = {
+    "beets/musicbrainz" = {
+      sopsFile = ../../secrets.yml;
+    };
+  };
 }

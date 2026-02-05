@@ -21,6 +21,10 @@
           fetchart.enable = true;
           fish.enable = true;
           plexupdate.enable = true;
+          originquery = {
+            enable = true;
+            propagatedBuildInputs = [ pkgs.beets-originquery ];
+          };
         };
       }
     );
@@ -48,7 +52,7 @@
         "info"
         "bandcamp"
         "embedart"
-        # "originquery"
+        "originquery"
         "plexupdate"
         "fetchart"
       ];

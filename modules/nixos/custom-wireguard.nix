@@ -6,9 +6,23 @@
 with lib;
 let
   cfg = config.services.custom-wireguard;
+
+  # Strip any leading "digits-" prefix from the interface key to get the actual name.
+  interfaceName = name:
+    let
+      m = builtins.match "([0-9]+-)(.*)" name;
+    in
+    if m != null then builtins.elemAt m 1 else name;
 in
 {
   options.services.custom-wireguard = {
+    secretsFile = mkOption {
+      default = ../../hosts/${config.networking.hostName}/secrets.yaml;
+      type = types.path;
+      description = ''
+        Path to the sops secrets file containing Wireguard private keys.
+      '';
+    };
     interfaces = mkOption {
       default = { };
       type =
@@ -33,7 +47,7 @@ in
               default = null;
               type = types.nullOr types.str;
               description = ''
-                Wireguard peer endpoint
+                Wireguard peer public key
               '';
             };
             peerAddressV6 = mkOption {
@@ -64,11 +78,11 @@ in
                 Wireguard local link-local IPv4 address
               '';
             };
-            isOSPF = mkOption {
-              default = null;
-              type = types.nullOr types.bool;
+            persistentKeepalive = mkOption {
+              default = 25;
+              type = types.int;
               description = ''
-                Is Wireguard interface used for OSPF
+                Wireguard persistent keepalive interval in seconds
               '';
             };
             vrf = mkOption {
@@ -87,7 +101,7 @@ in
       flip mapAttrsToList cfg.interfaces (
         interface: _data: {
           "wireguard/${interface}" = {
-            sopsFile = ../../hosts/${config.networking.hostName}/secrets.yaml;
+            sopsFile = cfg.secretsFile;
           };
         }
       )
@@ -108,43 +122,42 @@ in
     );
     systemd.network.netdevs = builtins.mapAttrs (interface: data: {
       netdevConfig = {
-        # TODO: This needs to be able to remove any "integer-" prefix
-        Name = lib.strings.removePrefix "50-" interface;
+        Name = interfaceName interface;
         Kind = "wireguard";
       };
       wireguardConfig = {
         PrivateKey = "@network.wireguard.private.${interface}";
+      } // lib.optionalAttrs (data.listenPort != null) {
         ListenPort = data.listenPort;
       };
       wireguardPeers = [
-        {
-          Endpoint = data.peerEndpoint;
-          PersistentKeepalive = 5;
+        ({
+          PersistentKeepalive = data.persistentKeepalive;
           PublicKey = data.peerPublicKey;
           AllowedIPs = [
             "0.0.0.0/0"
             "::/0"
           ];
-        }
+        } // lib.optionalAttrs (data.peerEndpoint != null) {
+          Endpoint = data.peerEndpoint;
+        })
       ];
     }) cfg.interfaces;
 
     systemd.network.networks = builtins.mapAttrs (interface: data: {
-      # TODO: Same as above
-      matchConfig.Name = lib.strings.removePrefix "50-" interface;
-      addresses = [
-        {
+      matchConfig.Name = interfaceName interface;
+      addresses =
+        lib.optional (data.localAddressV6 != null) {
           Address = data.localAddressV6;
           Peer = data.peerAddressV6;
         }
-        (lib.mkIf (data.isOSPF == true)
-        {
+        ++ lib.optional (data.localAddressV4 != null) {
           Address = data.localAddressV4;
           Peer = data.peerAddressV4;
-        })
-      ];
+        };
       networkConfig = {
         LinkLocalAddressing = false;
+      } // lib.optionalAttrs (data.vrf != null) {
         VRF = data.vrf;
       };
     }) cfg.interfaces;

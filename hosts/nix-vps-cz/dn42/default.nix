@@ -76,7 +76,6 @@
       peerPublicKey = "+ussih60DoaN4k+jwheyo7iMAEBN+Ns69A4Km2E8pEg=";
       localAddressV6 = "fe80::2:1033/64";
       peerAddressV6 = "fe80::1033";
-      isOSPF = true;
       localAddressV4 = "169.254.2.0/31";
       peerAddressV4 = "169.254.2.1/31";
       vrf = "dn42";
@@ -87,7 +86,6 @@
       peerPublicKey = "tSHnY/aezSgH6p5E2tMQCQWDMe4hTAcv9cKkq/qJwkk=";
       localAddressV6 = "fe80::2:1033/128";
       peerAddressV6 = "fe80::1:1033/128";
-      isOSPF = true;
       localAddressV4 = "169.254.1.0/31";
       peerAddressV4 = "169.254.1.1/31";
       vrf = "dn42";

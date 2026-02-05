@@ -21,8 +21,10 @@
       "usb_storage"
       "sd_mod"
     ];
+    kernelModules = [ "nvram" ];
   };
   hardware.i2c.enable = true;
+  # services.vep14xx-fan-curve.enable = true;
   disko.devices.disk.main = {
     type = "disk";
     device = "/dev/disk/by-id/ata-256GB_SATA_Flash_Drive_E02210565000000011ED";

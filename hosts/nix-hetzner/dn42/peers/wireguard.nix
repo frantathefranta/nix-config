@@ -55,7 +55,6 @@
       peerPublicKey = "I9U/GISDI42GHTv9CtDSmaoJTxzx1BQnrmFQcL/wazo=";
       peerAddressV6 = "fe80::2:1033/128";
       localAddressV6 = "fe80::1:1033/128";
-      isOSPF = true;
       peerAddressV4 = "169.254.1.0/31";
       localAddressV4 = "169.254.1.1/31";
       vrf = "dn42";

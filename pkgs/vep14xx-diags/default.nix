@@ -7,9 +7,38 @@
   zlib,
   pciutils,
   util-linux,
+  sku ? "SKU4",
   ...
 }:
 let
+  # Debian Bookworm ships ICU 72; nixpkgs has moved past this soname.
+  # Needed at runtime by the Bookworm libxml2 below.
+  icu72-compat = stdenv.mkDerivation {
+    pname = "icu72-compat";
+    version = "72.1";
+
+    src = fetchurl {
+      url = "https://deb.debian.org/debian/pool/main/i/icu/libicu72_72.1-3+deb12u1_amd64.deb";
+      name = "libicu72-bookworm.deb";
+      sha256 = "f7f6f99c6d7b025914df2447fc93e11d22c44c0c8bdd8b6f36691c9e7ddcef88";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ stdenv.cc.cc.lib ];
+
+    unpackPhase = ''
+      ar x $src
+      tar xf data.tar.* --no-same-permissions --no-same-owner
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib
+      cp -a usr/lib/x86_64-linux-gnu/libicu*.so.* $out/lib/
+    '';
+
+    dontStrip = true;
+  };
+
   # The Dell binaries expect libxml2.so.2 (Debian Bookworm's soname).
   # Current nixpkgs libxml2 2.14+ ships libxml2.so.16 with different version
   # symbols, so we use the matching Debian library directly.
@@ -24,9 +53,7 @@ let
     };
 
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ zlib xz.out stdenv.cc.cc.lib ];
-    # ICU soname 72 is not in nixpkgs (has 76); unused by Dell tools' basic XML parsing
-    autoPatchelfIgnoreMissingDeps = [ "libicuuc.so.72" ];
+    buildInputs = [ zlib xz.out stdenv.cc.cc.lib icu72-compat ];
 
     unpackPhase = ''
       ar x $src
@@ -84,15 +111,28 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dn-diags
     cp -r etc/dn/diag/* $out/share/dn-diags/
 
-    # Patch I2C bus: Dell DiagOS references /dev/i2c-1 but on Proxmox/NixOS
-    # the TC654 fan controller lives on /dev/i2c-0.
-    for xml in default_fan_list.xml default_temp_sensors.xml default_led_list.xml default_pl_list.xml; do
-      find $out/share/dn-diags -name "$xml" -exec \
-        sed -i 's|/dev/i2c-1|/dev/i2c-0|g' {} +
-    done
+    # default_fan_list.xml only exists in SKU subdirectories; copy the
+    # selected SKU's version to the top level where the tools expect it.
+    cp "etc/dn/diag/${sku}/default_fan_list.xml" "$out/share/dn-diags/"
   '';
 
   appendRunpaths = [ "$out/lib" ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    echo "Checking for unresolved shared library dependencies…"
+    local fail=0
+    for f in $out/bin/* $out/lib/*.so*; do
+      [ -f "$f" ] || continue
+      [ -L "$f" ] && continue
+      if ldd "$f" 2>&1 | grep -q "not found"; then
+        echo "MISSING deps in $f:"
+        ldd "$f" | grep "not found"
+        fail=1
+      fi
+    done
+    [ "$fail" -eq 0 ] || exit 1
+  '';
 
   dontStrip = true;
 

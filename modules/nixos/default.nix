@@ -5,5 +5,6 @@
   # my-module = import ./my-module.nix;
   system-tarball-extlinux = import ./system-tarball-extlinux.nix;
   custom-wireguard = import ./custom-wireguard.nix;
+  vep14xx-fan-curve = import ./vep14xx-fan-curve.nix;
   # conman = import ./conman.nix;
 }

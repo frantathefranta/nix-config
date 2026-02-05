@@ -13,7 +13,7 @@
           badfiles.enable = true;
           beetcamp = {
             enable = true;
-            propagatedBuildInputs = [ pkgs.beetcamp ];
+            propagatedBuildInputs = [ pkgs.python313Packages.beetcamp ];
           };
           convert.disable = true;
           replaygain.disable = true;

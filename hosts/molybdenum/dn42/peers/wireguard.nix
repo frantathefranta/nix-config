@@ -6,7 +6,6 @@
       peerPublicKey = "NDQyX3K9piwzVi30GDqudZLjgDsAZsBIndtqI4I5k2A=";
       localAddressV6 = "fe80::1033";
       peerAddressV6 = "fe80::2:1033/64";
-      isOSPF = true;
       peerAddressV4 = "169.254.2.0/31";
       localAddressV4 = "169.254.2.1/31";
     };

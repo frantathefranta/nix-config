@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }:
 let
@@ -168,9 +169,28 @@ in
       };
     };
   };
+  services.restic.enable = true;
+  services.restic.backups.beets = (
+    lib.mkIf (builtins.length config.monitors == 0) {
+      paths = [ beetsdir ];
+      initialize = true;
+      repositoryFile = config.sops.secrets."restic/beets".path;
+      passwordFile = config.sops.secrets."restic/password".path;
+      environmentFile = config.sops.secrets."restic/s3-credentials".path;
+    }
+  );
 
   sops.secrets = {
     "beets/musicbrainz.yaml" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "restic/beets" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "restic/password" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "restic/s3-credentials" = {
       sopsFile = ../../secrets.yml;
     };
   };

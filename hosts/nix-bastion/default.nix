@@ -5,10 +5,10 @@ let
 in
 {
   imports = [
-    inputs.srvos.nixosModules.server
     ./hardware-configuration.nix
 
     ../common/global
+    ../common/roles/server.nix
     ../common/optional/qemu-guest-agent.nix
     ../common/optional/1password.nix
     ../common/users/fbartik

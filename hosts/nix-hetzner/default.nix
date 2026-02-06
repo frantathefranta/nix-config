@@ -2,10 +2,10 @@
 
 {
   imports = [
-    inputs.srvos.nixosModules.server
     inputs.srvos.nixosModules.hardware-hetzner-cloud
     ../common/global/nix.nix
     ../common/global/sops.nix
+    ../common/roles/server.nix
     ../common/optional/autoupgrade.nix
     ./dn42
   ]

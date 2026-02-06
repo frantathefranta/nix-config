@@ -13,6 +13,7 @@
 
     ../common/global
     ../common/users/fbartik
+    ../common/roles/workstation.nix
 
     ../common/optional/kde.nix
     ../common/optional/1password.nix

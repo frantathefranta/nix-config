@@ -7,10 +7,10 @@
 
 {
   imports = [
-    inputs.srvos.nixosModules.server
     inputs.vpsadminos.nixosConfigurations.container
     ../common/users/fbartik
     ../common/global
+    ../common/roles/server.nix
     ../common/optional/autoupgrade.nix
 
     ./dn42

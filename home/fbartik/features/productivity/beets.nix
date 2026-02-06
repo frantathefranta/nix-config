@@ -50,7 +50,10 @@ in
       library = "${beetsdir}/library.db";
       statefile = "${beetsdir}/state.pickle";
       art_filename = "cover";
-      include = [ "${config.sops.secrets."beets/musicbrainz.yaml".path}" ];
+      include = [
+        "${config.sops.secrets."beets/musicbrainz.yaml".path}"
+        "${config.sops.secrets."beets/discogs.yaml".path}"
+      ];
       threaded = "yes";
       original_date = "yes";
       per_disc_numbering = "yes";
@@ -111,7 +114,7 @@ in
         };
       };
       discogs = {
-        source_weight = "0.0";
+        data_source_mismatch_penalty = "0.1";
         index_tracks = "yes";
       };
       replace = {
@@ -131,7 +134,9 @@ in
       # acoustid = {
       #   apikey = "{{.ACOUSTID_API_KEY}}";
       # };
-      # musicbrainz = {
+      musicbrainz = {
+        data_source_mismatch_penalty = "0.0";
+      };
       #     user = "{{.MB_USER}}";
       #     pass = "'{{.MB_PASS}}'";
       #     extra_tags = "[year, catalognum, country, media, label]";
@@ -194,6 +199,9 @@ in
 
   sops.secrets = {
     "beets/musicbrainz.yaml" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "beets/discogs.yaml" = {
       sopsFile = ../../secrets.yml;
     };
     "restic/beets" = {

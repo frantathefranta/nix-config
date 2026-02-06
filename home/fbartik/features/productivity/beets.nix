@@ -3,7 +3,10 @@
   pkgs,
   ...
 }:
+let
+  beetsdir = "/music/beets";
 
+in
 {
   programs.beets = {
     enable = true;
@@ -36,7 +39,8 @@
     );
     settings = {
       directory = "/music";
-      # library = "/config/library.db";
+      library = "${beetsdir}/library.db";
+      statefile = "${beetsdir}/state.pickle";
       art_filename = "cover";
       include = [ "${config.sops.secrets."beets/musicbrainz.yaml".path}" ];
       threaded = "yes";

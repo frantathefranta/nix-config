@@ -7,6 +7,7 @@
 let
   beetsdir = "/music/beets";
   backup-script = pkgs.writeShellScript "beets-backup-script" /* bash */ ''
+    ${pkgs.coreutils}/bin/echo "Starting db backup...\n"
     SERVICE="restic-backups-beets.service"
     ${pkgs.systemdMinimal}/bin/systemctl start --user $SERVICE
     ID=$(systemctl show --value -p InvocationID $SERVICE)

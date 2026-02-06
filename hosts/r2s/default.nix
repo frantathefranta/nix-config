@@ -7,6 +7,7 @@
     # ./services
     ../common/global
     ../common/users/fbartik
+    ../common/roles/server.nix
   ];
   networking = {
     hostName = "r2s";

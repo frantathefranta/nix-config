@@ -6,6 +6,13 @@
 }:
 let
   beetsdir = "/music/beets";
+  backup-script = pkgs.writeShellScript "beets-backup-script" /* bash */ ''
+    ${pkgs.coreutils}/bin/echo "Starting db backup...\n"
+    SERVICE="restic-backups-beets.service"
+    ${pkgs.systemdMinimal}/bin/systemctl start --user $SERVICE
+    ID=$(systemctl show --value -p InvocationID $SERVICE)
+    ${pkgs.systemdMinimal}/bin/journalctl -q _SYSTEMD_INVOCATION_ID=$ID
+  '';
 
 in
 {
@@ -43,7 +50,10 @@ in
       library = "${beetsdir}/library.db";
       statefile = "${beetsdir}/state.pickle";
       art_filename = "cover";
-      include = [ "${config.sops.secrets."beets/musicbrainz.yaml".path}" ];
+      include = [
+        "${config.sops.secrets."beets/musicbrainz.yaml".path}"
+        "${config.sops.secrets."beets/discogs.yaml".path}"
+      ];
       threaded = "yes";
       original_date = "yes";
       per_disc_numbering = "yes";
@@ -68,6 +78,10 @@ in
         "plexupdate"
         "fetchart"
       ];
+      hook = {
+        event = "cli_exit";
+        command = "${pkgs.bash}/bin/bash ${backup-script}";
+      };
       originquery = {
         origin_file = "TrackerMetadata/red - Release.json";
         tag_patterns = {
@@ -87,7 +101,7 @@ in
         incremental_ask_later = "no";
         quiet_fallback = "skip";
         timid = "yes";
-        log = "/config/beet.log";
+        log = "${beetsdir}/beet.log";
         bell = "yes";
         duplicate_action = "ask";
       };
@@ -100,7 +114,7 @@ in
         };
       };
       discogs = {
-        source_weight = "0.0";
+        data_source_mismatch_penalty = "0.1";
         index_tracks = "yes";
       };
       replace = {
@@ -120,7 +134,9 @@ in
       # acoustid = {
       #   apikey = "{{.ACOUSTID_API_KEY}}";
       # };
-      # musicbrainz = {
+      musicbrainz = {
+        data_source_mismatch_penalty = "0.0";
+      };
       #     user = "{{.MB_USER}}";
       #     pass = "'{{.MB_PASS}}'";
       #     extra_tags = "[year, catalognum, country, media, label]";
@@ -177,11 +193,15 @@ in
       repositoryFile = config.sops.secrets."restic/beets".path;
       passwordFile = config.sops.secrets."restic/password".path;
       environmentFile = config.sops.secrets."restic/s3-credentials".path;
+      timerConfig = null;
     }
   );
 
   sops.secrets = {
     "beets/musicbrainz.yaml" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "beets/discogs.yaml" = {
       sopsFile = ../../secrets.yml;
     };
     "restic/beets" = {

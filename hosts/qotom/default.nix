@@ -13,6 +13,7 @@
 
     ../common/global
     ../common/users/fbartik
+    ../common/roles/server.nix
 
     ../common/optional/dn42.nix
     ../common/optional/smartd.nix
@@ -79,6 +80,7 @@
       '';
     };
   };
+  time.timeZone = "America/Detroit";
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
     "net.ipv4.conf.all.forwarding" = 1;

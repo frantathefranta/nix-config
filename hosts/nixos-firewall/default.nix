@@ -12,12 +12,14 @@
 
     ../common/global
     ../common/users/fbartik
+    ../common/roles/server.nix
 
     ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "nixos-firewall";
   };
+  time.timeZone = "America/Detroit";
   environment.systemPackages = [
     pkgs.i2c-tools
     pkgs.vep14xx-diags

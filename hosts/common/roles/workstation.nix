@@ -1,5 +1,8 @@
 { lib, ... }:
 {
+  imports = [
+    ../optional/1password.nix
+  ];
   # Sound via pipewire
   security.rtkit.enable = true;
   services.pipewire = {

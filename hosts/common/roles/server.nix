@@ -2,6 +2,8 @@
 {
   imports = [
     inputs.srvos.nixosModules.server
+    ../optional/prometheus-node-exporter.nix
+    ../optional/autoupgrade.nix
   ];
 
   # Fast boot for headless systems

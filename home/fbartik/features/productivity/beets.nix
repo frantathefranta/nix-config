@@ -97,7 +97,7 @@ in
         incremental_ask_later = "no";
         quiet_fallback = "skip";
         timid = "yes";
-        log = "/config/beet.log";
+        log = "${beetsdir}/beet.log";
         bell = "yes";
         duplicate_action = "ask";
       };

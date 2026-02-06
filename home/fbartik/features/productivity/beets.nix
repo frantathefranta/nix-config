@@ -79,7 +79,7 @@ in
         "fetchart"
       ];
       hook = {
-        event = "cli_exit";
+        event = "import";
         command = "${pkgs.bash}/bin/bash ${backup-script}";
       };
       originquery = {

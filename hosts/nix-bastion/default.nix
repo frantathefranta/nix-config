@@ -1,4 +1,3 @@
-{ inputs, ... }:
 let
   lo_ipv6 = "2600:1702:6630:3fec::10:11";
   dn42_ipv6 = "fdb7:c21f:f30f:10::11";
@@ -70,7 +69,6 @@ in
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
-  time.timeZone = "America/Detroit";
   # systemd-resolved binds to same IP as dnsmasq, this disables it
   services.resolved.extraConfig = ''
     DNSStubListener=no
@@ -78,6 +76,7 @@ in
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
   networking.nameservers = [ ];
 
+  time.timeZone = "America/Detroit";
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = true;

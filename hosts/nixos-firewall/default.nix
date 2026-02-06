@@ -19,6 +19,7 @@
   networking = {
     hostName = "nixos-firewall";
   };
+  time.timeZone = "America/Detroit";
   environment.systemPackages = [
     pkgs.i2c-tools
     pkgs.vep14xx-diags

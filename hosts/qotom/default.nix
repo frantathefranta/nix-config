@@ -80,6 +80,7 @@
       '';
     };
   };
+  time.timeZone = "America/Detroit";
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
     "net.ipv4.conf.all.forwarding" = 1;

@@ -6,6 +6,12 @@
 }:
 let
   beetsdir = "/music/beets";
+  backup-script = pkgs.writeShellScript "beets-backup-script" /* bash */ ''
+    SERVICE="restic-backups-beets.service"
+    ${pkgs.systemdMinimal}/bin/systemctl start --user $SERVICE
+    ID=$(systemctl show --value -p InvocationID $SERVICE)
+    ${pkgs.systemdMinimal}/bin/journalctl -q _SYSTEMD_INVOCATION_ID=$ID
+  '';
 
 in
 {
@@ -68,6 +74,10 @@ in
         "plexupdate"
         "fetchart"
       ];
+      hook = {
+        event = "cli_exit";
+        command = "${pkgs.bash}/bin/bash ${backup-script}";
+      };
       originquery = {
         origin_file = "TrackerMetadata/red - Release.json";
         tag_patterns = {
@@ -177,6 +187,7 @@ in
       repositoryFile = config.sops.secrets."restic/beets".path;
       passwordFile = config.sops.secrets."restic/password".path;
       environmentFile = config.sops.secrets."restic/s3-credentials".path;
+      timerConfig = null;
     }
   );
 

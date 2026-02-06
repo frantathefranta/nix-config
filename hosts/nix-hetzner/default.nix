@@ -13,6 +13,7 @@
   networking = {
     hostName = "nix-hetzner";
   };
+  time.timeZone = "America/Seattle";
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "eth0";

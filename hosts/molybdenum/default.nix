@@ -49,6 +49,7 @@ in
       "2606:4700:4700::1001"
     ];
   };
+  time.timeZone = "America/Detroit";
   services.prometheus.exporters.node = {
     openFirewall = true;
     firewallRules = ''

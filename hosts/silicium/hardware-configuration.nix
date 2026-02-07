@@ -18,6 +18,7 @@
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelParams = [ "psmouse.proto=imps" ]; # This fixes trackpoint choppiness
   boot.extraModulePackages = [ ];
   boot.loader = {
     systemd-boot = {

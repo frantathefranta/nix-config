@@ -13,46 +13,50 @@ let
     ID=$(systemctl show --value -p InvocationID $SERVICE)
     ${pkgs.systemdMinimal}/bin/journalctl -q _SYSTEMD_INVOCATION_ID=$ID
   '';
+  python = pkgs.unstable.python3Packages;
+  beets = (
+    python.beets.override {
+      pluginOverrides = {
+        badfiles.enable = true;
+        beetcamp = {
+          enable = true;
+          propagatedBuildInputs = [ python.beetcamp ];
+        };
+        convert.disable = true;
+        replaygain.disable = true;
+        deezer.enable = true;
+        discogs.enable = true;
+        duplicates.enable = true;
+        edit.enable = true;
+        embedart.enable = true;
+        fetchart.enable = true;
+        fish.enable = true;
+        plexupdate.enable = true;
+        originquery = {
+          enable = true;
+          propagatedBuildInputs = [
+            (python.callPackage ../../../../pkgs/beets-originquery { })
+          ];
+        };
+      };
+    }
+  );
+  secret = config.sops.secrets;
 
 in
 {
   programs.beets = {
     enable = true;
-    package = (
-      pkgs.unstable.python3Packages.beets.override {
-        pluginOverrides = {
-          badfiles.enable = true;
-          beetcamp = {
-            enable = true;
-            propagatedBuildInputs = [ pkgs.unstable.python3Packages.beetcamp ];
-          };
-          convert.disable = true;
-          replaygain.disable = true;
-          deezer.enable = true;
-          discogs.enable = true;
-          duplicates.enable = true;
-          edit.enable = true;
-          embedart.enable = true;
-          fetchart.enable = true;
-          fish.enable = true;
-          plexupdate.enable = true;
-          originquery = {
-            enable = true;
-            propagatedBuildInputs = [
-              (pkgs.unstable.python3Packages.callPackage ../../../../pkgs/beets-originquery { })
-            ];
-          };
-        };
-      }
-    );
+    package = beets;
     settings = {
       directory = "/music";
       library = "${beetsdir}/library.db";
       statefile = "${beetsdir}/state.pickle";
       art_filename = "cover";
       include = [
-        "${config.sops.secrets."beets/musicbrainz.yaml".path}"
-        "${config.sops.secrets."beets/discogs.yaml".path}"
+        "${secret."beets/musicbrainz.yaml".path}"
+        "${secret."beets/plex.yaml".path}"
+        "${secret."beets/discogs.yaml".path}"
       ];
       threaded = "yes";
       original_date = "yes";
@@ -156,12 +160,6 @@ in
       bandcamp = {
         art = "yes";
       };
-      # plex = {
-      #   host = "plex.franta.us";
-      #   port = "32400";
-      #   token = "{{.PLEX_TOKEN}}";
-      #   library_name = "Music";
-      # };
       badfiles = {
         check_on_import = "yes";
         commands = {
@@ -212,6 +210,9 @@ in
       sopsFile = ../../secrets.yml;
     };
     "restic/s3-credentials" = {
+      sopsFile = ../../secrets.yml;
+    };
+    "beets/plex.yaml" = {
       sopsFile = ../../secrets.yml;
     };
   };

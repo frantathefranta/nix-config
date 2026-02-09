@@ -53,6 +53,7 @@ let
     "syncthing" = {
       path = "~/syncthing";
       devices = otherDevices;
+      id = "awtmp-wdpjw";
     };
   };
 

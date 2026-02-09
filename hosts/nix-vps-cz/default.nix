@@ -43,7 +43,7 @@
   };
 
   # Overrides from my default config
-  system.autoUpgrade.allowReboot = false;
+  # system.autoUpgrade.allowReboot = false; # Actually due to VRF issues during configuration changes, it's better if it's rebooted
   environment.systemPackages = with pkgs; [
     vim
     unstable.iperf3

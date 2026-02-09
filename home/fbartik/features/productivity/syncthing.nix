@@ -1,4 +1,10 @@
-{ config, lib, osConfig, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  osConfig,
+  ...
+}:
 let
   hostname = osConfig.networking.hostName;
 
@@ -21,14 +27,18 @@ let
 
   # Hubs connect to all other devices (and to each other)
   # Spokes connect only to hub hosts
-  hubHosts = [ "nix-bastion" "talos-maxi" ];
+  hubHosts = [
+    "nix-bastion"
+    "talos-maxi"
+  ];
 
   isHub = builtins.elem hostname hubHosts;
 
   devicesForHost =
-    if isHub
-    then lib.filterAttrs (name: _: name != hostname) allDevices
-    else lib.filterAttrs (name: _: builtins.elem name hubHosts) allDevices;
+    if isHub then
+      lib.filterAttrs (name: _: name != hostname) allDevices
+    else
+      lib.filterAttrs (name: _: builtins.elem name hubHosts) allDevices;
 
   # All other device names (excluding self) — used for folder sharing
   otherDevices = builtins.attrNames (lib.filterAttrs (name: _: name != hostname) devicesForHost);
@@ -51,7 +61,7 @@ let
     # };
   };
 
-  hostFolders = globalFolders // (extraFoldersForHost.${hostname} or {});
+  hostFolders = globalFolders // (extraFoldersForHost.${hostname} or { });
 
   # Per-host secrets file for syncthing cert and key
   hostSecretsFile = ../../../.. + "/hosts/${hostname}/secrets.yaml";
@@ -78,4 +88,7 @@ in
       }) hostFolders;
     };
   };
+  home.packages = [
+    pkgs.stc-cli
+  ];
 }

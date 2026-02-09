@@ -1,0 +1,14 @@
+set dns_server {
+  type ipv4_addr
+  elements = { 10.33.10.0 }
+}
+
+set trusted_devices {
+  type ipv4_addr
+  flags interval
+  auto-merge
+  elements = {
+    10.32.10.11,
+    10.0.10.11
+  }
+}

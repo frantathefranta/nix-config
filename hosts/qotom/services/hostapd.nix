@@ -67,6 +67,7 @@
       externalInterface = "enp1s0";
     };
   };
+  systemd.services.kea-dhcp4-server.after = [ config.systemd.services.systemd-networkd.name ];
 
   sops.secrets.wpa-password = {
     sopsFile = ../secrets.yaml;

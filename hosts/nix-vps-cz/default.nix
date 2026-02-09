@@ -41,6 +41,9 @@
     # authorize your keys in configuration
     authorizedKeysInHomedir = true;
   };
+
+  # Overrides from my default config
+  system.autoUpgrade.allowReboot = false;
   environment.systemPackages = with pkgs; [
     vim
     unstable.iperf3

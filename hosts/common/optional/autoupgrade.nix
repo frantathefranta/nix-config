@@ -17,7 +17,7 @@ in
     ];
     dates = "Mon 05:00";
     randomizedDelaySec = "30min";
-    allowReboot = true;
+    allowReboot = lib.mkDefault true;
   };
   # Stolen from https://discourse.nixos.org/t/system-autoupgrade-with-e-mail-notificaitons/32063/4
   # Define systemd template unit for reporting service failures via e-mail

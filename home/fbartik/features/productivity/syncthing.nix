@@ -51,7 +51,7 @@ let
   # Folders synced to all connected devices
   globalFolders = {
     "syncthing" = {
-      path = "~/syncthing";
+      path = "${config.home.homeDirectory}/syncthing";
       devices = otherDevices;
       id = "awtmp-wdpjw";
     };
@@ -94,7 +94,10 @@ in
       } // lib.optionalAttrs (cfg ? id) { inherit (cfg) id; }) hostFolders;
     };
   };
-  home.packages = [
-    pkgs.stc-cli
-  ];
+  # home.packages = [
+  #   pkgs.stc-cli
+  # ];
+  programs.fish.shellAliases = {
+    stc = "${pkgs.stc-cli}/bin/stc --homedir=${config.home.homeDirectory}/.local/state/syncthing";
+  };
 }

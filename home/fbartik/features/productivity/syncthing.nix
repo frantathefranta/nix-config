@@ -91,7 +91,7 @@ in
       devices = lib.mapAttrs (_name: cfg: { inherit (cfg) id; }) devicesForHost;
       folders = lib.mapAttrs (_name: cfg: {
         inherit (cfg) path devices;
-      }) hostFolders;
+      } // lib.optionalAttrs (cfg ? id) { inherit (cfg) id; }) hostFolders;
     };
   };
   home.packages = [

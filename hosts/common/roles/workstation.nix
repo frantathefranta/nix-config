@@ -18,6 +18,10 @@
     enableRedistributableFirmware = lib.mkDefault true;
   };
 
+  # Smart cards
+  services.pcscd.enable = true;
+  programs.yubikey-manager.enable = true;
+
   # Printing
   services.printing.enable = lib.mkDefault true;
 

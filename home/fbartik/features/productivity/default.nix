@@ -9,5 +9,6 @@
   home.packages = with pkgs; [
     hcloud # Hetzner Cloud CLI
     zola
+    age-plugin-yubikey
   ];
 }

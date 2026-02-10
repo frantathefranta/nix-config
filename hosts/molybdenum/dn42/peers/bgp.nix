@@ -76,6 +76,13 @@
       as = "4242420263";
       link = "3";
     }
+    {
+      multi = true;
+      name = "dn42_markround";
+      neigh = "fe80::401%wg4242420401";
+      as = "4242420401";
+      link = "3";
+    }
   ];
   extraConfig = ''
     protocol bgp ROUTE_COLLECTOR

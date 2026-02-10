@@ -40,5 +40,12 @@
       localAddressV6 = "fe80::abcd/128";
       vrf = "dn42";
     };
+    "50-wg4242420401" = {
+      listenPort = 20401;
+      peerEndpoint = "de01.dn42.markround.com:21033";
+      peerPublicKey = "ZPwzKog7ii0RVJsvRKRz2WdFHU0FWujMKDVqk9UKbF0=";
+      peerAddressV6 = "fe80::401/128";
+      localAddressV6 = "fe80::1033:0401/128";
+    };
   };
 }

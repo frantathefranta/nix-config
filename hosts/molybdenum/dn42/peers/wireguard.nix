@@ -72,6 +72,13 @@
       localAddressV6 = "fe80::1033/64";
       peerAddressV6 = "fe80::2189:124";
     };
+    "50-wg4242420401" = {
+      listenPort = 20401;
+      peerEndpoint = "useast01.dn42.markround.com:21033";
+      peerPublicKey = "sTS3P+oL1rVAOB0bdVSm1TRKfIAwnQr/nHoArk6koik=";
+      peerAddressV6 = "fe80::401/128";
+      localAddressV6 = "fe80::1033:0401/128";
+    };
     "50-wg_qotom" = {
       listenPort = 40001;
       peerEndpoint = "qotom.infra.franta.us:40001";

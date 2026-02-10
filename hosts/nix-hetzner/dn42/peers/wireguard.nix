@@ -49,6 +49,13 @@
       peerAddressV6 = "fe80::3088:191/128";
       localAddressV6 = "fe80::abcd/128";
     };
+    "50-wg4242420401" = {
+      listenPort = 20401;
+      peerEndpoint = "uswest01.dn42.markround.com:21033";
+      peerPublicKey = "HQy5+GyAOSYGpZ9hwbNxLHrSOvKZtJ3yZUazImiM5Bs=";
+      peerAddressV6 = "fe80::401/128";
+      localAddressV6 = "fe80::1033:0401/128";
+    };
     "50-ospf_nix-vps-cz" = {
       listenPort = 24002;
       peerEndpoint = "prg.dn42.franta.us:24002";

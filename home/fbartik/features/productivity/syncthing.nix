@@ -24,10 +24,7 @@ let
     };
     ipad.id = "5KZRX7Q-2S24O72-AFSXUGX-O6WGCIF-ILOCZTI-TWH7KXT-WW2VU3M-2NO4RAE";
     nc312237.id = "JJRYAAB-TGNZT47-IVZYW3B-APRRIQS-2MAUKCC-NF54L7K-XUCUBNY-LUWQ7QM";
-    # silicium = {
-    #   id = "PLACEHOLDER-SILICIUM-ID";
-    # };
-    # Add more devices as needed
+    silicium.id = "BCY7I24-U4YMINM-Z4QURGH-G7KVVFN-NMXC4QV-UK7VUXH-QAEGR3S-RQPPRAD";
   };
 
   # Hubs connect to all other devices (and to each other)
@@ -89,9 +86,13 @@ in
     settings = {
       options.localAnnounceEnabled = true;
       devices = lib.mapAttrs (_name: cfg: { inherit (cfg) id; }) devicesForHost;
-      folders = lib.mapAttrs (_name: cfg: {
-        inherit (cfg) path devices;
-      } // lib.optionalAttrs (cfg ? id) { inherit (cfg) id; }) hostFolders;
+      folders = lib.mapAttrs (
+        _name: cfg:
+        {
+          inherit (cfg) path devices;
+        }
+        // lib.optionalAttrs (cfg ? id) { inherit (cfg) id; }
+      ) hostFolders;
     };
   };
   # home.packages = [

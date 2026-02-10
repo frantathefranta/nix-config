@@ -95,9 +95,6 @@ in
       ) hostFolders;
     };
   };
-  # home.packages = [
-  #   pkgs.stc-cli
-  # ];
   programs.fish.shellAliases = {
     stc = "${pkgs.stc-cli}/bin/stc --homedir=${config.home.homeDirectory}/.local/state/syncthing";
   };

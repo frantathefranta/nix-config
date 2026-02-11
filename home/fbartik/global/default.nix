@@ -29,7 +29,7 @@
 
   home = {
     username = "fbartik";
-    homeDirectory = "/home/fbartik";
+    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/fbartik" else "/home/fbartik";
   };
 
   sops = {
@@ -72,7 +72,7 @@
     timestamp = "-7 days";
   };
   # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
+  systemd.user.startServices = lib.mkIf pkgs.stdenv.isLinux "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = lib.mkDefault "24.11";

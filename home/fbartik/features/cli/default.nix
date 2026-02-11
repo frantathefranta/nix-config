@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./fish
@@ -9,7 +9,7 @@
     ./tmux.nix
     ./zoxide.nix
     # ./bash.nix
-    # ./bat.nix
+    ./bat.nix
     ./direnv.nix
     # ./gh.nix
     # ./git.nix
@@ -40,7 +40,9 @@
     fd # Better find
     httpie # Better curl
     minijinja
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
     ipmitool # IPMI management
+  ] ++ [
     unstable.managarr # Sonarr/Radarr TUI
     nmap
     jq # JSON pretty printer and manipulator
@@ -55,7 +57,7 @@
     mtr # traceroute replacement
     iperf3
     alejandra # Nix formatter
-    nixfmt-rfc-style
+    nixfmt
     nvd # Differ
     nix-diff # Differ, more detailed
     nix-output-monitor

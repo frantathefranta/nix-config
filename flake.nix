@@ -19,7 +19,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
-    systems.url = "github:nix-systems/default-linux";
+    systems.url = "github:nix-systems/default";
     hardware.url = "github:nixos/nixos-hardware";
     srvos.url = "github:nix-community/srvos";
     gobgp.url = "github:wavelens/gobgp.nix";
@@ -36,6 +36,8 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager-unstable.url = "github:nix-community/home-manager";
+    home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # Emacs
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -169,6 +171,17 @@
           modules = [
             # > Our main home-manager configuration file <
             ./home/fbartik/nix-bastion.nix
+            ./home/fbartik/nixpkgs.nix
+          ];
+        };
+        "fbartik@NC312237" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable {
+            system = "aarch64-darwin";
+            config.allowUnfree = true;
+          };
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            ./home/fbartik/NC312237.nix
             ./home/fbartik/nixpkgs.nix
           ];
         };

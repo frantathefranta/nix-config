@@ -16,6 +16,10 @@
   ++ (builtins.attrValues outputs.homeManagerModules);
 
   nix = {
+    # On Darwin with Determinate Nix, disable home-manager's nix module
+    # to avoid the activation script using a nixpkgs nix that doesn't
+    # understand Determinate-specific settings (lazy-trees, eval-cores).
+    enable = !pkgs.stdenv.isDarwin;
     package = lib.mkDefault pkgs.nix;
     settings = {
       experimental-features = [

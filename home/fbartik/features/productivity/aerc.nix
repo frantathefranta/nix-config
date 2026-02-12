@@ -64,9 +64,13 @@ in
         maildir-store = config.accounts.email.maildirBasePath;
         maildir-account-path = "icloud";
         default = "Inbox";
+        use-labels = true;
+        cache-state = true;
+        cache-blobs = true;
+        use-envelope-from = true;
         cache-headers = true;
         folder-map = toString (
-          pkgs.writeText "gmail-folder-map" ''
+          pkgs.writeText "icloud-folder-map" ''
             Sent Messages=Sent
             Junk=Spam
           ''
@@ -416,7 +420,7 @@ in
 
         # Archive and delete keybindings
         "e" =
-          '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
+          '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Archive") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
         "E" =
           '':unmark -a<Enter>:mark -T<Enter>:modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
         "d" =
@@ -446,6 +450,8 @@ in
 
       view = {
         "<C-f>" = ":toggle-key-passthrough<Enter>/";
+        "<C-j>" = ":next-part<Enter>";
+        "<C-k>" = ":prev-part<Enter>";
         "/" = ":query -f -n \"\" -a combined date:1y..<Space>";
 
         "c" = ":change-tab {{.Account}}<Enter>:compose<Enter>";

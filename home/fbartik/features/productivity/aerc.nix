@@ -11,6 +11,16 @@ let
   realName = "Franta Bartik";
   primaryEmail = "fb@franta.us";
   aerc-filters = "${pkgs.aerc}/libexec/aerc/filters";
+  moveToTrash = pkgs.writeShellScript "aerc-trash" ''
+    case "$1" in
+      */icloud/*) mv "$1" "${config.accounts.email.maildirBasePath}/icloud/Deleted Messages/cur/" ;;
+      */fastmail/*) mv "$1" "${config.accounts.email.maildirBasePath}/fastmail/Trash/cur/" ;;
+      */nibuild/*) mv "$1" "${config.accounts.email.maildirBasePath}/nibuild/Trash/cur/" ;;
+      */gmail/*) mv "$1" "${config.accounts.email.maildirBasePath}/gmail/[Gmail]/Trash/cur/" ;;
+    esac
+    ${pkgs.notmuch}/bin/notmuch new --quiet 2>/dev/null
+  '';
+
   # Script to clean up deleted messages before sync
   notmuchCleanup = ''
     # Remove files that are tagged as deleted
@@ -98,9 +108,9 @@ in
 
             # Folder-specific views (path-based to match physical location)
             Archive=path:icloud/Archive/**
-            Sent="path:icloud/Sent Messages/**"
+            Sent=path:"icloud/Sent Messages/**"
             Drafts=path:icloud/Drafts/**
-            Trash="path:icloud/Deleted Messages/**"
+            Trash=path:"icloud/Deleted Messages/**"
             Spam=path:icloud/Junk/**
             # Archive=path:fastmail/Archive/** or path:"gmail/[Gmail]/All Mail/**" or path:nibuild/Archive/**
             # Sent=path:fastmail/Sent/** or path:"gmail/[Gmail]/Sent Mail/**" or path:nibuild/Sent/**
@@ -118,17 +128,10 @@ in
           ''
         );
 
-        folder-map = toString (
-          pkgs.writeText "combined-folder-map" ''
-            icloud/Deleted Messages=icloud/Trash
-            icloud/Sent Messages=icloud/Sent
-          ''
-        );
-
         default = "Inbox";
 
         # Folder sort order - pin important folders to the top
-        # folders-sort = "Inbox,Unread,Starred,Archive,Sent,Drafts,Trash,Spam";
+        folders-sort = "Inbox,Unread,Starred,Archive,Sent,Drafts,Trash,Spam";
 
         # Check mail command
         check-mail-cmd = toString (
@@ -431,8 +434,7 @@ in
           '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Archive") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
         "E" =
           '':unmark -a<Enter>:mark -T<Enter>:modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
-        "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+        "d" = '':modify-labels -inbox -unread +trash<Enter>:exec ${moveToTrash} {{.Filename}}<Enter>'';
 
         "rr" = ":reply -a<Enter>";
         "rq" = ":reply -aq<Enter>";
@@ -467,8 +469,7 @@ in
         "q" = ":close<Enter>";
 
         "s" = ":move Starred<Enter>";
-        "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Trash") (case "gmail" "gmail/[Gmail]/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+        "d" = '':modify-labels -inbox -unread +trash<Enter>:exec ${moveToTrash} {{.Filename}}<Enter>'';
         "D" = ":delete<Enter>";
         "e" =
           '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';

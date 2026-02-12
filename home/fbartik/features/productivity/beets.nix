@@ -97,17 +97,17 @@ in
           albumdisambig = "$.torrent.remasterTitle";
         };
       };
-      asciify_paths = "yes";
+      asciify_paths = true;
       import = {
-        write = "yes";
-        copy = "yes";
+        write = true;
+        copy = true;
         resume = "ask";
-        incremental = "yes";
-        incremental_ask_later = "no";
+        incremental = true;
+        incremental_ask_later = false;
         quiet_fallback = "skip";
-        timid = "yes";
+        timid = true;
         log = "${beetsdir}/beet.log";
-        bell = "yes";
+        bell = true;
         duplicate_action = "ask";
       };
       match = {
@@ -120,7 +120,7 @@ in
       };
       discogs = {
         data_source_mismatch_penalty = 0.1;
-        index_tracks = "yes";
+        index_tracks = true;
       };
       replace = {
         "^\." = "_";
@@ -134,7 +134,7 @@ in
         "\s+$" = "''";
       };
       ftintitle = {
-        auto = "yes";
+        auto = true;
       };
       # acoustid = {
       #   apikey = "{{.ACOUSTID_API_KEY}}";
@@ -147,8 +147,8 @@ in
       #     extra_tags = "[year, catalognum, country, media, label]";
       # };
       the = {
-        a = "no";
-        the = "yes";
+        a = false;
+        the = true;
       };
       # acousticbrainz = {
       #     auto = "yes";
@@ -158,7 +158,7 @@ in
         surround = "1 if channels > 2 else 0";
       };
       bandcamp = {
-        art = "yes";
+        art = true;
       };
       badfiles = {
         check_on_import = true;
@@ -167,10 +167,10 @@ in
         };
       };
       embedart = {
-        auto = "no";
+        auto = false;
       };
       fetchart = {
-        auto = "yes";
+        auto = true;
         minwidth = 600;
         sources = "coverart itunes amazon albumart wikipedia lastfm fanarttv";
         # lastfm_key = "{{.LASTFM_API_KEY}}";

@@ -13,6 +13,7 @@ keys:
     - &nix-hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
     - &nix-vps-cz age1zqggxdatjwcryu5qgr9ge0gewzvvfpjv630h4mmc9d6xunufcayq3xvg02
     - &silicium age1rtkde8zynkul4y7ufxwvs2axp842u4wexynn9ypf8zv7egzs8azs5ue8je
+    - &NC312237 age1yubikey1qgdsulvw5rlcn5scpf8z92tlgf4prqagg2nay6zzcpj0nt9avvrdwz72rak
 creation_rules:
   - path_regex: hosts/common/secrets.ya?ml$
     key_groups:
@@ -77,3 +78,7 @@ creation_rules:
     key_groups:
       - age:
           - *franta
+  - path_regex: home/fbartik/NC312237-secrets.ya?ml$
+    key_groups:
+      - age:
+          - *NC312237

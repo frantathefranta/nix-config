@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     ./global
@@ -7,5 +7,6 @@
   home.packages = with pkgs; [
     nil
   ];
-  sops.age.keyFile = null;
+  sops.age.keyFile = "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt";
+  sops.defaultSopsFile = ./NC312237-secrets.yaml;
 }

@@ -72,6 +72,7 @@ in
         folder-map = toString (
           pkgs.writeText "icloud-folder-map" ''
             Sent Messages=Sent
+            Deleted Messages=Trash
             Junk=Spam
           ''
         );
@@ -114,6 +115,13 @@ in
 
             # Account-specific inboxes
             iCloud-Inbox=path:icloud/Inbox/**
+          ''
+        );
+
+        folder-map = toString (
+          pkgs.writeText "combined-folder-map" ''
+            icloud/Deleted Messages=icloud/Trash
+            icloud/Sent Messages=icloud/Sent
           ''
         );
 
@@ -424,7 +432,7 @@ in
         "E" =
           '':unmark -a<Enter>:mark -T<Enter>:modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
         "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Deleted Messages") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
 
         "rr" = ":reply -a<Enter>";
         "rq" = ":reply -aq<Enter>";
@@ -460,7 +468,7 @@ in
 
         "s" = ":move Starred<Enter>";
         "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Trash") (case "gmail" "gmail/[Gmail]/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
         "D" = ":delete<Enter>";
         "e" =
           '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
@@ -605,7 +613,7 @@ in
         realName = realName;
         address = primaryEmail;
         userName = "frantisek.bartik@icloud.com";
-        passwordCommand = "op read op://Personal/iCloudMail/password";
+        passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/icloud".path}";
         aliases = [ "admin@franta.us" ];
         flavor = "plain";
         folders = {
@@ -657,4 +665,5 @@ in
     };
   };
   services.imapnotify.enable = true;
+  sops.secrets."email/icloud" = {};
 }

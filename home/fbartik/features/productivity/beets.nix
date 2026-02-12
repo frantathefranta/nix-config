@@ -161,9 +161,9 @@ in
         art = "yes";
       };
       badfiles = {
-        check_on_import = "yes";
+        check_on_import = true;
         commands = {
-          flac = "flac --test --silent";
+          flac = "${pkgs.flac}/bin/flac --test --silent";
         };
       };
       embedart = {

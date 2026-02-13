@@ -180,7 +180,7 @@ in
         singleton = "Non-Album/$albumartist/$album/$artist - $title";
         #comp = "Compilations/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
         albumtype_soundtrack = "Soundtracks/$album/$track $title";
-        default = "%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
+        default = "'%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title'";
       };
     };
   };

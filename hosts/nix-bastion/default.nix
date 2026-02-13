@@ -11,6 +11,7 @@ in
     ../common/optional/qemu-guest-agent.nix
     ../common/optional/1password.nix
     ../common/users/fbartik
+    ../common/users/admin
     ./services
   ];
   networking = {

@@ -684,7 +684,7 @@ in
               CopyArrivalDate = "yes";
             };
             account = {
-              PipelineDepth = 1; # Gmail doesn't like multiple parallel IMAP commands, this disables it
+              PipelineDepth = 10; # Gmail doesn't like multiple parallel IMAP commands, this disables it
             };
           };
         };
@@ -731,7 +731,7 @@ in
               CopyArrivalDate = "yes";
             };
             account = {
-              PipelineDepth = 1; # Gmail doesn't like multiple parallel IMAP commands, this disables it
+              PipelineDepth = 10; # Gmail doesn't like multiple parallel IMAP commands, this disables it
             };
           };
         };

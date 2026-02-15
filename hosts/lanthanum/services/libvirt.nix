@@ -35,6 +35,6 @@
 
   virtualisation.incus = {
     enable = true;
-
   };
+  networking.firewall.trustedInterfaces = [ "incusbr0" ];
 }

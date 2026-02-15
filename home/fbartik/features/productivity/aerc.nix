@@ -24,14 +24,14 @@ let
   notmuchCleanup = ''
     # Remove files that are tagged as deleted
     ${pkgs.notmuch}/bin/notmuch search --format=text0 --output=files tag:deleted | \
-      xargs -0 --no-run-if-empty rm -v
+      ${pkgs.toybox}/bin/xargs -0 --no-run-if-empty rm -v
   '';
   notmuchPreNew = pkgs.writeShellScript "notmuch-pre-new_remove_tagged_deleted" ''
     #!/usr/bin/env bash
 
     # Remove files that are tagged as deleted
     ${pkgs.notmuch}/bin/notmuch search --format=text0 --output=files tag:deleted | \
-      xargs -0 --no-run-if-empty rm -v
+      ${pkgs.toybox}/bin/xargs -0 --no-run-if-empty rm -v
   '';
 
   notmuchPostNew = pkgs.writeShellScript "notmuch-post-new_autotag" ''
@@ -766,7 +766,13 @@ in
       };
     }
   ) (lib.filterAttrs (_: acc: acc.imapnotify.enable or false) config.accounts.email.accounts);
-  sops.secrets."email/icloud" = { };
-  sops.secrets."email/gmail-oz" = { };
-  sops.secrets."email/gmail-fb" = { };
+  sops.secrets."email/icloud" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
+  sops.secrets."email/gmail-oz" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
+  sops.secrets."email/gmail-fb" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
 }

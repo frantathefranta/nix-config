@@ -57,6 +57,13 @@ in
         "${secret."beets/musicbrainz.yaml".path}"
         "${secret."beets/plex.yaml".path}"
         "${secret."beets/discogs.yaml".path}"
+        (pkgs.writeText "beets-paths.yaml" (builtins.toJSON {
+          paths = {
+            singleton = "Non-Album/$albumartist/$album/$artist - $title";
+            albumtype_soundtrack = "Soundtracks/$album/$track $title";
+            default = "%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
+          };
+        }))
       ];
       threaded = "yes";
       original_date = "yes";
@@ -175,12 +182,6 @@ in
         sources = "coverart itunes amazon albumart wikipedia lastfm fanarttv";
         # lastfm_key = "{{.LASTFM_API_KEY}}";
         # fanarttv_key = "{{.FANART_API_KEY}}";
-      };
-      paths = {
-        singleton = "Non-Album/$albumartist/$album/$artist - $title";
-        #comp = "Compilations/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
-        albumtype_soundtrack = "Soundtracks/$album/$track $title";
-        default = "'%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title'";
       };
     };
   };

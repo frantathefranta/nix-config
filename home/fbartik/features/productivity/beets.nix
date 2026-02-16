@@ -122,16 +122,17 @@ in
         data_source_mismatch_penalty = 0.1;
         index_tracks = true;
       };
+      # There need to be double backward slashes so Nix doesn't interpret this wrong (if your paths result in _oooo/_oooo, that's the issue)
       replace = {
-        "^\." = "_";
-        "[\x00-\x1f]" = "_";
-        "[\xE8-\xEB]" = "e";
-        "[\xEC-\xEF]" = "i";
-        "[\xE2-\xE6]" = "a";
-        "[\xF2-\xF6]" = "o";
-        "[\xF8]" = "o";
-        "\.$" = "_";
-        "\s+$" = "''";
+        "^\\." = "_";
+        "[\\x00-\\x1f]" = "_";
+        "[\\xE8-\\xEB]" = "e";
+        "[\\xEC-\\xEF]" = "i";
+        "[\\xE2-\\xE6]" = "a";
+        "[\\xF2-\\xF6]" = "o";
+        "[\\xF8]" = "o";
+        "\\.$" = "_";
+        "\\s+$" = "";
       };
       ftintitle = {
         auto = true;
@@ -180,7 +181,7 @@ in
         singleton = "Non-Album/$albumartist/$album/$artist - $title";
         #comp = "Compilations/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
         albumtype_soundtrack = "Soundtracks/$album/$track $title";
-        default = "'%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title'";
+        default = "%if{$surround,surround,stereo}/%the{$albumartist}/$albumartist - %if{$original_year,$original_year,$year} - $album%aunique{} - [%if{$deezer,Digital Media,$media}%if{$label,$, $label}%if{$catalognum,$, $catalognum}]/%if{$multidisc,Disc $disc/}$track - $title";
       };
     };
   };

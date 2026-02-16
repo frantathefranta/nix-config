@@ -122,6 +122,7 @@ in
         data_source_mismatch_penalty = 0.1;
         index_tracks = true;
       };
+      # There need to be double backward slashes so Nix doesn't interpret this wrong (if your paths result in _oooo/_oooo, that's the issue)
       replace = {
         "^\\." = "_";
         "[\\x00-\\x1f]" = "_";

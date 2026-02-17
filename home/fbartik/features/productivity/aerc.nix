@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-# TODO: Add aerc config
+# TODO: Clean this up, I think mu might be better suited for me than aerc
 let
   ca-bundle_path = "${pkgs.cacert}/etc/ssl/certs/";
   ca-bundle_crt = "${ca-bundle_path}/ca-bundle.crt";
@@ -646,7 +646,8 @@ in
           boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync icloud";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new
+            ${pkgs.notmuch}/bin/notmuch new \
+            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
         imap = {
@@ -702,7 +703,7 @@ in
           onNotify = "${pkgs.isync}/bin/mbsync gmail-oz";
           onNotifyPost = ''
             ${pkgs.notmuch}/bin/notmuch new \
-            && ${pkgs.mu}/bin/mu index
+            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
       };
@@ -748,7 +749,7 @@ in
           onNotify = "${pkgs.isync}/bin/mbsync gmail-fb";
           onNotifyPost = ''
             ${pkgs.notmuch}/bin/notmuch new \
-            && ${pkgs.mu}/bin/mu index
+            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
       };

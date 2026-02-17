@@ -1,9 +1,13 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 let
-  # emacsPkg = pkgs.inputs.emacs-overlay;
+  isDarwin = pkgs.stdenv.isDarwin;
+  emacsBase =
+    if isDarwin then pkgs.emacs
+    else if (builtins.length config.monitors != 0) then pkgs.emacs-gtk
+    else pkgs.emacs-nox;
   emacs =
     with pkgs;
-    (emacsPackagesFor (if (builtins.length config.monitors != 0) then emacs-gtk else emacs-nox))
+    (emacsPackagesFor emacsBase)
     .emacsWithPackages
       (
         epkgs: with epkgs; [
@@ -33,9 +37,10 @@ in
     sqlite
     nil
     nixd # Nix LSP
-    xclip
     python3Minimal
     emacs-lsp-booster
     aporetic # fonts
+  ] ++ lib.optionals (!isDarwin) [
+    xclip
   ];
 }

@@ -621,6 +621,7 @@ in
         };
         aerc.enable = true;
         notmuch.enable = true;
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -642,7 +643,7 @@ in
         # Real-time IMAP notifications
         imapnotify = {
           enable = true;
-          boxes = [ "Inbox" ];
+          boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync icloud";
           onNotifyPost = ''
             ${pkgs.notmuch}/bin/notmuch new
@@ -674,6 +675,7 @@ in
         flavor = "gmail.com";
         aerc.enable = true;
         notmuch.enable = true;
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -682,9 +684,6 @@ in
           extraConfig = {
             channel = {
               CopyArrivalDate = "yes";
-            };
-            account = {
-              PipelineDepth = 10; # Gmail doesn't like multiple parallel IMAP commands, this disables it
             };
           };
         };
@@ -699,10 +698,11 @@ in
 
         imapnotify = {
           enable = true;
-          boxes = [ "Inbox" ];
+          boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync gmail-oz";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new
+            ${pkgs.notmuch}/bin/notmuch new \
+            && ${pkgs.mu}/bin/mu index
           '';
         };
       };
@@ -721,6 +721,7 @@ in
         flavor = "gmail.com";
         aerc.enable = true;
         notmuch.enable = true;
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -729,9 +730,6 @@ in
           extraConfig = {
             channel = {
               CopyArrivalDate = "yes";
-            };
-            account = {
-              PipelineDepth = 10; # Gmail doesn't like multiple parallel IMAP commands, this disables it
             };
           };
         };
@@ -746,15 +744,17 @@ in
 
         imapnotify = {
           enable = true;
-          boxes = [ "Inbox" ];
+          boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync gmail-fb";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new
+            ${pkgs.notmuch}/bin/notmuch new \
+            && ${pkgs.mu}/bin/mu index
           '';
         };
       };
     };
   };
+  programs.mu.enable = true;
   services.imapnotify.enable = true;
   launchd.agents = lib.mapAttrs' (
     name: _:

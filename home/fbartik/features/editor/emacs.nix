@@ -29,7 +29,6 @@ in
   };
   home.packages = with pkgs; [
     # For installing LSP servers
-    nodePackages.npm
     ispell # Spelling
     # :tools editorconfig
     editorconfig-core-c # per-project style config
@@ -42,5 +41,6 @@ in
     aporetic # fonts
   ] ++ lib.optionals (!isDarwin) [
     xclip
+    nodePackages.npm # This takes hours to build, might need to add it as a brew cask?
   ];
 }

@@ -1,6 +1,9 @@
 {
   services.caddy = {
-    enable = false;
+    enable = true;
+    globalConfig = ''
+      auto_https off
+    '';
     virtualHosts."qotom.infra.franta.us" = {
       extraConfig = ''
         root * /var/www

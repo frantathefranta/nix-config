@@ -11,4 +11,7 @@
       '';
     };
   };
+  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [
+   80
+  ];
 }

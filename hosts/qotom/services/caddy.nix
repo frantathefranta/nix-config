@@ -7,7 +7,7 @@
     virtualHosts."qotom.infra.franta.us:80" = {
       extraConfig = ''
         root * /var/www
-        file_server
+        file_server browse
       '';
     };
   };

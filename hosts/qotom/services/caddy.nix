@@ -1,7 +1,7 @@
 {
   services.caddy = {
     enable = true;
-    virtualHosts."qotom.franta.us" = {
+    virtualHosts."qotom.infra.franta.us" = {
       extraConfig = ''
         root * /var/www
         file_server

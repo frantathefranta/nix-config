@@ -3,6 +3,7 @@
     ./hostapd.nix
     ./syslog.nix
     ./conman.nix
+    ./caddy.nix
   ];
   services = {
     lldpd.enable = true;

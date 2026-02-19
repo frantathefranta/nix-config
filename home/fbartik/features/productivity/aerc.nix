@@ -648,8 +648,7 @@ in
           boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync icloud";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new \
-            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
         imap = {
@@ -704,8 +703,7 @@ in
           boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync gmail-oz";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new \
-            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
       };
@@ -750,8 +748,7 @@ in
           boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync gmail-fb";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new \
-            && ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
       };

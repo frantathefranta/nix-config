@@ -25,8 +25,9 @@
       { Gateway = "fe80::1"; }
     ];
   };
+  # TODO: This needs to be handled by roles/server.nix
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQqaMxYeqp/5gsnH7ZH80dq/awufVB0eTq5d4v3tR+S"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM"
   ];
 
   system.stateVersion = "25.05";

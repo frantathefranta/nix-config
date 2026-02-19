@@ -4,25 +4,34 @@
   pkgs,
   ...
 }:
-# TODO: Add aerc config
+# TODO: Clean this up, I think mu might be better suited for me than aerc
 let
   ca-bundle_path = "${pkgs.cacert}/etc/ssl/certs/";
   ca-bundle_crt = "${ca-bundle_path}/ca-bundle.crt";
   realName = "Franta Bartik";
   primaryEmail = "fb@franta.us";
   aerc-filters = "${pkgs.aerc}/libexec/aerc/filters";
+  moveToTrash = pkgs.writeShellScript "aerc-trash" ''
+    case "$1" in
+      */icloud/*) mv "$1" "${config.accounts.email.maildirBasePath}/icloud/Deleted Messages/cur/" ;;
+      */gmail-oz/*) mv "$1" "${config.accounts.email.maildirBasePath}/gmail-oz/[Gmail]/Trash/cur/" ;;
+      */gmail-fb/*) mv "$1" "${config.accounts.email.maildirBasePath}/gmail-fb/[Gmail]/Trash/cur/" ;;
+    esac
+    ${pkgs.notmuch}/bin/notmuch new --quiet 2>/dev/null
+  '';
+
   # Script to clean up deleted messages before sync
   notmuchCleanup = ''
     # Remove files that are tagged as deleted
     ${pkgs.notmuch}/bin/notmuch search --format=text0 --output=files tag:deleted | \
-      xargs -0 --no-run-if-empty rm -v
+      ${pkgs.toybox}/bin/xargs -0 --no-run-if-empty rm -v
   '';
   notmuchPreNew = pkgs.writeShellScript "notmuch-pre-new_remove_tagged_deleted" ''
     #!/usr/bin/env bash
 
     # Remove files that are tagged as deleted
     ${pkgs.notmuch}/bin/notmuch search --format=text0 --output=files tag:deleted | \
-      xargs -0 --no-run-if-empty rm -v
+      ${pkgs.toybox}/bin/xargs -0 --no-run-if-empty rm -v
   '';
 
   notmuchPostNew = pkgs.writeShellScript "notmuch-post-new_autotag" ''
@@ -30,6 +39,8 @@ let
 
     # Auto-tag by account
     ${pkgs.notmuch}/bin/notmuch tag +icloud -- path:icloud/** and tag:new
+    ${pkgs.notmuch}/bin/notmuch tag +gmail-oz -- path:gmail-oz/** and tag:new
+    ${pkgs.notmuch}/bin/notmuch tag +gmail-fb -- path:gmail-fb/** and tag:new
 
     # Auto-tag by folder
     ${pkgs.notmuch}/bin/notmuch tag +sent -inbox -- 'folder:"Sent Messages" or folder:"[Gmail]/Sent Mail"' and tag:new
@@ -72,6 +83,7 @@ in
         folder-map = toString (
           pkgs.writeText "icloud-folder-map" ''
             Sent Messages=Sent
+            Deleted Messages=Trash
             Junk=Spam
           ''
         );
@@ -89,23 +101,18 @@ in
             # Path-based unified inbox with tag-based exclusions for instant removal
             # This combines physical location check with tag-based filtering for immediate UI updates
             # Inbox=(path:fastmail/INBOX/** or path:gmail/Inbox/** or path:nibuild/INBOX/**) and not tag:spam and not tag:trash and not tag:archive
-            Inbox=(path:icloud/Inbox/**) and not tag:spam and not tag:trash and not tag:archive
+            Inbox=(path:icloud/Inbox/** or path:"/gmail.*/"/Inbox/**) and not tag:spam and not tag:trash and not tag:archive
 
             # # Tag-based views for instant updates when moving messages
             Unread=tag:unread and not tag:trash and not tag:spam
             Starred=tag:flagged
 
             # Folder-specific views (path-based to match physical location)
-            Archive=path:icloud/Archive/**
-            Sent="path:icloud/Sent Messages/**"
-            Drafts=path:icloud/Drafts/**
-            Trash="path:icloud/Deleted Messages/**"
-            Spam=path:icloud/Junk/**
-            # Archive=path:fastmail/Archive/** or path:"gmail/[Gmail]/All Mail/**" or path:nibuild/Archive/**
-            # Sent=path:fastmail/Sent/** or path:"gmail/[Gmail]/Sent Mail/**" or path:nibuild/Sent/**
-            # Drafts=path:fastmail/Drafts/** or path:"gmail/[Gmail]/Drafts/**" or path:nibuild/Drafts/**
-            # Trash=path:fastmail/Trash/** or path:"gmail/[Gmail]/Trash/**" or path:nibuild/Trash/**
-            # Spam=path:fastmail/Spam/** or path:"gmail/[Gmail]/Spam/**" or path:nibuild/Spam/**
+            Archive=path:icloud/Archive/** or path:"/gmail.*//[Gmail]/All Mail/**"
+            Sent=path:"icloud/Sent Messages/**" or path:"/gmail.*//[Gmail]/Sent Mail/**"
+            Drafts=path:icloud/Drafts/** or path:"/gmail.*//[Gmail]/Drafts/**"
+            Trash=path:"icloud/Deleted Messages/**" or path:"/gmail.*//[Gmail]/Trash/**"
+            Spam=path:icloud/Junk/** or path:"/gmail.*//[Gmail]/Spam/**"
 
             # Tag-based filtered views
             Lists=tag:list and tag:inbox
@@ -114,13 +121,15 @@ in
 
             # Account-specific inboxes
             iCloud-Inbox=path:icloud/Inbox/**
+            Gmail-ozz=path:gmail-oz/Inbox/**
+            Gmail-fb=path:gmail-fb/Inbox/**
           ''
         );
 
         default = "Inbox";
 
         # Folder sort order - pin important folders to the top
-        # folders-sort = "Inbox,Unread,Starred,Archive,Sent,Drafts,Trash,Spam";
+        folders-sort = "Inbox,Unread,Starred,Archive,Sent,Drafts,Trash,Spam";
 
         # Check mail command
         check-mail-cmd = toString (
@@ -423,8 +432,7 @@ in
           '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Archive") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
         "E" =
           '':unmark -a<Enter>:mark -T<Enter>:modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
-        "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "icloud" "icloud/Deleted Messages") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+        "d" = ":modify-labels -inbox -unread +trash<Enter>:exec ${moveToTrash} {{.Filename}}<Enter>";
 
         "rr" = ":reply -a<Enter>";
         "rq" = ":reply -aq<Enter>";
@@ -459,8 +467,7 @@ in
         "q" = ":close<Enter>";
 
         "s" = ":move Starred<Enter>";
-        "d" =
-          '':modify-labels -inbox -unread +trash<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/Trash") (case "fastmail" "fastmail/Trash") (case "nibuild" "nibuild/Trash") (default "Trash")}}<Enter>'';
+        "d" = ":modify-labels -inbox -unread +trash<Enter>:exec ${moveToTrash} {{.Filename}}<Enter>";
         "D" = ":delete<Enter>";
         "e" =
           '':modify-labels -inbox -unread +archive<Enter>:move {{switch (index (.Filename | split "/") 4) (case "gmail" "gmail/[Gmail]/All Mail") (case "fastmail" "fastmail/Archive") (case "nibuild" "nibuild/Archive") (default "Archive")}}<Enter>'';
@@ -605,7 +612,7 @@ in
         realName = realName;
         address = primaryEmail;
         userName = "frantisek.bartik@icloud.com";
-        passwordCommand = "op read op://Personal/iCloudMail/password";
+        passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/icloud".path}";
         aliases = [ "admin@franta.us" ];
         flavor = "plain";
         folders = {
@@ -616,6 +623,7 @@ in
         };
         aerc.enable = true;
         notmuch.enable = true;
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -637,10 +645,10 @@ in
         # Real-time IMAP notifications
         imapnotify = {
           enable = true;
-          boxes = [ "Inbox" ];
+          boxes = [ "INBOX" ];
           onNotify = "${pkgs.isync}/bin/mbsync icloud";
           onNotifyPost = ''
-            ${pkgs.notmuch}/bin/notmuch new
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
           '';
         };
         imap = {
@@ -654,7 +662,116 @@ in
           port = 465;
         };
       };
+      gmail-oz = {
+        primary = false;
+        realName = realName;
+        address = "ozzfranta@gmail.com";
+        userName = "ozzfranta@gmail.com";
+        passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/gmail-oz".path}";
+        folders = {
+          inbox = "Inbox";
+          sent = "[Gmail]/Sent Mail";
+          trash = "[Gmail]/Trash";
+          drafts = "[Gmail]/Drafts";
+        };
+        flavor = "gmail.com";
+        aerc.enable = true;
+        notmuch.enable = true;
+        mu.enable = true;
+        mbsync = {
+          enable = true;
+          create = "both";
+          expunge = "both";
+          remove = "both";
+          extraConfig = {
+            channel = {
+              CopyArrivalDate = "yes";
+            };
+          };
+        };
+
+        msmtp = {
+          enable = true;
+          extraConfig = {
+            tls_starttls = "on";
+            logfile = "~/.cache/msmtp/msmtp.log";
+          };
+        };
+
+        imapnotify = {
+          enable = true;
+          boxes = [ "INBOX" ];
+          onNotify = "${pkgs.isync}/bin/mbsync gmail-oz";
+          onNotifyPost = ''
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+          '';
+        };
+      };
+      gmail-fb = {
+        primary = false;
+        realName = realName;
+        address = "frantabart@gmail.com";
+        userName = "frantabart@gmail.com";
+        passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/gmail-fb".path}";
+        folders = {
+          inbox = "Inbox";
+          sent = "[Gmail]/Sent Mail";
+          trash = "[Gmail]/Trash";
+          drafts = "[Gmail]/Drafts";
+        };
+        flavor = "gmail.com";
+        aerc.enable = true;
+        notmuch.enable = true;
+        mu.enable = true;
+        mbsync = {
+          enable = true;
+          create = "both";
+          expunge = "both";
+          remove = "both";
+          extraConfig = {
+            channel = {
+              CopyArrivalDate = "yes";
+            };
+          };
+        };
+
+        msmtp = {
+          enable = true;
+          extraConfig = {
+            tls_starttls = "on";
+            logfile = "~/.cache/msmtp/msmtp.log";
+          };
+        };
+
+        imapnotify = {
+          enable = true;
+          boxes = [ "INBOX" ];
+          onNotify = "${pkgs.isync}/bin/mbsync gmail-fb";
+          onNotifyPost = ''
+            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+          '';
+        };
+      };
     };
   };
+  programs.mu.enable = true;
   services.imapnotify.enable = true;
+  launchd.agents = lib.mapAttrs' (
+    name: _:
+    lib.nameValuePair "imapnotify-${name}" {
+      config = {
+        StandardOutPath = "/Users/fbartik/Library/Logs/imapnotify-${name}.log";
+        StandardErrorPath = "/Users/fbartik/Library/Logs/imapnotify-${name}.log";
+      };
+    }
+  ) (lib.filterAttrs (_: acc: acc.imapnotify.enable or false) config.accounts.email.accounts);
+  sops.secrets."email/icloud" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
+  sops.secrets."email/gmail-oz" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
+  sops.secrets."email/gmail-fb" = {
+    sopsFile = ../../NC312237-secrets.yaml;
+  };
 }

@@ -59,6 +59,8 @@ in {
 
       # aws-switch = mkIf hasAwsCli "export AWS_PROFILE=(aws configure list-profiles | fzf)";
       # awssw = aws-switch;
+    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      sftp = "${pkgs.openssh}/bin/sftp";
     };
     shellAliases = {
       # Clear screen and scrollback

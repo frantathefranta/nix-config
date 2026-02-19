@@ -63,12 +63,12 @@ in
       "ssh-keys" = [
         {
           vault = "SSH";
-          item = "rcrhyzps3y7tpmg5ghz7xpwyj4";
+          item = "rcrhyzps3y7tpmg5ghz7xpwyj4"; 
         }
-        {
-          vault = "SSH";
-          item = "4asutv4ihemt5phe3eakbxcqxe"; # git key
-        }
+        # {
+        #   vault = "SSH";
+        #   item = "4asutv4ihemt5phe3eakbxcqxe"; # git key
+        # }
         {
           vault = "SSH";
           item = "5yo45wnti4mcbz3eahp3dcfn5i"; # Brocade

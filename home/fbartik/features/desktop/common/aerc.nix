@@ -766,12 +766,12 @@ in
     }
   ) (lib.filterAttrs (_: acc: acc.imapnotify.enable or false) config.accounts.email.accounts);
   sops.secrets."email/icloud" = {
-    sopsFile = ../../NC312237-secrets.yaml;
+    sopsFile = ../../../NC312237-secrets.yaml;
   };
   sops.secrets."email/gmail-oz" = {
-    sopsFile = ../../NC312237-secrets.yaml;
+    sopsFile = ../../../NC312237-secrets.yaml;
   };
   sops.secrets."email/gmail-fb" = {
-    sopsFile = ../../NC312237-secrets.yaml;
+    sopsFile = ../../../NC312237-secrets.yaml;
   };
 }

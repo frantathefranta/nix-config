@@ -2,8 +2,8 @@
   config,
   outputs,
   lib,
+  pkgs,
   ...
-
 }:
 let
   nixosConfigs = builtins.attrNames outputs.nixosConfigurations;
@@ -11,6 +11,14 @@ let
     builtins.attrNames outputs.homeConfigurations
   );
   hostnames = lib.unique (homeConfigs ++ nixosConfigs);
+  isWorkstation = pkgs.stdenv.isDarwin || (builtins.length config.monitors != 0);
+  identityAgent =
+    if pkgs.stdenv.isDarwin then
+      "'${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
+    else if (builtins.length config.monitors != 0) then
+      "${config.home.homeDirectory}/.1Password/agent.sock"
+    else
+      "${config.home.homeDirectory}/.ssh/ssh_auth_sock";
 in
 {
   programs.ssh = {
@@ -20,22 +28,18 @@ in
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
-      "brocade*" = (
-        lib.mkIf (builtins.hasAttr "ssh/brocade_2048" config.sops.secrets) {
-          user = "admin";
-          identityFile = config.sops.secrets."ssh/brocade_2048".path;
-          extraOptions = {
-            KexAlgorithms = "+diffie-hellman-group1-sha1";
-            HostKeyAlgorithms = "+ssh-rsa";
-            PubkeyAcceptedAlgorithms = "+ssh-rsa";
-          };
-        }
-      );
-      "github.com" = (
-        lib.mkIf (builtins.hasAttr "ssh/git_key" config.sops.secrets) {
-          identityFile = config.sops.secrets."ssh/git_key".path;
-        }
-      );
+      "github.com" = {
+        inherit identityAgent;
+      };
+      "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
+        user = "admin";
+        inherit identityAgent;
+        extraOptions = {
+          KexAlgorithms = "+diffie-hellman-group1-sha1";
+          HostKeyAlgorithms = "+ssh-rsa";
+          PubkeyAcceptedAlgorithms = "+ssh-rsa";
+        };
+      };
       "hetzner.vm.franta.us" = {
         user = "root";
       };
@@ -47,15 +51,41 @@ in
               host
               "${host}.franta.us"
               "${host}.infra.franta.us"
-
             ]) hostnames
           )
         );
-        identityAgent = lib.mkIf (builtins.length config.monitors != 0) "~/.1password/agent.sock";
+        inherit identityAgent;
       };
     };
   };
-  home.file.".ssh/rc" = lib.mkIf (config.programs.tmux.enable) {
+  home.file.".config/1Password/ssh/agent.toml" = lib.mkIf isWorkstation {
+    source = (pkgs.formats.toml { }).generate "agent.toml" {
+      "ssh-keys" = [
+        { vault = "Personal"; }
+        {
+          vault = "SSH";
+          item = "local_sshkey";
+        }
+        {
+          vault = "SSH";
+          item = "4asutv4ihemt5phe3eakbxcqxe"; # git key
+        }
+        {
+          vault = "SSH";
+          item = "5yo45wnti4mcbz3eahp3dcfn5i"; # Brocade
+        }
+        {
+          vault = "SSH";
+          item = "Hetzner Key";
+        }
+        {
+          vault = "SSH";
+          item = "Google Key";
+        }
+      ];
+    };
+  };
+  home.file.".ssh/rc" = lib.mkIf (!isWorkstation && config.programs.tmux.enable) {
     executable = true;
     text = /* bash */ ''
       #!/usr/bin/env bash
@@ -65,15 +95,5 @@ in
         ln -sf $SSH_AUTH_SOCK ${config.home.homeDirectory}/.ssh/ssh_auth_sock
       fi
     '';
-  };
-  sops = lib.mkIf (config.sops.age.keyFile != null) {
-    secrets = {
-      "ssh/brocade_2048" = {
-        sopsFile = ../../secrets.yml;
-      };
-      "ssh/git_key" = {
-        sopsFile = ../../secrets.yml;
-      };
-    };
   };
 }

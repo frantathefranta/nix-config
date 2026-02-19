@@ -61,10 +61,9 @@ in
   home.file.".config/1Password/ssh/agent.toml" = lib.mkIf isWorkstation {
     source = (pkgs.formats.toml { }).generate "agent.toml" {
       "ssh-keys" = [
-        { vault = "Personal"; }
         {
           vault = "SSH";
-          item = "local_sshkey";
+          item = "rcrhyzps3y7tpmg5ghz7xpwyj4";
         }
         {
           vault = "SSH";

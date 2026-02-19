@@ -39,6 +39,8 @@ let
 
     # Auto-tag by account
     ${pkgs.notmuch}/bin/notmuch tag +icloud -- path:icloud/** and tag:new
+    ${pkgs.notmuch}/bin/notmuch tag +gmail-oz -- path:gmail-oz/** and tag:new
+    ${pkgs.notmuch}/bin/notmuch tag +gmail-fb -- path:gmail-fb/** and tag:new
 
     # Auto-tag by folder
     ${pkgs.notmuch}/bin/notmuch tag +sent -inbox -- 'folder:"Sent Messages" or folder:"[Gmail]/Sent Mail"' and tag:new

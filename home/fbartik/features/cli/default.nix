@@ -23,47 +23,50 @@
     # ./xpo.nix
     # ./jira.nix
   ];
-  home.packages = with pkgs; [
-    cachix # Cachix CLI client
-    comma # Install and run programs by sticking a , before them
-    devenv
+  home.packages =
+    with pkgs;
+    [
+      cachix # Cachix CLI client
+      comma # Install and run programs by sticking a , before them
+      devenv
 
-    bc # Calculator
-    bottom # System viewer
-    btop # better top
-    cyme # Modern lsusb
-    doggo # Better DNS
-    ncdu # TUI disk usage
-    eza # Better ls
-    file
-    ripgrep # Better grep
-    fd # Better find
-    httpie # Better curl
-    minijinja
-  ] ++ lib.optionals pkgs.stdenv.isLinux [
-    ipmitool # IPMI management
-  ] ++ [
-    unstable.managarr # Sonarr/Radarr TUI
-    nmap
-    jq # JSON pretty printer and manipulator
-    sops
-    screen
-    s5cmd
-    # trekscii # Cute startrek cli printer
-    timer # To help with my ADHD paralysis
-    viddy # Better watch
-    wget # I will simply not learn curl syntax for downloading files
+      bc # Calculator
+      bottom # System viewer
+      btop # better top
+      cyme # Modern lsusb
+      doggo # Better DNS
+      ncdu # TUI disk usage
+      eza # Better ls
+      file
+      ripgrep # Better grep
+      fd # Better find
+      httpie # Better curl
+      minijinja
+      unstable.managarr # Sonarr/Radarr TUI
+      nmap
+      jq # JSON pretty printer and manipulator
+      sops
+      screen
+      tree
+      s5cmd
+      # trekscii # Cute startrek cli printer
+      timer # To help with my ADHD paralysis
+      viddy # Better watch
+      wget # I will simply not learn curl syntax for downloading files
 
-    mtr # traceroute replacement
-    iperf3
-    alejandra # Nix formatter
-    nixfmt
-    nvd # Differ
-    nix-diff # Differ, more detailed
-    nix-output-monitor
-    unstable.nh # Nice wrapper for NixOS and HM
+      mtr # traceroute replacement
+      iperf3
+      alejandra # Nix formatter
+      nixfmt
+      nvd # Differ
+      nix-diff # Differ, more detailed
+      nix-output-monitor
+      unstable.nh # Nice wrapper for NixOS and HM
 
-    # Rust
-    cargo
-  ];
+      # Rust
+      cargo
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      ipmitool # IPMI management
+    ];
 }

@@ -8,7 +8,7 @@
   imports = [
     ./global
     ./features/editor
-    ./features/productivity/aerc.nix
+    ./features/desktop/common/aerc.nix
   ];
   home.packages = with pkgs; [
     symbola

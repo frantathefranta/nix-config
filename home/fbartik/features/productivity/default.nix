@@ -2,9 +2,8 @@
 {
   imports = [
     ./syncthing.nix
-    ./beets.nix
-    ./aerc.nix
     ./github.nix
+    ./beets.nix
     ./pass.nix
   ];
   home.packages = with pkgs; [

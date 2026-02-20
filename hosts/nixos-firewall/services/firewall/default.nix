@@ -18,6 +18,7 @@
               oifname "wan0" ip daddr 0.0.0.0/0 counter masquerade comment "outbound will use the public IP so I can browse internet"
             }
           '';
+          };
           home_ip_filter = {
             family = "ip";
             content = ''
@@ -61,5 +62,4 @@
         };
       };
     };
-  };
 }

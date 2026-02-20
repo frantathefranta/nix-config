@@ -24,4 +24,6 @@
   # My state version is 24.11, which defaults to linkApps. Changing it to copyApps which allows Spotlight to index the apps
   targets.darwin.linkApps.enable = false;
   targets.darwin.copyApps.enable = true;
+
+  # TODO: Consider adding https://github.com/DivitMittal/hammerspoon-nix
 }

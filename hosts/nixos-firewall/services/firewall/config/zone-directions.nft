@@ -8,12 +8,8 @@ chain ZONE_FORWARD {
   type filter hook forward priority filter + 1; policy accept;
   jump STATE_POLICY
   oifname "lan0" counter jump ZONE_TO_LAN0
-  oifname "lan0.50" counter jump ZONE_TO_HOME
-  oifname "lan0.69" counter jump ZONE_TO_IOT
-  # oifname "lan0.200" counter jump ZONE_TO_SERVER
-  # oifname "lan0.250" counter jump ZONE_TO_GUEST
-  # oifname "ctr0" counter jump ZONE_TO_CONTAINERS
-  # oifname "wg0" counter jump ZONE_TO_WIREGUARD
+  oifname "lan0.20" counter jump ZONE_TO_HOME
+  oifname "lan0.50" counter jump ZONE_TO_IOT
   oifname "wan0" counter jump ZONE_TO_WAN
 }
 
@@ -26,8 +22,8 @@ chain ZONE_OUTPUT {
 chain ZONE_TO_LOCAL {
   meta l4proto icmp counter return
   iifname "lo" counter return
-  iifname $nic_mgmt counter jump MGMT-LOCAL
-  iifname $nic_mgmt counter return
+  iifname "mgmt" counter jump MGMT-LOCAL
+  iifname "mgmt" counter return
   iifname "lan0" counter jump LAN0-LOCAL
   iifname "lan0" counter return
   iifname "lan0.20" counter jump HOME-LOCAL

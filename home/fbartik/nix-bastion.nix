@@ -6,10 +6,6 @@
     ./features/productivity
     ./features/editor
   ];
-  programs.claude-code = {
-    enable = true;
-    package = pkgs.unstable.claude-code;
-  };
   programs.irssi = {
     enable = true;
     networks = {

@@ -8,7 +8,8 @@
   imports = [
     ./global
     ./features/editor
-    ./features/desktop/common/aerc.nix
+    ./features/desktop/common/mail.nix
+    ./features/productivity/claude-code.nix
   ];
   home.packages = with pkgs; [
     symbola

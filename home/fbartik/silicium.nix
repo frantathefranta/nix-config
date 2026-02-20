@@ -6,15 +6,12 @@
     ./features/productivity
     ./features/editor
     ./features/desktop/common
+    ./features/productivity/claude-code.nix
   ];
   home.packages = with pkgs; [
     wpa_supplicant_gui
     winbox4
   ];
-  programs.claude-code = {
-    enable = true;
-    package = pkgs.unstable.claude-code;
-  };
   programs.ssh = {
     enable = true;
     matchBlocks = {

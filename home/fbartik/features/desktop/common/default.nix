@@ -3,7 +3,7 @@
   imports = [
     ./firefox.nix
     ./font.nix
-    ./aerc.nix
+    ./mail.nix
   ];
   home.packages = with pkgs; [
     discord

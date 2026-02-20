@@ -3,66 +3,66 @@
 #################
 chain LAN0-LOCAL {
   udp dport 123 counter return comment "allow access to ntp server"
-  meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
+  meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
   ct state invalid counter log prefix "[LAN0-LOCAL-invalid-D]" drop comment "drop invalid"
   counter log prefix "[LAN0-LOCAL-default-D]" drop comment "default-action drop"
 }
 
 chain HOME-LOCAL {
   udp dport 123 counter return comment "allow access to ntp server"
-  meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
-  ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
-  ip saddr @trusted_devices meta l4proto icmp counter return comment "allow icmp request from trusted_devices"
+  meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
+  tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
+  meta l4proto icmp counter return comment "allow icmp request from trusted_devices"
   ct state invalid counter log prefix "[HOME-LOCAL-invalid-D]" drop comment "drop invalid"
   counter log prefix "[HOME-LOCAL-default-D]" drop comment "default-action drop"
 }
 
 chain IOT-LOCAL {
   udp dport 123 counter return comment "allow access to ntp server"
-  meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
+  meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
   ct state invalid counter log prefix "[IOT-LOCAL-invalid-D]" drop comment "drop invalid"
   counter log prefix "[IOT-LOCAL-default-D]" drop comment "default-action drop"
 }
 
 chain MGMT-LOCAL {
   udp dport 123 counter return comment "allow access to ntp server"
-  meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
-  ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
+  meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
+  tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
   ct state invalid counter log prefix "[MGMT-LOCAL-invalid-D]" drop comment "drop invalid"
   counter log prefix "[MGMT-LOCAL-default-D]" drop comment "default-action drop"
 }
 
 # chain SERVER-LOCAL {
 #   udp dport 123 counter return comment "allow access to ntp server"
-#   meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
+#   meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
 #   tcp dport 179 counter return comment "allow access to bgp server"
 #   udp dport 69 counter return comment "allow access to tftp server"
-#   ip saddr @k8s_nodes tcp dport { 80, 3000 } counter return comment "allow access to adguardhome from k8s_nodes"
-#   ip saddr @k8s_nodes meta l4proto icmp counter return comment "allow icmp request from k8s_nodes"
-#   ip saddr @k8s_nodes tcp dport 9100 counter return comment "allow access to node-exporter from k8s_nodes"
-#   ip saddr @k8s_nodes tcp dport 9633 counter return comment "allow access to smartctl-exporter from k8s_nodes"
+#   tcp dport { 80, 3000 } counter return comment "allow access to adguardhome from k8s_nodes"
+#   meta l4proto icmp counter return comment "allow icmp request from k8s_nodes"
+#   tcp dport 9100 counter return comment "allow access to node-exporter from k8s_nodes"
+#   tcp dport 9633 counter return comment "allow access to smartctl-exporter from k8s_nodes"
 #   ct state invalid counter log prefix "[SERVER-LOCAL-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[SERVER-LOCAL-default-D]" drop comment "default-action drop"
 # }
 
 # chain GUEST-LOCAL {
 #   udp dport 123 counter return comment "allow access to ntp server"
-#   meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
+#   meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
 #   ct state invalid counter log prefix "[GUEST-LOCAL-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[GUEST-LOCAL-default-D]" drop comment "default-action drop"
 # }
 
 # chain CONTAINERS-LOCAL {
 #   udp dport 123 counter return comment "allow access to ntp server"
-#   meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
+#   meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
 #   ct state invalid counter log prefix "[CONTAINERS-LOCAL-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[CONTAINERS-LOCAL-default-D]" drop comment "default-action drop"
 # }
 
 # chain WIREGUARD-LOCAL {
 #   udp dport 123 counter return comment "allow access to ntp server"
-#   meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
-#   ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
+#   meta l4proto { tcp, udp } th dport { 53, 853 } counter return comment "allow access to dns server"
+#   tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
 #   ct state invalid counter log prefix "[WIREGUARD-LOCAL-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[WIREGUARD-LOCAL-default-D]" drop comment "default-action drop"
 # }
@@ -76,7 +76,7 @@ chain WAN-LOCAL {
 # ZONE_TO_LAN0 #
 ################
 chain HOME-LAN0 {
-  ip saddr @trusted_devices counter return comment "accept from trusted_devices"
+  counter return comment "accept from trusted_devices"
   ct state invalid counter log prefix "[HOME-LAN0-invalid-D]" drop comment "drop invalid"
   counter log prefix "[HOME-LAN0-default-D]" drop comment "default-action drop"
 }
@@ -125,9 +125,9 @@ chain IOT-HOME {
 }
 
 # chain SERVER-HOME {
-#   ip saddr @k8s_nodes ip daddr @wall_displays tcp dport 2323 counter return comment "allow access to fullykioskbrowser from k8s_nodes"
-#   ip saddr @k8s_nodes tcp dport 9100 counter return comment "allow access to node-exporter from k8s_nodes"
-#   ip saddr @k8s_nodes tcp dport 9633 counter return comment "allow access to smartctl-exporter from k8s_nodes"
+#   tcp dport 2323 counter return comment "allow access to fullykioskbrowser from k8s_nodes"
+#   tcp dport 9100 counter return comment "allow access to node-exporter from k8s_nodes"
+#   tcp dport 9633 counter return comment "allow access to smartctl-exporter from k8s_nodes"
 #   ct state invalid counter log prefix "[SERVER-HOME-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[SERVER-HOME-default-D]" drop comment "default-action drop"
 # }
@@ -143,7 +143,7 @@ chain IOT-HOME {
 # }
 
 # chain WIREGUARD-HOME {
-#   ip saddr @trusted_devices return comment "allow access from trusted_devices"
+#   return comment "allow access from trusted_devices"
 #   ct state invalid counter log prefix "[WIREGUARD-HOME-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[WIREGUARD-HOME-default-D]" drop comment "default-action drop"
 # }
@@ -182,7 +182,7 @@ chain HOME-IOT {
 # }
 
 # chain WIREGUARD-IOT {
-#   ip saddr @trusted_devices return comment "allow access from trusted_devices"
+#   return comment "allow access from trusted_devices"
 #   ct state invalid counter log prefix "[WIREGUARD-IOT-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[WIREGUARD-IOT-default-D]" drop comment "default-action drop"
 # }
@@ -196,23 +196,23 @@ chain WAN-IOT {
 # ZONE_TO_SERVER #
 ##################
 # chain LAN0-SERVER {
-#   tcp dport { 80, 443 } ip daddr @k8s_ingress counter return comment "allow access to k8s_ingress"
+#   tcp dport { 80, 443 } counter return comment "allow access to k8s_ingress"
 #   ct state invalid counter log prefix "[LAN0-SERVER-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[LAN0-SERVER-default-D]" drop comment "default-action drop"
 # }
 
 # chain HOME-SERVER {
-#   tcp dport { 80, 443 } ip daddr @k8s_ingress counter return comment "allow access to k8s_ingress"
-#   ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh from trusted_devices"
-#   ip saddr @trusted_devices ip daddr @k8s_nodes counter return comment "allow access to k8s nodes from trusted_devices"
-#   ip saddr @trusted_devices tcp dport 50000 counter return comment "allow access to talos api port from trusted_devices"
+#   tcp dport { 80, 443 } counter return comment "allow access to k8s_ingress"
+#   tcp dport 22 counter return comment "allow access to ssh from trusted_devices"
+#   counter return comment "allow access to k8s nodes from trusted_devices"
+#   tcp dport 50000 counter return comment "allow access to talos api port from trusted_devices"
 #   ct state invalid counter log prefix "[HOME-SERVER-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[HOME-SERVER-default-D]" drop comment "default-action drop"
 # }
 
 # chain IOT-SERVER {
-#   ip saddr @broadlink_plugs ip daddr @k8s_nodes counter return comment "allow broadlink_plugs to access k8s_nodes"
-#   ip saddr @android_livingroom_tv tcp dport { 80, 443 } ip daddr @k8s_ingress return comment "allow access to k8s_ingress from android_livingroom_tv"
+#   counter return comment "allow broadlink_plugs to access k8s_nodes"
+#   tcp dport { 80, 443 } return comment "allow access to k8s_ingress from android_livingroom_tv"
 #   ct state invalid counter log prefix "[IOT-SERVER-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[IOT-SERVER-default-D]" drop comment "default-action drop"
 # }
@@ -228,8 +228,8 @@ chain WAN-IOT {
 # }
 
 # chain WIREGUARD-SERVER {
-#   tcp dport { 80, 443 } ip daddr @k8s_ingress counter return comment "allow access to k8s_ingress"
-#   ip saddr @trusted_devices return comment "allow access from trusted_devices"
+#   tcp dport { 80, 443 } counter return comment "allow access to k8s_ingress"
+#   return comment "allow access from trusted_devices"
 #   ct state invalid counter log prefix "[WIREGUARD-SERVER-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[WIREGUARD-SERVER-default-D]" drop comment "default-action drop"
 # }
@@ -281,14 +281,14 @@ chain WAN-IOT {
 # ZONE_TO_CONTAINERS #
 ######################
 # chain LAN0-CONTAINERS {
-#   ip daddr @omada_controller udp dport @omada_udp counter return comment "accept omada_controller udp ports"
-#   ip daddr @omada_controller tcp dport @omada_tcp counter return comment "accept omada_controller tcp ports"
+#   udp dport @omada_udp counter return comment "accept omada_controller udp ports"
+#   tcp dport @omada_tcp counter return comment "accept omada_controller tcp ports"
 #   ct state invalid counter log prefix "[LAN0-CONTAINERS-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[LAN0-CONTAINERS-default-A]" return comment "default-action accept"
 # }
 
 # chain HOME-CONTAINERS {
-#   ip saddr @trusted_devices counter return comment "allow access from trusted_devices"
+#   counter return comment "allow access from trusted_devices"
 #   ct state invalid counter log prefix "[HOME-CONTAINERS-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[HOME-CONTAINERS-default-D]" drop comment "default-action drop"
 # }
@@ -304,13 +304,13 @@ chain WAN-IOT {
 # }
 
 # chain GUEST-CONTAINERS {
-#   tcp dport 8088 ip daddr @omada_controller counter return comment "allow access to guest portal"
+#   tcp dport 8088 counter return comment "allow access to guest portal"
 #   ct state invalid counter log prefix "[GUEST-CONTAINERS-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[GUEST-CONTAINERS-default-D]" drop comment "default-action drop"
 # }
 
 # chain WIREGUARD-CONTAINERS {
-#   ip saddr @trusted_devices return comment "allow access from trusted_devices"
+#   return comment "allow access from trusted_devices"
 #   ct state invalid counter log prefix "[WIREGUARD-CONTAINERS-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[WIREGUARD-CONTAINERS-default-D]" drop comment "default-action drop"
 # }
@@ -329,8 +329,8 @@ chain WAN-IOT {
 # }
 
 # chain HOME-WIREGUARD {
-#   ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh from trusted_devices"
-#   ip saddr @trusted_devices ip daddr 10.10.10.10 tcp dport 8080 counter return comment "allow access to seedbox webuiPort from trusted_devices"
+#   tcp dport 22 counter return comment "allow access to ssh from trusted_devices"
+#   ip daddr 10.10.10.10 tcp dport 8080 counter return comment "allow access to seedbox webuiPort from trusted_devices"
 #   tcp dport 5432 ip daddr 10.10.10.13 counter return comment "allow access to postgres database on work-pc"
 #   tcp dport 631 ip daddr 10.10.10.13 counter return comment "allow access to printer on work-pc"
 #   ct state invalid counter log prefix "[HOME-WIREGUARD-invalid-D]" drop comment "drop invalid"
@@ -415,8 +415,8 @@ chain LOCAL-IOT {
 
 # chain LOCAL-SERVER {
 #   tcp dport 179 counter return comment "allow access to bgp server"
-#   tcp dport 6000 ip daddr @k8s_vector_aggregator counter return comment "allow access to k8s_vector_aggregator"
-#   tcp dport 9000 ip daddr @k8s_minio counter return comment "allow access to k8s_minio"
+#   tcp dport 6000 counter return comment "allow access to k8s_vector_aggregator"
+#   tcp dport 9000 counter return comment "allow access to k8s_minio"
 #   tcp dport 2049 ip daddr 192.168.200.30 counter return comment "allow access to NFS server"
 #   ct state invalid counter log prefix "[LOCAL-SERVER-invalid-D]" drop comment "drop invalid"
 #   counter log prefix "[LOCAL-SERVER-default-D]" drop comment "default-action drop"

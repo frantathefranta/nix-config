@@ -25,6 +25,7 @@ chain ZONE_OUTPUT {
 
 chain ZONE_TO_LOCAL {
   iifname "lo" counter return
+  iifname "mgmt" counter jump MGMT-LOCAL
   iifname "mgmt" counter return
   iifname "lan0" counter jump LAN0-LOCAL
   iifname "lan0" counter return
@@ -159,6 +160,7 @@ chain ZONE_TO_WAN {
 
 chain ZONE_FROM_LOCAL {
   oifname "lo" counter return
+  oifname "mgmt" counter return
   oifname "lan0" counter jump LOCAL-LAN0
   oifname "lan0" counter return
   oifname "lan0.20" counter jump LOCAL-HOME

@@ -24,6 +24,7 @@ chain ZONE_OUTPUT {
 }
 
 chain ZONE_TO_LOCAL {
+  meta l4proto icmp counter return
   iifname "lo" counter return
   iifname "mgmt" counter jump MGMT-LOCAL
   iifname "mgmt" counter return

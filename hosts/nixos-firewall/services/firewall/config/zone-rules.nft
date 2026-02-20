@@ -28,7 +28,7 @@ chain MGMT-LOCAL {
   udp dport 123 counter return comment "allow access to ntp server"
   meta l4proto { tcp, udp } th dport { 53, 853 } ip daddr @dns_server counter return comment "allow access to dns server"
   ip saddr @trusted_devices tcp dport 22 counter return comment "allow access to ssh server from trusted_devices"
-  ct state invalid counter log prefix "[IOT-LOCAL-invalid-D]" drop comment "drop invalid"
+  ct state invalid counter log prefix "[MGMT-LOCAL-invalid-D]" drop comment "drop invalid"
   counter log prefix "[MGMT-LOCAL-default-D]" drop comment "default-action drop"
 }
 

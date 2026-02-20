@@ -20,7 +20,7 @@
           '';
         };
         home_ip_filter = {
-          family = "ip";
+          family = "inet";
           content = ''
             chain STATE_POLICY {
               ct state established counter accept
@@ -33,35 +33,35 @@
             ${builtins.readFile ./config/zone-directions.nft}
           '';
         };
-        home_ip6_filter = {
-          family = "ip6";
-          content = ''
-            chain STATE_POLICY {
-              ct state established counter accept
-              ct state related counter accept
-              return
-            }
+        # home_ip6_filter = {
+        #   family = "ip6";
+        #   content = ''
+        #     chain STATE_POLICY {
+        #       ct state established counter accept
+        #       ct state related counter accept
+        #       return
+        #     }
 
-            ${builtins.readFile ./config/sets-ipv6.nft}
-            ${builtins.readFile ./config/zone-rules.nft}
-            ${builtins.readFile ./config/zone-directions.nft}
-            # chain ZONE_INPUT {
-            #   type filter hook input priority filter + 1; policy accept;
-            #   jump STATE_POLICY
-            #   iifname "lo" counter return
-            #   counter drop comment "default-action drop"
-            # }
+        #     ${builtins.readFile ./config/sets-ipv6.nft}
+        #     ${builtins.readFile ./config/zone-rules.nft}
+        #     ${builtins.readFile ./config/zone-directions.nft}
+        #     # chain ZONE_INPUT {
+        #     #   type filter hook input priority filter + 1; policy accept;
+        #     #   jump STATE_POLICY
+        #     #   iifname "lo" counter return
+        #     #   counter drop comment "default-action drop"
+        #     # }
 
-            # # ZONE_FORWARD is disabled for ipv6 in sysctl above
+        #     # # ZONE_FORWARD is disabled for ipv6 in sysctl above
 
-            # chain ZONE_OUTPUT {
-            #   type filter hook output priority filter + 1; policy accept;
-            #   jump STATE_POLICY
-            #   oifname "lo" counter return
-            #   counter drop comment "default-action drop"
-            # }
-          '';
-        };
+        #     # chain ZONE_OUTPUT {
+        #     #   type filter hook output priority filter + 1; policy accept;
+        #     #   jump STATE_POLICY
+        #     #   oifname "lo" counter return
+        #     #   counter drop comment "default-action drop"
+        #     # }
+        #   '';
+        # };
       };
     };
   };

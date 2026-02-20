@@ -21,6 +21,7 @@ chain ZONE_OUTPUT {
 
 chain ZONE_TO_LOCAL {
   meta l4proto icmp counter return
+  meta l4proto icmpv6 counter return
   iifname "lo" counter return
   iifname "mgmt" counter jump MGMT-LOCAL
   iifname "mgmt" counter return
@@ -145,6 +146,7 @@ chain ZONE_TO_IOT {
 # }
 
 chain ZONE_TO_WAN {
+  meta l4proto icmpv6 counter return
   iifname "wan0" counter return
   iifname "lan0" counter jump LAN0-WAN
   iifname "lan0" counter return

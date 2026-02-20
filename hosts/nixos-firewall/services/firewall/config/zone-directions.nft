@@ -10,10 +10,10 @@ chain ZONE_FORWARD {
   oifname "lan0" counter jump ZONE_TO_LAN0
   oifname "lan0.50" counter jump ZONE_TO_HOME
   oifname "lan0.69" counter jump ZONE_TO_IOT
-  oifname "lan0.200" counter jump ZONE_TO_SERVER
-  oifname "lan0.250" counter jump ZONE_TO_GUEST
-  oifname "ctr0" counter jump ZONE_TO_CONTAINERS
-  oifname "wg0" counter jump ZONE_TO_WIREGUARD
+  # oifname "lan0.200" counter jump ZONE_TO_SERVER
+  # oifname "lan0.250" counter jump ZONE_TO_GUEST
+  # oifname "ctr0" counter jump ZONE_TO_CONTAINERS
+  # oifname "wg0" counter jump ZONE_TO_WIREGUARD
   oifname "wan0" counter jump ZONE_TO_WAN
 }
 

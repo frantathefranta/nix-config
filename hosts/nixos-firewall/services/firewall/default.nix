@@ -9,7 +9,7 @@
       tables = {
         home_nat = {
           family = "ip";
-          content = ''
+          content = /* nft */ ''
             chain PREROUTING {
               type nat hook prerouting priority dstnat; policy accept;
             }

@@ -16,7 +16,7 @@ let
     if pkgs.stdenv.isDarwin then
       "'${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
     else if (builtins.length config.monitors != 0) then
-      "${config.home.homeDirectory}/.1Password/agent.sock"
+      "${config.home.homeDirectory}/.1password/agent.sock"
     else
       "${config.home.homeDirectory}/.ssh/ssh_auth_sock";
 in
@@ -63,7 +63,7 @@ in
       "ssh-keys" = [
         {
           vault = "SSH";
-          item = "rcrhyzps3y7tpmg5ghz7xpwyj4"; 
+          item = "rcrhyzps3y7tpmg5ghz7xpwyj4";
         }
         # {
         #   vault = "SSH";

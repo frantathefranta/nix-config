@@ -2,6 +2,8 @@
 keys:
   - &users:
     - &franta age1dvj29v7swu6e0pw5t5mwpjscktts4d676a8lre7vpf995qf58aqqqy6c32
+    - &franta-gpg 2BB46A1FA9B655BC0225BCC988244D8075364DC4
+    - &mainkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM 
   - &hosts:
     - &nix-bastion age1an8jkd67y34aa3fzejsdcq27lfzsn74kn2qdnpzsjyhc9wcw5dqqhc7rhr
     - &qotom age1fku3as83dv8fcm0vm0ka2z7ckpcegvp4xanl8fjndmkprxfn54nsdrfc97
@@ -86,5 +88,9 @@ creation_rules:
           - *nix-bastion
   - path_regex: home/fbartik/NC312237-secrets.ya?ml$
     key_groups:
-      - age:
+      - pgp:
+          - *franta-gpg
+        age:
+          - *franta
+          - *mainkey
           - *NC312237

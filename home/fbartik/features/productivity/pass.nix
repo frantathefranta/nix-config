@@ -3,6 +3,6 @@
 {
   programs.password-store = {
     enable = true;
-    package = pkgs.passage;
+    # package = pkgs.passage;
   };
 }

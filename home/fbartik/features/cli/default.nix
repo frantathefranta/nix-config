@@ -12,8 +12,8 @@
     ./bat.nix
     ./direnv.nix
     # ./gh.nix
-    # ./git.nix
-    # ./gpg.nix
+    ./git.nix
+    ./gpg.nix
     # ./jujutsu.nix
     # ./lyrics.nix
     # ./nushell.nix

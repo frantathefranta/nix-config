@@ -33,6 +33,7 @@
       # theme = "light:Belafonte Day,dark:Belafonte Night";
     };
   };
+  # systemd.user.services.sops-nix.Service.Environment = [ "PATH=${pkgs.age-plugin-1p}/bin" ];
   monitors = [
     {
       name = "eDP-1";

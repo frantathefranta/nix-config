@@ -54,22 +54,6 @@
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
-  programs.git = {
-    enable = true;
-    settings = {
-      user = {
-        name = "frantathefranta";
-        email = "fb@franta.us";
-      };
-      init.defaultBranch = "main";
-      # fish takes these options and adds them to the prompt
-      bash = {
-        showInformativeStatus = true;
-        showDirtyState = true;
-        showUntrackedFiles = true;
-      };
-    };
-  };
   services.home-manager.autoExpire = {
     enable = true;
     frequency = "weekly";

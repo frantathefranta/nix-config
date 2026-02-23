@@ -164,6 +164,7 @@ in
       emacs-lsp-booster
       aporetic # fonts
       imagemagick
+      pinentry-emacs
     ]
     ++ lib.optionals isDarwin [ emacsClientApp ]
     ++ lib.optionals (!isDarwin) [

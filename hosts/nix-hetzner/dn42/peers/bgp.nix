@@ -3,7 +3,7 @@
   sessions = [
     {
       multi = true;
-      name = "moe233";
+      name = "dn42_moe233";
       neigh = "fe80::0253%wg4242420253";
       as = "4242420253";
       link = "4";

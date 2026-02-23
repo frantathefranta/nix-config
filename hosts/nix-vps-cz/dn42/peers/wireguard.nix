@@ -16,6 +16,13 @@
       peerAddressV6 = "fe80::0207/128";
       vrf = "dn42";
     };
+    "50-wg4242420253" = {
+      listenPort = 20253;
+      peerEndpoint = "ams.dn42.moe233.net:21033";
+      peerPublicKey = "vRRfNnGL7jpKGBJjLZg612vHQulDOtICkgXCC++1+2g=";
+      localAddressV6 = "fe80::1033/64";
+      peerAddressV6 = "fe80::0253";
+    };
     "50-wg4242420263" = {
       listenPort = 20263;
       peerEndpoint = "de-fra1.flap42.eu:52026";

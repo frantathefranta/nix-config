@@ -10,6 +10,13 @@
     }
     {
       multi = true;
+      name = "dn42_moe233";
+      neigh = "fe80::0253%wg4242420253";
+      as = "4242420253";
+      link = "3";
+    }
+    {
+      multi = true;
       name = "dn42_RoutedBits";
       neigh = "fe80::0207%wg4242420207";
       as = "4242420207";

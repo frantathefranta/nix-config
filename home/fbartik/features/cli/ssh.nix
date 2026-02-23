@@ -28,7 +28,7 @@ in
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
-      "github.com" = {
+      "*" = {
         inherit identityAgent;
       };
       "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {

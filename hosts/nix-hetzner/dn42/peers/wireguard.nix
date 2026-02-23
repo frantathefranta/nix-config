@@ -1,5 +1,12 @@
 {
   services.custom-wireguard.interfaces = {
+    "50-wg4242420253" = {
+      listenPort = 20253;
+      peerEndpoint = "lv.dn42.moe233.net:21033";
+      peerPublicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
+      localAddressV6 = "fe80::1033/64";
+      peerAddressV6 = "fe80::0253";
+    };
     "50-wg4242420454" = {
       listenPort = 20454;
       peerEndpoint = "dn42a.nedifinita.com:54876";

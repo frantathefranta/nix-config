@@ -3,6 +3,13 @@
   sessions = [
     {
       multi = true;
+      name = "moe233";
+      neigh = "fe80::0253%wg4242420253";
+      as = "4242420253";
+      link = "4";
+    }
+    {
+      multi = true;
       name = "dn42_Kioubit";
       neigh = "fe80::ade0%wg4242423914";
       as = "4242423914";

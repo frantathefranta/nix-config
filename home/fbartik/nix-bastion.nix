@@ -18,4 +18,5 @@
       };
     };
   };
+  programs.git.settings.commit.gpgSign = false;
 }

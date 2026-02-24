@@ -1,17 +1,23 @@
-{ inputs, outputs, ... }:
+{ inputs, ... }:
 
 {
   imports = [
     inputs.srvos.nixosModules.hardware-hetzner-cloud
-    ../common/global/nix.nix
-    ../common/global/sops.nix
+    ../common/global
     ../common/roles/server.nix
+    ../common/users/fbartik
     ../common/optional/autoupgrade.nix
     ./dn42
-  ]
-  ++ (builtins.attrValues outputs.nixosModules);
+  ];
   networking = {
     hostName = "nix-hetzner";
+    domain = "us.franta.us";
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+      "2606:4700:4700::1111"
+      "2606:4700:4700::1001"
+    ];
   };
   time.timeZone = "America/Seattle";
   systemd.network.enable = true;
@@ -25,7 +31,9 @@
       { Gateway = "fe80::1"; }
     ];
   };
-  # TODO: This needs to be handled by roles/server.nix
+
+  # Keep root SSH access for emergency recovery
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM"
   ];

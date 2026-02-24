@@ -12,7 +12,7 @@
 
     ../common/global
     ../common/users/fbartik
-    ../common/roles/server.nix
+    # ../common/roles/server.nix
 
     ../common/optional/fwupd.nix
   ];

@@ -45,6 +45,7 @@
     };
     lfs.enable = true;
     ignores = [
+      ".claude"
       ".direnv"
       "result"
       ".jj"

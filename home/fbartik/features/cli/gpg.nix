@@ -13,7 +13,11 @@
     # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
     enableExtraSocket = true;
     pinentry.package =
-      if osConfig.services.desktopManager.plasma6.enable then pkgs.pinentry-qt else pkgs.pinentry-tty;
+      if osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable
+      then pkgs.pinentry-qt
+      else if pkgs.stdenv.isDarwin
+      then pkgs.pinentry_mac
+      else pkgs.pinentry-tty;
   };
   programs =
     let

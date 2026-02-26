@@ -5,7 +5,11 @@
   fetchurl,
   autoPatchelfHook,
   stdenv,
-  expect,
+  pcsclite,
+  qt6,
+  gtk3,
+  openssl,
+  libxxf86vm,
   ...
 }:
 stdenv.mkDerivation rec {
@@ -16,24 +20,31 @@ stdenv.mkDerivation rec {
     urls = [
       "https://info.identita.gov.cz/download/eObcanka.deb"
     ];
-    sha256 = "1h7l42rhin2izsszr3bzpmgms34yx12x5422l5dk4dfczfqjri58";
+    hash = "sha256-EnkLvqcFzlQXETGhufq7m/Eabm3QEhihIcMh5U2BJjo=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    qt6.wrapQtAppsHook
   ];
 
-  # buildInputs = [
-  #   freeipmi # For libipmiconsole.so.2
-  #   tcp_wrappers # For libwrap.so.0
-  #   expect # For conman/*.exp scripts
-  # ];
+  buildInputs = [
+    pcsclite
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qt5compat
+    qt6.qtwebengine
+    openssl
+    libxxf86vm
+    gtk3
+  ];
 
   unpackPhase = "dpkg -x $src ./";
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc $out/share/man 
+    mkdir -p $out/bin $out/share/doc $out/share/man $out/lib
+    mv opt/eObcanka/lib/lib* $out/lib
     mv opt/eObcanka/SpravceKarty/* $out/bin/
     mv opt/eObcanka/Identifikace/* $out/bin/
 

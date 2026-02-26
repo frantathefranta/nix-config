@@ -17,7 +17,6 @@
 
     ../common/optional/dn42.nix
     ../common/optional/smartd.nix
-    ../common/optional/autoupgrade.nix
   ];
   networking = {
     hostName = "qotom";

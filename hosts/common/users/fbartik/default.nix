@@ -17,6 +17,7 @@ in
     extraGroups = ifTheyExist [
       "audio"
       "bird"
+      "caddy"
       "dialout"
       "frrvty" # For inspecting vtysh
       "ftdi"

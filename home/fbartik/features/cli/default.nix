@@ -11,7 +11,7 @@
     # ./bash.nix
     ./bat.nix
     ./direnv.nix
-    # ./gh.nix
+    ./gh.nix
     ./git.nix
     ./gpg.nix
     # ./jujutsu.nix

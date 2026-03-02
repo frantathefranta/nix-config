@@ -58,7 +58,7 @@ in
         msmtp = {
           enable = true;
           extraConfig = {
-            tls_starttls = "on";
+            tls_starttls = "off";
             logfile = "~/.cache/msmtp/msmtp.log";
           };
         };
@@ -107,7 +107,7 @@ in
         msmtp = {
           enable = true;
           extraConfig = {
-            tls_starttls = "on";
+            tls_starttls = "off";
             logfile = "~/.cache/msmtp/msmtp.log";
           };
         };
@@ -146,7 +146,7 @@ in
         msmtp = {
           enable = true;
           extraConfig = {
-            tls_starttls = "on";
+            tls_starttls = "off";
             logfile = "~/.cache/msmtp/msmtp.log";
           };
         };

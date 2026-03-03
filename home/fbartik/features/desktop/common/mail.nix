@@ -8,6 +8,37 @@ let
   ca-bundle_crt = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   realName = "Franta Bartik";
   primaryEmail = "fb@franta.us";
+
+  commonMsmtp = {
+    enable = true;
+    extraConfig = {
+      tls_starttls = "off";
+      logfile = "~/.cache/msmtp/msmtp.log";
+    };
+  };
+
+  mkImapnotify = account: {
+    enable = true;
+    boxes = [ "INBOX" ];
+    onNotify = "${pkgs.isync}/bin/mbsync ${account}";
+    onNotifyPost = ''
+      ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+    '';
+  };
+
+  # Shared extraConfig for each channel inside gmail-fb's groups.
+  gmailChannelExtra = {
+    SyncState = "*";
+    CopyArrivalDate = "yes";
+    Create = "both";
+    Expunge = "both";
+  };
+
+  mkGmailChannel = far: near: {
+    farPattern = far;
+    nearPattern = near;
+    extraConfig = gmailChannelExtra;
+  };
 in
 {
   programs = {
@@ -51,25 +82,10 @@ in
           create = "both";
           expunge = "both";
           remove = "both";
-          extraConfig.channel = {
-            CopyArrivalDate = "yes";
-          };
+          extraConfig.channel.CopyArrivalDate = "yes";
         };
-        msmtp = {
-          enable = true;
-          extraConfig = {
-            tls_starttls = "off";
-            logfile = "~/.cache/msmtp/msmtp.log";
-          };
-        };
-        imapnotify = {
-          enable = true;
-          boxes = [ "INBOX" ];
-          onNotify = "${pkgs.isync}/bin/mbsync icloud";
-          onNotifyPost = ''
-            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
-          '';
-        };
+        msmtp = commonMsmtp;
+        imapnotify = mkImapnotify "icloud";
         imap = {
           host = "imap.mail.me.com";
           tls.enable = true;
@@ -87,38 +103,29 @@ in
         address = "ozzfranta@gmail.com";
         userName = "ozzfranta@gmail.com";
         passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/gmail-oz".path}";
+        flavor = "gmail.com";
         folders = {
           inbox = "Inbox";
           sent = "[Gmail]/Sent Mail";
           trash = "[Gmail]/Trash";
           drafts = "[Gmail]/Drafts";
         };
-        flavor = "gmail.com";
         mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
-          expunge = "both";
+          expunge = "maildir";
           remove = "both";
-          extraConfig.channel = {
-            CopyArrivalDate = "yes";
+          groups."gmail-oz".channels = {
+            inbox  = mkGmailChannel "INBOX"            "INBOX";
+            trash  = mkGmailChannel "[Gmail]/Trash"    "Trash";
+            spam   = mkGmailChannel "[Gmail]/Spam"     "Spam";
+            all    = mkGmailChannel "[Gmail]/All Mail"  "Archive";
+            drafts = mkGmailChannel "[Gmail]/Drafts"   "Drafts";
           };
         };
-        msmtp = {
-          enable = true;
-          extraConfig = {
-            tls_starttls = "off";
-            logfile = "~/.cache/msmtp/msmtp.log";
-          };
-        };
-        imapnotify = {
-          enable = true;
-          boxes = [ "INBOX" ];
-          onNotify = "${pkgs.isync}/bin/mbsync gmail-oz";
-          onNotifyPost = ''
-            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
-          '';
-        };
+        msmtp = commonMsmtp;
+        imapnotify = mkImapnotify "gmail-oz";
       };
       gmail-fb = {
         primary = false;
@@ -126,38 +133,29 @@ in
         address = "frantabart@gmail.com";
         userName = "frantabart@gmail.com";
         passwordCommand = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."email/gmail-fb".path}";
+        flavor = "gmail.com";
         folders = {
           inbox = "Inbox";
           sent = "[Gmail]/Sent Mail";
           trash = "[Gmail]/Trash";
           drafts = "[Gmail]/Drafts";
         };
-        flavor = "gmail.com";
         mu.enable = true;
         mbsync = {
           enable = true;
           create = "both";
-          expunge = "both";
+          expunge = "maildir";
           remove = "both";
-          extraConfig.channel = {
-            CopyArrivalDate = "yes";
+          groups."gmail-fb".channels = {
+            inbox  = mkGmailChannel "INBOX"            "INBOX";
+            trash  = mkGmailChannel "[Gmail]/Trash"    "Trash";
+            spam   = mkGmailChannel "[Gmail]/Spam"     "Spam";
+            all    = mkGmailChannel "[Gmail]/All Mail"  "Archive";
+            drafts = mkGmailChannel "[Gmail]/Drafts"   "Drafts";
           };
         };
-        msmtp = {
-          enable = true;
-          extraConfig = {
-            tls_starttls = "off";
-            logfile = "~/.cache/msmtp/msmtp.log";
-          };
-        };
-        imapnotify = {
-          enable = true;
-          boxes = [ "INBOX" ];
-          onNotify = "${pkgs.isync}/bin/mbsync gmail-fb";
-          onNotifyPost = ''
-            ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
-          '';
-        };
+        msmtp = commonMsmtp;
+        imapnotify = mkImapnotify "gmail-fb";
       };
     };
   };

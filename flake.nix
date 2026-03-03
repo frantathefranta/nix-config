@@ -153,6 +153,12 @@
             ./hosts/nix-vps-cz
           ];
         };
+        installer-iso = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/installer-iso
+          ];
+        };
       };
 
       # Standalone home-manager configuration entrypoint

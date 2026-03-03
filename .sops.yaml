@@ -6,7 +6,7 @@ keys:
     - &mainkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM 
   - &hosts:
     - &nix-bastion age1an8jkd67y34aa3fzejsdcq27lfzsn74kn2qdnpzsjyhc9wcw5dqqhc7rhr
-    - &qotom age1fku3as83dv8fcm0vm0ka2z7ckpcegvp4xanl8fjndmkprxfn54nsdrfc97
+    - &qotom age10e453n4u26tvygc5hua5x392d2lsw3cyk65u69m8kt2u09rqv3dq4drc7q
     - &lanthanum age1xc4sgp7yt7j0hy842kffqy2hpjxpwdn6f235l42s7tmdu0qkx4cs8uxxyc
     - &work-vm age1u2z93gyp7zek6cy5tuva3n4lm825rd3au8aqralx409jh9wm9gfsdsgdq3
     - &nixos-firewall age17zdm40vq8zwspqula4uhydjxe39ah0ltntj03ywjmzq4nglgednsv9sfr5
@@ -32,11 +32,15 @@ creation_rules:
           - *nix-hetzner
           - *nix-vps-cz
           - *silicium
+        pgp:
+          - *franta-gpg
   - path_regex: hosts/qotom/secrets.ya?ml$
     key_groups:
       - age:
           - *franta
           - *qotom
+        pgp:
+          - *franta-gpg
   - path_regex: hosts/nixos-firewall/secrets.ya?ml$
     key_groups:
       - age:

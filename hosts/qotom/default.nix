@@ -17,6 +17,7 @@
 
     ../common/optional/dn42.nix
     ../common/optional/smartd.nix
+    ../common/optional/fwupd.nix
   ];
   networking = {
     hostName = "qotom";

@@ -22,36 +22,59 @@
       "net.ipv4.conf.wlp2s0.forwarding" = 1;
     };
     binfmt.emulatedSystems = [ "aarch64-linux" ];
+    loader = {
+      systemd-boot = {
+        enable = true;
+      };
+      efi.canTouchEfiVariables = true;
+      timeout = 3;
+    };
   };
 
   disko.devices.disk.main = {
-    device = "/dev/sda";
+    device = "/dev/disk/by-id/ata-LITEON_LMH-256V2M-11_MSATA_256GB_TW02HNG6LOH00794B1FQ";
     type = "disk";
     content = {
       type = "gpt";
       partitions = {
-        MBR = {
-          priority = 0;
-          size = "1M";
-          type = "EF02";
-        };
         ESP = {
           priority = 1;
-          size = "500M";
+          name = "ESP";
+          start = "1M";
+          end = "512M";
           type = "EF00";
           content = {
             type = "filesystem";
             format = "vfat";
             mountpoint = "/boot";
+            mountOptions = [ "umask=0077" ];
           };
         };
         root = {
-          priority = 2;
           size = "100%";
           content = {
-            type = "filesystem";
-            format = "ext4";
-            mountpoint = "/";
+            type = "btrfs";
+            extraArgs = [ "-f" ]; # Override existing partition
+            # Subvolumes must set a mountpoint in order to be mounted,
+            # unless their parent is mounted
+            subvolumes = {
+              "/root" = {
+                mountOptions = [ "compress=zstd" ];
+                mountpoint = "/";
+              };
+              # Parent is not mounted so the mountpoint must be set
+              "/nix" = {
+                mountOptions = [
+                  "compress=zstd"
+                  "noatime"
+                ];
+                mountpoint = "/nix";
+              };
+              "/persist" = {
+                mountOptions = [ "compress=zstd" ];
+                mountpoint = "/persist";
+              };
+            };
           };
         };
       };

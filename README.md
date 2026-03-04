@@ -35,3 +35,10 @@ nix-shell -p ssh-to-age --run "ssh-to-age -i /etc/ssh/ssh_host_ed25519_key.pub"
 ``` sh
 nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nixos@10.32.10.10 --copy-host-keys
 ```
+
+
+## Building an installer ISO
+`nh` has added a way to replicate `nixos-rebuild build-image` functionality
+``` shell
+nix run github:nix-community/nh -- os build-image --image-variant iso-installer .#installer-iso --hostname installer-iso
+```

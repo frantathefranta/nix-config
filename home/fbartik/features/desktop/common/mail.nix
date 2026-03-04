@@ -1,3 +1,4 @@
+# Inspiration for mu4e configuration came from https://github.com/danielfleischer/mu4easy
 {
   config,
   lib,
@@ -83,6 +84,34 @@ in
           expunge = "both";
           remove = "both";
           extraConfig.channel.CopyArrivalDate = "yes";
+          groups."icloud".channels = {
+            "all" = {
+              patterns = [
+                "INBOX"
+                "Archive"
+                "Deleted Messages"
+                "Junk"
+                "Drafts"
+              ];
+              extraConfig = {
+                SyncState = "*";
+                CopyArrivalDate = "yes";
+                Create = "both";
+                Expunge = "both";
+              };
+            };
+            "sent" = {
+              farPattern = "Sent Messages";
+              nearPattern = "Sent";
+              extraConfig = {
+                SyncState = "*";
+                CopyArrivalDate = "yes";
+                Create = "both";
+                Expunge = "both";
+              };
+            };
+          };
+
         };
         msmtp = commonMsmtp;
         imapnotify = mkImapnotify "icloud";
@@ -117,11 +146,11 @@ in
           expunge = "maildir";
           remove = "both";
           groups."gmail-oz".channels = {
-            inbox  = mkGmailChannel "INBOX"            "INBOX";
-            trash  = mkGmailChannel "[Gmail]/Trash"    "Trash";
-            spam   = mkGmailChannel "[Gmail]/Spam"     "Spam";
-            all    = mkGmailChannel "[Gmail]/All Mail"  "Archive";
-            drafts = mkGmailChannel "[Gmail]/Drafts"   "Drafts";
+            inbox = mkGmailChannel "INBOX" "INBOX";
+            trash = mkGmailChannel "[Gmail]/Trash" "Trash";
+            spam = mkGmailChannel "[Gmail]/Spam" "Spam";
+            all = mkGmailChannel "[Gmail]/All Mail" "Archive";
+            drafts = mkGmailChannel "[Gmail]/Drafts" "Drafts";
           };
         };
         msmtp = commonMsmtp;
@@ -147,11 +176,11 @@ in
           expunge = "maildir";
           remove = "both";
           groups."gmail-fb".channels = {
-            inbox  = mkGmailChannel "INBOX"            "INBOX";
-            trash  = mkGmailChannel "[Gmail]/Trash"    "Trash";
-            spam   = mkGmailChannel "[Gmail]/Spam"     "Spam";
-            all    = mkGmailChannel "[Gmail]/All Mail"  "Archive";
-            drafts = mkGmailChannel "[Gmail]/Drafts"   "Drafts";
+            inbox = mkGmailChannel "INBOX" "INBOX";
+            trash = mkGmailChannel "[Gmail]/Trash" "Trash";
+            spam = mkGmailChannel "[Gmail]/Spam" "Spam";
+            all = mkGmailChannel "[Gmail]/All Mail" "Archive";
+            drafts = mkGmailChannel "[Gmail]/Drafts" "Drafts";
           };
         };
         msmtp = commonMsmtp;

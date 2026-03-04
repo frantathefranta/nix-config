@@ -42,33 +42,9 @@ in
       };
     };
   };
-  # systemd.services.bird-lg-proxy = {
-  #   enable = true;
-  #   after = [ "network.target" ];
-  #   wantedBy = [ "multi-user.target" ];
-  #   description = "Bird Looking Glass Proxy";
-  #   serviceConfig = {
-  #     Type = "simple";
-  #     Restart = "on-failure";
-  #     ProtectSystem = "full";
-  #     ProtectHome = "yes";
-  #     MemoryDenyWriteExecute = "yes";
-  #     User = "root";
-  #     Group = "root";
-  #   };
-  #   script = ''
-  #     ${pkgs.iproute2}/bin/ip vrf exec dn42 ${pkgs.util-linux}/bin/runuser -u bird-lg -g bird-lg -- \
-  #     ${pkgs.bird-lg}/bin/proxy \
-  #       --allowed 172.23.234.17,fdb7:c21f:f30f::1,fdb7:c21f:f30f:1::1,fdb7:c21f:f30f:2::1 \
-  #       --bird /var/run/bird/bird.ctl \
-  #       --listen [fdb7:c21f:f30f:2::1]:8000 \
-  #       --traceroute_bin ${pkgs.traceroute}/bin/traceroute \
-  #       --traceroute_raw false
-  #   '';
-  # };
   services = {
     bird-lg = {
-      package = pkgs.bird-lg-custom;
+      package = pkgs.unstable.bird-lg;
       proxy = {
         enable = true;
         listenAddresses = "[fdb7:c21f:f30f:2::1]:8000";

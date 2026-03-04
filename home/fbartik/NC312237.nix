@@ -15,6 +15,14 @@
   home.packages = with pkgs; [
     symbola
   ];
+  programs.nh = {
+    clean = {
+      enable = true;
+    };
+    enable = true;
+    homeFlake = "${config.home.homeDirectory}/git/nix-config";
+    package = pkgs.unstable.nh;
+  };
   sops.age.keyFile = "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt";
   sops.defaultSopsFile = ./NC312237-secrets.yaml;
 

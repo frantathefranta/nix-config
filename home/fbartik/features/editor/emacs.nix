@@ -159,6 +159,7 @@ in
       sqlite
       nil
       nixd # Nix LSP
+      claude-code-acp # agent-shell
       mu.mu4e # Mail
       python3Minimal
       emacs-lsp-booster

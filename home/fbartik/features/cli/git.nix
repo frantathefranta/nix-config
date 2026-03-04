@@ -49,6 +49,7 @@
       ".direnv"
       "result"
       ".jj"
+      ".agent-shell"
     ];
   };
 }

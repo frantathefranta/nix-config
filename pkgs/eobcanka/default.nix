@@ -2,9 +2,14 @@
 # Uses buildFHSEnv because the binary has hardcoded /usr/lib64 paths for its
 # PKCS#11 modules. Inside the FHS environment /usr/lib64 is a symlink to
 # /usr/lib, where the P11 libs end up via targetPkgs.
+#
+# P11 modules and pin providers live in a separate derivation (p11modules) with
+# dontFixup = true so autoPatchelfHook never touches them — the app verifies
+# their on-disk bytes against .sig RSA signature files at startup.
 {
   lib,
   buildFHSEnv,
+  writeShellScript,
   dpkg,
   fetchurl,
   autoPatchelfHook,
@@ -21,14 +26,56 @@
 }:
 
 let
+  src = fetchurl {
+    urls = [ "https://info.identita.gov.cz/download/eObcanka.deb" ];
+    hash = "sha256-EnkLvqcFzlQXETGhufq7m/Eabm3QEhihIcMh5U2BJjo=";
+  };
+
+  # P11 modules and pin providers extracted without any ELF patching.
+  # dontFixup = true skips autoPatchelfHook, stripping, and all other fixup.
+  p11modules = stdenv.mkDerivation {
+    pname = "eobcanka-p11";
+    version = "3.5.1";
+    inherit src;
+    nativeBuildInputs = [ dpkg ];
+    unpackPhase = "dpkg -x $src ./";
+    installPhase = ''
+      mkdir -p $out/lib $out/local/etc/crplus/sigs/x64
+
+      # Versioned .so files and their unversioned symlinks
+      for pat in libeopproxyp11 libeop2v1czep11 libeopczep11 libsa2v1czep11; do
+        cp -P usr/lib/x86_64-linux-gnu/$pat.so* $out/lib/ 2>/dev/null || true
+      done
+      # Fix absolute symlinks to be relative
+      for link in $out/lib/*.so; do
+        [ -L "$link" ] || continue
+        base="$(basename "$(readlink "$link")")"
+        [ -f "$out/lib/$base" ] && ln -sf "$base" "$link"
+      done
+      [ -f opt/eObcanka/lib/libcmprovp11.so ] && \
+        cp opt/eObcanka/lib/libcmprovp11.so $out/lib/
+
+      # Pin provider executables – also live in usr/lib/x86_64-linux-gnu/ so the
+      # app finds them at /usr/lib64/. Put them in $out/lib/ to match.
+      for bin in eop2v1czep11 eopczep11 sa2v1czep11; do
+        [ -f "usr/lib/x86_64-linux-gnu/$bin" ] && \
+          cp "usr/lib/x86_64-linux-gnu/$bin" $out/lib/
+      done
+
+      # .sig files – serve from the primary path the app checks first and from
+      # the /usr/lib64 fallback, so both report Found rather than Not found.
+      cp usr/local/etc/crplus/sigs/x64/* $out/local/etc/crplus/sigs/x64/
+      cp usr/local/etc/crplus/sigs/x64/* $out/lib/
+    '';
+
+    dontStrip = true;
+    dontFixup = true;
+  };
+
   inner = stdenv.mkDerivation {
     pname = "eobcanka-inner";
     version = "3.5.1";
-
-    src = fetchurl {
-      urls = [ "https://info.identita.gov.cz/download/eObcanka.deb" ];
-      hash = "sha256-EnkLvqcFzlQXETGhufq7m/Eabm3QEhihIcMh5U2BJjo=";
-    };
+    inherit src;
 
     nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
@@ -51,74 +98,53 @@ let
       libdrm
     ];
 
+    # The FHS env provides all libs at runtime; allow autoPatchelf to skip
+    # anything it can't resolve at build time.
+    autoPatchelfIgnoreMissingDeps = true;
+
     unpackPhase = "dpkg -x $src ./";
 
     installPhase = ''
-      mkdir -p $out/bin $out/lib $out/share $out/local/etc/crplus
+      mkdir -p $out/lib $out/share $out/local/etc/crplus \
+               $out/eobcanka/SpravceKarty $out/eobcanka/Identifikace
 
-      # All P11 .so files, versioned files, and pin-provider executables live in
-      # usr/lib/x86_64-linux-gnu/ in the deb.
+      # Non-P11 libs (P11 modules and pin providers come from p11modules).
       mv usr/lib/x86_64-linux-gnu/* $out/lib/
+      rm -f $out/lib/libeopproxyp11.so* \
+            $out/lib/libeop2v1czep11.so* \
+            $out/lib/libeopczep11.so* \
+            $out/lib/libsa2v1czep11.so* \
+            $out/lib/eop2v1czep11 \
+            $out/lib/eopczep11 \
+            $out/lib/sa2v1czep11
+      [ -f opt/eObcanka/lib/libcryptoui.so ] && mv opt/eObcanka/lib/libcryptoui.so $out/lib/
 
-      # Those .so files include absolute symlinks (→ /usr/lib/x86_64-linux-gnu/...).
-      # Fix them to be relative so they resolve inside $out/lib/.
-      for f in $out/lib/*.so; do
-        [ -L "$f" ] || continue
-        base="$(basename "$(readlink "$f")")"
-        [ -f "$out/lib/$base" ] && ln -sf "$base" "$f"
+      # Install binaries into the original /opt/eObcanka/ directory structure so
+      # the hardcoded installRoot path and sibling-file lookups work at runtime.
+      for f in opt/eObcanka/SpravceKarty/*; do
+        case "$(basename "$f")" in
+          eop2v1czep11|eopczep11|sa2v1czep11|*.sh) ;;
+          *) mv "$f" $out/eobcanka/SpravceKarty/ ;;
+        esac
+      done
+      for f in opt/eObcanka/Identifikace/*; do
+        case "$(basename "$f")" in
+          eop2v1czep11|eopczep11|sa2v1czep11|*.sh) ;;
+          *) mv "$f" $out/eobcanka/Identifikace/ ;;
+        esac
+      done
+      # Any top-level files directly in opt/eObcanka/ (e.g. version file)
+      for f in opt/eObcanka/*; do
+        [ -f "$f" ] && mv "$f" $out/eobcanka/
       done
 
-      # Additional libs only present in opt/eObcanka/lib/ (not in x86_64-linux-gnu/).
-      for extra in opt/eObcanka/lib/libcmprovp11.so opt/eObcanka/lib/libcryptoui.so; do
-        [ -e "$extra" ] && mv "$extra" $out/lib/
-      done
-
-      # .sig files – app checks /usr/local/etc/crplus/sigs/x64 first, then /usr/lib64.
-      # Serve them from /usr/lib64 (the FHS fallback) via $out/lib/.
-      mv usr/local/etc/crplus/sigs/x64/* $out/lib/
-
-      # .cfg files tell libeopproxyp11.so which P11 modules to load.
-      # Patch the hardcoded /usr/lib/x86_64-linux-gnu/ prefix → /usr/lib64/
-      # so modules are found via the FHS symlink inside the sandbox.
+      # .cfg files – patch module paths to /usr/lib64/ for the FHS symlink.
       for f in usr/local/etc/crplus/*.cfg; do
         sed 's|/usr/lib/x86_64-linux-gnu/|/usr/lib64/|g' "$f" \
           > "$out/local/etc/crplus/$(basename "$f")"
       done
 
-      # Binaries + sibling files (eopcardman.sig, JSON configs)
-      mv opt/eObcanka/SpravceKarty/* $out/bin/
-      mv opt/eObcanka/Identifikace/* $out/bin/
-      rm $out/bin/*.sh
-
       mv usr/share/* $out/share/
-    '';
-
-    # autoPatchelfHook modifies every ELF file it finds, including the P11 modules
-    # and pin providers. The app verifies those files against .sig RSA signature
-    # files at startup, so their on-disk bytes must be identical to the originals.
-    # Re-extract the signed files from the .deb after autoPatchelf has finished.
-    postFixup = ''
-      tmpdir=$(mktemp -d)
-      dpkg -x $src "$tmpdir"
-
-      # Restore versioned P11 .so files (symlinks were not patched, only the
-      # versioned targets; overwriting the targets restores valid signatures).
-      for pat in libeopproxyp11 libeop2v1czep11 libeopczep11 libsa2v1czep11; do
-        for f in "$tmpdir"/usr/lib/x86_64-linux-gnu/$pat.so.*; do
-          [ -f "$f" ] && cp "$f" $out/lib/
-        done
-      done
-      [ -f "$tmpdir/opt/eObcanka/lib/libcmprovp11.so" ] && \
-        cp "$tmpdir/opt/eObcanka/lib/libcmprovp11.so" $out/lib/
-
-      # Restore pin provider executables
-      for bin in eop2v1czep11 eopczep11 sa2v1czep11; do
-        for dir in "$tmpdir/opt/eObcanka/SpravceKarty" "$tmpdir/opt/eObcanka/Identifikace"; do
-          [ -f "$dir/$bin" ] && cp "$dir/$bin" "$out/bin/$bin"
-        done
-      done
-
-      rm -rf "$tmpdir"
     '';
 
     dontWrapQtApps = true;
@@ -130,6 +156,7 @@ buildFHSEnv {
 
   targetPkgs = _: [
     inner
+    p11modules
     pcsclite
     qt6.qtbase
     qt6.qtdeclarative
@@ -155,11 +182,30 @@ buildFHSEnv {
     export QML2_IMPORT_PATH="/usr/lib/qt-6/qml"
   '';
 
-  runScript = "${inner}/bin/eopcardman";
+  # Bind-mount the eobcanka binaries at their hardcoded installRoot so the
+  # version file, AppSettings.json, and other sibling-file lookups work.
+  # bwrap's --dir creates /opt and /opt/eObcanka in the sandbox namespace.
+  extraBwrapArgs = [
+    "--dir" "/opt/eObcanka"
+    "--ro-bind" "${inner}/eobcanka" "/opt/eObcanka"
+  ];
+
+  # Dispatch to the correct binary using its in-FHS path so argv[0]-derived
+  # paths (sysProfilePath) also resolve to /opt/eObcanka/... at runtime.
+  runScript = writeShellScript "eobcanka-run" ''
+    if [ "''${EOP_APP:-}" = "eopauthapp" ]; then
+      exec /opt/eObcanka/Identifikace/eopauthapp "$@"
+    else
+      exec /opt/eObcanka/SpravceKarty/eopcardman "$@"
+    fi
+  '';
 
   extraInstallCommands = ''
-    # Also expose eopauthapp
-    ln -s $out/bin/eopcardman $out/bin/eopauthapp
+    # eopauthapp wrapper: sets EOP_APP before entering the bwrap sandbox so
+    # runScript knows which binary to launch. bwrap inherits the env var.
+    printf '#!/bin/sh\nexec env EOP_APP=eopauthapp %s "$@"\n' \
+      "$out/bin/eopcardman" > $out/bin/eopauthapp
+    chmod +x $out/bin/eopauthapp
   '';
 
   meta = with lib; {

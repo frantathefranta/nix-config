@@ -1,0 +1,13 @@
+set dns_server {
+  type ipv6_addr
+  elements = { 2600:1702:6630:3fef:10:33:10:0 }
+}
+
+set trusted_devices {
+  type ipv6_addr
+  flags interval
+  auto-merge
+  elements = {
+    2600:1702:6630:3fed:f0f5:d796:6d74:593e
+  }
+}

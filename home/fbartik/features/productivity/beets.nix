@@ -40,7 +40,12 @@ let
         };
       };
     }
-  );
+  ).overrideAttrs {
+    # lap 0.5.13 uses the old numpy C API incompatible with numpy 2.x,
+    # causing installCheckPhase to fail when beet is imported.
+    # The vanilla build is validated by Hydra so skipping this is safe.
+    doInstallCheck = false;
+  };
   secret = config.sops.secrets;
 
 in

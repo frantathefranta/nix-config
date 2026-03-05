@@ -95,7 +95,7 @@ in
           "
           ) bgp.sessions
         )
-        + bgp.extraConfig;
+        + builtins.readFile ./peers/bird-extra.conf;
     };
   };
 

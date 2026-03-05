@@ -101,7 +101,7 @@ in
           "
           ) bgp.sessions
         )
-        + bgp.extraConfig;
+        + builtins.readFile ./peers/bird-extra.conf;
     };
     # prometheus.exporters.bird = {
     #   enable = true;

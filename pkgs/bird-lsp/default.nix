@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     typescript
   ];
 
-  pnpmWorkspaces = [ "@birdcc/lsp" ];
+  # pnpmWorkspaces = [ "@birdcc/lsp" ];
   pnpmDeps = fetchPnpmDeps {
-    # inherit (finalAttrs) pname version src;
-    inherit (finalAttrs) pnpmWorkspaces pname version src;
+    inherit (finalAttrs) pname version src;
+    # inherit (finalAttrs) pnpmWorkspaces pname version src;
     fetcherVersion = 3;
     pnpm = pnpm_10;
     hash = "sha256-G6HmzS8cgmfcYyd5FbD1V6l5E+/eL/y6uA9x8yTGd7Q=";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm -r --filter=@birdcc/lsp... --parallel build
+    pnpm --filter=@birdcc/cli... build
     # pnpm --filter='!intel' --filter='!vscode' --filter='!dprint-plugin-bird' build
 
     runHook postBuild
@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cp -r dist $out
+    # mkdir -p $out/{bin,lib/bird-lsp}
+    # cp -r {packages,node_modules} $out/lib/bird-lsp
+    # ln -s $out/lib/bird-lsp/packages/server/bin/vtsls.js $out/bin/vtsls
 
     runHook postInstall
   '';

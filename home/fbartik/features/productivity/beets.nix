@@ -13,7 +13,7 @@ let
     ID=$(systemctl show --value -p InvocationID $SERVICE)
     ${pkgs.systemdMinimal}/bin/journalctl -q _SYSTEMD_INVOCATION_ID=$ID
   '';
-  python = pkgs.unstable.python3Packages;
+  python = pkgs.unstable.python3.pkgs;
   beets = (
     python.beets.override {
       pluginOverrides = {
@@ -22,8 +22,8 @@ let
           enable = true;
           propagatedBuildInputs = [ python.beetcamp ];
         };
-        convert.disable = true;
-        replaygain.disable = true;
+        convert.enable = false;
+        replaygain.enable = false;
         deezer.enable = true;
         discogs.enable = true;
         duplicates.enable = true;

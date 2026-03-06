@@ -160,6 +160,7 @@ in
       nil
       nixd # Nix LSP
       claude-code-acp # agent-shell
+      bird-lsp
       mu.mu4e # Mail
       python3Minimal
       emacs-lsp-booster

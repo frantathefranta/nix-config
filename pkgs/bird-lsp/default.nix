@@ -12,13 +12,13 @@
   makeWrapper,
 }:
 let
-  version = "0.0.1-0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "bird-chinese-community";
     repo = "BIRD-LSP";
     tag = "v${version}";
-    hash = "sha256-yRASbGIqjOi0qxIJjSP4PIIhbDSAmHsuDbF/6Se3/gA=";
+    hash = "sha256-1wVxRCgNrhG1zPK9iswOVylDOLK73zTPZ9ia/vgtjnI=";
   };
 
   # Build the dprint BIRD formatter plugin as wasm32-unknown-unknown.
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     inherit version src;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-G6HmzS8cgmfcYyd5FbD1V6l5E+/eL/y6uA9x8yTGd7Q=";
+    hash = "sha256-CcLRymDxvPLUQUWjTDCEkci+aCWAKboIBrTyDM/1nYI=";
   };
 
   postPatch = ''

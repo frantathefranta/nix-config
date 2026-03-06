@@ -18,7 +18,7 @@ let
     owner = "bird-chinese-community";
     repo = "BIRD-LSP";
     tag = "v${version}";
-    hash = "sha256-DrA+Olc++aRJkFTytxONN7kR+baOnw/7yKyET2s87fU=";
+    hash = "sha256-yRASbGIqjOi0qxIJjSP4PIIhbDSAmHsuDbF/6Se3/gA=";
   };
 
   # Build the dprint BIRD formatter plugin as wasm32-unknown-unknown.

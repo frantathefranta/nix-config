@@ -7,7 +7,9 @@
   pnpmConfigHook,
   typescript,
   stdenv,
-  pkgsCross,
+  rustPlatform,
+  lld,
+  makeWrapper,
 }:
 let
   version = "0.0.1-0";
@@ -20,10 +22,10 @@ let
   };
 
   # Build the dprint BIRD formatter plugin as wasm32-unknown-unknown.
-  # Use pkgsCross.wasi32 to pass nixpkgs platform checks (wasm32-wasi is a known
-  # platform), but override CARGO_BUILD_TARGET to wasm32-unknown-unknown so the
-  # code compiles correctly — the wasm_plugin module is gated on target_os = "unknown".
-  dprintPluginBirdWasm = pkgsCross.wasi32.rustPlatform.buildRustPackage {
+  # Use the host rustPlatform (no pkgsCross) and simply override CARGO_BUILD_TARGET.
+  # This avoids pkgsCross trying to build rustc from source with WASI SDK etc.
+  # Requires nixpkgs' rustc to include the wasm32-unknown-unknown stdlib.
+  dprintPluginBirdWasm = rustPlatform.buildRustPackage {
     pname = "dprint-plugin-bird-wasm";
     version = "0.0.1";
 
@@ -33,9 +35,14 @@ let
       lockFile = "${src}/packages/@birdcc/dprint-plugin-bird/Cargo.lock";
     };
 
-    buildFeatures = [ "wasm" ];
-    CARGO_BUILD_TARGET = "wasm32-unknown-unknown";
+    nativeBuildInputs = [ lld ];
     doCheck = false;
+
+    buildPhase = ''
+      runHook preBuild
+      cargo build --release --target wasm32-unknown-unknown --features wasm
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -58,6 +65,7 @@ stdenv.mkDerivation {
     pnpmConfigHook
     pnpm_10
     typescript
+    makeWrapper
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -94,7 +102,11 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    cp -r dist $out
+    mkdir -p $out/{bin,lib/birdcc}
+    cp -r {packages,node_modules} $out/lib/birdcc
+
+    makeWrapper ${nodejs}/bin/node $out/bin/birdcc \
+      --add-flags "$out/lib/birdcc/packages/@birdcc/cli/dist/cli.js"
 
     runHook postInstall
   '';

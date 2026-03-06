@@ -48,12 +48,7 @@ jobs:
       - name: Run Flake Check
         id: flake_check
         run: |
-          # installer-iso intentionally omits fileSystems/bootloader/user config
-          # (installation-cd-minimal.nix is commented out), so nix flake check
-          # would fail its assertions. Check each nixosConfiguration individually.
-          nix flake show --json \
-            | jq -r '.nixosConfigurations | keys[] | select(. != "installer-iso")' \
-            | xargs -I{} sh -c 'echo "Checking {}..." && nix eval .#nixosConfigurations.{}.config.system.build.toplevel > /dev/null'
+          nix flake check
 
   generate-matrix:
     name: Generate Build Matrix

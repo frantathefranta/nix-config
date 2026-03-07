@@ -22,6 +22,7 @@
   xorg,
   xcb-util-cursor,
   libdrm,
+  adwaita-icon-theme,
   ...
 }:
 
@@ -96,6 +97,7 @@ let
       xorg.xcbutilimage
       xcb-util-cursor
       libdrm
+      qt6.qtsvg
     ];
 
     # The FHS env provides all libs at runtime; allow autoPatchelf to skip
@@ -133,9 +135,13 @@ let
           *) mv "$f" $out/eobcanka/Identifikace/ ;;
         esac
       done
-      # Any top-level files directly in opt/eObcanka/ (e.g. version file)
+      # Any remaining contents of opt/eObcanka/ not already handled above
+      # (top-level files, shared icons/, resources/, translations/ dirs, etc.)
       for f in opt/eObcanka/*; do
-        [ -f "$f" ] && mv "$f" $out/eobcanka/
+        case "$(basename "$f")" in
+          SpravceKarty|Identifikace|lib) ;;
+          *) mv "$f" $out/eobcanka/ ;;
+        esac
       done
 
       # .cfg files – patch module paths to /usr/lib64/ for the FHS symlink.
@@ -174,12 +180,15 @@ buildFHSEnv {
     xorg.xcbutilimage
     xcb-util-cursor
     libdrm
+    adwaita-icon-theme
+    qt6.qtsvg
   ];
 
   # Sourced before runScript – sets Qt plugin paths using the FHS /usr/lib tree.
   profile = ''
     export QT_PLUGIN_PATH="/usr/lib/qt-6/plugins"
     export QML2_IMPORT_PATH="/usr/lib/qt-6/qml"
+    export XDG_DATA_DIRS="/usr/share:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
   '';
 
   # Bind-mount the eobcanka binaries at their hardcoded installRoot so the

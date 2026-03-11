@@ -63,6 +63,7 @@
     krew
     kubecolor
     kubectl
+    kubectl-passman
     kubernetes-helm
     kustomize
     stern # Logs
@@ -71,7 +72,6 @@
     interactiveShellInit = /* fish */ 
       ''
         set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
-        set -x KUBECONFIG ${config.sops.secrets.kubeconfig.path}
       '';
     shellAbbrs = {
       k = {
@@ -91,8 +91,5 @@
         expansion = "kubectl get";
       };
     };
-  };
-  sops.secrets.kubeconfig = {
-    sopsFile = ../../secrets.yml;
   };
 }

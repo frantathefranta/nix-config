@@ -18,7 +18,7 @@ in
     };
     bird = {
       enable = true;
-      checkConfig = false;
+      checkConfig = true;
       config =
         builtins.readFile ./bird.conf
         + lib.concatStrings (

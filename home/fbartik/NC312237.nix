@@ -9,11 +9,13 @@
   imports = [
     ./global
     ./features/editor
+    ./features/kubectl
     ./features/desktop/common/mail.nix
     ./features/productivity/claude-code.nix
   ];
   home.packages = with pkgs; [
     symbola
+    d2
   ];
   programs.nh = {
     clean = {

@@ -1,6 +1,11 @@
 ## Inspiration
 [Misterio77/nix-config](https://github.com/Misterio77/nix-config) - file structure
 
+--image-variant iso-installer .#installer-iso --hostname installer-iso## Building an installer ISO
+`nh` has added a way to replicate `nixos-rebuild build-image` functionality
+``` shell
+nix run github:nix-community/nh -- os build-image --image-variant iso-installer .#installer-iso --hostname installer-iso
+```
 ## New server bootstrap
 ### Server-side
 1. Boot it up with NixOS (ideally with a modified liveCD so SSH already works). If SSH isn't set up, get a video/serial output from the server and set a password for the nixos user.
@@ -37,8 +42,3 @@ nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nix
 ```
 
 
-## Building an installer ISO
-`nh` has added a way to replicate `nixos-rebuild build-image` functionality
-``` shell
-nix run github:nix-community/nh -- os build-image --image-variant iso-installer .#installer-iso --hostname installer-iso
-```

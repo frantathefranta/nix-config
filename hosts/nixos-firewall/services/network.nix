@@ -111,11 +111,13 @@
       "30-eth6" = {
         matchConfig.Name = "eth6";
         networkConfig = {
-          IPv6AcceptRA = true;
+          IPv6AcceptRA = false;
+          IPv6PrivacyExtensions = false;
           VRF = "mgmt";
         };
         addresses = [
           { Address = "10.32.10.230/24"; }
+          { Address = "2600:1702:6630:3fed:10:32:10:230/64"; }
         ];
       };
 

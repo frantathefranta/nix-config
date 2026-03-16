@@ -160,6 +160,7 @@ chain ZONE_TO_WAN {
 chain ZONE_FROM_LOCAL {
   oifname "lo" counter return
   oifname "mgmt" counter return
+  oifname "eth6" counter return
   oifname "lan0" counter jump LOCAL-LAN0
   oifname "lan0" counter return
   oifname "lan0.20" counter jump LOCAL-HOME

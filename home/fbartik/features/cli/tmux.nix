@@ -2,6 +2,7 @@
 {
   programs.tmux = {
     enable = true;
+    shell = "${pkgs.fish}/bin/fish";
     plugins = with pkgs.tmuxPlugins; [
       sensible
       {

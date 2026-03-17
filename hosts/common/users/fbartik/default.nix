@@ -26,6 +26,7 @@ in
       "incus-admin"
       "network"
       "plugdev"
+      "pdns" # PowerDNS group
       "video"
       "wheel"
       "_lldp"
@@ -50,4 +51,5 @@ in
     rssh.enable = true;
     services.sudo.rssh = true;
   };
+  security.sudo.wheelNeedsPassword = lib.mkDefault false;
 }

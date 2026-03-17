@@ -273,5 +273,8 @@ in
   services.prometheus.exporters.node = {
     listenAddress = "10.32.10.11";
   };
+
+  security.sudo.wheelNeedsPassword = true;
+
   system.stateVersion = "24.11";
 }

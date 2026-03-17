@@ -22,7 +22,7 @@ in
   services.powerdns = {
     enable = true;
     extraConfig = ''
-      local-address=10.0.10.1:53,10.32.10.230:53,[2600:1702:6630:3fed:10:32:10:230]:53 # TODO: Add lan0 IPv6 address
+      local-address=10.0.10.1:53 # TODO: Add lan0 IPv6 address
       launch=gsqlite3
       gsqlite3-database=${directory}/pdns.sqlite3
       dnsupdate=yes
@@ -58,8 +58,20 @@ in
 
         cmd=${pkgs.pdns}/bin/pdnsutil
 
+        add_record_if_missing() {
+          local zone="$1" name="$2" type="$3" content="$4"
+          if $cmd list-zone "$zone" 2>/dev/null | grep -qF "$content"; then
+            echo "INIT: record $name $type $content already exists, skipping"
+          else
+            $cmd add-record "$zone" "$name" "$type" "$content"
+          fi
+        }
+
         $cmd create-zone franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
+        add_record_if_missing franta.us. ns1 A 10.0.10.1
+        add_record_if_missing 10.in-addr.arpa. @ NS 1.10.0.10.in-addr.arpa.
+        add_record_if_missing franta.us. @ NS ns1.franta.us.
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

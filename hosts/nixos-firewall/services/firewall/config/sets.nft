@@ -1,6 +1,6 @@
 set dns_server {
   type ipv4_addr
-  elements = { 10.33.10.0 }
+  elements = { 10.0.10.1 }
 }
 
 set trusted_devices {

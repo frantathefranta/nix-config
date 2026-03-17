@@ -1,0 +1,16 @@
+#+title: Readme
+* NFT quirks
+Throwing a VRF into the mix, it seems that this is the path a packet takes when arriving on an interface inside a VRF:
+
+**  Ingress (INPUT hook):
+  1. Packet arrives on ~eth6~
+  2. The VRF driver intercepts it and re-injects it through the VRF master device (~mgmt~)
+  3. By the time the netfilter INPUT hook fires, ~iifname = "mgmt"~
+  4. ~eth6~ is never seen by nftables on ingress
+
+** Egress (OUTPUT hook):
+  1. Kernel generates a packet (e.g. the NA response)
+  2. Route lookup in the VRF routing table resolves the egress interface to eth6 (the actual physical interface)
+  3. Netfilter OUTPUT hook fires before any VRF re-processing, with ~oifname = "eth6"~
+  4. The VRF master (~mgmt~) is never seen by nftables on egress
+

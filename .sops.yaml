@@ -45,7 +45,10 @@ creation_rules:
     key_groups:
       - age:
           - *franta
+          - *NC312237
           - *nixos-firewall
+        pgp:
+          - *franta-gpg
   - path_regex: hosts/nix-bastion/secrets.ya?ml$
     key_groups:
       - age:

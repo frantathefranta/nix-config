@@ -1,3 +1,4 @@
+{ lib, ... }:
 let
   lo_ipv6 = "2600:1702:6630:3fec::10:11";
   dn42_ipv6 = "fdb7:c21f:f30f:10::11";
@@ -274,7 +275,7 @@ in
     listenAddress = "10.32.10.11";
   };
 
-  security.sudo.wheelNeedsPassword = true;
+  security.sudo.wheelNeedsPassword = lib.mkForce true;
 
   system.stateVersion = "24.11";
 }

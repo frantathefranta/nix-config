@@ -15,7 +15,6 @@
     ../common/users/fbartik
     ../common/roles/server.nix
 
-    ../common/optional/dn42.nix
     ../common/optional/smartd.nix
     ../common/optional/fwupd.nix
   ];

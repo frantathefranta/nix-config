@@ -68,6 +68,8 @@ in
         }
 
         $cmd create-zone franta.us. || true
+        $cmd create-zone wifi.franta.us. || true
+        $cmd create-zone iot.franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
         add_record_if_missing franta.us. ns1 A 10.0.10.1
         add_record_if_missing 10.in-addr.arpa. @ NS 1.10.0.10.in-addr.arpa.
@@ -75,6 +77,8 @@ in
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea
+        $cmd set-meta wifi.franta.us. TSIG-ALLOW-DNSUPDATE kea
+        $cmd set-meta iot.franta.us. TSIG-ALLOW-DNSUPDATE kea
         $cmd set-meta 10.in-addr.arpa. TSIG-ALLOW-DNSUPDATE kea
       ''
     );

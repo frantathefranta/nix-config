@@ -4,7 +4,7 @@
     ./lldpd.nix
     ./firewall
     ./powerdns.nix
-    # TODO: ./dhcp.nix # https://github.com/budimanjojo/nix-config/blob/main/system/hosts/budimanjojo-firewall/_modules/services/kea/default.nix
+    ./dhcp.nix # https://github.com/budimanjojo/nix-config/blob/main/system/hosts/budimanjojo-firewall/_modules/services/kea/default.nix
     # TODO: ./radvd.nix
     # TODO: ./ntp.nix
     # TODO: ./routing.nix

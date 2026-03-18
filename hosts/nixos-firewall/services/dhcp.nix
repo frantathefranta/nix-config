@@ -19,6 +19,7 @@ let
   keaddnsUser = "kea";
 in
 {
+  services.resolved.enable = false;
   services.kea.dhcp4 = {
     enable = true;
     settings = {
@@ -143,7 +144,7 @@ in
           pdnsServer = [
             {
               ip-address = "10.0.10.1";
-              port = 53;
+              port = 8853;
             }
           ];
         in

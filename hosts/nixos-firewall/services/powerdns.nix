@@ -22,7 +22,7 @@ in
   services.powerdns = {
     enable = true;
     extraConfig = ''
-      local-address=10.0.10.1:53 # TODO: Add lan0 IPv6 address
+      local-address=10.0.10.1:8853 # TODO: Add lan0 IPv6 address
       launch=gsqlite3
       gsqlite3-database=${directory}/pdns.sqlite3
       dnsupdate=yes
@@ -32,6 +32,19 @@ in
     secretFile = config.sops.secrets."powerdns/env".path;
   };
 
+  services.pdns-recursor = {
+    enable = true;
+    # TODO: This doesn't work, specifying more than one IP crashes the daemon
+    forwardZonesRecurse = {
+      "." = "1.1.1.1;1.0.0.1";
+    };
+    forwardZones = {
+      "franta.us" = "10.0.10.1:8853";
+      "wifi.franta.us" = "10.0.10.1:8853";
+      "iot.franta.us" = "10.0.10.1:8853";
+      "10.in-addr.arpa" = "10.0.10.1:8853";
+    };
+  };
   systemd.services.pdns.serviceConfig = {
     # powerdns doesn't create the sqlite database for us
     # so we gotta either do it manually one-off or do the below to ensure it's created

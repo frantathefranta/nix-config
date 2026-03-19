@@ -36,7 +36,7 @@ in
     enable = true;
     # TODO: This doesn't work, specifying more than one IP crashes the daemon
     forwardZonesRecurse = {
-      "." = "1.1.1.1;1.0.0.1";
+      "." = "1.1.1.1";
     };
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";

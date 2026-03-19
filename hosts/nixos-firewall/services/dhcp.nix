@@ -19,6 +19,7 @@ let
   keaddnsUser = "kea";
 in
 {
+  services.resolved.enable = false;
   services.kea.dhcp4 = {
     enable = true;
     settings = {
@@ -27,6 +28,7 @@ in
           "lan0"
           "lan0.20"
           "lan0.50"
+          "lan0.920"
         ];
       };
       subnet4 = [
@@ -110,6 +112,30 @@ in
           }
           // leaseOption
         )
+        (
+          {
+            id = 4;
+            interface = "lan0.920";
+            subnet = "10.9.20.0/24";
+            pools = [ { pool = "10.9.20.50 - 10.9.20.199"; } ];
+            ddns-qualifying-suffix = "iot.franta.us";
+            option-data = [
+              {
+                name = "routers";
+                data = "10.0.10.1";
+              }
+            {
+              name = "domain-name";
+              data = "iot.franta.us";
+            }
+            {
+              name = "domain-search";
+              data = "iot.franta.us";
+            }
+            ] ++ commonDhcpOptions;
+          }
+          // leaseOption
+        )
       ];
     };
   };
@@ -143,7 +169,7 @@ in
           pdnsServer = [
             {
               ip-address = "10.0.10.1";
-              port = 53;
+              port = 8853;
             }
           ];
         in

@@ -78,6 +78,14 @@
         };
         vlanConfig.Id = 50;
       };
+      "20-lan0.920" = {
+        netdevConfig = {
+          Name = "lan0.920";
+          Description = "test";
+          Kind = "vlan";
+        };
+        vlanConfig.Id = 920;
+      };
     };
     networks = {
       # Disabled interfaces
@@ -131,6 +139,7 @@
         vlan = [
           "lan0.20" # WIFI
           "lan0.50" # IOT
+          "lan0.920" # test
           # "lan0.200" # SERVER
           # "lan0.250" # GUEST
         ];
@@ -152,6 +161,13 @@
         networkConfig.ConfigureWithoutCarrier = "yes";
         linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
         # linkConfig.RequiredForOnline = "routable";
+      };
+
+      "30-lan0.920" = {
+        matchConfig.Name = "lan0.920";
+        address = [ "10.9.20.1/24" ];
+        # linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
+        linkConfig.RequiredForOnline = "routable";
       };
     };
   };

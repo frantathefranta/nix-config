@@ -66,7 +66,7 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.0.20.1";
               }
             {
               name = "domain-name";
@@ -90,7 +90,7 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.0.50.1";
               }
             {
               name = "domain-name";
@@ -122,7 +122,7 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.9.20.1";
               }
             {
               name = "domain-name";

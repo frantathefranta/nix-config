@@ -17,21 +17,12 @@ let
   beets = (
     python.beets.override {
       pluginOverrides = {
-        badfiles.enable = true;
         beetcamp = {
           enable = true;
           propagatedBuildInputs = [ python.beetcamp ];
         };
-        convert.disable = true;
-        replaygain.disable = true;
-        deezer.enable = true;
-        discogs.enable = true;
-        duplicates.enable = true;
-        edit.enable = true;
-        embedart.enable = true;
-        fetchart.enable = true;
-        fish.enable = true;
-        plexupdate.enable = true;
+        convert.enable = false;
+        replaygain.enable = false;
         originquery = {
           enable = true;
           propagatedBuildInputs = [

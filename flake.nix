@@ -19,6 +19,10 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
+    # Pinned nixpkgs for beets — update independently from the rest when lap/numpy are compatible again
+    # To update: nix flake lock --update-input nixpkgs-beets
+    nixpkgs-beets.url = "github:nixos/nixpkgs/nixos-unstable";
+
     systems.url = "github:nix-systems/default";
     hardware.url = "github:nixos/nixos-hardware";
     srvos.url = "github:nix-community/srvos";

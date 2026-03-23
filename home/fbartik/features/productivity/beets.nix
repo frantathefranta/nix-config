@@ -13,25 +13,7 @@ let
     ID=$(systemctl show --value -p InvocationID $SERVICE)
     ${pkgs.systemdMinimal}/bin/journalctl -q _SYSTEMD_INVOCATION_ID=$ID
   '';
-  python = pkgs.unstable.python3.pkgs;
-  beets = (
-    python.beets.override {
-      pluginOverrides = {
-        beetcamp = {
-          enable = true;
-          propagatedBuildInputs = [ python.beetcamp ];
-        };
-        convert.enable = false;
-        replaygain.enable = false;
-        originquery = {
-          enable = true;
-          propagatedBuildInputs = [
-            (python.callPackage ../../../../pkgs/beets-originquery { })
-          ];
-        };
-      };
-    }
-  );
+  beets = pkgs.beets-nixpkgs.beets;
   secret = config.sops.secrets;
 
 in

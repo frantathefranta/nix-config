@@ -34,4 +34,12 @@
       config.allowUnfree = true;
     };
   };
+
+  # Pinned nixpkgs for beets, accessible through 'pkgs.beets-nixpkgs'
+  beets-nixpkgs = final: _prev: {
+    beets-nixpkgs = import inputs.nixpkgs-beets {
+      system = final.stdenv.hostPlatform.system;
+      config.allowUnfree = true;
+    };
+  };
 }

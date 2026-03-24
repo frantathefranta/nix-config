@@ -91,7 +91,12 @@ in
       ];
     };
   };
-
+  users.groups = {
+    media = {
+      gid = 1003;
+      members = [ "fbartik" ];
+    };
+  };
   systemd.network.enable = true;
   systemd.network.netdevs."10-dummy42" = {
     netdevConfig = {

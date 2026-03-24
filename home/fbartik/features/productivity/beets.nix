@@ -36,6 +36,9 @@ let
 
 in
 {
+  home.packages = with pkgs; [
+    unstable.wrtag
+  ];
   programs.beets = {
     enable = true;
     package = beets;

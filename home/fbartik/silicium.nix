@@ -11,6 +11,7 @@
   home.packages = with pkgs; [
     wpa_supplicant_gui
     winbox4
+    varroa
   ];
   programs.ssh = {
     enable = true;

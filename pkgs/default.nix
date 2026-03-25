@@ -15,6 +15,7 @@ rec {
   bird-lsp = pkgs.callPackage ./bird-lsp {  };
   kubectl-passman = pkgs.callPackage ./kubectl-passman {};
   wrtag-dev = pkgs.callPackage ./wrtag-dev {  };
+  varroa = pkgs.callPackage ./varroa {  };
   # rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

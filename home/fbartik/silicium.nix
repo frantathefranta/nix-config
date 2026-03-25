@@ -7,6 +7,7 @@
     ./features/editor
     ./features/desktop/common
     ./features/productivity/claude-code.nix
+    ./features/productivity/rclone-music.nix
   ];
   home.packages = with pkgs; [
     wpa_supplicant_gui

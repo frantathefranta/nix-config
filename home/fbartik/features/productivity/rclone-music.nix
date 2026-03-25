@@ -1,25 +1,29 @@
-{ pkgs, config, ... }:
+{ config, lib, ... }:
 {
-  home.packages = [ pkgs.rclone ];
-
-  xdg.configFile."rclone/rclone-sftp.conf".text = ''
-    [franta-music]
-    type = sftp
-    host = ssh.franta.dev
-    key_use_agent = true
-  '';
-
-  systemd.user.services.rclone-music = {
-    Unit = {
-      Description = "rclone SFTP mount ssh.franta.dev:/music";
-      After = [ "network-online.target" ];
+  programs.rclone = {
+    enable = true;
+    remotes.franta-music = {
+      config = {
+        type = "sftp";
+        host = "ssh.franta.dev";
+        key_use_agent = true;
+      };
+      mounts."/music" = {
+        enable = true;
+        mountPoint = "${config.home.homeDirectory}/Music";
+        options.vfs-cache-mode = "minimal";
+      };
     };
-    Service = {
-      Type = "notify";
-      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p %h/Music";
-      ExecStart = "${pkgs.rclone}/bin/rclone mount --config=%h/.config/rclone/rclone-sftp.conf franta-music:/music %h/Music --vfs-cache-mode minimal --temp-dir=/tmp";
-      ExecStop = "${pkgs.fuse3}/bin/fusermount3 -u %h/Music";
-      Environment = "SSH_AUTH_SOCK=%h/.1password/agent.sock";
-    };
+  };
+
+  # The module hardcodes WantedBy = [ "default.target" ] with no opt-out,
+  # and has no way to inject SSH_AUTH_SOCK. Override both here.
+  # Service name is derived from: rclone-mount:<slashes-as-dots in path>@<remote>
+  systemd.user.services."rclone-mount:.music@franta-music" = {
+    Service.Environment = lib.mkForce [
+      "PATH=/run/wrappers/bin"
+      "SSH_AUTH_SOCK=%h/.1password/agent.sock"
+    ];
+    Install.WantedBy = lib.mkForce [ ];
   };
 }

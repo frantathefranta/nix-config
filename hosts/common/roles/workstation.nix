@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ../optional/1password.nix
@@ -21,6 +21,13 @@
   security.tpm2.pkcs11.enable = true; # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
   security.tpm2.tctiEnvironment.enable = true; # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
   users.users.fbartik.extraGroups = [ "tss" ]; # tss group has access to TPM devices
+
+  # https://blog.wrouesnel.com/posts/tpm-secured-gpg-keys/
+  environment.etc."pkcs11/modules/tpm2_pkcs11".text = ''
+    module: ${pkgs.tpm2-pkcs11}/lib/libtpm2_pkcs11.so
+    critical: yes
+  '';
+
   # Smart cards
   services.pcscd.enable = true;
   programs.yubikey-manager.enable = true;

@@ -13,6 +13,10 @@
     wpa_supplicant_gui
     winbox4
     varroa
+    # TPM tools
+    p11-kit
+    gnutls
+    tpm2-tools
   ];
   programs.ssh = {
     enable = true;

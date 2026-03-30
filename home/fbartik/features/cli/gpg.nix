@@ -12,12 +12,20 @@
     # enableSshSupport = true;
     # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
     enableExtraSocket = true;
+    enableScDaemon = true;
+    extraConfig = ''
+      scdaemon-program ${pkgs.gnupg-pkcs11-scd}/bin/gnupg-pkcs11-scd
+      allow-emacs-pinentry
+    '';
     pinentry.package =
-      if osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable
-      then pkgs.pinentry-qt
-      else if pkgs.stdenv.isDarwin
-      then pkgs.pinentry_mac
-      else pkgs.pinentry-tty;
+      if
+        osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable
+      then
+        pkgs.pinentry-qt
+      else if pkgs.stdenv.isDarwin then
+        pkgs.pinentry_mac
+      else
+        pkgs.pinentry-tty;
   };
   programs =
     let
@@ -47,4 +55,10 @@
         ];
       };
     };
+  home.file.".gnupg/gnupg-pkcs11-scd.conf" = {
+    text = ''
+      providers tpm
+      provider-tpm-library /run/current-system/sw/lib/libtpm2_pkcs11.so
+    '';
+  };
 }

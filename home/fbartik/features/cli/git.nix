@@ -2,9 +2,17 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 
+let
+  gpgKey =
+    if osConfig.networking.hostName == "silicium" then
+      "6476C19999AA5FD0220F03CD899EEBE51E1C696A"
+    else
+      "2FDD0DA7EA2674718E42055E128750E77EF037D4";
+in
 {
   programs.git = {
     enable = true;
@@ -28,7 +36,7 @@
         pushall = "!git remote | xargs -L1 git push --all";
         add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
       };
-      user.signing.key = "2FDD0DA7EA2674718E42055E128750E77EF037D4";
+      # user.signing.key = null;
       commit.gpgSign = lib.mkDefault true;
       gpg.program = "${config.programs.gpg.package}/bin/gpg2";
 

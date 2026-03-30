@@ -25,10 +25,10 @@
     };
     "50-wg4242420263" = {
       listenPort = 20263;
-      peerEndpoint = "de-fra1.flap42.eu:52026";
-      peerPublicKey = "d7ICCZTiZaYlf9ueUuPlVV1QdLWLobIlCiI9fxet+H4=";
-      peerAddressV6 = "fe80:4263::1:1a/128";
-      localAddressV6 = "fe80:4263::2:1a/128";
+      peerEndpoint = "fr-par1.flap42.eu:52029";
+      peerPublicKey = "/kwo9FiQRtgNyhMARTW9SvyvXIN7I7LfoICTytHjfA4=";
+      peerAddressV6 = "fe80::0263/128";
+      localAddressV6 = "fe80::1033/128";
       vrf = "dn42";
     };
     "50-wg4242422884" = {

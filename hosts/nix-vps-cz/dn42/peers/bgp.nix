@@ -25,9 +25,9 @@
     {
       multi = true;
       name = "dn42_flipflap";
-      neigh = "fe80:4263::1:1a%wg4242420263";
+      neigh = "fe80::0263%wg4242420263";
       as = "4242420263";
-      link = "2";
+      link = "3";
     }
     {
       multi = true;

@@ -71,13 +71,6 @@
     }
     {
       multi = true;
-      name = "dn42_flipflap";
-      neigh = "fe80:3263::1:16%wg4242420263";
-      as = "4242420263";
-      link = "3";
-    }
-    {
-      multi = true;
       name = "dn42_markround";
       neigh = "fe80::401%wg4242420401";
       as = "4242420401";

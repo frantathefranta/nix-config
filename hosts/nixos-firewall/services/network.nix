@@ -103,10 +103,20 @@
       # WAN0
       "30-wan0" = {
         matchConfig.Name = "wan0";
-        networkConfig.DHCP = "yes";
+        networkConfig = {
+          DHCP = "yes";
+          IPv6AcceptRA = true;
+          IPv6SendRA = false;
+        };
         linkConfig = {
+          MACAddress = "F8:9B:6E:42:02:D2";
           MTUBytes = "1500";
           RequiredForOnline = "routable";
+        };
+        dhcpV6Config = {
+          PrefixDelegationHint = "::/60";
+          # We don't want an IP from the ISP on this interface
+          # Assign = false;
         };
       };
       "30-mgmt" = {
@@ -133,7 +143,15 @@
       "30-lan0" = {
         matchConfig.Name = "lan0";
         address = [ "10.0.10.1/24" ];
-        networkConfig.ConfigureWithoutCarrier = "yes";
+        networkConfig = {
+          ConfigureWithoutCarrier = "yes";
+          DHCPPrefixDelegation = true;
+          IPv6AcceptRA = false;
+          IPv6SendRA = true;
+        };
+        dhcpPrefixDelegationConfig = {
+          SubnetId = 0;
+        };
         linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
         # linkConfig.RequiredForOnline = "carrier";
         vlan = [

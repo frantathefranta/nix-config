@@ -9,6 +9,7 @@
         key_use_agent = false;
         key_file = "${config.home.homeDirectory}/.ssh/local_sshkey";
         known_hosts_file = "${config.home.homeDirectory}/.ssh/known_hosts";
+        idle_timeout = 0;
       };
       mounts."/music" = {
         enable = true;

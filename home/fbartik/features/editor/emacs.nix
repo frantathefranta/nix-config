@@ -147,6 +147,8 @@ in
   services.emacs = {
     enable = true;
     defaultEditor = true;
+    client.enable = true;
+    package = emacs;
   };
   home.packages =
     with pkgs;

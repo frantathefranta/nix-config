@@ -70,7 +70,7 @@
     ospfd.enable = true;
     ospf6d.enable = true;
     config = ''
-      router bgp 65033
+      router bgp 65032
         bgp router-id 10.0.0.99
         bgp log-neighbor-changes
         no bgp ebgp-requires-policy
@@ -79,6 +79,12 @@
         no bgp network import-check
         neighbor eno1 arista01
         neighbor eno1 interface v6only remote-as 65033
+        address-family ipv4 unicast
+          network 10.0.0.99/32
+        exit-address-family
+        address-family ipv6 unicast
+          neighbor eno1 activate
+        exit-address-family
       ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
       route-map correct_src permit 1
         match ip address prefix-list loopbacks_ips

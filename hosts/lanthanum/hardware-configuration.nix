@@ -31,8 +31,8 @@
     extraModprobeConfig = ''
       options nvidia_modeset vblank_sem_control=0 nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp
     '';
-    # Need this package for my Bluetooth/WiFi
-    extraModulePackages = with config.boot.kernelPackages; [ rtl8852bu ];
+    # Used to need this package for my Bluetooth/WiFi, not anymore with Cachy kernel (I think)
+    # extraModulePackages = with config.boot.kernelPackages; [ rtl8852bu ];
     # clear /tmp on boot to get a stateless /tmp directory.
     tmp.cleanOnBoot = true;
     supportedFilesystems = [ "nfs" ];

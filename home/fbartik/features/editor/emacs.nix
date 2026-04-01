@@ -161,7 +161,7 @@ in
       sqlite
       nil
       nixd # Nix LSP
-      claude-agent-acp # agent-shell
+      unstable.claude-agent-acp # agent-shell
       bird-lsp
       mu.mu4e # Mail
       python3Minimal

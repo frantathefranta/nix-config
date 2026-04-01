@@ -13,10 +13,10 @@
     # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
     enableExtraSocket = true;
     enableScDaemon = true;
-    extraConfig = ''
+    extraConfig = (lib.mkIf (!pkgs.stdenv.isDarwin) ''
       scdaemon-program ${pkgs.gnupg-pkcs11-scd}/bin/gnupg-pkcs11-scd
       allow-emacs-pinentry
-    '';
+    '');
     pinentry.package =
       if
         osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable

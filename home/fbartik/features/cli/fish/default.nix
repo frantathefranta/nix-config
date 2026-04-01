@@ -80,6 +80,15 @@ in {
         bash -ic "source ${./get-bash-completions.sh}; get_completions '$cmd'"
       '';
     };
+    shellInit = lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
+      # Source Nix profile scripts for non-system fish on Darwin
+      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+        source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+      end
+      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+      end
+    '';
     interactiveShellInit = /* fish */ ''
       # Open command buffer in editor when alt+e is pressed
       bind \ee edit_command_buffer

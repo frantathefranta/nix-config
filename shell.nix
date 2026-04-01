@@ -8,7 +8,6 @@
     nativeBuildInputs =
       with pkgs;
       [
-        nix
         git
         sops
         ssh-to-age
@@ -17,6 +16,7 @@
       ]
       ++ lib.optionals stdenv.isLinux [
         home-manager
+        nix
       ];
   };
 }

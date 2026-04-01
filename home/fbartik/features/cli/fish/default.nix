@@ -88,6 +88,16 @@ in {
       if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
         source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
       end
+      # fish_user_paths (universal var) is prepended before inherited PATH on every shell start.
+      # In nested shells (tmux), this pushes entries like homebrew in front of the inherited nix
+      # paths, while the nix.fish guard (__ETC_PROFILE_NIX_SOURCED) prevents re-anchoring them.
+      # Unconditionally move nix paths to front to fix ordering in every shell.
+      fish_add_path --prepend --global --move /nix/var/nix/profiles/default/bin
+      if test -d $HOME/.local/state/nix/profile/bin
+        fish_add_path --prepend --global --move $HOME/.local/state/nix/profile/bin
+      else if test -d $HOME/.nix-profile/bin
+        fish_add_path --prepend --global --move $HOME/.nix-profile/bin
+      end
     '';
     interactiveShellInit = /* fish */ ''
       # Open command buffer in editor when alt+e is pressed

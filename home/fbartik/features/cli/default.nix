@@ -5,7 +5,7 @@
 
     ./atuin.nix
     ./fzf.nix
-    ./mise.nix
+    # ./mise.nix
     ./tmux.nix
     ./zoxide.nix
     # ./bash.nix

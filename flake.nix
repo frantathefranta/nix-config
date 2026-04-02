@@ -26,6 +26,7 @@
     snitch.url = "github:karol-broda/snitch";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
+    direnv-instant.url = "github:Mic92/direnv-instant";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
@@ -78,13 +79,16 @@
       inherit lib;
       # Your custom packages
       # Accessible through 'nix build', 'nix shell', etc
-      packages = forEachSystem (pkgs: import ./pkgs {
-        inherit pkgs;
-        pkgs-unstable = import inputs.nixpkgs-unstable {
-          inherit (pkgs) system;
-          config.allowUnfree = true;
-        };
-      });
+      packages = forEachSystem (
+        pkgs:
+        import ./pkgs {
+          inherit pkgs;
+          pkgs-unstable = import inputs.nixpkgs-unstable {
+            inherit (pkgs) system;
+            config.allowUnfree = true;
+          };
+        }
+      );
       formatter = forEachSystem (pkgs: pkgs.alejandra);
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 

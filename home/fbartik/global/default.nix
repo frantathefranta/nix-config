@@ -10,6 +10,7 @@
   imports = [
     inputs.sops-nix.homeManagerModules.sops
     inputs.snitch.homeManagerModules.snitch
+    inputs.direnv-instant.homeModules.direnv-instant
     #inputs.impermanence.nixosModules.home-manager.impermanence
     ../features/cli
   ]

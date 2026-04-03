@@ -1,0 +1,192 @@
+---
+name: Better Check and Build Flake Config # Tweaked from https://github.com/Rishabh5321/dotfiles/blob/main/.github/workflows/build.yml
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  EXTRA_NIX_CONFIG: |
+    auto-optimise-store = true
+    experimental-features = nix-command flakes
+    max-jobs = auto
+    download-buffer-size = 500000000
+    substituters = https://frantathefranta.cachix.org https://cache.nixos.org https://nix-community.cachix.org
+    trusted-public-keys = frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      specific_host:
+        description: "Build only a specific host (leave empty for all)"
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # These two jobs now run in parallel since they're independent
+  flake-checks:
+    name: Flake Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          extra-conf: |
+            fallback = true
+            http-connections = 128
+            max-substitution-jobs = 128
+            extra-platforms = aarch64-linux
+
+      - name: Run Flake Check
+        id: flake_check
+        run: |
+          nix flake check --accept-flake-config --all-systems
+
+  generate-matrix:
+    name: Generate Build Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          extra-conf: |
+            fallback = true
+            http-connections = 128
+            max-substitution-jobs = 128
+            extra-platforms = aarch64-linux
+      # - name: Install Nix
+      #   uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+      #   with:
+      #     nix_path: nixpkgs=channel:nixos-unstable
+      #     extra_nix_config: |
+      #       experimental-features = nix-command flakes
+
+      - name: Generate matrix from nixosConfigurations
+        id: set-matrix
+        run: |
+          ARCH_MAP=$(nix eval --json '.#nixosConfigurations' --apply 'cfgs: builtins.mapAttrs (name: cfg: cfg.pkgs.stdenv.hostPlatform.system) cfgs')
+          if [ -n "${{ github.event.inputs.specific_host }}" ]; then
+            # If a specific host was provided, only build that one
+            MATRIX=$(echo "$ARCH_MAP" | jq -c --arg host "${{ github.event.inputs.specific_host }}" '[to_entries[] | select(.key == $host) | {hostname: .key, system: .value}]')
+          else
+            # Otherwise build all hosts from the flake
+            MATRIX=$(echo "$ARCH_MAP" | jq -c '[to_entries[] | select(.key != "installer-iso") | {hostname: .key, system: .value}]')
+          fi
+          echo "matrix={\"include\":$MATRIX}" >> "$GITHUB_OUTPUT"
+
+  Build_Config:
+    name: Build ${{ matrix.hostname }}
+    needs: [flake-checks, generate-matrix]
+    runs-on: ubuntu-latest
+    timeout-minutes: 180 # Prevent hung builds
+    strategy:
+      fail-fast: true # Stop all matrix jobs if one fails
+      matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+    steps:
+      - name: Free Disk Space
+        uses: endersonmenezes/free-disk-space@7901478139cff6e9d44df5972fd8ab8fcade4db1 # v3.2.2
+        with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_tool_cache: true
+          remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+          remove_packages_one_command: true
+          remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
+
+      - name: Set up QEMU
+        if: matrix.system == 'aarch64-linux'
+        uses: docker/setup-qemu-action@v3
+
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          extra-conf: |
+            fallback = true
+            http-connections = 128
+            max-substitution-jobs = 128
+            extra-platforms = aarch64-linux
+            substituters = https://frantathefranta.cachix.org https://cache.nixos.org https://nix-community.cachix.org
+            trusted-public-keys = frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+        with:
+          use-flakehub: false
+
+      - name: Setup Cachix
+        uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
+        with:
+          name: frantathefranta
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Build NixOS configuration
+        id: build
+        run: |
+          echo "Starting Nix build for ${{ matrix.hostname }}..."
+
+          # Create a temporary file for capturing output
+          mkdir -p logs
+
+          # Run the build and capture output to both stdout and a file
+          start_time=$(date +%s)
+
+          cachix watch-exec frantathefranta -- \
+            nix build --accept-flake-config .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel \
+            -v --show-trace --out-link result-${{ matrix.hostname }} 2>&1 | tee logs/build_${{ matrix.hostname }}.log
+
+          BUILD_EXIT_CODE=${PIPESTATUS[0]}  # Get the exit code of nix build, not tee
+
+          end_time=$(date +%s)
+          build_duration=$((end_time - start_time))
+
+          echo "Build duration: $build_duration seconds"
+          echo "build_duration=$build_duration" >> $GITHUB_OUTPUT
+
+          # If build was successful, generate a system report
+          if [ $BUILD_EXIT_CODE -eq 0 ]; then
+            echo "Generating system report for ${{ matrix.hostname }}..."
+            nix-shell -p nix-info --run "nix-info -m" > logs/system_info_${{ matrix.hostname }}.log
+
+            # Extract some useful information about the build
+            nix path-info --json ./result-${{ matrix.hostname }} | jq 'if type == "array" then .[0] else . end | {path: .path, closureSize: .closureSize}' > logs/build_info_${{ matrix.hostname }}.json
+
+            CLOSURE_SIZE=$(jq -r '.closureSize' logs/build_info_${{ matrix.hostname }}.json)
+
+            if [[ "$CLOSURE_SIZE" != "null" && -n "$CLOSURE_SIZE" ]]; then
+              HUMAN_SIZE=$(numfmt --to=iec-i --suffix=B "$CLOSURE_SIZE")
+              echo "closure_size=$HUMAN_SIZE" >> $GITHUB_OUTPUT
+            else
+              echo "closure_size=unknown" >> $GITHUB_OUTPUT
+              echo "Warning: closure size is null or empty"
+            fi
+          fi
+
+          exit $BUILD_EXIT_CODE
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+        with:
+          name: build-logs-${{ matrix.hostname }}
+          path: logs/
+          retention-days: 5
+

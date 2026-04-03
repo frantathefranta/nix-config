@@ -177,7 +177,7 @@
       homeConfigurations = {
         "fbartik@nix-bastion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs; };
+          extraSpecialArgs = { inherit inputs outputs; hostname = "nix-bastion"; };
           modules = [
             # > Our main home-manager configuration file <
             ./home/fbartik/nix-bastion.nix

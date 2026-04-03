@@ -2,11 +2,11 @@
   pkgs,
   config,
   lib,
-  osConfig,
+  osConfig ? null,
   ...
-}:
+} @ args:
 let
-  hostname = osConfig.networking.hostName;
+  hostname = if args ? hostname then args.hostname else osConfig.networking.hostName;
 
   # Central device registry — all known Syncthing devices
   allDevices = {

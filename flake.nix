@@ -158,6 +158,12 @@
             ./hosts/nix-vps-cz
           ];
         };
+        nix-oci = lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/nix-oci
+          ];
+        };
         installer-iso = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [

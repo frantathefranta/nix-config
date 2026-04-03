@@ -13,7 +13,6 @@ let
   commonMsmtp = {
     enable = true;
     extraConfig = {
-      tls_starttls = "off";
       logfile = "~/.cache/msmtp/msmtp.log";
     };
   };

@@ -95,7 +95,7 @@
 
   services.udev.extraRules =
     ''ACTION=="add" SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="8153", ''
-    + ''RUN+="${inputs.eh5.packages.aarch64-linux.rtl8152-led-ctrl}/bin/rtl8152-led-ctrl set --device %s{busnum}:%s{devnum}"'';
+    + ''RUN+="${pkgs.rtl8152-led-ctrl}/bin/rtl8152-led-ctrl set --device %s{busnum}:%s{devnum}"'';
 
   services.lvm.enable = false;
   services.fake-hwclock.enable = true;

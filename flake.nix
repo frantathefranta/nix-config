@@ -49,10 +49,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    eh5 = {
-      url = "github:EHfive/flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =

@@ -43,15 +43,16 @@ in
                 name = "routers";
                 data = "10.0.10.1";
               }
-            {
-              name = "domain-name";
-              data = "franta.us";
-            }
-            {
-              name = "domain-search";
-              data = "franta.us";
-            }
-            ] ++ commonDhcpOptions;
+              {
+                name = "domain-name";
+                data = "franta.us";
+              }
+              {
+                name = "domain-search";
+                data = "franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
           }
           // leaseOption
         )
@@ -66,17 +67,18 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.0.20.1";
               }
-            {
-              name = "domain-name";
-              data = "wifi.franta.us";
-            }
-            {
-              name = "domain-search";
-              data = "wifi.franta.us";
-            }
-            ] ++ commonDhcpOptions;
+              {
+                name = "domain-name";
+                data = "wifi.franta.us";
+              }
+              {
+                name = "domain-search";
+                data = "wifi.franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
           }
           // leaseOption
         )
@@ -90,22 +92,68 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.0.50.1";
               }
-            {
-              name = "domain-name";
-              data = "iot.franta.us";
-            }
-            {
-              name = "domain-search";
-              data = "iot.franta.us";
-            }
-            ] ++ commonDhcpOptions;
+              {
+                name = "domain-name";
+                data = "iot.franta.us";
+              }
+              {
+                name = "domain-search";
+                data = "iot.franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
             reservations = [
               {
                 hostname = "zigbee-poe";
                 ip-address = "10.0.50.40";
                 hw-address = "94:54:c5:eb:33:9f";
+              }
+              {
+                hostname = "upper-bathroom-presence-sensor";
+                ip-address = "10.0.50.94";
+                hw-address = "f0:f5:bd:f8:88:b0";
+              }
+              {
+                hostname = "freezer-temp-probe";
+                ip-address = "10.0.50.95";
+                hw-address = "a0:85:e3:26:7a:60";
+              }
+              {
+                hostname = "fridge-temp-probe";
+                ip-address = "10.0.50.96";
+                hw-address = "a0:85:e3:26:41:e8";
+              }
+              {
+                hostname = "prusa-mini";
+                ip-address = "10.0.50.97";
+                hw-address = "10:9c:70:0a:95:70";
+              }
+              {
+                hostname = "emporiavue2";
+                ip-address = "10.0.50.98";
+                hw-address = "b8:d6:1a:9d:13:6c";
+              }
+              {
+                hostname = "dreamevacuump2029";
+                ip-address = "10.0.50.100";
+                hw-address = "24:18:c6:14:5d:6e";
+              }
+              {
+                hostname = "camera-yard";
+                ip-address = "10.0.50.201";
+                hw-address = "ec:71:db:c5:2a:94";
+              }
+              {
+                hostname = "camera-sunroom";
+                ip-address = "10.0.50.202";
+                hw-address = "ec:71:db:f4:55:23";
+              }
+              {
+                hostname = "amcrest-garage";
+                ip-address = "10.0.50.203";
+                hw-address = "9c:8e:cd:3e:32:31";
               }
               # TODO: Add remaining leases
             ];
@@ -122,17 +170,18 @@ in
             option-data = [
               {
                 name = "routers";
-                data = "10.0.10.1";
+                data = "10.9.20.1";
               }
-            {
-              name = "domain-name";
-              data = "iot.franta.us";
-            }
-            {
-              name = "domain-search";
-              data = "iot.franta.us";
-            }
-            ] ++ commonDhcpOptions;
+              {
+                name = "domain-name";
+                data = "iot.franta.us";
+              }
+              {
+                name = "domain-search";
+                data = "iot.franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
           }
           // leaseOption
         )

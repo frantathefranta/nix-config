@@ -34,16 +34,18 @@ in
 
   services.pdns-recursor = {
     enable = true;
-    # TODO: This doesn't work, specifying more than one IP crashes the daemon
-    forwardZonesRecurse = {
-      "." = "1.1.1.1";
-    };
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";
       "wifi.franta.us" = "10.0.10.1:8853";
       "iot.franta.us" = "10.0.10.1:8853";
       "10.in-addr.arpa" = "10.0.10.1:8853";
     };
+    yaml-settings.recursor.forward_zones_recurse = [
+      {
+        zone = ".";
+        forwarders = [ "1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" ];
+      }
+    ];
   };
   systemd.services.pdns.serviceConfig = {
     # powerdns doesn't create the sqlite database for us

@@ -37,5 +37,5 @@ jobs:
           git-author-email: "170540725+lord-of-lightning-bot[bot]@users.noreply.github.com"
           git-committer-name: "lord-of-lightning-bot[bot]"
           git-committer-email: "170540725+lord-of-lightning-bot[bot]@users.noreply.github.com"
-          auto-merge: 'true'
+          auto-merge: 'false'
           delete-branch: 'true'

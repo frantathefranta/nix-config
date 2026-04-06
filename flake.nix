@@ -4,10 +4,12 @@
     extra-substituters = [
       "https://frantathefranta.cachix.org"
       "https://nix-community.cachix.org"
+      "https://attic.xuyh0120.win/lantian"
     ];
     extra-trusted-public-keys = [
       "frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];
   };
   inputs = {
@@ -173,7 +175,10 @@
       homeConfigurations = {
         "fbartik@nix-bastion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs; hostname = "nix-bastion"; };
+          extraSpecialArgs = {
+            inherit inputs outputs;
+            hostname = "nix-bastion";
+          };
           modules = [
             # > Our main home-manager configuration file <
             ./home/fbartik/nix-bastion.nix

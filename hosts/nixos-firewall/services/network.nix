@@ -115,6 +115,8 @@
         };
         dhcpV6Config = {
           PrefixDelegationHint = "::/60";
+          SendHostname = false;
+          UseAddress = false;
           # We don't want an IP from the ISP on this interface
           # Assign = false;
         };
@@ -159,7 +161,22 @@
           # "lan0.200" # SERVER
           # "lan0.250" # GUEST
         ];
+        routes = [
+          {
+            Gateway = "10.0.10.2";
+            Destination = "10.32.10.10/24";
+          }
+          {
+            Gateway = "10.0.10.2";
+            Destination = "10.33.0.0/16";
+          }
+          {
+            Gateway = "10.0.10.2";
+            Destination = "10.40.0.0/16";
+          }
+        ];
       };
+
 
       #   # HOME VLAN
       "30-lan0.20" = {

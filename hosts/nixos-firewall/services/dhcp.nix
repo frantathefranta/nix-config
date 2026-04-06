@@ -155,7 +155,6 @@ in
                 ip-address = "10.0.50.203";
                 hw-address = "9c:8e:cd:3e:32:31";
               }
-              # TODO: Add remaining leases
             ];
           }
           // leaseOption

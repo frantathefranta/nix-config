@@ -170,10 +170,11 @@
             Gateway = "10.0.10.2";
             Destination = "10.33.0.0/16";
           }
-          {
-            Gateway = "10.0.10.2";
-            Destination = "10.40.0.0/16";
-          }
+          # TODO: Uncomment when WAN is no longer connected to VLAN40
+          # {
+          #   Gateway = "10.0.10.2";
+          #   Destination = "10.40.0.0/16";
+          # }
         ];
       };
 

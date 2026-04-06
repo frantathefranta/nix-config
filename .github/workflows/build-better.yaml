@@ -190,3 +190,17 @@ jobs:
           path: logs/
           retention-days: 5
 
+  auto-merge:
+    name: Auto-merge flake update PR
+    needs: [Build_Config]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.actor == 'lord-of-lightning-bot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Merge PR
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

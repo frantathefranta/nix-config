@@ -144,7 +144,6 @@
         matchConfig.Name = "lan0";
         address = [ "10.0.10.1/24" ];
         networkConfig = {
-          ConfigureWithoutCarrier = "yes";
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
@@ -152,8 +151,7 @@
         dhcpPrefixDelegationConfig = {
           SubnetId = 0;
         };
-        linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
-        # linkConfig.RequiredForOnline = "carrier";
+        linkConfig.RequiredForOnline = "routable"; # TODO: Change when interface is connected
         vlan = [
           "lan0.20" # WIFI
           "lan0.50" # IOT
@@ -166,25 +164,36 @@
       #   # HOME VLAN
       "30-lan0.20" = {
         matchConfig.Name = "lan0.20";
+        networkConfig = {
+          DHCPPrefixDelegation = true;
+          IPv6AcceptRA = false;
+          IPv6SendRA = true;
+        };
+        dhcpPrefixDelegationConfig = {
+          SubnetId = 1;
+        };
         address = [ "10.0.20.1/24" ];
-        networkConfig.ConfigureWithoutCarrier = "yes";
-        linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
-        # linkConfig.RequiredForOnline = "routable";
+        linkConfig.RequiredForOnline = "routable";
       };
 
       #   # IOT VLAN
       "30-lan0.50" = {
         matchConfig.Name = "lan0.50";
+        networkConfig = {
+          DHCPPrefixDelegation = true;
+          IPv6AcceptRA = false;
+          IPv6SendRA = true;
+        };
+        dhcpPrefixDelegationConfig = {
+          SubnetId = 2;
+        };
         address = [ "10.0.50.1/24" ];
-        networkConfig.ConfigureWithoutCarrier = "yes";
-        linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
-        # linkConfig.RequiredForOnline = "routable";
+        linkConfig.RequiredForOnline = "routable";
       };
 
       "30-lan0.920" = {
         matchConfig.Name = "lan0.920";
         address = [ "10.9.20.1/24" ];
-        # linkConfig.RequiredForOnline = "no"; # TODO: Change when interface is connected
         linkConfig.RequiredForOnline = "routable";
       };
     };

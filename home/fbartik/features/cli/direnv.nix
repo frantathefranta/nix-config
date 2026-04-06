@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   programs.direnv = {
     enable = true;
-    enableFishIntegration = false;
+    # enableFishIntegration = false;
     nix-direnv.enable = true;
     # nixpkgs PR#475992 added postInstall = "rm -rf $out/share/fish" but
     # direnv sets installPhase as a variable, so Nix evals it directly and

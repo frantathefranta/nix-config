@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-let
-  defaultKey = if osConfig.networking.hostName == "silicium" then "6476C19999AA5FD0220F03CD899EEBE51E1C696A" else "2FDD0DA7EA2674718E42055E128750E77EF037D4";
-    in
 {
   services.gpg-agent = {
     enable = true;
@@ -48,7 +45,6 @@ let
         enable = true;
         settings = {
           trust-model = "tofu+pgp";
-          default-key = defaultKey;
         };
         publicKeys = [
           {

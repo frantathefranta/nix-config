@@ -7,7 +7,7 @@
 }:
 
 let
-  gpgKey =
+  defaultKey =
     if osConfig.networking.hostName == "silicium" then
       "6476C19999AA5FD0220F03CD899EEBE51E1C696A"
     else
@@ -21,6 +21,7 @@ in
       user = {
         name = "Franta Bartik";
         email = "fb@franta.us";
+      signingKey = defaultKey;
       };
       init.defaultBranch = "main";
       # fish takes these options and adds them to the prompt
@@ -36,7 +37,6 @@ in
         pushall = "!git remote | xargs -L1 git push --all";
         add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
       };
-      # user.signing.key = null;
       commit.gpgSign = lib.mkDefault true;
       gpg.program = "${config.programs.gpg.package}/bin/gpg2";
 

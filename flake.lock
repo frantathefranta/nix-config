@@ -490,6 +490,21 @@
         "type": "github"
       }
     },
+    "nnf": {
+      "locked": {
+        "lastModified": 1774778550,
+        "narHash": "sha256-sz7uRra2VvVm5OV3hUiS2X9ePceTVRLyzKNU5VAHp+k=",
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
+        "rev": "85e1a85ef9a15419ee9ed06db9c86204c7897bce",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "direnv-instant": "direnv-instant",
@@ -501,6 +516,7 @@
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nnf": "nnf",
         "sops-nix": "sops-nix",
         "srvos": "srvos",
         "systems": "systems_3",

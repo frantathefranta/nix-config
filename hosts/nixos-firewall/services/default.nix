@@ -2,7 +2,8 @@
   imports = [
     ./network.nix
     ./lldpd.nix
-    ./firewall
+    # ./firewall
+    ./firewall-alternate
     ./powerdns.nix
     ./dhcp.nix
     # TODO: ./radvd.nix

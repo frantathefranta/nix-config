@@ -28,6 +28,7 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
     direnv-instant.url = "github:Mic92/direnv-instant";
+    nnf.url = "github:thelegy/nixos-nftables-firewall";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix

@@ -22,11 +22,10 @@ in
   services.powerdns = {
     enable = true;
     extraConfig = ''
-      local-address=10.0.10.1:8853 # TODO: Add lan0 IPv6 address
+      local-port=8853
       launch=gsqlite3
       gsqlite3-database=${directory}/pdns.sqlite3
       dnsupdate=yes
-      # allow-dnsupdate-from=192.168.10.1/32
       default-soa-content=@ gateway.franta.us. 0 7200 3600 120960 3600
     '';
     secretFile = config.sops.secrets."powerdns/env".path;

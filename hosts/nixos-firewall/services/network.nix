@@ -86,6 +86,14 @@
         };
         vlanConfig.Id = 920;
       };
+      "20-lan0.950" = {
+        netdevConfig = {
+          Name = "lan0.950";
+          Description = "test2";
+          Kind = "vlan";
+        };
+        vlanConfig.Id = 950;
+      };
     };
     networks = {
       # Disabled interfaces
@@ -158,6 +166,7 @@
           "lan0.20" # WIFI
           "lan0.50" # IOT
           "lan0.920" # test
+          "lan0.950" # test2
           # "lan0.200" # SERVER
           # "lan0.250" # GUEST
         ];
@@ -212,6 +221,11 @@
       "30-lan0.920" = {
         matchConfig.Name = "lan0.920";
         address = [ "10.9.20.1/24" ];
+        linkConfig.RequiredForOnline = "routable";
+      };
+      "30-lan0.950" = {
+        matchConfig.Name = "lan0.950";
+        address = [ "10.9.50.1/24" ];
         linkConfig.RequiredForOnline = "routable";
       };
     };

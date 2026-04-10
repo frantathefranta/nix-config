@@ -6,6 +6,7 @@
     ./firewall-alternate
     ./powerdns.nix
     ./dhcp.nix
+    ./udpbroadcastrelay.nix
     # TODO: ./radvd.nix
     # TODO: ./ntp.nix
     # TODO: ./routing.nix

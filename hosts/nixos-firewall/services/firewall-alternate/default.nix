@@ -52,7 +52,7 @@
       };
       rules = {
         wan_egress = {
-          from = [ "local_interfaces" ];
+          from = [ "local_interfaces" "lan950" ];
           to = [ "untrusted" ];
           verdict = "accept";
           late = true;
@@ -75,7 +75,7 @@
           verdict = "accept";
         };
         allow_dns = {
-          from = [ "local_interfaces" ];
+          from = [ "local_interfaces" "lan950" ];
           allowedUDPPorts = [ 53 ];
           to = [ "fw" ];
           verdict = "accept";

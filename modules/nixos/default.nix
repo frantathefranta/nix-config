@@ -7,5 +7,6 @@
   custom-wireguard = import ./custom-wireguard.nix;
   vep14xx-fan-curve = import ./vep14xx-fan-curve.nix;
   fake-hwclock = import ./fake-hwclock.nix;
+  udp-broadcast-relay = import ./udp-broadcast-relay.nix;
   # conman = import ./conman.nix;
 }

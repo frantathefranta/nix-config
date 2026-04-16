@@ -22,6 +22,7 @@ in
         "root"
         "@wheel"
       ];
+      # Optimizes store during each build
       auto-optimise-store = lib.mkDefault true;
       experimental-features = [
         "nix-command"
@@ -35,11 +36,6 @@ in
         "nixos-test"
       ];
       flake-registry = ""; # Disable global flake registry
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
     };
     # Add each flake input as a registry and nix_path
     registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;

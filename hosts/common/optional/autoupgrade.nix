@@ -4,7 +4,6 @@ let
   emailAddress = "admin@franta.us";
   services = [
     "nixos-upgrade"
-    "nixos-store-optimize"
   ];
 in
 {

@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }:
 
@@ -18,6 +19,16 @@
       "1.0.0.1"
     ];
     useDHCP = false;
+  };
+  systemd.services.systemd-networkd.serviceConfig = {
+    LoadCredential = [
+      "dhcp6c_duid:${config.sops.secrets."systemd/dhcp6c_duid".path}"
+    ];
+  };
+  sops.secrets = {
+    "systemd/dhcp6c_duid" = {
+      sopsFile = ../secrets.yaml;
+    };
   };
   systemd.network = {
     enable = true;
@@ -124,6 +135,7 @@
         dhcpV6Config = {
           PrefixDelegationHint = "::/60";
           WithoutRA = "solicit";
+          DUIDRawData = "@dhcp6c_duid";
           # SendHostname = false;
           # UseAddress = false;
           # We don't want an IP from the ISP on this interface

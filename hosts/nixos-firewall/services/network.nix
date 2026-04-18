@@ -113,8 +113,8 @@
         matchConfig.Name = "wan0";
         networkConfig = {
           DHCP = "yes";
-          IPv6AcceptRA = true;
-          IPv6SendRA = false;
+          IPv6AcceptRA = "yes";
+          IPv6SendRA = "no";
         };
         linkConfig = {
           MACAddress = "F8:9B:6E:42:02:D2";
@@ -123,10 +123,15 @@
         };
         dhcpV6Config = {
           PrefixDelegationHint = "::/60";
-          SendHostname = false;
-          UseAddress = false;
+          WithoutRA = "solicit";
+          # SendHostname = false;
+          # UseAddress = false;
           # We don't want an IP from the ISP on this interface
           # Assign = false;
+        };
+        ipv6AcceptRAConfig = {
+          DHCPv6Client = "always";
+          UseDNS = "no";
         };
       };
       "30-mgmt" = {
@@ -186,7 +191,6 @@
           # }
         ];
       };
-
 
       #   # HOME VLAN
       "30-lan0.20" = {

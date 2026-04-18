@@ -44,15 +44,30 @@
         ];
       };
       zones.lab_space = {
-        ipv4Addresses = [ "10.32.10.0/24" "10.33.0.0/16" ];
+        ipv4Addresses = [
+          "10.32.10.0/24"
+          "10.33.0.0/16"
+        ];
         ipv6Addresses = [ "2600:1702:6630:3fec::/63" ];
+      };
+      zones.plex = {
+        ipv4Addresses = [ "10.32.10.210/24" ];
+      };
+      zones.wifi = {
+        interfaces = [ "lan0.20" ];
+      };
+      zones.iot = {
+        interfaces = [ "lan0.50" ];
       };
       zones.lan950 = {
         interfaces = [ "lan0.950" ];
       };
       rules = {
         wan_egress = {
-          from = [ "local_interfaces" "lan950" ];
+          from = [
+            "local_interfaces"
+            "lan950"
+          ];
           to = [ "untrusted" ];
           verdict = "accept";
           late = true;
@@ -62,6 +77,11 @@
         allow_920_to_950 = {
           from = [ "local_interfaces" ];
           to = [ "lan950" ];
+          verdict = "accept";
+        };
+        allow_wifi_to_iot = {
+          from = [ "wifi" ];
+          to = [ "iot" ];
           verdict = "accept";
         };
         allow_access_to_lab = {
@@ -75,7 +95,10 @@
           verdict = "accept";
         };
         allow_dns = {
-          from = [ "local_interfaces" "lan950" ];
+          from = [
+            "local_interfaces"
+            "lan950"
+          ];
           allowedUDPPorts = [ 53 ];
           to = [ "fw" ];
           verdict = "accept";

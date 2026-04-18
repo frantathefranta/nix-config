@@ -34,7 +34,8 @@ in
   services.pdns-recursor = {
     enable = true;
     forwardZones = {
-      "franta.us" = "10.0.10.1:8853";
+      "franta.us" = "10.33.40.53:53";
+      "infra.franta.us" = "10.33.10.0:53";
       "wifi.franta.us" = "10.0.10.1:8853";
       "iot.franta.us" = "10.0.10.1:8853";
       "10.in-addr.arpa" = "10.0.10.1:8853";

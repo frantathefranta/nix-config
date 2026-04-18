@@ -43,6 +43,16 @@
           "lan0.920"
         ];
       };
+      zones.wifi = {
+        interfaces = [
+          "lan0.20"
+        ];
+      };
+      zones.iot = {
+        interfaces = [
+          "lan0.50"
+        ];
+      };
       zones.lab_space = {
         ipv4Addresses = [
           "10.32.10.0/24"
@@ -53,11 +63,10 @@
       zones.plex = {
         ipv4Addresses = [ "10.32.10.210/24" ];
       };
-      zones.wifi = {
-        interfaces = [ "lan0.20" ];
-      };
-      zones.iot = {
-        interfaces = [ "lan0.50" ];
+      zones.hass = {
+        ipv4Addresses = [
+          "10.0.50.30/24"
+        ];
       };
       zones.lan950 = {
         interfaces = [ "lan0.950" ];
@@ -74,9 +83,14 @@
           masquerade = true;
         };
         # Test rule for letting traffic from 920 to 950 (but not the other way)
-        allow_920_to_950 = {
-          from = [ "local_interfaces" ];
-          to = [ "lan950" ];
+        allow_hass_everywhere = {
+          from = [ "hass" ];
+          to = [ "local_interfaces" ];
+          verdict = "accept";
+        };
+        allow_20_to_50 = {
+          from = [ "wifi" ];
+          to = [ "iot" ];
           verdict = "accept";
         };
         allow_wifi_to_iot = {

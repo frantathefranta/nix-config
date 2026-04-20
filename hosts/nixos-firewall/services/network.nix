@@ -13,6 +13,7 @@
     "net.ipv4.tcp_l3mdev_accept" = 1;
     "net.ipv4.udp_l3mdev_accept" = 1;
   };
+  environment.systemPackages = [ pkgs.wireguard-tools ];
   networking = {
     nameservers = [
       "1.1.1.1"
@@ -23,10 +24,14 @@
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
       "dhcp6c_duid:${config.sops.secrets."systemd/dhcp6c_duid".path}"
+      "wg_iphone_key:${config.sops.secrets."systemd/wg_iphone_key".path}"
     ];
   };
   sops.secrets = {
     "systemd/dhcp6c_duid" = {
+      sopsFile = ../secrets.yaml;
+    };
+    "systemd/wg_iphone_key" = {
       sopsFile = ../secrets.yaml;
     };
   };
@@ -38,7 +43,6 @@
         # "wan0"
         # "wan1"
         "lan1"
-        "ctr0"
         "mgmt"
         # "wg0"
       ];
@@ -104,6 +108,25 @@
           Kind = "vlan";
         };
         vlanConfig.Id = 950;
+      };
+      "50-wg_iphone" = {
+        netdevConfig = {
+          Name = "wg_iphone";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          PrivateKey = "@wg_iphone_key";
+          ListenPort = 51820;
+        };
+        wireguardPeers = [
+          {
+            PublicKey = "+gNq5fKQnTGfUD+UAC9AEwu0dTaumh5ciVfu7nKZxHQ=";
+            AllowedIPs = [
+              "172.16.255.2/32"
+              "2600:1702:6630:3fe4::2/128"
+            ];
+          }
+        ];
       };
     };
     networks = {
@@ -243,6 +266,16 @@
         matchConfig.Name = "lan0.950";
         address = [ "10.9.50.1/24" ];
         linkConfig.RequiredForOnline = "routable";
+      };
+
+      "50_wg_iphone" = {
+        matchConfig.Name = "wg_iphone";
+        addresses = [
+          {
+            Address = "172.16.255.1/32";
+            Peer = "172.16.255.2/32";
+          }
+        ];
       };
     };
   };

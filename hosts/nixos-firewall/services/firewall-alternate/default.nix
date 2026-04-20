@@ -82,7 +82,6 @@
           late = true;
           masquerade = true;
         };
-        # Test rule for letting traffic from 920 to 950 (but not the other way)
         allow_hass_everywhere = {
           from = [ "hass" ];
           to = [ "local_interfaces" ];
@@ -120,6 +119,14 @@
         allow_dns_mgmt = {
           from = [ "mgmt" ];
           allowedTCPPorts = [ 8853 ];
+          to = [ "fw" ];
+          verdict = "accept";
+        };
+        allow_ntp = {
+          from = [
+            "local_interfaces"
+          ];
+          allowedUDPPorts = [ 123 ];
           to = [ "fw" ];
           verdict = "accept";
         };

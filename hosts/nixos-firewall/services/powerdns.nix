@@ -22,6 +22,11 @@ in
   services.powerdns = {
     enable = true;
     extraConfig = ''
+      webserver=yes
+      webserver-address=10.0.10.1 # TODO: Move this to a reverse proxy
+      webserver-allow-from=10.0.0.0/8
+      api=yes
+      api-key=''\${PDNS_AUTH_API_KEY}
       local-port=8853
       launch=gsqlite3
       gsqlite3-database=${directory}/pdns.sqlite3
@@ -34,7 +39,7 @@ in
   services.pdns-recursor = {
     enable = true;
     forwardZones = {
-      "franta.us" = "10.33.40.53:53";
+      "franta.us" = "10.0.10.1:8853";
       "infra.franta.us" = "10.33.10.0:53";
       "wifi.franta.us" = "10.0.10.1:8853";
       "iot.franta.us" = "10.0.10.1:8853";

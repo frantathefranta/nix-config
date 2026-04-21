@@ -11,5 +11,6 @@
     # TODO: ./radvd.nix
     ./routing.nix
     # TODO: ./qos.nix # https://github.com/budimanjojo/nix-config/blob/main/system/hosts/budimanjojo-firewall/_modules/services/fireqos/default.nix
+    ./znc.nix
   ];
 }

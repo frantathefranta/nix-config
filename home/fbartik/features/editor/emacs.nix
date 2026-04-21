@@ -155,6 +155,7 @@ in
     [
       # For installing LSP servers
       ispell # Spelling
+      hunspellDicts.en-us
       # :tools editorconfig
       editorconfig-core-c # per-project style config
       # :tools lookup & :lang org +roam

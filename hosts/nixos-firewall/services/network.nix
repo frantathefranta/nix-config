@@ -160,9 +160,8 @@
           WithoutRA = "solicit";
           DUIDRawData = "@dhcp6c_duid";
           # SendHostname = false;
-          # UseAddress = false;
           # We don't want an IP from the ISP on this interface
-          # Assign = false;
+          UseAddress = false;
         };
         ipv6AcceptRAConfig = {
           DHCPv6Client = "always";
@@ -197,6 +196,7 @@
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
+          # Token = "::10:0:10:1";
         };
         dhcpPrefixDelegationConfig = {
           SubnetId = 0;

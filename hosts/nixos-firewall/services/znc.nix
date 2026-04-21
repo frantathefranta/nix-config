@@ -1,5 +1,14 @@
 { config, pkgs, ... }:
 {
+  # security.acme = {
+  #   acceptTerms = true;
+  #   defaults.email = "franta@franta.us";
+  #   certs."znc.franta.us" = {
+  #     dnsProvider = "cloudflare";
+  #     environmentFile = config.sops.secrets."acme/cloudflare".path;
+  #     group = "znc";
+  #   };
+  # };
   # User auth taken from https://discourse.nixos.org/t/znc-config-without-putting-password-hash-in-configuration-nix/14236/3
   users.users."znc-admin" = {
     isSystemUser = true;
@@ -45,10 +54,11 @@
     modulePackages = [ pkgs.zncModules.playback ];
     config = {
       Listener.l = {
-        Port = 5000;
+        Port = 6697;
         IPv4 = true;
         IPv6 = true;
-        SSL = false;
+        SSL = true;
+        SSLCertFile = "/var/lib/acme/znc.franta.us/full.pem";
       };
       LoadModule = [
         "adminlog"
@@ -76,6 +86,9 @@
     sopsFile = ../secrets.yaml;
   };
   sops.secrets."znc/hackint-sasl" = {
+    sopsFile = ../secrets.yaml;
+  };
+  sops.secrets."acme/cloudflare" = {
     sopsFile = ../secrets.yaml;
   };
 }

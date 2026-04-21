@@ -130,6 +130,14 @@
           to = [ "fw" ];
           verdict = "accept";
         };
+        allow_znc = {
+          from = [
+            "wifi"
+          ];
+          allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
+          to = [ "fw" ];
+          verdict = "accept";
+        };
       };
     };
   };

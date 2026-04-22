@@ -13,6 +13,10 @@
   networking = {
     firewall.enable = false;
     nat.enable = false;
+    nftables.chains.prerouting.nat = {
+      after = [ "hook" ];
+      rules = [ "iif \"wan0\" tcp dport 32400 dnat to 10.32.10.210" ];
+    };
     nftables.firewall = {
       enable = true;
       snippets = {
@@ -61,7 +65,8 @@
         ipv6Addresses = [ "2600:1702:6630:3fec::/62" ];
       };
       zones.plex = {
-        ipv4Addresses = [ "10.32.10.210/24" ];
+        ipv4Addresses = [ "10.32.10.210/32" ];
+        ipv6Addresses = [ "2600:1702:6630:3fed:ba85:84ff:feb9:446e/128" ];
       };
       zones.hass = {
         ipv4Addresses = [
@@ -137,6 +142,12 @@
           allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
           to = [ "fw" ];
           verdict = "accept";
+        };
+        allow_plex = {
+          from = [ "untrusted" ];
+          to = [ "plex" ];
+          verdict = "accept";
+          allowedTCPPorts = [ 32400 ];
         };
       };
     };

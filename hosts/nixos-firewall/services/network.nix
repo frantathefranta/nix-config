@@ -23,14 +23,10 @@
   };
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
-      "dhcp6c_duid:${config.sops.secrets."systemd/dhcp6c_duid".path}"
       "wg_iphone_key:${config.sops.secrets."systemd/wg_iphone_key".path}"
     ];
   };
   sops.secrets = {
-    "systemd/dhcp6c_duid" = {
-      sopsFile = ../secrets.yaml;
-    };
     "systemd/wg_iphone_key" = {
       sopsFile = ../secrets.yaml;
     };
@@ -158,7 +154,7 @@
         dhcpV6Config = {
           PrefixDelegationHint = "::/60";
           WithoutRA = "solicit";
-          DUIDRawData = "@dhcp6c_duid";
+          DUIDRawData = "0e:00:01:00:01:2e:4e:47:34:60:be:b4:0c:38:80";
           # SendHostname = false;
           # We don't want an IP from the ISP on this interface
           UseAddress = false;
@@ -196,10 +192,10 @@
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
-          # Token = "::10:0:10:1";
         };
         dhcpPrefixDelegationConfig = {
           SubnetId = 0;
+          Token = "::10:0:10:1";
         };
         linkConfig.RequiredForOnline = "routable"; # TODO: Change when interface is connected
         vlan = [

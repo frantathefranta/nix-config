@@ -1,14 +1,18 @@
 { config, pkgs, ... }:
+let
+  zncDomain = "znc.franta.us";
+in
 {
-  # security.acme = {
-  #   acceptTerms = true;
-  #   defaults.email = "franta@franta.us";
-  #   certs."znc.franta.us" = {
-  #     dnsProvider = "cloudflare";
-  #     environmentFile = config.sops.secrets."acme/cloudflare".path;
-  #     group = "znc";
-  #   };
-  # };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "fb@franta.us";
+    certs."${zncDomain}" = {
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      environmentFile = config.sops.secrets."acme/cloudflare".path;
+      group = "znc";
+    };
+  };
   # User auth taken from https://discourse.nixos.org/t/znc-config-without-putting-password-hash-in-configuration-nix/14236/3
   users.users."znc-admin" = {
     isSystemUser = true;
@@ -52,35 +56,47 @@
     mutable = false;
     useLegacyConfig = false;
     modulePackages = [ pkgs.zncModules.playback ];
-    config = {
-      Listener.l = {
-        Port = 6697;
-        IPv4 = true;
-        IPv6 = true;
-        SSL = true;
-        SSLCertFile = "/var/lib/acme/znc.franta.us/full.pem";
-      };
-      LoadModule = [
-        "adminlog"
-        "cyrusauth saslauthd"
-        "corecaps"
-        "playback"
-      ];
-      User."znc-admin" = {
-        Admin = true;
-        # fake hash, auth against this will always fail, user can only login via SASL
-        # znc compains if you have no Pass
-        Pass = "md5#::#::#";
-        Nick = "franta";
-        AltNick = "frantathefranta";
-        Ident = "franta";
-        Network."hackint" = {
-          LoadModule = [ "simple_away" "chansaver" ];
-          Server = "irc.hackint.org +6697";
-          Chan = { "#dn42-registry" = { Detached = false; }; };
+    config =
+      let
+        certPath = config.security.acme.certs.${zncDomain}.directory;
+      in
+      {
+        SSLCertFile = "${certPath}/cert.pem";
+        SSLKeyFile = "${certPath}/key.pem";
+        Listener.l = {
+          Port = 6697;
+          IPv4 = true;
+          IPv6 = true;
+          SSL = true;
+        };
+        LoadModule = [
+          "adminlog"
+          "cyrusauth saslauthd"
+          "corecaps"
+          "playback"
+        ];
+        User."znc-admin" = {
+          Admin = true;
+          # fake hash, auth against this will always fail, user can only login via SASL
+          # znc compains if you have no Pass
+          Pass = "md5#::#::#";
+          Nick = "franta";
+          AltNick = "frantathefranta";
+          Ident = "franta";
+          Network."hackint" = {
+            LoadModule = [
+              "simple_away"
+              "chansaver"
+            ];
+            Server = "irc.hackint.org +6697";
+            Chan = {
+              "#dn42-registry" = {
+                Detached = false;
+              };
+            };
+          };
         };
       };
-    };
   };
   sops.secrets."znc/admin" = {
     sopsFile = ../secrets.yaml;

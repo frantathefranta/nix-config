@@ -17,6 +17,7 @@
     hostName = "silicium";
     useDHCP = true;
     interfaces.wlp3s0.useDHCP = true;
+    nameservers = [ ];
   };
   # environment.systemPackages = [
   #   (builtins.getFlake "github:jordond/jolt").packages.${pkgs.system}.default

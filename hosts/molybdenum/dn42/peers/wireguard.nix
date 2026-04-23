@@ -4,7 +4,7 @@
       listenPort = 24001;
       peerEndpoint = "prg.dn42.franta.us:24001";
       peerPublicKey = "NDQyX3K9piwzVi30GDqudZLjgDsAZsBIndtqI4I5k2A=";
-      localAddressV6 = "fe80::1033";
+      localAddressV6 = "fe80::1033/128";
       peerAddressV6 = "fe80::2:1033/64";
       peerAddressV4 = "169.254.2.0/31";
       localAddressV4 = "169.254.2.1/31";
@@ -13,7 +13,7 @@
       listenPort = 20454;
       peerEndpoint = "dn42b.nedifinita.com:44280";
       peerPublicKey = "q9+7MHvWmWO18uZ0RfNNLNAgUWhqs+zA1zBoWv9r23U=";
-      peerAddressV6 = "fe80::454:2";
+      peerAddressV6 = "fe80::454:2/128";
       localAddressV6 = "fe80::1033:0454/64";
     };
     "50-wg4242422601" = {

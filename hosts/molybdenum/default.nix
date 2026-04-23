@@ -18,35 +18,52 @@ in
   ];
   networking = {
     hostName = "molybdenum";
-    useDHCP = false;
-    interfaces.ens18 = {
-      useDHCP = false;
-      ipv4.addresses = [
-        {
-          address = hostIPv4;
-          prefixLength = 24;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = "2600:1702:6630:3fed::242";
-          prefixLength = 64;
-        }
-      ];
-    };
-    defaultGateway = {
-      address = "10.32.10.254";
-      interface = "ens18";
-    };
-    defaultGateway6 = {
-      address = "fe80::464c:a8ff:fede:3cf7";
-      interface = "ens18";
-    };
+    # useDHCP = false;
+    # interfaces.ens18 = {
+    #   useDHCP = false;
+    #   ipv4.addresses = [
+    #     {
+    #       address = hostIPv4;
+    #       prefixLength = 24;
+    #     }
+    #   ];
+    #   ipv6.addresses = [
+    #     {
+    #       address = "2600:1702:6630:3fed::242";
+    #       prefixLength = 64;
+    #     }
+    #   ];
+    # };
+    # defaultGateway = {
+    #   address = "10.32.10.254";
+    #   interface = "ens18";
+    # };
+    # defaultGateway6 = {
+    #   address = "fe80::464c:a8ff:fede:3cf7";
+    #   interface = "ens18";
+    # };
     nameservers = [
       "1.1.1.1"
       "1.0.0.1"
       "2606:4700:4700::1111"
       "2606:4700:4700::1001"
+    ];
+  };
+  systemd.network = {
+    enable = true;
+  };
+  systemd.network.networks."10-wan" = {
+    matchConfig.Name = "ens18";
+    networkConfig = {
+      IPv6PrivacyExtensions = false;
+    };
+    address = [
+      "${hostIPv4}/24"
+      "2600:1702:6630:3fed::242/64"
+    ];
+    routes = [
+      { Gateway = "10.32.10.254"; }
+      { Gateway = "fe80::464c:a8ff:fede:3cf7"; }
     ];
   };
   time.timeZone = "America/Detroit";

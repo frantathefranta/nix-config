@@ -7,8 +7,8 @@
 
 let
   bgp = import peers/bgp.nix { };
-  hostIPv4 = builtins.elemAt config.networking.interfaces.ens18.ipv4.addresses 0;
-  address = hostIPv4.address;
+  # hostIPv4 = builtins.elemAt config.systemd.network.networks."10-wan".address 0;
+  address = "10.32.10.242";
 in
 {
   services = {

@@ -15,7 +15,10 @@
     nat.enable = false;
     nftables.chains.prerouting.nat = {
       after = [ "hook" ];
-      rules = [ "iif \"wan0\" tcp dport 32400 dnat to 10.32.10.210" ];
+      rules = [
+        "iif wan0 tcp dport 32400 dnat ip to 10.32.10.210"
+        "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
+      ];
     };
     nftables.firewall = {
       enable = true;
@@ -68,9 +71,15 @@
         ipv4Addresses = [ "10.32.10.210/32" ];
         ipv6Addresses = [ "2600:1702:6630:3fed:ba85:84ff:feb9:446e/128" ];
       };
+      zones.molybdenum = {
+        ipv6Addresses = [ "2600:1702:6630:3fed::242" ];
+      };
+
+      zones.transmission_music.ipv4Addresses = [ "10.33.40.65" ];
+
       zones.hass = {
         ipv4Addresses = [
-          "10.0.50.30/24"
+          "10.0.50.30"
         ];
       };
       zones.lan950 = {
@@ -143,11 +152,36 @@
           to = [ "fw" ];
           verdict = "accept";
         };
+        allow_znc_from_wan = {
+          from = [
+            "untrusted"
+          ];
+          allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
+          to = [ "fw" ];
+          verdict = "accept";
+        };
         allow_plex = {
           from = [ "untrusted" ];
           to = [ "plex" ];
           verdict = "accept";
           allowedTCPPorts = [ 32400 ];
+        };
+        allow_transmission_music = {
+          from = [ "untrusted" ];
+          to = [ "transmission_music" ];
+          verdict = "accept";
+          allowedTCPPorts = [ 51414 ];
+        };
+        allow_molybdenum_dn42 = {
+          from = [ "untrusted" ];
+          to = [ "molybdenum" ];
+          verdict = "accept";
+          allowedUDPPortRanges = [
+            {
+              from = 20000;
+              to = 30000;
+            }
+          ];
         };
       };
     };

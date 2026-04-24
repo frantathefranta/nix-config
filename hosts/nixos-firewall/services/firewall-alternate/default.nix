@@ -16,7 +16,7 @@
     nftables.chains.prerouting.nat = {
       after = [ "hook" ];
       rules = [
-        "iif wan0 tcp dport 32400 dnat ip to 10.32.10.210"
+        "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
         "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
       ];
     };
@@ -26,7 +26,7 @@
         nnf-common.enable = true;
         nnf-conntrack.enable = true;
         nnf-default-stopRuleset.enable = true;
-        nnf-drop.enable = false; # see above, using our own drop rules
+        nnf-drop.enable = true;
         nnf-loopback.enable = true;
         nnf-dhcpv6.enable = true;
         nnf-icmp.enable = true;
@@ -74,8 +74,10 @@
       zones.molybdenum = {
         ipv6Addresses = [ "2600:1702:6630:3fed::242" ];
       };
-
-      zones.transmission_music.ipv4Addresses = [ "10.33.40.65" ];
+      zones.transmission_music = {
+        ipv4Addresses = [ "10.33.40.65" ];
+        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
+      };
 
       zones.hass = {
         ipv4Addresses = [
@@ -99,11 +101,6 @@
         allow_hass_everywhere = {
           from = [ "hass" ];
           to = [ "local_interfaces" ];
-          verdict = "accept";
-        };
-        allow_20_to_50 = {
-          from = [ "wifi" ];
-          to = [ "iot" ];
           verdict = "accept";
         };
         allow_wifi_to_iot = {
@@ -134,7 +131,6 @@
           from = [ "mgmt" ];
           allowedTCPPorts = [ 8853 ];
           to = [ "fw" ];
-          verdict = "accept";
         };
         allow_ntp = {
           from = [
@@ -142,40 +138,28 @@
           ];
           allowedUDPPorts = [ 123 ];
           to = [ "fw" ];
-          verdict = "accept";
         };
         allow_znc = {
           from = [
+            "untrusted"
             "wifi"
           ];
-          allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
           to = [ "fw" ];
-          verdict = "accept";
-        };
-        allow_znc_from_wan = {
-          from = [
-            "untrusted"
-          ];
           allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
-          to = [ "fw" ];
-          verdict = "accept";
         };
         allow_plex = {
           from = [ "untrusted" ];
           to = [ "plex" ];
-          verdict = "accept";
           allowedTCPPorts = [ 32400 ];
         };
         allow_transmission_music = {
           from = [ "untrusted" ];
           to = [ "transmission_music" ];
-          verdict = "accept";
           allowedTCPPorts = [ 51414 ];
         };
         allow_molybdenum_dn42 = {
           from = [ "untrusted" ];
           to = [ "molybdenum" ];
-          verdict = "accept";
           allowedUDPPortRanges = [
             {
               from = 20000;

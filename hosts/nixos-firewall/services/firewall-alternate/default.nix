@@ -74,11 +74,18 @@
       zones.molybdenum = {
         ipv6Addresses = [ "2600:1702:6630:3fed::242" ];
       };
+      zones.qbittorrent = {
+        ipv4Addresses = [ "10.33.40.63" ];
+        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:63" ];
+      };
+      zones.transmission_jeopardy = {
+        ipv4Addresses = [ "10.33.40.64" ];
+        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:64" ];
+      };
       zones.transmission_music = {
         ipv4Addresses = [ "10.33.40.65" ];
         ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
       };
-
       zones.hass = {
         ipv4Addresses = [
           "10.0.50.30"
@@ -151,6 +158,16 @@
           from = [ "untrusted" ];
           to = [ "plex" ];
           allowedTCPPorts = [ 32400 ];
+        };
+        allow_qbittorrent = {
+          from = [ "untrusted" ];
+          to = [ "qbittorrent" ];
+          allowedTCPPorts = [ 18903 ];
+        };
+        allow_transmission_jeopardy = {
+          from = [ "untrusted" ];
+          to = [ "transmission_jeopardy" ];
+          allowedTCPPorts = [ 51413 ];
         };
         allow_transmission_music = {
           from = [ "untrusted" ];

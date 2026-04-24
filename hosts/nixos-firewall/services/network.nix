@@ -113,6 +113,7 @@
         wireguardConfig = {
           PrivateKey = "@wg_iphone_key";
           ListenPort = 51820;
+          RouteTable = "main";
         };
         wireguardPeers = [
           {
@@ -270,6 +271,10 @@
           {
             Address = "172.16.255.1/32";
             Peer = "172.16.255.2/32";
+          }
+          {
+            Address = "2600:1702:6630:3fe4::/128";
+            Peer = "2600:1702:6630:3fe4::2/128";
           }
         ];
       };

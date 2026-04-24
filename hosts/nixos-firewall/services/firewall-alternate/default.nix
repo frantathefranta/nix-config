@@ -17,6 +17,8 @@
       after = [ "hook" ];
       rules = [
         "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
+        "iifname wan0 tcp dport 18903 dnat ip to 10.33.40.63"
+        "iifname wan0 tcp dport 51413 dnat ip to 10.33.40.64"
         "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
       ];
     };
@@ -49,6 +51,9 @@
           "lan0.50"
           "lan0.920"
         ];
+      };
+      zones.wg = {
+        interfaces = [ "wg_iphone" ];
       };
       zones.wifi = {
         interfaces = [
@@ -98,7 +103,7 @@
         wan_egress = {
           from = [
             "local_interfaces"
-            "lan950"
+            "wg"
           ];
           to = [ "untrusted" ];
           verdict = "accept";
@@ -116,7 +121,10 @@
           verdict = "accept";
         };
         allow_access_to_lab = {
-          from = [ "local_interfaces" ];
+          from = [
+            "local_interfaces"
+            "wg"
+          ];
           to = [ "lab_space" ];
           verdict = "accept";
         };
@@ -128,11 +136,10 @@
         allow_dns = {
           from = [
             "local_interfaces"
-            "lan950"
+            "wg"
           ];
           allowedUDPPorts = [ 53 ];
           to = [ "fw" ];
-          verdict = "accept";
         };
         allow_dns_mgmt = {
           from = [ "mgmt" ];
@@ -153,6 +160,16 @@
           ];
           to = [ "fw" ];
           allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];
+        };
+        allow_wg_from_wan = {
+          from = [ "untrusted" ];
+          to = [ "fw" ];
+          allowedUDPPorts = [ config.systemd.network.netdevs."50-wg_iphone".wireguardConfig.ListenPort ];
+        };
+        allow_wg_to_local = {
+          from = [ "wg" ];
+          to = [ "local_interfaces" ];
+          verdict = "accept";
         };
         allow_plex = {
           from = [ "untrusted" ];

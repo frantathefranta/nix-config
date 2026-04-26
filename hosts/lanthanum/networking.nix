@@ -3,14 +3,14 @@
   networking = {
     nftables.enable = true;
     firewall.interfaces.eno1.allowedTCPPorts = [
-      179
+      # 179
       22000
     ];
     firewall.interfaces.eno1.allowedUDPPorts = [
       21027
       22000
-      3784 # BFD messages
-      3785 # BFD messages
+      # 3784 # BFD messages
+      # 3785 # BFD messages
     ];
     # firewall.extraCommands = ''
     #   iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
@@ -37,59 +37,61 @@
     networks."10-eno1" = {
       matchConfig.Name = "eno1";
       networkConfig = {
-        IPv6AcceptRA = false;
+        IPv6AcceptRA = true;
+        DHCP = "yes";
       };
       # dns = [
       #   "10.33.10.0"
       #   "10.33.10.1"
       # ];
-      addresses = [
-        { Address = "10.254.0.2/30"; }
-        {
-          Address = "2600:1702:6630:3fec::254:1/127";
-          AddPrefixRoute = false;
-        }
-      ];
-      routes = [
-        {
-          Gateway = "10.254.0.1";
-          Metric = 20;
-        }
-        {
-          Gateway = "fe80::464c:a8ff:fede:3cf7";
-          GatewayOnLink = "yes";
-          Metric = 20;
-        }
-      ];
-      linkConfig.MTUBytes = "9000";
+      # addresses = [
+      #   # { Address = ""; }
+      #   # { Address = "10.254.0.2/30"; }
+      #   # {
+      #   #   Address = "2600:1702:6630:3fec::254:1/127";
+      #   #   AddPrefixRoute = false;
+      #   # }
+      # ];
+      # routes = [
+      #   {
+      #     Gateway = "10.254.0.1";
+      #     Metric = 20;
+      #   }
+      #   {
+      #     Gateway = "fe80::464c:a8ff:fede:3cf7";
+      #     GatewayOnLink = "yes";
+      #     Metric = 20;
+      #   }
+      # ];
+      # linkConfig.MTUBytes = "9000";
     };
   };
-  services.frr = {
-    bfdd.enable = true;
-    bgpd.enable = true;
-    ospfd.enable = true;
-    ospf6d.enable = true;
-    config = ''
-      router bgp 65032
-        bgp router-id 10.0.0.99
-        bgp log-neighbor-changes
-        no bgp ebgp-requires-policy
-        no bgp hard-administrative-reset
-        no bgp graceful-restart notification
-        no bgp network import-check
-        neighbor eno1 arista01
-        neighbor eno1 interface v6only remote-as 65033
-        address-family ipv4 unicast
-          network 10.0.0.99/32
-        exit-address-family
-        address-family ipv6 unicast
-          neighbor eno1 activate
-        exit-address-family
-      ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
-      route-map correct_src permit 1
-        match ip address prefix-list loopbacks_ips
-        set src 10.0.0.99
-      ip protocol bgp route-map correct_src
-    '';
-  };
+  # services.frr = {
+  #   bfdd.enable = true;
+  #   bgpd.enable = true;
+  #   ospfd.enable = true;
+  #   ospf6d.enable = true;
+  #   config = ''
+  #     router bgp 65032
+  #       bgp router-id 10.0.0.99
+  #       bgp log-neighbor-changes
+  #       no bgp ebgp-requires-policy
+  #       no bgp hard-administrative-reset
+  #       no bgp graceful-restart notification
+  #       no bgp network import-check
+  #       neighbor eno1 arista01
+  #       neighbor eno1 interface v6only remote-as 65033
+  #       address-family ipv4 unicast
+  #         network 10.0.0.99/32
+  #       exit-address-family
+  #       address-family ipv6 unicast
+  #         neighbor eno1 activate
+  #       exit-address-family
+  #     ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 le 32
+  #     route-map correct_src permit 1
+  #       match ip address prefix-list loopbacks_ips
+  #       set src 10.0.0.99
+  #     ip protocol bgp route-map correct_src
+  #   '';
+  # };
 }

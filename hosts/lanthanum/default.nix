@@ -32,7 +32,14 @@
 
   programs = {
     dconf.enable = true;
-    steam.enable = true;
+steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+};
+    gamescope = {
+      enable = true;
+      capSysNice = false;
+    };
   };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {

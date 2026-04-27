@@ -146,6 +146,11 @@
           allowedTCPPorts = [ 8853 ];
           to = [ "fw" ];
         };
+        allow_dns_api = {
+          from = [ "lab_space" ];
+          to = [ "fw" ];
+          allowedTCPPorts = [ 8081 ];
+        };
         allow_ntp = {
           from = [
             "local_interfaces"

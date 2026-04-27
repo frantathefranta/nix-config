@@ -120,6 +120,11 @@
           to = [ "iot" ];
           verdict = "accept";
         };
+        allow_iot_to_wifi_mdns = {
+          from = [ "iot" ];
+          to = [ "wifi" ];
+          verdict = "accept";
+        };
         allow_access_to_lab = {
           from = [
             "local_interfaces"
@@ -150,6 +155,14 @@
           from = [ "lab_space" ];
           to = [ "fw" ];
           allowedTCPPorts = [ 8081 ];
+        };
+        allow_mdns = {
+          from = [
+            "wifi"
+            "iot"
+          ];
+          allowedUDPPorts = [ 5353 ];
+          to = [ "fw" ];
         };
         allow_ntp = {
           from = [

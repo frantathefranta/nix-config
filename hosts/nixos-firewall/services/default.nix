@@ -7,8 +7,8 @@
     ./firewall-alternate
     ./powerdns.nix
     ./dhcp.nix
-    ./udpbroadcastrelay.nix
-    # TODO: ./radvd.nix
+    # ./udpbroadcastrelay.nix
+    ./avahi.nix
     ./routing.nix
     # TODO: ./qos.nix # https://github.com/budimanjojo/nix-config/blob/main/system/hosts/budimanjojo-firewall/_modules/services/fireqos/default.nix
     ./znc.nix

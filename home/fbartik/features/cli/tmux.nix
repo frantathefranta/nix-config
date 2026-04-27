@@ -61,7 +61,6 @@
       setw -q -g utf8 on
 
       # So tmux always knows about SSH_AUTH_SOCK
-      set-environment -g SSH_AUTH_SOCK ${config.home.homeDirectory}/.ssh/ssh_auth_sock
       set -g update-environment -r
       # -----------------------------------------------------------------------------
       # Key bindings

@@ -13,6 +13,9 @@ in
 {
   systemd.tmpfiles.rules = [ "d ${directory} 0750 ${user} ${group}" ];
 
+  environment.systemPackages = [
+    pkgs.pdns # For using pdnsutil
+  ];
   sops.secrets."powerdns/env" = {
     sopsFile = ../secrets.yaml;
     owner = user;

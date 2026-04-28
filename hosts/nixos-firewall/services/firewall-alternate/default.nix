@@ -17,8 +17,9 @@
       after = [ "hook" ];
       rules = [
         "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
-        "iifname wan0 tcp dport 40002 dnat ip to 10.32.10.10" # Qotom wireguard to R2s
-        "iifname wan0 tcp dport 44069 dnat ip to 10.32.10.10" # Qotom wireguard to Mikrotik
+        "iifname wan0 udp dport 40002 dnat ip to 10.32.10.10" # Qotom wireguard to R2s
+        "iifname wan0 udp dport 41000 dnat ip to 10.32.10.11" # nix-bastion wireguard to Mikrotik
+        "iifname wan0 udp dport 44069 dnat ip to 10.32.10.10" # Qotom wireguard to Mikrotik
         "iifname wan0 tcp dport 18903 dnat ip to 10.33.40.63"
         "iifname wan0 tcp dport 51413 dnat ip to 10.33.40.64"
         "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
@@ -84,6 +85,10 @@
       zones.qotom = {
         ipv4Addresses = [ "10.32.10.10" ];
         ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:10" ];
+      };
+      zones.nix-bastion = {
+        ipv4Addresses = [ "10.32.10.11" ];
+        ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:11" ];
       };
       zones.qbittorrent = {
         ipv4Addresses = [ "10.33.40.63" ];
@@ -221,6 +226,13 @@
           allowedUDPPorts = [
             40002
             44069
+          ];
+        };
+        allow_nix-bastion_wg = {
+          from = [ "untrusted" ];
+          to = [ "nix-bastion" ];
+          allowedUDPPorts = [
+            41000
           ];
         };
         allow_molybdenum_dn42 = {

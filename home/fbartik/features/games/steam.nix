@@ -56,7 +56,7 @@ in
     steam-session
     pkgs.protontricks
     pkgs.gamescope
-    pkgs.unstable.lutris
+    pkgs.lutris
     pkgs.prismlauncher
   ];
 }

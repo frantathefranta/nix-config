@@ -4,28 +4,43 @@
   power.ups = {
     enable = true;
     mode = "netserver";
-    /*
-      APC Smart UPS with NMC2 card (AP9631).
-      Had to run "snmp -c1 public -n1 0.0.0.0" to allow access for SNMPv1
-      No need to set privProtocol=AES as claimed in https://networkupstools.org/stable-hcl.html 
-    */
-    ups."apc-rack-pdu01" = {
-      driver = "snmp-ups";
-      summary = ''
-        mibs=apcc
-        snmp_version=v1
-      '';
-      port = "apc-rack-pdu01.infra.franta.us";
+    ups = {
+      /*
+        APC Smart UPS with NMC2 card (AP9631).
+        Had to run "snmp -c1 public -n1 0.0.0.0" to allow access for SNMPv1
+        No need to set privProtocol=AES as claimed in https://networkupstools.org/stable-hcl.html
+      */
+      "apc-rack-pdu01" = {
+        driver = "snmp-ups";
+        summary = ''
+          mibs=apcc
+          snmp_version=v1
+        '';
+        port = "apc-rack-pdu01.infra.franta.us";
+      };
+      "apc-usb" = {
+        driver = "usbhid-ups";
+        port = "/dev/input/by-id/usb-American_Power_Conversion_Back-UPS_XS_1500M_FW:947.d11_.D_USB_FW:d11_0B2251N05172-hidraw";
+      };
     };
     users."nut-admin" = {
       passwordFile = config.sops.secrets."ups/apcPassword".path;
       upsmon = "primary";
     };
-    upsmon.monitor."apc-rack-pdu01" = {
-      system = "apc-rack-pdu01@localhost";
-      user = "nut-admin";
-      powerValue = 1; # Number of power supplies that the UPS feeds on this system
-      passwordFile = config.sops.secrets."ups/apcPassword".path;
+    upsmon.monitor = {
+      "apc-rack-pdu01" = {
+        system = "apc-rack-pdu01@localhost";
+        user = "nut-admin";
+        powerValue = 1; # Number of power supplies that the UPS feeds on this system
+        passwordFile = config.sops.secrets."ups/apcPassword".path;
+      };
+      # TODO: Cannot be seen for some reason
+      # "apc-usb" = {
+      #   system = "apc-usb@localhost";
+      #   user = "nut-admin";
+      #   powerValue = 0; # Number of power supplies that the UPS feeds on this system
+      #   passwordFile = config.sops.secrets."ups/apcPassword".path;
+      # };
     };
   };
   services.prometheus.exporters.nut = {

@@ -209,6 +209,12 @@ in
       ddns-override-client-update = true; # always generate ddns update request ignoring the client's wishes not to
       ddns-override-no-update = true; # same as above but for different client's wishes
       ddns-qualifying-suffix = "franta.us";
+      /*
+        This could fix errors in PowerDNS like:
+        UPDATE (44091) from 10.0.10.1 for 10.in-addr.arpa: Failed PreRequisites check (RRs differ), returning NXRRSet
+        But I'm not sure it's necessary for now
+      */
+      # ddns-conflict-resolution-mode = "no-check-with-dhcid";
     };
     dhcp-ddns = {
       enable = true;

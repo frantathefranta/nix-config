@@ -166,12 +166,12 @@
           to = [ "fw" ];
           allowedTCPPorts = [ 8081 ];
         };
-        allow_mdns = {
+        allow_multicast_to_fw = {
           from = [
             "wifi"
             "iot"
           ];
-          allowedUDPPorts = [ 5353 ];
+          allowedUDPPorts = [ 1900 5353 ];
           to = [ "fw" ];
         };
         allow_ntp = {

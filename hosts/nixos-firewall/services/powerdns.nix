@@ -28,6 +28,7 @@ in
       webserver=yes
       webserver-address=10.0.10.1 # TODO: Move this to a reverse proxy
       webserver-allow-from=10.0.0.0/8
+      allow-dnsupdate-from=10.0.10.1/32
       api=yes
       api-key=''\${PDNS_AUTH_API_KEY}
       local-port=8853

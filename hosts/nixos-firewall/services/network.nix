@@ -464,4 +464,13 @@
         ExecStop = "${pkgs.python3}/bin/python -u - stop %i -q";
       };
     };
+  services.custom-wireguard.interfaces = {
+    "50-wg_mikrotik" = {
+      listenPort = 41000;
+      peerEndpoint = "mikrotik.eu.franta.us:41000";
+      peerPublicKey = "BkpNRSaQbXazDzVSfyLGnV6WKdVfiRdyTx9YSPWsNwk=";
+      peerAddressV6 = "fe80::1/64";
+      localAddressV6 = "fe80::2";
+    };
+  };
 }

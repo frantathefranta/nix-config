@@ -20,19 +20,31 @@
       };
       "apc-usb" = {
         driver = "usbhid-ups";
-        port = "/dev/input/by-id/usb-American_Power_Conversion_Back-UPS_XS_1500M_FW:947.d11_.D_USB_FW:d11_0B2251N05172-hidraw";
+        port = "/dev/input/event0";
       };
     };
     users."nut-admin" = {
-      passwordFile = config.sops.secrets."ups/apcPassword".path;
+      passwordFile = config.sops.secrets."nut/adminPassword".path;
       upsmon = "primary";
     };
+    users."nut-view" = {
+      passwordFile = config.sops.secrets."nut/viewPassword".path;
+      upsmon = "secondary";
+    };
+    upsd.listen = [
+      {
+        address = "10.0.10.1";
+      }
+      {
+        address = "::";
+      }
+    ];
     upsmon.monitor = {
       "apc-rack-pdu01" = {
         system = "apc-rack-pdu01@localhost";
         user = "nut-admin";
         powerValue = 1; # Number of power supplies that the UPS feeds on this system
-        passwordFile = config.sops.secrets."ups/apcPassword".path;
+        passwordFile = config.sops.secrets."nut/adminPassword".path;
       };
       # TODO: Cannot be seen for some reason
       # "apc-usb" = {
@@ -47,11 +59,20 @@
     enable = true;
   };
   networking.nftables.firewall.rules.allow_nut_access = {
-    from = [ "lab_space" ];
+    from = [
+      "iot"
+      "lab_space"
+    ];
     to = [ "fw" ];
-    allowedTCPPorts = [ config.services.prometheus.exporters.nut.port ];
+    allowedTCPPorts = [
+      3493
+      config.services.prometheus.exporters.nut.port
+    ];
   };
-  sops.secrets."ups/apcPassword" = {
+  sops.secrets."nut/adminPassword" = {
     sopsFile = ../secrets.yaml;
+  };
+  sops.secrets."nut/viewPassword" = {
+    sopsFile = ../../common/secrets.yaml;
   };
 }

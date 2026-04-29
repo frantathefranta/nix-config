@@ -139,6 +139,13 @@
       #   linkConfig.ActivationPolicy = "always-down";
       # };
 
+      "10-lo" = {
+        matchConfig.Name = "lo";
+        address = [
+          "10.0.0.1/32"
+          "2600:1702:6630:3fea::1/128"
+        ];
+      };
       # WAN0
       "30-wan0" = {
         matchConfig.Name = "wan0";
@@ -470,7 +477,7 @@
       peerEndpoint = "mikrotik.eu.franta.us:41000";
       peerPublicKey = "BkpNRSaQbXazDzVSfyLGnV6WKdVfiRdyTx9YSPWsNwk=";
       peerAddressV6 = "fe80::1/64";
-      localAddressV6 = "fe80::2";
+      localAddressV6 = "fe80::2/64";
     };
   };
 }

@@ -145,6 +145,10 @@
           "10.0.0.1/32"
           "2600:1702:6630:3fea::1/128"
         ];
+        # Linux doesn't add lo route to main routing table by default
+        routes = [
+          { Destination = "10.0.0.1/32"; }
+        ];
       };
       # WAN0
       "30-wan0" = {

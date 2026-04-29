@@ -33,7 +33,7 @@
     };
     upsd.listen = [
       {
-        address = "10.0.10.1";
+        address = "0.0.0.0";
       }
       {
         address = "::";

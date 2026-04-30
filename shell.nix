@@ -13,6 +13,8 @@
         ssh-to-age
         gnupg
         age
+        opentofu
+        tofu-ls
       ]
       ++ lib.optionals stdenv.isLinux [
         home-manager

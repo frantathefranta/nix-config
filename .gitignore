@@ -7,3 +7,5 @@ tmp/
 result*
 ssl/*pem
 **/**.key
+**/.terraform
+terraform.tfstate*

@@ -44,6 +44,7 @@ in
     enable = true;
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";
+      "us.franta.us" = "10.33.10.0:53";
       "infra.franta.us" = "10.33.10.0:53";
       "wifi.franta.us" = "10.0.10.1:8853";
       "iot.franta.us" = "10.0.10.1:8853";

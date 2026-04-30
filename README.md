@@ -42,3 +42,8 @@ nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nix
 ```
 
 
+## Terraform
+Running terraform (tofu) with 1Password CLI secret injection:
+``` sh
+$ op run --env-file=terraform/uptimekuma/.env.1password -- tofu -chdir=terraform/uptimekuma apply
+```

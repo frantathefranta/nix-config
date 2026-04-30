@@ -1,7 +1,7 @@
 push_monitors = {
    alert_manager = {
       name     = "Alert Manager"
-      interval = 3600
+      interval = 60
     }
     # another_service = {
     #   name = "Another Service"

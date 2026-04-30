@@ -1,10 +1,12 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
     ../common/global
     ../common/roles/server.nix
+
+    ./services
   ];
 
   networking = {
@@ -16,6 +18,7 @@
       "2606:4700:4700::1111"
       "2606:4700:4700::1001"
     ];
+    nftables.enable = true;
   };
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
@@ -37,6 +40,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM"
   ];
 
+  services.prometheus.exporters.node.openFirewall = false;
   system.stateVersion = "25.11";
   nixpkgs.hostPlatform = "aarch64-linux";
 }

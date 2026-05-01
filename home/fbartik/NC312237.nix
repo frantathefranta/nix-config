@@ -15,7 +15,7 @@
   ];
   home.packages = with pkgs; [
     symbola
-    d2
+    # d2
   ];
   programs.nh = {
     clean = {

@@ -40,6 +40,7 @@ provider "registry.opentofu.org/breml/uptimekuma" {
   version     = "0.3.0"
   constraints = "~> 0.3"
   hashes = [
+    "h1:5VtvgHrLVxsN+G4xZUaERuNTVyOunGtGjtD4OO8c8nk=",
     "h1:FtevhJa/jHuGn7M8YwKsO83434ttrZHn9Uiaz6WOnpc=",
     "zh:1b1b62fc9b61f7f66eefaac2ae03cd273c8cae86105b37fff72aea271916d05b",
     "zh:1ce03da1ce13eae1b70df32af6e2ed66ed77ababc59588caeb33f3ede97c92e0",

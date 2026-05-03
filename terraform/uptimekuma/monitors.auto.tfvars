@@ -3,8 +3,8 @@ push_monitors = {
       name     = "Alert Manager"
       interval = 60
     }
-    # another_service = {
-    #   name = "Another Service"
-    #   # interval defaults to 3600
-    # }
+    nixos_firewall = {
+      name = "nixos-firewall"
+      interval = 60
+    }
   }

@@ -7,28 +7,33 @@
   imports = [
     inputs.disko.nixosModules.disko
   ];
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "ehci_pci"
-    "xhci_pci_renesas"
-    "xhci_pci"
-    "usb_storage"
-    "sd_mod"
-    "rtsx_pci_sdmmc"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  # boot.kernelParams = [ "psmouse.proto=imps" ]; # This fixes trackpoint choppiness
-  boot.extraModulePackages = [ ];
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      consoleMode = "max";
-      configurationLimit = 5;
+  boot = {
+    initrd.availableKernelModules = [
+      "nvme"
+      "ehci_pci"
+      "xhci_pci_renesas"
+      "xhci_pci"
+      "usb_storage"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+    ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "kvm-amd" ];
+    # boot.kernelParams = [ "psmouse.proto=imps" ]; # This fixes trackpoint choppiness
+    extraModulePackages = [ ];
+    loader = {
+      systemd-boot = {
+        enable = true;
+        consoleMode = "max";
+        configurationLimit = 5;
+      };
+      efi.canTouchEfiVariables = true;
     };
-    efi.canTouchEfiVariables = true;
+    tmp.cleanOnBoot = true;
+    supportedFilesystems = {
+      exfat = true;
+    };
   };
-  boot.tmp.cleanOnBoot = true;
   disko.devices.disk.main = {
     device = "/dev/disk/by-id/nvme-WDC_PC_SN720_SDAQNTW-256G-1001_192846427976";
     type = "disk";

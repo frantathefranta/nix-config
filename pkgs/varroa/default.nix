@@ -23,14 +23,6 @@ buildGoModule (finalAttrs: {
 
   doCheck = true;
 
-  # passthru = {
-  #   updateScript = nix-update-script { };
-  #   tests.version = testers.testVersion {
-  #     package = finalAttrs.finalPackage;
-  #     command = "wrtag --version";
-  #   };
-  # };
-
   meta = {
     description = "A much nicer parasite than varroa destructor.";
     homepage = "https://gitlab.com/passelecasque/varroa";

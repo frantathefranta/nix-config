@@ -15,13 +15,23 @@
   ];
   networking = {
     hostName = "silicium";
-    useDHCP = true;
-    interfaces.wlp3s0.useDHCP = true;
     nameservers = [ ];
+    useNetworkd = true;
   };
-  # environment.systemPackages = [
-  #   (builtins.getFlake "github:jordond/jolt").packages.${pkgs.system}.default
-  # ];
+  systemd = {
+    network = {
+      enable = true;
+      wait-online.enable = false;
+      networks."30-wlp3s0" = {
+        matchConfig.Name = "wlp3s0";
+        networkConfig = {
+          DHCP = "ipv4";
+          IPv6AcceptRA = true;
+        };
+      };
+    };
+  };
+
   hardware.enableAllFirmware = true;
   services.fprintd.enable = true;
 

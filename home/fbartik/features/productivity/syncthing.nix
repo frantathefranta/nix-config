@@ -4,7 +4,7 @@
   lib,
   osConfig ? null,
   ...
-} @ args:
+}@args:
 let
   hostname = if args ? hostname then args.hostname else osConfig.networking.hostName;
 
@@ -50,6 +50,7 @@ let
     "syncthing" = {
       path = "${config.home.homeDirectory}/syncthing";
       devices = otherDevices;
+      versioning.type = "staggered";
       id = "awtmp-wdpjw";
     };
   };
@@ -84,12 +85,15 @@ in
     overrideDevices = true;
     overrideFolders = true;
     settings = {
-      options.localAnnounceEnabled = true;
+      options = {
+        localAnnounceEnabled = true;
+        urAccepted = 3;
+      };
       devices = lib.mapAttrs (_name: cfg: { inherit (cfg) id; }) devicesForHost;
       folders = lib.mapAttrs (
         _name: cfg:
         {
-          inherit (cfg) path devices;
+          inherit (cfg) path devices versioning;
         }
         // lib.optionalAttrs (cfg ? id) { inherit (cfg) id; }
       ) hostFolders;

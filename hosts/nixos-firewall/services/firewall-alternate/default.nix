@@ -177,6 +177,7 @@
         allow_ntp = {
           from = [
             "local_interfaces"
+            "lab_space"
           ];
           allowedUDPPorts = [ 123 ];
           to = [ "fw" ];

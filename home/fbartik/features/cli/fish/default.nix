@@ -80,7 +80,13 @@ in {
         bash -ic "source ${./get-bash-completions.sh}; get_completions '$cmd'"
       '';
     };
-    shellInit = lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
+    shellInit = /* fish */ ''
+      # Pin SSH_AUTH_SOCK to the fixed symlink path inside tmux so agent
+      # forwarding works across reconnects regardless of session environment.
+      if set -q TMUX
+        set -gx SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+      end
+    '' + lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
       # Source Nix profile scripts for non-system fish on Darwin
       if test -e /nix/var/nix/profiles/default/etc/profile.d/nix.fish
         source /nix/var/nix/profiles/default/etc/profile.d/nix.fish

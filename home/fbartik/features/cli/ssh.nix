@@ -18,7 +18,7 @@ let
     else if (builtins.length config.monitors != 0) then
       "${config.home.homeDirectory}/.1password/agent.sock"
     else
-      "$SSH_AUTH_SOCK";
+      "${config.home.homeDirectory}/.ssh/ssh_auth_sock";
 in
 {
   programs.ssh = {
@@ -82,5 +82,16 @@ in
         }
       ];
     };
+  };
+  home.file.".ssh/rc" = lib.mkIf (!isWorkstation && config.programs.tmux.enable) {
+    executable = true;
+    text = /* bash */ ''
+      #!/usr/bin/env bash
+
+      # Fix SSH auth socket location so agent forwarding works with tmux.
+      if test "$SSH_AUTH_SOCK" ; then
+        ln -sf $SSH_AUTH_SOCK ${config.home.homeDirectory}/.ssh/ssh_auth_sock
+      fi
+    '';
   };
 }

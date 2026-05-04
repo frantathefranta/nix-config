@@ -60,8 +60,8 @@
 
       setw -q -g utf8 on
 
-      # So tmux always knows about SSH_AUTH_SOCK
-      set -g update-environment -r
+      # Always use the fixed SSH agent socket path (maintained by ~/.ssh/rc symlink)
+      set-environment -g SSH_AUTH_SOCK ${config.home.homeDirectory}/.ssh/ssh_auth_sock
       # -----------------------------------------------------------------------------
       # Key bindings
       # -----------------------------------------------------------------------------

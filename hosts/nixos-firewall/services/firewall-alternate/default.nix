@@ -171,7 +171,10 @@
             "wifi"
             "iot"
           ];
-          allowedUDPPorts = [ 1900 5353 ];
+          allowedUDPPorts = [
+            1900
+            5353
+          ];
           to = [ "fw" ];
         };
         allow_ntp = {
@@ -226,6 +229,13 @@
           allowedUDPPorts = [
             40002
             44069
+          ];
+        };
+        allow_bgp_from_lab = {
+          from = [ "lab_space" ];
+          to = [ "fw" ];
+          allowedTCPPorts = [
+            179
           ];
         };
         allow_wg_mikrotik = {

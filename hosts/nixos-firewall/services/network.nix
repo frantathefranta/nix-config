@@ -204,6 +204,7 @@
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
+          IPv6PrivacyExtensions = false;
         };
         dhcpPrefixDelegationConfig = {
           SubnetId = 0;
@@ -242,9 +243,11 @@
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
+          IPv6PrivacyExtensions = false;
         };
         dhcpPrefixDelegationConfig = {
           SubnetId = 1;
+          Token = "::10:0:20:1";
         };
         address = [ "10.0.20.1/24" ];
         linkConfig.RequiredForOnline = "routable";
@@ -257,6 +260,7 @@
           DHCPPrefixDelegation = true;
           IPv6AcceptRA = false;
           IPv6SendRA = true;
+          IPv6PrivacyExtensions = false;
         };
         dhcpPrefixDelegationConfig = {
           SubnetId = 2;

@@ -249,6 +249,10 @@
           SubnetId = 1;
           Token = "::10:0:20:1";
         };
+        ipv6SendRAConfig = {
+          # Apple TV lives on same subnet, also sends RAs and a non-Apple laptop (silicium) gets confused
+          RouterPreference = "high";
+        };
         address = [ "10.0.20.1/24" ];
         linkConfig.RequiredForOnline = "routable";
       };

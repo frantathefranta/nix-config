@@ -17,7 +17,7 @@
     # ./jujutsu.nix
     # ./lyrics.nix
     # ./nushell.nix
-    # ./nix-index.nix
+    ./nix-index.nix
     # ./pfetch.nix
     ./ssh.nix
     # ./xpo.nix

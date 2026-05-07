@@ -61,6 +61,8 @@ in
       "result"
       ".jj"
       ".agent-shell"
+      ".terraform"
+      "terraform.tfstate*"
     ];
   };
 }

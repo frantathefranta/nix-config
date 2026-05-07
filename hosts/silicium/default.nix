@@ -21,13 +21,25 @@
   systemd = {
     network = {
       enable = true;
-      wait-online.enable = false;
+      wait-online = {
+        enable = true;
+        extraArgs = [ "--any" "--interface=wlp3s0" "--interface=enp5s0" ];
+      };
+      networks."20-enp5s0" = {
+        matchConfig.Name = "enp5s0";
+        networkConfig = {
+          DHCP = "yes";
+          IPv6AcceptRA = true;
+        };
+        dhcpV4Config.RouteMetric = 10;
+      };
       networks."30-wlp3s0" = {
         matchConfig.Name = "wlp3s0";
         networkConfig = {
           DHCP = "ipv4";
           IPv6AcceptRA = true;
         };
+        dhcpV4Config.RouteMetric = 100;
       };
     };
   };

@@ -5,7 +5,7 @@
     remotes.franta-music = {
       config = {
         type = "sftp";
-        host = "ssh.franta.dev";
+        host = "nix-bastion.infra.franta.us";
         key_use_agent = false;
         key_file = "${config.home.homeDirectory}/.ssh/local_sshkey";
         known_hosts_file = "${config.home.homeDirectory}/.ssh/known_hosts";

@@ -170,6 +170,10 @@ in
       aporetic # fonts
       imagemagick
       pinentry-emacs
+      texliveFull
+      # texlive.combined.scheme-medium
+      texlivePackages.fontawesome.tex
+      texlivePackages.academicons
     ]
     ++ lib.optionals isDarwin [ emacsClientApp ]
     ++ lib.optionals (!isDarwin) [

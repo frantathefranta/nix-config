@@ -88,26 +88,26 @@
     "net.ipv6.conf.all.forwarding" = 1;
   };
   # systemd-resolved binds to same IP as dnsmasq, this disables it
-  services.resolved.extraConfig = ''
-    DNSStubListener=no
-  '';
+  # services.resolved.extraConfig = ''
+  #   DNSStubListener=no
+  # '';
 
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
-  networking.nameservers = [ ];
+  networking.nameservers = [ "10.0.10.1" ];
 
   environment.systemPackages = [ pkgs.wireguard-tools ];
-  services.dnsmasq = {
-    enable = true;
-    resolveLocalQueries = true;
-    settings = {
-      server = [
-        "/dn42/fdb7:c21f:f30f:53::"
-        "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"
-        "10.33.10.0"
-        "10.33.10.1"
-      ];
-    };
-  };
+  # services.dnsmasq = {
+  #   enable = true;
+  #   resolveLocalQueries = true;
+  #   settings = {
+  #     server = [
+  #       "/dn42/fdb7:c21f:f30f:53::"
+  #       "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"
+  #       "10.33.10.0"
+  #       "10.33.10.1"
+  #     ];
+  #   };
+  # };
   systemd.network.enable = true;
   systemd.network.netdevs."20-vrf_dn42" = {
     netdevConfig = {

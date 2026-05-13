@@ -226,21 +226,21 @@
           # "lan0.200" # SERVER
           # "lan0.250" # GUEST
         ];
-        routes = [
-          {
-            Gateway = "10.0.10.2";
-            Destination = "10.32.10.10/24";
-          }
-          {
-            Gateway = "10.0.10.2";
-            Destination = "10.33.0.0/16";
-          }
-          # TODO: Uncomment when WAN is no longer connected to VLAN40
-          # {
-          #   Gateway = "10.0.10.2";
-          #   Destination = "10.40.0.0/16";
-          # }
-        ];
+        # routes = [
+        #   {
+        #     Gateway = "10.0.10.2";
+        #     Destination = "10.32.10.10/24";
+        #   }
+        #   {
+        #     Gateway = "10.0.10.2";
+        #     Destination = "10.33.0.0/16";
+        #   }
+        #   # TODO: Uncomment when WAN is no longer connected to VLAN40
+        #   # {
+        #   #   Gateway = "10.0.10.2";
+        #   #   Destination = "10.40.0.0/16";
+        #   # }
+        # ];
       };
 
       #   # HOME VLAN

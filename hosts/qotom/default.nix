@@ -22,28 +22,6 @@
     hostName = "qotom";
     useDHCP = false;
     enableIPv6 = true;
-    interfaces.lo = {
-      ipv4.addresses = [
-        {
-          address = "10.0.10.10";
-          prefixLength = 32;
-        }
-      ];
-    };
-    interfaces.enp1s0 = {
-      ipv4.addresses = [
-        {
-          address = "10.32.10.10";
-          prefixLength = 24;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = "2600:1702:6630:3fed:10:32:10:10";
-          prefixLength = 64;
-        }
-      ];
-    };
     interfaces.wlp2s0.ipv4 = {
       addresses = [
         {
@@ -51,14 +29,6 @@
           prefixLength = 27;
         }
       ];
-    };
-    defaultGateway = {
-      address = "10.32.10.254";
-      interface = "enp1s0";
-    };
-    defaultGateway6 = {
-      address = "fe80::464c:a8ff:fede:3cf7";
-      interface = "enp1s0";
     };
     firewall = {
       checkReversePath = false;
@@ -93,7 +63,7 @@
   # '';
 
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
-  networking.nameservers = [ "10.0.10.1" ];
+  networking.nameservers = [ ];
 
   environment.systemPackages = [ pkgs.wireguard-tools ];
   # services.dnsmasq = {
@@ -109,6 +79,40 @@
   #   };
   # };
   systemd.network.enable = true;
+
+  systemd.network.networks."10-lo" = {
+    matchConfig.Name = "lo";
+    address = [
+      "10.0.10.10/32"
+    ];
+    # Linux doesn't add lo route to main routing table by default
+    routes = [
+      { Destination = "10.0.10.10/32"; }
+    ];
+  };
+  systemd.network.networks."10-enp1s0" = {
+    matchConfig.Name = "enp1s0";
+    address = [ "10.32.10.10/24" ];
+    networkConfig = {
+      IPv6AcceptRA = true;
+      IPv6PrivacyExtensions = false;
+    };
+    ipv6AcceptRAConfig = {
+      Token = "::10:32:10:10";
+    };
+    dns = [ "10.0.10.1" ];
+    domains = [
+      "franta.us"
+      "infra.franta.us"
+    ];
+    routes = [
+      {
+        Gateway = "10.32.10.254";
+        Destination = "0.0.0.0/0";
+      }
+    ];
+  };
+
   systemd.network.netdevs."20-vrf_dn42" = {
     netdevConfig = {
       Name = "dn42";
@@ -134,6 +138,7 @@
       IPv6LinkLocalAddressGenerationMode = "none";
       VRF = "dn42";
     };
+    dns = [ "fdb7:c21f:f30f:53::" ];
   };
   services.custom-wireguard.interfaces = {
     "50-wg_mikrotik" = {

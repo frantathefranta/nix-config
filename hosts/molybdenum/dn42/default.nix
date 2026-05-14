@@ -80,19 +80,25 @@
       "~d.f.ip6.arpa"
     ];
   };
-  # systemd.network.netdevs."10-dummy_ospf" = {
-  #   netdevConfig = {
-  #     Name = "dummy_ospf";
-  #     Kind = "dummy";
-  #   };
-  # };
-  # systemd.network.networks."10-dummy_ospf" = {
-  #   matchConfig.Name = "dummy_ospf";
-  #   address = [
-  #     "fdb7:c21f:f30f::89/128"
-  #   ];
-  #   networkConfig = {
-  #     LinkLocalAddressing = false;
-  #   };
-  # };
+  systemd.network.netdevs = {
+    "20-ens18.2000" = {
+      netdevConfig = {
+        Name = "ens18.2000";
+        Description = "DN42 DHCP";
+        Kind = "vlan";
+      };
+      vlanConfig.Id = 2000;
+    };
+  };
+  systemd.network.networks = {
+    "20-ens18.2000" = {
+      matchConfig.Name = "ens18.2000";
+      networkConfig = {
+        IPv6AcceptRA = false;
+        IPv6SendRA = true;
+        IPv6PrivacyExtensions = false;
+      };
+      addresses = [ { Address = "fdb7:c21f:f30f:0100:172:23:234:17/64" } ];
+    };
+  };
 }

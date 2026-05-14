@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   lo_ipv6 = "2600:1702:6630:3fec::10:11";
   dn42_ipv6 = "fdb7:c21f:f30f:10::11";
@@ -18,44 +18,6 @@ in
     hostName = "nix-bastion";
     useDHCP = false;
     enableIPv6 = true;
-    interfaces.lo = {
-      ipv4.addresses = [
-        {
-          address = "10.0.10.11";
-          prefixLength = 32;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = lo_ipv6;
-          prefixLength = 128;
-        }
-      ];
-    };
-    interfaces.ens18 = {
-      ipv4.addresses = [
-        {
-          address = "10.32.10.11";
-          prefixLength = 24;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = "2600:1702:6630:3fed:10:32:10:11";
-          prefixLength = 64;
-        }
-      ];
-    };
-    defaultGateway = {
-      address = "10.32.10.254";
-      interface = "ens18";
-      metric = 2147483647;
-    };
-    defaultGateway6 = {
-      address = "fe80::464c:a8ff:fede:3cf7";
-      interface = "ens18";
-      metric = 2147483647;
-    };
     firewall.interfaces.ens18 = {
       allowedTCPPorts = [
         80
@@ -63,33 +25,18 @@ in
       ];
     };
   };
-  boot.kernel.sysctl = {
-    "net.ipv4.conf.all.rp_filter" = 0;
-    "net.ipv4.conf.all.forwarding" = 1;
-    "net.ipv4.conf.default.rp_filter" = 0;
-    "net.ipv4.ip_forward" = 1;
-    "net.ipv6.conf.all.forwarding" = 1;
-  };
-  # systemd-resolved binds to same IP as dnsmasq, this disables it
-  # services.resolved.extraConfig = ''
-  #   DNSStubListener=no
-  # '';
+  # boot.kernel.sysctl = {
+  #   "net.ipv4.conf.all.rp_filter" = 0;
+  #   "net.ipv4.conf.all.forwarding" = 1;
+  #   "net.ipv4.conf.default.rp_filter" = 0;
+  #   "net.ipv4.ip_forward" = 1;
+  #   "net.ipv6.conf.all.forwarding" = 1;
+  # };
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
-  networking.nameservers = [ "10.0.10.1" ];
+  networking.nameservers = [ ];
 
   time.timeZone = "America/Detroit";
-  # services.dnsmasq = {enable = true;
-  #   resolveLocalQueries = true;
-  #   settings = {
-  #     clear-on-reload = true;
-  #     server = [
-  #       "/dn42/fdb7:c21f:f30f:53::"
-  #       "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"
-  #       "10.33.10.0"
-  #       "10.33.10.1"
-  #     ];
-  #   };
-  # };
+  security.pki.certificateFiles = [ "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ];
   users.groups = {
     media = {
       gid = 1003;
@@ -97,6 +44,62 @@ in
     };
   };
   systemd.network.enable = true;
+
+  systemd.network.networks."10-lo" = {
+    matchConfig.Name = "lo";
+    address = [
+      "10.0.10.11/32"
+      "${lo_ipv6}/128"
+    ];
+    # Linux doesn't add lo route to main routing table by default
+    routes = [
+      { Destination = "10.0.10.11/32"; }
+    ];
+  };
+
+  systemd.network.networks."10-ens18" = {
+    matchConfig.Name = "ens18";
+    address = [ "10.32.10.11/24" ];
+    networkConfig = {
+      IPv6AcceptRA = true;
+      IPv6PrivacyExtensions = false;
+    };
+    ipv6AcceptRAConfig = {
+      Token = "::10:32:10:11";
+    };
+    dns = [ "10.0.10.1" ];
+    domains = [
+      "franta.us"
+      "infra.franta.us"
+    ];
+    routes = [
+      {
+        Gateway = "10.32.10.254";
+        Destination = "0.0.0.0/0";
+      }
+    ];
+    vlan = [ "ens18.2000" ];
+  };
+  systemd.network = {
+    netdevs."20-ens18.2000" = {
+      netdevConfig = {
+        Name = "ens18.2000";
+        Description = "DN42 DHCP";
+        Kind = "vlan";
+      };
+      vlanConfig.Id = 2000;
+    };
+    networks."20-ens18.2000" = {
+      matchConfig.Name = "ens18.2000";
+      networkConfig = {
+        IPv6AcceptRA = true;
+        IPv6PrivacyExtensions = false;
+      };
+      ipv6AcceptRAConfig = {
+        Token = "::10:32:10:11";
+      };
+    };
+  };
   systemd.network.netdevs."10-dummy42" = {
     netdevConfig = {
       Name = "dummy42";

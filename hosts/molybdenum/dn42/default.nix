@@ -98,7 +98,17 @@
         IPv6SendRA = true;
         IPv6PrivacyExtensions = false;
       };
-      addresses = [ { Address = "fdb7:c21f:f30f:0100:172:23:234:17/64" } ];
+      ipv6SendRAConfig = {
+        RouterLifetimeSec = 0; # Don't advertise a default route. Doesn't interfere with ipv6RoutePrefixes
+        DNS = "fdb7:c21f:f30f:53::";
+      };
+      ipv6Prefixes = [ { Prefix = "fdb7:c21f:f30f:0099::/64"; } ];
+      ipv6RoutePrefixes = [ { Route = "fd00::/8"; } ];
+      addresses = [ { Address = "fdb7:c21f:f30f:0099:172:23:234:17/64"; } ];
+      domains = [
+        "~dn42"
+        "~d.f.ip6.arpa"
+      ];
     };
   };
 }

@@ -7,7 +7,7 @@
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
     inputs.hardware.nixosModules.common-pc-ssd
-    inputs.gobgp.nixosModules.gobgp
+    # inputs.gobgp.nixosModules.gobgp
     ./services
     ./hardware-configuration.nix
 
@@ -31,7 +31,6 @@
       ];
     };
     firewall = {
-      checkReversePath = false;
       interfaces = {
         enp1s0 = {
           allowedUDPPorts = [
@@ -40,44 +39,15 @@
           ];
         };
       };
-      extraCommands = ''
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.33.00.0/16 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 10.32.10.0/24 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
-      '';
     };
   };
   time.timeZone = "America/Detroit";
-  boot.kernel.sysctl = {
-    "net.ipv4.conf.all.rp_filter" = 0;
-    "net.ipv4.conf.all.forwarding" = 1;
-    "net.ipv4.conf.default.rp_filter" = 0;
-    "net.ipv4.ip_forward" = 1;
-    "net.ipv6.conf.all.forwarding" = 1;
-  };
-  # systemd-resolved binds to same IP as dnsmasq, this disables it
-  # services.resolved.extraConfig = ''
-  #   DNSStubListener=no
-  # '';
+  security.pki.certificateFiles = [ "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ];
 
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
   networking.nameservers = [ ];
 
   environment.systemPackages = [ pkgs.wireguard-tools ];
-  # services.dnsmasq = {
-  #   enable = true;
-  #   resolveLocalQueries = true;
-  #   settings = {
-  #     server = [
-  #       "/dn42/fdb7:c21f:f30f:53::"
-  #       "/d.f.ip6.arpa/fdb7:c21f:f30f:53::"
-  #       "10.33.10.0"
-  #       "10.33.10.1"
-  #     ];
-  #   };
-  # };
   systemd.network.enable = true;
 
   systemd.network.networks."10-lo" = {
@@ -111,6 +81,28 @@
         Destination = "0.0.0.0/0";
       }
     ];
+    vlan = [ "enp1s0.2000" ];
+  };
+
+  systemd.network = {
+    netdevs."20-enp1s0.2000" = {
+      netdevConfig = {
+        Name = "enp1s0.2000";
+        Description = "DN42 DHCP";
+        Kind = "vlan";
+      };
+      vlanConfig.Id = 2000;
+    };
+    networks."20-enp1s0.2000" = {
+      matchConfig.Name = "enp1s0.2000";
+      networkConfig = {
+        IPv6AcceptRA = true;
+        IPv6PrivacyExtensions = false;
+      };
+      ipv6AcceptRAConfig = {
+        Token = "::10:32:10:10";
+      };
+    };
   };
 
   systemd.network.netdevs."20-vrf_dn42" = {

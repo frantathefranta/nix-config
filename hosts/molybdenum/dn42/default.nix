@@ -32,6 +32,7 @@
         ip saddr 10.33.0.0/16 accept
         ip saddr 10.32.10.0/24 accept
         ip6 saddr 2600:1702:6630:3fec::/62 accept
+        ip6 saddr 2600:1702:6630:3fe4::/64 accept
       '';
     };
     nftables = {

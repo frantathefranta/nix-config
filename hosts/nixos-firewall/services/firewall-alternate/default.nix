@@ -162,7 +162,10 @@
           to = [ "fw" ];
         };
         allow_dns_api = {
-          from = [ "lab_space" ];
+          from = [
+            "lab_space"
+            "wg"
+          ];
           to = [ "fw" ];
           allowedTCPPorts = [ 8081 ];
         };

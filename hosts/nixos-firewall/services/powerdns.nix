@@ -26,8 +26,10 @@ in
     enable = true;
     extraConfig = ''
       webserver=yes
-      webserver-address=10.0.10.1 # TODO: Move this to a reverse proxy
-      webserver-allow-from=10.0.0.0/8
+      # webserver cannot listen on more than 1 endpoint
+      webserver-address=:: # TODO: Move this to a reverse proxy
+      # ::ffff:127.0.0.1/32 allows IPv4 traffic
+      webserver-allow-from=2600:1702:6630:3fe0::/60,::ffff:127.0.0.1/32
       allow-dnsupdate-from=10.0.10.1/32
       api=yes
       api-key=''\${PDNS_AUTH_API_KEY}
@@ -42,6 +44,12 @@ in
 
   services.pdns-recursor = {
     enable = true;
+    dns = {
+      allowFrom = [ # Default is only private IPs (including IPv6 ULAs)
+        "::/0"
+        "0.0.0.0/0"
+      ];
+    };
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";
       "us.franta.us" = "10.33.10.0:53";

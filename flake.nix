@@ -29,6 +29,8 @@
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
     direnv-instant.url = "github:Mic92/direnv-instant";
     nnf.url = "github:thelegy/nixos-nftables-firewall";
+    nixos-dns.url = "github:Janik-Haag/nixos-dns";
+    nixos-dns.inputs.nixpkgs.follows = "nixpkgs";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
@@ -72,6 +74,10 @@
           config.allowUnfree = true;
         }
       );
+      dnsConfig = {
+        inherit (self) nixosConfigurations;
+        extraConfig = import ./dns.nix;
+      };
     in
     {
       inherit lib;
@@ -79,11 +85,36 @@
       # Accessible through 'nix build', 'nix shell', etc
       packages = forEachSystem (
         pkgs:
-        import ./pkgs {
+        let
+          generate = inputs.nixos-dns.utils.generate pkgs;
+        in
+        (import ./pkgs {
           inherit pkgs;
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (pkgs) system;
             config.allowUnfree = true;
+          };
+        })
+        // {
+          zoneFiles = generate.zoneFiles dnsConfig;
+          octodns = generate.octodnsConfig {
+            inherit dnsConfig;
+            config = {
+              providers = {
+                bind = {
+                  class = "octodns_bind.Rfc2136Provider";
+                  host = "2600:1702:6630:3fed::242";
+                  port = 53;
+                  ipv6 = true;
+                  key_name = "env/AXFR_KEY_NAME";
+                  key_secret = "env/AXFR_KEY_SECRET";
+                  key_algorithm = "hmac-sha256";
+                };
+              };
+            };
+            zones = {
+              "franta.dn42." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "bind" ];
+            };
           };
         }
       );

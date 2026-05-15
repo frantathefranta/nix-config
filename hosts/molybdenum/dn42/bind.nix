@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   services.bind = {
     cacheNetworks = [
@@ -29,6 +30,7 @@
       "2606:4700:4700::1001"
     ];
     extraConfig = ''
+      include "${config.sops.secrets."bind/tsigkey".path}";
       zone "dn42" {
         type forward;
         forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
@@ -59,16 +61,13 @@
       };
     '';
     forward = "only";
-    # listenOn = [
-    #   "!10.32.10.0/24"
-    #   "0.0.0.0/0"
-    # ];
     zones = {
       "franta.dn42" = {
         file = "/etc/zones/franta.dn42";
         master = true;
+        slaves = [ "key franta.dn42." ]; # This should just be for IPs but works for keys as well (as of 25.11)
         extraConfig = ''
-          update-policy local;
+          allow-update { key franta.dn42.; };
         '';
       };
       "16/28.234.23.172.in-addr.arpa" = {
@@ -86,5 +85,10 @@
         '';
       };
     };
+  };
+  sops.secrets."bind/tsigkey" = {
+    sopsFile = ../secrets.yaml;
+    owner = config.users.users.named.name;
+    group = config.users.users.named.group;
   };
 }

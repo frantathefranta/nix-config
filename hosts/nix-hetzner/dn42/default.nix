@@ -1,11 +1,13 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }:
 
 {
   imports = [
+    inputs.nixos-dns.nixosModules.dns
     ./bird.nix
     ./peers/wireguard.nix
   ];
@@ -17,6 +19,15 @@
     "net.ipv6.conf.all.forwarding" = 1;
   };
   networking = {
+    domains = {
+      enable = true;
+      defaultTTL = 86400;
+      baseDomains."franta.dn42" = { };
+      subDomains."us-pdx.franta.dn42" = {
+        a.data = "172.23.234.18";
+        aaaa.data = "fdb7:c21f:f30f:1::1";
+      };
+    };
     firewall = {
       checkReversePath = false;
       extraCommands = ''

@@ -1,10 +1,11 @@
-{ ... }:
+{ inputs, ... }:
 let
   hostIPv4 = "10.32.10.242";
 in
 {
   imports = [
     #./services
+    inputs.nixos-dns.nixosModules.dns
     ./dn42
     ./hardware-configuration.nix
 
@@ -18,6 +19,22 @@ in
   ];
   networking = {
     hostName = "molybdenum";
+    domains = {
+      enable = true;
+      defaultTTL = 86400;
+      baseDomains."franta.dn42" = { };
+      subDomains."ns0.franta.dn42" = {
+        a.data = "172.23.234.30";
+        aaaa.data = "fdb7:c21f:f30f:53::";
+      };
+      subDomains."us-cmh.franta.dn42" = {
+        a.data = "172.23.234.17";
+        aaaa.data = "fdb7:c21f:f30f::1";
+      };
+      subDomains."lg.franta.dn42" = {
+        cname.data = "us-cmh";
+      };
+    };
     nameservers = [
       "1.1.1.1"
       "1.0.0.1"

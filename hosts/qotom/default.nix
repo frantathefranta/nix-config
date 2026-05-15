@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   inputs,
   ...
 }:
@@ -7,6 +8,7 @@
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
     inputs.hardware.nixosModules.common-pc-ssd
+    inputs.nixos-dns.nixosModules.dns
     # inputs.gobgp.nixosModules.gobgp
     ./services
     ./hardware-configuration.nix
@@ -20,8 +22,14 @@
   ];
   networking = {
     hostName = "qotom";
-    useDHCP = false;
-    enableIPv6 = true;
+    domains = {
+      enable = true;
+      baseDomains."franta.dn42" = { };
+      subDomains."${config.networking.hostName}.franta.dn42" = {
+        aaaa.data = "fdb7:c21f:f30f:99:10:32:10:10";
+      };
+    };
+
     interfaces.wlp2s0.ipv4 = {
       addresses = [
         {

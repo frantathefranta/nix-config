@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
-  
+
   imports = [
+    inputs.nixos-dns.nixosModules.dns
     ./bird.nix
     ./peers/wireguard.nix
   ];
@@ -15,6 +16,17 @@
     "net.ipv6.conf.all.forwarding" = 1;
     "net.ipv4.tcp_l3mdev_accept" = 1;
     "net.ipv4.udp_l3mdev_accept" = 1;
+  };
+  networking = {
+    domains = {
+      enable = true;
+      defaultTTL = 86400;
+      baseDomains."franta.dn42" = { };
+      subDomains."cz-prg.franta.dn42" = {
+        a.data = "172.23.234.19";
+        aaaa.data = "fdb7:c21f:f30f:2::1";
+      };
+    };
   };
   systemd.network.enable = true;
   systemd.network.netdevs."20-vrf_dn42" = {
@@ -56,8 +68,8 @@
       VRF = "dn42";
     };
     dns = [
-     "172.23.234.30" 
-     "fdb7:c21f:f30f:53::" 
+      "172.23.234.30"
+      "fdb7:c21f:f30f:53::"
     ];
     domains = [
       "~dn42"

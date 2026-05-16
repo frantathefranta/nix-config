@@ -33,31 +33,31 @@
       include "${config.sops.secrets."bind/tsigkey".path}";
       zone "dn42" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "20.172.in-addr.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "21.172.in-addr.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "22.172.in-addr.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "23.172.in-addr.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "10.in-addr.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
       zone "d.f.ip6.arpa" {
         type forward;
-        forwarders { 172.20.0.53; fd42:d42:d42:54::1; };
+        forwarders { 172.20.0.53; 172.23.0.53; fd42:d42:d42:54::1; fd42:d42:d42:53::1; };
       };
     '';
     forward = "only";

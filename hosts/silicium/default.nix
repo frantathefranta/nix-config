@@ -39,6 +39,7 @@
           DHCP = "ipv4";
           IPv6AcceptRA = true;
         };
+        ipv6AcceptRAConfig.RouterDenyList = [ "fe80::1c7d:ad2e:acf4:e622" ];
         dhcpV4Config.RouteMetric = 100;
       };
     };

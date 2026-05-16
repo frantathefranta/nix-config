@@ -33,7 +33,16 @@
         nnf-drop.enable = true;
         nnf-loopback.enable = true;
         nnf-dhcpv6.enable = true;
-        nnf-icmp.enable = true;
+        nnf-icmp = {
+          enable = true;
+          ipv6Types = [
+            "echo-request"
+            "nd-router-solicit" # The default snippet is missing this
+            "nd-router-advert"
+            "nd-neighbor-solicit"
+            "nd-neighbor-advert"
+          ];
+        };
         nnf-ssh.enable = true;
         nnf-nixos-firewall.enable = false;
       };

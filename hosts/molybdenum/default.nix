@@ -31,6 +31,9 @@ in
         a.data = "172.23.234.17";
         aaaa.data = "fdb7:c21f:f30f::1";
       };
+      subDomains."us-cmh-wg-home.franta.dn42" = {
+        aaaa.data = "fdb7:c21f:f30f:98::1";
+      };
       subDomains."lg.franta.dn42" = {
         cname.data = "us-cmh";
       };

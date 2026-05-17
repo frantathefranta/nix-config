@@ -41,6 +41,7 @@
       capSysNice = false;
     };
     pulseview.enable = true;
+    flashrom.enable = true;
   };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {

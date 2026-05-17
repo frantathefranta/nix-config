@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
   imports = [
@@ -23,7 +23,11 @@
       enable = true;
       wait-online = {
         enable = true;
-        extraArgs = [ "--any" "--interface=wlp3s0" "--interface=enp5s0" ];
+        extraArgs = [
+          "--any"
+          "--interface=wlp3s0"
+          "--interface=enp5s0"
+        ];
       };
       networks."20-enp5s0" = {
         matchConfig.Name = "enp5s0";
@@ -39,9 +43,48 @@
           DHCP = "ipv4";
           IPv6AcceptRA = true;
         };
-        ipv6AcceptRAConfig.RouterDenyList = [ "fe80::1c7d:ad2e:acf4:e622" ];
+        ipv6AcceptRAConfig.RouterDenyList = [ "fe80::1c7d:ad2e:acf4:e622" ]; # Block the darn Apple TV ULA
         dhcpV4Config.RouteMetric = 100;
       };
+      netdevs."50-wg_dn42" = {
+        netdevConfig = {
+          Name = "wg_dn42";
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          PrivateKey = "@wg_dn42_key";
+          ListenPort = 51820;
+          RouteTable = "main";
+        };
+        wireguardPeers = [
+          {
+            PublicKey = "homewu6grFdjuoFxfXh1hLNdB9wvaO1m7/ZtCe1o/1o=";
+            Endpoint = "molybdenum.infra.franta.us:51820";
+            AllowedIPs = [
+              "fd00::/8"
+            ];
+          }
+        ];
+      };
+      networks."50_wg_dn42" = {
+        matchConfig.Name = "wg_dn42";
+        addresses = [
+          {
+            Address = "fdb7:c21f:f30f:98::2/128";
+          }
+        ];
+      };
+    };
+  };
+  environment.systemPackages = [ pkgs.wireguard-tools ];
+  systemd.services.systemd-networkd.serviceConfig = {
+    LoadCredential = [
+      "wg_dn42_key:${config.sops.secrets."wireguard/50-wg_dn42".path}"
+    ];
+  };
+  sops.secrets = {
+    "wireguard/50-wg_dn42" = {
+      sopsFile = ./secrets.yaml;
     };
   };
 

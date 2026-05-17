@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   imports = [
     ./wireguard.nix
@@ -33,6 +33,7 @@
         ip saddr 10.32.10.0/24 accept
         ip6 saddr 2600:1702:6630:3fec::/62 accept
         ip6 saddr 2600:1702:6630:3fe4::/64 accept
+        ip6 saddr 2600:1702:6630:3fe1::/64 accept
       '';
     };
     nftables = {
@@ -80,6 +81,47 @@
       "~10.in-addr.arpa"
       "~d.f.ip6.arpa"
     ];
+  };
+  systemd.services.systemd-networkd.serviceConfig = {
+    LoadCredential = [
+      "wg_home_key:${config.sops.secrets."wireguard/50-wg_home".path}"
+    ];
+  };
+  sops.secrets = {
+    "wireguard/50-wg_home" = {
+      sopsFile = ../secrets.yaml;
+    };
+  };
+  systemd.network.netdevs = {
+    "50-wg_home" = {
+      netdevConfig = {
+        Name = "wg_home";
+        Kind = "wireguard";
+      };
+      wireguardConfig = {
+        PrivateKey = "@wg_home_key";
+        ListenPort = 51820;
+        RouteTable = "main";
+      };
+      wireguardPeers = [
+        {
+          PublicKey = "silicHWwttt2Ccq3hrIFXW+utFVzk0AJPkmTU0+ikh0=";
+          AllowedIPs = [
+            "fdb7:c21f:f30f:98::2/128"
+          ];
+        }
+      ];
+    };
+  };
+  systemd.network.networks = {
+    "50_wg_home" = {
+      matchConfig.Name = "wg_home";
+      addresses = [
+        {
+          Address = "fdb7:c21f:f30f:98::1/64";
+        }
+      ];
+    };
   };
   systemd.network.netdevs = {
     "20-ens18.2000" = {

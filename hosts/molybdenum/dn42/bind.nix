@@ -80,8 +80,9 @@
       "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
         file = "/etc/zones/ipv6.reverse";
         master = true;
+        slaves = [ "key franta.dn42." ]; # This should just be for IPs but works for keys as well (as of 25.11)
         extraConfig = ''
-          update-policy local;
+          allow-update { key franta.dn42.; };
         '';
       };
     };

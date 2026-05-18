@@ -14,5 +14,12 @@
         aaaa.data = "fdb7:c21f:f30f:53::";
       };
     };
+    "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
+      "" = {
+        ns = {
+          data = [ "ns0.franta.dn42" ];
+        };
+      };
+    };
   };
 }

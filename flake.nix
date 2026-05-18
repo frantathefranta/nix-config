@@ -114,6 +114,10 @@
             };
             zones = {
               "franta.dn42." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "bind" ];
+              "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa." = {
+                sources = [ "config" "auto-arpa" ];
+                targets = [ "bind" ];
+              };
             };
             manager.auto_arpa = true;
           };

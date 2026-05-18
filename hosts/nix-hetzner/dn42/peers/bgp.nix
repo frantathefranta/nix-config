@@ -119,7 +119,7 @@
             };
     }
       protocol bgp iBGP_prg from dnpeers {
-            neighbor fdb7:c21f:f30f:2::1 as 4242421033;
+            neighbor fdb7:c21f:f30f:200::1 as 4242421033;
             bfd on;
             source address OWNIPv6;
             ipv4 {

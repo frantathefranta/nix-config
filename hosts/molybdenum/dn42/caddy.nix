@@ -18,4 +18,14 @@
       '';
     };
   };
+
+  /*
+        geofeed.csv
+        172.23.234.17/32,US,US-OH,Columbus,43214,
+        172.23.234.18/32,US,US-OR,Hillsboro,97124,
+        172.23.234.19/32,CZ,CZ-10,Prague,10100,
+        fdb7:c21f:f30f::/56,US,US-OH,Columbus,43214,
+        fdb7:c21f:f30f:100:/56,US,US-OR,Hillsboro,97124, # https://www.hetzner.com/unternehmen/rechenzentrum/
+        fdb7:c21f:f30f:200:/56,CZ,CZ-10,Prague,10100, # https://www.master.cz/datacentrum-praha/
+  */
 }

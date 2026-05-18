@@ -5,6 +5,10 @@
   ...
 }:
 
+let
+  dn42_dummy_ipv6 = "fdb7:c21f:f30f:100::1";
+in
+
 {
   imports = [
     inputs.nixos-dns.nixosModules.dns
@@ -25,7 +29,7 @@
       baseDomains."franta.dn42" = { };
       subDomains."us-pdx.franta.dn42" = {
         a.data = "172.23.234.18";
-        aaaa.data = "fdb7:c21f:f30f:1::1";
+        aaaa.data = dn42_dummy_ipv6;
       };
     };
     firewall = {
@@ -93,7 +97,7 @@
     matchConfig.Name = "dummy_ospf";
     address = [
       "172.23.234.18"
-      "fdb7:c21f:f30f:1::1/128"
+      "${dn42_dummy_ipv6}/128"
     ];
     networkConfig = {
       LinkLocalAddressing = false;

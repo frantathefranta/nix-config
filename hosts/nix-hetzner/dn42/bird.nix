@@ -8,10 +8,10 @@ in
     bird-lg = {
       proxy = {
         enable = true;
-        listenAddresses = "[fdb7:c21f:f30f:1::1]:8000";
+        listenAddresses = "[fdb7:c21f:f30f:100::1]:8000";
         allowedIPs = [
           "fdb7:c21f:f30f::1"
-          "fdb7:c21f:f30f:1::1"
+          "fdb7:c21f:f30f:100::1"
         ];
         birdSocket = "/var/run/bird/bird.ctl";
       };

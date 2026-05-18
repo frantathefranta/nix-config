@@ -20,8 +20,8 @@ in
         allowedIPs = [
           "172.23.234.17"
           "fdb7:c21f:f30f::1"
-          "fdb7:c21f:f30f:1::1"
-          "fdb7:c21f:f30f:2::1"
+          "fdb7:c21f:f30f:100::1"
+          "fdb7:c21f:f30f:200::1"
         ];
         birdSocket = "/var/run/bird/bird.ctl";
       };

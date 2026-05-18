@@ -76,7 +76,7 @@
       }
       protocol bgp iBGP_pdx_v6 from dnpeers {
             vrf "dn42";
-            neighbor fdb7:c21f:f30f:1::1 as 4242421033;
+            neighbor fdb7:c21f:f30f:100::1 as 4242421033;
             ipv4 {
                     table DN42v4;
                     extended next hop on;

@@ -1,5 +1,8 @@
 { inputs, pkgs, ... }:
 
+let
+  dn42_dummy_ipv6 = "fdb7:c21f:f30f:200::1";
+in
 {
 
   imports = [
@@ -24,7 +27,7 @@
       baseDomains."franta.dn42" = { };
       subDomains."cz-prg.franta.dn42" = {
         a.data = "172.23.234.19";
-        aaaa.data = "fdb7:c21f:f30f:2::1";
+        aaaa.data = dn42_dummy_ipv6;
       };
     };
   };
@@ -55,7 +58,7 @@
     matchConfig.Name = "dummy42";
     address = [
       "172.23.234.19"
-      "fdb7:c21f:f30f:2::1/128"
+      "${dn42_dummy_ipv6}/128"
     ];
     linkConfig = {
       ActivationPolicy = "up";

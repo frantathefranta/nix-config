@@ -55,12 +55,12 @@ in
     };
     address = [
       "${hostIPv4}/24"
-      "2600:1702:6630:3fed::242/64"
     ];
+    ipv6AcceptRAConfig.Token = "::242";
     routes = [
       { Gateway = "10.32.10.254"; }
-      { Gateway = "fe80::464c:a8ff:fede:3cf7"; }
     ];
+    dns = [ "10.0.10.1" ];
     vlan = [ "ens18.2000" ];
   };
   time.timeZone = "America/Detroit";

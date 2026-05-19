@@ -26,6 +26,8 @@
         }
       ];
       extraInputRules = /* nftables */ ''
+        ip protocol ospfigp counter accept
+        ip6 nexthdr ospfigp counter accept
         ip saddr 172.20.0.0/14 counter accept
         ip6 saddr fd00::/8 counter accept
         ip6 saddr fe80::/64 counter accept

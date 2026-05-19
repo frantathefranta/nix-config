@@ -1,3 +1,6 @@
 {
-  imports = [ ./uptime-kuma.nix ];
+  imports = [
+    ./uptime-kuma.nix
+    ./renovate.nix
+  ];
 }

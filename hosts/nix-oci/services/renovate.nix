@@ -11,6 +11,7 @@
       RENOVATE_TOKEN = config.sops.secrets."renovate/token".path;
       RENOVATE_GITHUB_COM_TOKEN = config.sops.secrets."renovate/GITHUB_TOKEN".path;
     };
+    package = pkgs.unstable.renovate;
     settings = {
       platform = "forgejo";
       endpoint = "https://codeberg.org";

@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, config, ... }:
 
 {
   imports = [
@@ -12,18 +12,15 @@
   networking = {
     hostName = "nix-hetzner";
     domain = "us.franta.us";
-    nameservers = [
-      "1.1.1.1"
-      "1.0.0.1"
-      "2606:4700:4700::1111"
-      "2606:4700:4700::1001"
-    ];
+    nameservers = [ ];
   };
   time.timeZone = "America/Seattle";
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "eth0";
     networkConfig.DHCP = "ipv4";
+    dhcpV4Config.UseDNS = false;
+    ipv6AcceptRAConfig.UseDNS = false;
     address = [
       "2a01:4ff:1f0:d924::1/64"
     ];
@@ -31,6 +28,7 @@
       { Gateway = "fe80::1"; }
     ];
   };
+  # services.resolved = lib.mkDefault { fallbackDns = config.networking.nameservers; };
 
   # Keep root SSH access for emergency recovery
   services.openssh.settings.PermitRootLogin = "prohibit-password";

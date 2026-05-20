@@ -2,16 +2,23 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }:
 
 let
   dn42_dummy_ipv6 = "fdb7:c21f:f30f:100::1";
+  networkInterfaces =
+    prefix:
+    lib.mapAttrsToList (_name: net: net.matchConfig.Name) (
+      lib.filterAttrs (name: _: lib.hasPrefix prefix name) config.systemd.network.networks
+    );
 in
 
 {
   imports = [
     inputs.nixos-dns.nixosModules.dns
+    inputs.nnf.nixosModules.default
     ./bird.nix
     ./peers/wireguard.nix
   ];
@@ -32,61 +39,87 @@ in
         aaaa.data = dn42_dummy_ipv6;
       };
     };
+    nat.enable = false;
     firewall = {
-      checkReversePath = false;
-      extraCommands = ''
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 172.20.0.0/14 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -A INPUT -s 169.254.0.0/16 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fd00::/8 -j ACCEPT
-        ${pkgs.iptables}/bin/ip6tables -A INPUT -s fe80::/64 -j ACCEPT
-      '';
+      enable = lib.mkForce false;
+    };
+    nftables.firewall = {
+      enable = true;
+      snippets.nnf-common.enable = true;
+      zones.untrusted.interfaces = [ "eth0" ];
+      zones.wg_dn42.interfaces = networkInterfaces "50-wg";
+      zones.ospf_wg.interfaces = networkInterfaces "50-ospf";
+      zones.dn42_ibgp_peers.ipv6Addresses = [
+        "fdb7:c21f:f30f::1"
+        "fdb7:c21f:f30f:200::1"
+      ];
+      zones.dn42_subnets = {
+        ipv4Addresses = [ "172.20.0.0/14" ];
+        ipv6Addresses = [ "fd00::/8" ];
+      };
+      zones.ospf = {
+        ingressExpression = [
+          "ip protocol ospfigp"
+          "ip6 nexthdr ospfigp"
+        ];
+        egressExpression = [
+          "ip protocol ospfigp"
+          "ip6 nexthdr ospfigp"
+        ];
+      };
+      rules = {
+        allow_wg_ingress = {
+          from = [ "untrusted" ];
+          to = [ "fw" ];
+          allowedUDPPortRanges = [
+            {
+              from = 20000;
+              to = 30000;
+            }
+          ];
+        };
+        allow_bgp_from_peers = {
+          from = [
+            "ospf_wg"
+            "wg_dn42"
+          ];
+          to = [ "fw" ];
+          allowedTCPPorts = [ 179 ];
+        };
+        allow_ospf_traffic = {
+          from = [ "ospf" ];
+          to = [ "fw" ];
+          verdict = "accept";
+        };
+        allow_ospf_bfd = {
+          from = [ "ospf_wg" ];
+          to = [ "fw" ];
+          allowedUDPPorts = [ 3784 ];
+        };
+        allow_ibgp_bfd = {
+          from = [ "dn42_ibgp_peers" ];
+          to = [ "fw" ];
+          allowedUDPPorts = [ 4784 ];
+        };
+        allow_dn42_traceroute = {
+          from = [ "dn42_subnets" ];
+          to = [ "fw" ];
+          allowedUDPPortRanges = [
+            {
+              from = 33434;
+              to = 33689;
+            }
+          ];
+        };
+        allow_bird_lg_proxy = {
+          from = [ "dn42_ibgp_peers" ];
+          to = [ "fw" ];
+          allowedTCPPorts = [ 8000 ];
+        };
+      };
     };
   };
   environment.systemPackages = [ pkgs.wireguard-tools ];
-  systemd.services.systemd-networkd.serviceConfig = {
-    LoadCredential = [
-      "network.wireguard.private.89-ospf_wg:${
-        config.sops.secrets."wireguard/home-private-key".path
-      }"
-    ];
-  };
-  systemd.network.netdevs."89-ospf_wg" = {
-    netdevConfig = {
-      Name = "ospf_wg";
-      Kind = "wireguard";
-    };
-    wireguardConfig = {
-      PrivateKey = "@network.wireguard.private.89-ospf_wg";
-      ListenPort = 21033;
-    };
-    wireguardPeers = [
-      {
-        Endpoint = "cmh.dn42.franta.us:21033";
-        PersistentKeepalive = 5;
-        PublicKey = "3GAUz/+Q81eblrA78/LfkLs4X2CAsfnIHgw0R8LT9GE=";
-        AllowedIPs = [
-          "0.0.0.0/0"
-          "::/0"
-        ];
-      }
-    ];
-  };
-  systemd.network.networks."89-ospf_wg" = {
-    matchConfig.Name = "ospf_wg";
-    addresses = [
-      {
-        Address = "fe80::1:1033/64";
-        Peer = "fe80::1033/64";
-      }
-      {
-        Address = "169.254.1.2/16";
-        Peer = "169.254.1.1/16";
-      }
-    ];
-    networkConfig = {
-      LinkLocalAddressing = false;
-    };
-  };
   systemd.network.netdevs."10-dummy_ospf" = {
     netdevConfig = {
       Name = "dummy_ospf";
@@ -101,11 +134,6 @@ in
     ];
     networkConfig = {
       LinkLocalAddressing = false;
-    };
-  };
-  sops.secrets = {
-    "wireguard/home-private-key" = {
-      sopsFile = ../secrets.yaml;
     };
   };
 }

@@ -22,6 +22,7 @@
       peerPublicKey = "vRRfNnGL7jpKGBJjLZg612vHQulDOtICkgXCC++1+2g=";
       localAddressV6 = "fe80::1033/64";
       peerAddressV6 = "fe80::0253";
+      vrf = "dn42";
     };
     "50-wg4242420263" = {
       listenPort = 20263;
@@ -53,6 +54,7 @@
       peerPublicKey = "ZPwzKog7ii0RVJsvRKRz2WdFHU0FWujMKDVqk9UKbF0=";
       peerAddressV6 = "fe80::401/128";
       localAddressV6 = "fe80::1033:0401/128";
+      vrf = "dn42";
     };
   };
 }

@@ -120,6 +120,14 @@ in
     };
   };
   environment.systemPackages = [ pkgs.wireguard-tools ];
+  # TODO: This will be an official option in 26.05
+  environment.etc."systemd/dns-delegate.d/dn42.dns-delegate".text = ''
+    [Delegate]
+    DNS=fdb7:c21f:f30f:53::
+    Domains=~dn42
+    Domains=~d.f.ip6.arpa
+  '';
+
   systemd.network.netdevs."10-dummy_ospf" = {
     netdevConfig = {
       Name = "dummy_ospf";
@@ -129,14 +137,15 @@ in
   systemd.network.networks."10-dummy_ospf" = {
     matchConfig.Name = "dummy_ospf";
     address = [
-      "172.23.234.18"
+      "172.23.234.18/32"
       "${dn42_dummy_ipv6}/128"
     ];
-    dns = [ "fdb7:c21f:f30f:53::" ];
-    domains = [
-      "~dn42"
-      "~d.f.ip6.arpa"
-    ];
+    # dns = [ "fdb7:c21f:f30f:53::" ];
+    # domains = [
+    #   "~dn42"
+    #   "~d.f.ip6.arpa"
+    # ];
+    networkConfig.DNSDefaultRoute = true;
     networkConfig = {
       LinkLocalAddressing = false;
     };
@@ -145,7 +154,8 @@ in
   #   dns = [ "fdb7:c21f:f30f:53::" ];
   #   domains = [
   #     "~.dn42"
-  #     "~.d.f.ip6.arpa"
+  #     "~d.f.ip6.arpa"
   #   ];
+  #   # networkConfig.DNSDefaultRoute = true;
   # };
 }

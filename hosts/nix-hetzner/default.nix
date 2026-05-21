@@ -16,11 +16,12 @@
   };
   time.timeZone = "America/Seattle";
   systemd.network.enable = true;
-  systemd.network.networks."10-wan" = {
+  systemd.network.networks."05-wan" = {
     matchConfig.Name = "eth0";
     networkConfig.DHCP = "ipv4";
     dhcpV4Config.UseDNS = false;
-    ipv6AcceptRAConfig.UseDNS = false;
+    # ipv6AcceptRAConfig.UseDNS = false;
+    dns = [ "2a01:4ff:ff00::add:1" "2a01:4ff:ff00::add:2"];
     address = [
       "2a01:4ff:1f0:d924::1/64"
     ];

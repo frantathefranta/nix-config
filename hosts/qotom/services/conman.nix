@@ -9,4 +9,5 @@
   sops.secrets."conman.conf" = {
     sopsFile = ../secrets.yaml;
   };
+  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 7890 ];
 }

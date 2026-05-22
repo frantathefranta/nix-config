@@ -87,9 +87,13 @@ in
             LoadModule = [
               "simple_away"
               "chansaver"
+              "sasl"
             ];
             Server = "irc.hackint.org +6697";
             Chan = {
+              "#dn42" = {
+                Detached = false;
+              };
               "#dn42-registry" = {
                 Detached = false;
               };

@@ -7,6 +7,7 @@
   imports = [
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
+    inputs.niri.nixosModules.niri
     ./services
     ./hardware-configuration.nix
     ./networking.nix
@@ -15,7 +16,7 @@
     ../common/users/fbartik
     ../common/roles/workstation.nix
 
-    ../common/optional/kde.nix
+    ../common/optional/niri.nix
     ../common/optional/fwupd.nix
   ];
   networking = {

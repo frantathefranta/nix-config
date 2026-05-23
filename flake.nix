@@ -31,6 +31,7 @@
     nnf.url = "github:thelegy/nixos-nftables-firewall";
     nixos-dns.url = "github:Janik-Haag/nixos-dns";
     nixos-dns.inputs.nixpkgs.follows = "nixpkgs";
+    niri.url = "github:sodiboo/niri-flake";
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix

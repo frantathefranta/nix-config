@@ -15,5 +15,6 @@
     ./ups.nix
     ./fail2ban.nix
     ./rust-motd.nix
+    ./syslog.nix
   ];
 }

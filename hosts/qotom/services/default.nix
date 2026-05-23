@@ -1,7 +1,7 @@
 {
   imports = [
     ./hostapd.nix
-    ./syslog.nix
+    # ./syslog.nix
     ./conman.nix
     ./caddy.nix
   ];

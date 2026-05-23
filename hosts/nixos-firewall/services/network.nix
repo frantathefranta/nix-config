@@ -245,6 +245,7 @@
           DNS = "2600:1702:6630:3fe1:10:0:20:1";
         };
         domains = [
+          "local"
           "franta.us"
           "infra.franta.us"
         ];

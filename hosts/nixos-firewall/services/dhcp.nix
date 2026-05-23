@@ -75,7 +75,7 @@ in
               }
               {
                 name = "domain-search";
-                data = "wifi.franta.us";
+                data = "local, wifi.franta.us";
               }
             ]
             ++ commonDhcpOptions;
@@ -208,7 +208,7 @@ in
       ddns-update-on-renew = true; # always update when a lease is renewed, in case I lost the DNS server database
       ddns-override-client-update = true; # always generate ddns update request ignoring the client's wishes not to
       ddns-override-no-update = true; # same as above but for different client's wishes
-      ddns-qualifying-suffix = "franta.us";
+      ddns-qualifying-suffix = "local.";
       /*
         This could fix errors in PowerDNS like:
         UPDATE (44091) from 10.0.10.1 for 10.in-addr.arpa: Failed PreRequisites check (RRs differ), returning NXRRSet
@@ -243,7 +243,7 @@ in
                 dns-servers = pdnsServer;
               }
               {
-                name = "iot.franta.us.";
+                name = "local.";
                 key-name = "kea";
                 dns-servers = pdnsServer;
               }

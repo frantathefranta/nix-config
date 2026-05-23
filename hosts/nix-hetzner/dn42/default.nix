@@ -140,22 +140,9 @@ in
       "172.23.234.18/32"
       "${dn42_dummy_ipv6}/128"
     ];
-    # dns = [ "fdb7:c21f:f30f:53::" ];
-    # domains = [
-    #   "~dn42"
-    #   "~d.f.ip6.arpa"
-    # ];
     networkConfig.DNSDefaultRoute = true;
     networkConfig = {
       LinkLocalAddressing = false;
     };
   };
-  # systemd.network.networks."50-ospf_molybdenum" = {
-  #   dns = [ "fdb7:c21f:f30f:53::" ];
-  #   domains = [
-  #     "~.dn42"
-  #     "~d.f.ip6.arpa"
-  #   ];
-  #   # networkConfig.DNSDefaultRoute = true;
-  # };
 }

@@ -88,7 +88,7 @@ in
             interface = "lan0.50";
             subnet = "10.0.50.0/24";
             pools = [ { pool = "10.0.50.50 - 10.0.50.199"; } ];
-            ddns-qualifying-suffix = "iot.franta.us";
+            ddns-qualifying-suffix = "local";
             option-data = [
               {
                 name = "routers";
@@ -96,11 +96,11 @@ in
               }
               {
                 name = "domain-name";
-                data = "iot.franta.us";
+                data = "local";
               }
               {
                 name = "domain-search";
-                data = "iot.franta.us";
+                data = "local";
               }
             ]
             ++ commonDhcpOptions;

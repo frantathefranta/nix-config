@@ -11,6 +11,9 @@
     services.kde = {
       u2fAuth = false;
     };
+    services.hyprlock = {
+      u2fAuth = false;
+    };
   };
   sops.secrets."u2f_keys" = {
     sopsFile = ../secrets.yaml;

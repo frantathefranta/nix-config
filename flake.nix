@@ -31,7 +31,14 @@
     nnf.url = "github:thelegy/nixos-nftables-firewall";
     nixos-dns.url = "github:Janik-Haag/nixos-dns";
     nixos-dns.inputs.nixpkgs.follows = "nixpkgs";
-    niri.url = "github:sodiboo/niri-flake";
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    stylix = {
+      url = "github:nix-community/stylix/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
@@ -116,7 +123,10 @@
             zones = {
               "franta.dn42." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "bind" ];
               "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa." = {
-                sources = [ "config" "auto-arpa" ];
+                sources = [
+                  "config"
+                  "auto-arpa"
+                ];
                 targets = [ "bind" ];
               };
             };

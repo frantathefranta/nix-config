@@ -8,6 +8,7 @@
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
     inputs.niri.nixosModules.niri
+    # inputs.stylix.nixosModules.stylix
     ./services
     ./hardware-configuration.nix
     ./networking.nix

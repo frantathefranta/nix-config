@@ -82,7 +82,6 @@ in
       age
       nil
       # For installing LSP servers
-      nodePackages.npm
     ];
 
     # environment.variables.PATH = [ "$XDG_CONFIG_HOME/emacs/bin" ];

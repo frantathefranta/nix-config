@@ -24,13 +24,18 @@
     systems.url = "github:nix-systems/default";
     hardware.url = "github:nixos/nixos-hardware";
     srvos.url = "github:nix-community/srvos";
-    gobgp.url = "github:wavelens/gobgp.nix";
+    gobgp = {
+      url = "github:wavelens/gobgp.nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
     direnv-instant.url = "github:Mic92/direnv-instant";
     nnf.url = "github:thelegy/nixos-nftables-firewall";
-    nixos-dns.url = "github:Janik-Haag/nixos-dns";
-    nixos-dns.inputs.nixpkgs.follows = "nixpkgs";
+    nixos-dns = {
+      url = "github:Janik-Haag/nixos-dns";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -82,6 +87,24 @@
           config.allowUnfree = true;
         }
       );
+      mkServer =
+        hostname:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; isStableHM = true; };
+          modules = [ ./hosts/${hostname} ];
+        };
+      mkWorkstation =
+        hostname:
+        inputs.nixpkgs-unstable.lib.nixosSystem {
+          specialArgs = {
+            inherit outputs;
+            isStableHM = false;
+            inputs = inputs // {
+              home-manager = inputs.home-manager-unstable;
+            };
+          };
+          modules = [ ./hosts/${hostname} ];
+        };
       dnsConfig = {
         inherit (self) nixosConfigurations;
         extraConfig = import ./dns.nix;
@@ -149,72 +172,18 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        nix-bastion = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/nix-bastion
-          ];
-        };
-        lanthanum = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/lanthanum
-          ];
-        };
-        silicium = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/silicium
-          ];
-        };
-        qotom = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/qotom
-          ];
-        };
-        nixos-firewall = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/nixos-firewall
-          ];
-        };
-        molybdenum = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/molybdenum
-          ];
-        };
-        r2s = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/r2s
-          ];
-        };
-        nix-hetzner = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/nix-hetzner
-          ];
-        };
-        nix-vps-cz = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/nix-vps-cz
-          ];
-        };
-        nix-oci = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/nix-oci
-          ];
-        };
-        installer-iso = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/installer-iso
-          ];
-        };
+        lanthanum = mkWorkstation "lanthanum";
+        silicium = mkWorkstation "silicium";
+
+        installer-iso = mkServer "installer-iso";
+        molybdenum = mkServer "molybdenum";
+        nix-bastion = mkServer "nix-bastion";
+        nix-hetzner = mkServer "nix-hetzner";
+        nix-oci = mkServer "nix-oci";
+        nix-vps-cz = mkServer "nix-vps-cz";
+        nixos-firewall = mkServer "nixos-firewall";
+        qotom = mkServer "qotom";
+        r2s = mkServer "r2s";
       };
 
       # Standalone home-manager configuration entrypoint

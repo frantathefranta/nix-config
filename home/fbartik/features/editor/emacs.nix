@@ -178,6 +178,5 @@ in
     ++ lib.optionals isDarwin [ emacsClientApp ]
     ++ lib.optionals (!isDarwin) [
       xclip
-      nodePackages.npm # This takes hours to build, might need to add it as a brew cask?
     ];
 }

@@ -55,7 +55,10 @@ in
     enable = true;
     mutable = false;
     useLegacyConfig = false;
-    modulePackages = [ pkgs.zncModules.playback ];
+    modulePackages = [
+      pkgs.zncModules.playback
+      pkgs.zncModules.clientbuffer
+    ];
     config =
       let
         certPath = config.security.acme.certs.${zncDomain}.directory;

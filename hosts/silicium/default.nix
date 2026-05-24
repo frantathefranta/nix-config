@@ -93,7 +93,7 @@
       "wg_dn42_key:${config.sops.secrets."wireguard/50-wg_dn42".path}"
     ];
   };
-  services.resolved.fallbackDns = [ ]; # WiFi interface comes up too slow so systemd-resolved always goes to fallback
+  services.resolved.settings.Resolve.FallbackDNS = [ ]; # WiFi interface comes up too slow so systemd-resolved always goes to fallback
   sops.secrets = {
     "wireguard/50-wg_dn42" = {
       sopsFile = ./secrets.yaml;

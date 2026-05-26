@@ -5,6 +5,12 @@
     instances.${config.networking.hostName} = {
       enable = true;
       settings = {
+        # container.enable_ipv6 = true;
+        container.network = "podman";
+        cache = {
+          proxy_port = 4000;
+          actions_cache_url_override = "http://host.containers.internal:4000";
+        };
         server.connections.codeberg = {
           labels = [
             "native:host"
@@ -23,6 +29,7 @@
     podman = {
       enable = true;
       dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
     };
   };
   sops.secrets.forgejo-runner-token = {

@@ -45,6 +45,7 @@ jobs:
         uses: https://github.com/mfenniak/update-flake-inputs-forgejo@b5614c72bdce961524fe3ca2daad7de2d2d8f46f
         with:
           # gitea-token: ${{ secrets.GITEA_TOKEN }}
+          forgejo-token: ${{ secrets.BOT_FORGEJO_TOKEN }}
           github-token: ${{ steps.app-token.outputs.token }}
           git-author-name: "lordoflightning-bot"
           git-author-email: "lol@franta.us"

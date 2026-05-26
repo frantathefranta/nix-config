@@ -4,6 +4,7 @@
     # enable = true;
     instances.${config.networking.hostName} = {
       enable = true;
+      # Direct from https://code.forgejo.org/forgejo/runner/src/branch/main/internal/pkg/config/config.example.yaml
       settings = {
         # container.enable_ipv6 = true;
         container.network = "podman";

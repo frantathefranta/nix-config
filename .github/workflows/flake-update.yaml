@@ -23,6 +23,12 @@ jobs:
           key: nix-${{ hashFiles('flake.lock') }}
           restore-keys: nix-
 
+      - name: Configure git identity
+        run: |
+          git config --global user.email "lol@franta.us"
+          git config --global user.name "lordoflightning-bot"
+          git config --global init.defaultBranch main
+
       - name: Install nix
         uses: https://github.com/DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 

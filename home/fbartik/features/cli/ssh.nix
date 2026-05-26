@@ -27,7 +27,7 @@ in
     ];
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         inherit identityAgent;
       };

@@ -51,5 +51,5 @@ jobs:
           git-author-email: "lol@franta.us"
           git-committer-name: "lordoflightning-bot"
           git-committer-email: "lol@franta.us"
-          auto-merge: 'false'
+          auto-merge: 'true'
           delete-branch: 'true'

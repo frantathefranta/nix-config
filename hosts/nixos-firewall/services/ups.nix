@@ -58,7 +58,9 @@
   services.prometheus.exporters.nut = {
     enable = true;
   };
-  systemd.services.upsd.after = [ "network-online.target" ];
+  systemd.services.upsd = {
+    wants = [ "network-online.target" ];
+  };
   networking.nftables.firewall.rules.allow_nut_access = {
     from = [
       "iot"

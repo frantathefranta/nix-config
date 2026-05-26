@@ -28,6 +28,12 @@ jobs:
         # with:
         #   token: ${{ secrets.RO_GITHUB_TOKEN }}
 
+      - uses: https://code.forgejo.org/actions/cache@v4
+        with:
+          path: ~/.cache/nix
+          key: nix-${{ hashFiles('flake.lock') }}
+          restore-keys: nix-
+
       - name: Install nix
         uses: https://github.com/DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 

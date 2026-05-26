@@ -8,7 +8,7 @@
         server.connections.codeberg = {
           labels = [
             "native:host"
-            "ubuntu:docker://ghcr.io/cattlehacker/ubuntu:act-latest"
+            "ubuntu:docker://ghcr.io/catthehacker/ubuntu:act-latest"
           ];
           token_url = "file:${config.sops.secrets.forgejo-runner-token.path}";
           url = "https://codeberg.org";
@@ -20,27 +20,11 @@
   };
   virtualisation = {
     containers.enable = true;
-    podman.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+    };
   };
-  # services.gitea-actions-runner = {
-  #   package = pkgs.forgejo-runner;
-  #   instances.default = {
-  #     enable = true;
-  #     name = "monolith";
-  #     url = "https://codeberg.org";
-  #     # Obtaining the path to the runner token file may differ
-  #     # tokenFile should be in format TOKEN=<secret>, since it's EnvironmentFile for systemd
-  #     tokenFile = config.sops.secrets.forgejo-runner-token.path;
-  #     labels = [
-  #       # "ubuntu-latest:docker://node:16-bullseye"
-  #       # "ubuntu-22.04:docker://node:16-bullseye"
-  #       # "ubuntu-20.04:docker://node:16-bullseye"
-  #       # "ubuntu-18.04:docker://node:16-buster"
-  #       ## optionally provide native execution on the host:
-  #       "native:host"
-  #     ];
-  #   };
-  # };
   sops.secrets.forgejo-runner-token = {
     sopsFile = ../secrets.yaml;
     mode = "0444";

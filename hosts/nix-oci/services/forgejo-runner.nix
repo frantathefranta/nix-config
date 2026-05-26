@@ -8,6 +8,7 @@
         server.connections.codeberg = {
           labels = [
             "native:host"
+            "ubuntu:docker://ghcr.io/cattlehacker/ubuntu:act-latest"
           ];
           token_url = "file:${config.sops.secrets.forgejo-runner-token.path}";
           url = "https://codeberg.org";
@@ -16,7 +17,10 @@
 
       };
     };
-
+  };
+  virtualisation = {
+    containers.enable = true;
+    podman.enable = true;
   };
   # services.gitea-actions-runner = {
   #   package = pkgs.forgejo-runner;
@@ -39,6 +43,6 @@
   # };
   sops.secrets.forgejo-runner-token = {
     sopsFile = ../secrets.yaml;
-    mode = "0755";
+    mode = "0444";
   };
 }

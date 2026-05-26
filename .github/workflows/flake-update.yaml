@@ -29,7 +29,7 @@ jobs:
       - name: Update flake inputs
         uses: https://github.com/mfenniak/update-flake-inputs-forgejo@b5614c72bdce961524fe3ca2daad7de2d2d8f46f
         with:
-          gitea-token: ${{ secrets.GITEA_TOKEN }}
+          # gitea-token: ${{ secrets.GITEA_TOKEN }}
           github-token: ${{ secrets.RO_GITHUB_TOKEN }}
           git-author-name: "lordoflightning-bot"
           git-author-email: "lol@franta.us"

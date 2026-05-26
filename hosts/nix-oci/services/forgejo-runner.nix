@@ -33,6 +33,9 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
+  # Allow containers to reach the runner's cache proxy via host.containers.internal
+  networking.firewall.interfaces."podman0".allowedTCPPorts = [ 4000 ];
+
   sops.secrets.forgejo-runner-token = {
     sopsFile = ../secrets.yaml;
     mode = "0444";

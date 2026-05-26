@@ -14,6 +14,15 @@ jobs:
       pull-requests: write
     
     steps:
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: https://github.com/actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          owner: frantathefranta
+          github-api-url: https://api.github.com
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: https://code.forgejo.org/actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -36,7 +45,7 @@ jobs:
         uses: https://github.com/mfenniak/update-flake-inputs-forgejo@b5614c72bdce961524fe3ca2daad7de2d2d8f46f
         with:
           # gitea-token: ${{ secrets.GITEA_TOKEN }}
-          github-token: ${{ secrets.RO_GITHUB_TOKEN }}
+          github-token: ${{ steps.app-token.outputs.token }}
           git-author-name: "lordoflightning-bot"
           git-author-email: "lol@franta.us"
           git-committer-name: "lordoflightning-bot"

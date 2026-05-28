@@ -87,12 +87,12 @@ in
           AltNick = "frantathefranta";
           Ident = "franta";
           LoadModule = [
-            "clientbuffer"
             "log"
           ];
 
           Network."hackint" = {
             LoadModule = [
+              "clientbuffer"
               "simple_away"
               "chansaver"
               "sasl"

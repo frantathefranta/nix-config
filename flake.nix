@@ -225,6 +225,7 @@
           extraSpecialArgs = {
             inherit inputs outputs;
             hostname = "nix-bastion";
+            isStableHM = true;
           };
           modules = [
             # > Our main home-manager configuration file <
@@ -237,7 +238,7 @@
             system = "aarch64-darwin";
             config.allowUnfree = true;
           };
-          extraSpecialArgs = { inherit inputs outputs; };
+          extraSpecialArgs = { inherit inputs outputs; isStableHM = false; };
           modules = [
             ./home/fbartik/NC312237.nix
             ./home/fbartik/nixpkgs.nix

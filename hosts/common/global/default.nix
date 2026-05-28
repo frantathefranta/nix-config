@@ -36,6 +36,7 @@
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = {
     inherit inputs outputs;
+    isStableHM = true;
   };
 
   nixpkgs = {

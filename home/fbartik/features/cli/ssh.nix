@@ -3,6 +3,7 @@
   outputs,
   lib,
   pkgs,
+  isStableHM ? false,
   ...
 }:
 let
@@ -21,46 +22,53 @@ let
       "${config.home.homeDirectory}/.ssh/ssh_auth_sock";
 in
 {
-  programs.ssh = {
-    includes = [
-      "${config.home.homeDirectory}/.ssh/ephemeral_config"
-    ];
-    enable = true;
-    enableDefaultConfig = false;
-    settings = {
-      "*" = {
-        inherit identityAgent;
-      };
-      "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
-        user = "admin";
-        inherit identityAgent;
-        extraOptions = {
-          KexAlgorithms = "+diffie-hellman-group1-sha1";
-          HostKeyAlgorithms = "+ssh-rsa";
-          PubkeyAcceptedAlgorithms = "+ssh-rsa";
+  programs.ssh = lib.mkMerge [
+    {
+      includes = [
+        "${config.home.homeDirectory}/.ssh/ephemeral_config"
+      ];
+      enable = true;
+      enableDefaultConfig = false;
+    }
+    (
+      let
+        sshBlocks = {
+          "*" = {
+            inherit identityAgent;
+          };
+          "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
+            user = "admin";
+            inherit identityAgent;
+            extraOptions = {
+              KexAlgorithms = "+diffie-hellman-group1-sha1";
+              HostKeyAlgorithms = "+ssh-rsa";
+              PubkeyAcceptedAlgorithms = "+ssh-rsa";
+            };
+          };
+          "*.infra.franta.us" = lib.mkIf pkgs.stdenv.isDarwin {
+            proxyJump = "ssh.franta.dev";
+          };
+          "hetzner.vm.franta.us" = {
+            user = "root";
+          };
+          net = {
+            forwardAgent = true;
+            host = lib.concatStringsSep " " (
+              lib.flatten (
+                map (host: [
+                  host
+                  "${host}.franta.us"
+                  "${host}.infra.franta.us"
+                ]) hostnames
+              )
+            );
+            inherit identityAgent;
+          };
         };
-      };
-      "*.infra.franta.us" = lib.mkIf pkgs.stdenv.isDarwin {
-        proxyJump = "ssh.franta.dev";
-      };
-      "hetzner.vm.franta.us" = {
-        user = "root";
-      };
-      net = {
-        forwardAgent = true;
-        host = lib.concatStringsSep " " (
-          lib.flatten (
-            map (host: [
-              host
-              "${host}.franta.us"
-              "${host}.infra.franta.us"
-            ]) hostnames
-          )
-        );
-        inherit identityAgent;
-      };
-    };
-  };
+      in
+      if isStableHM then { matchBlocks = sshBlocks; } else { settings = sshBlocks; }
+    )
+  ];
   home.file.".config/1Password/ssh/agent.toml" = lib.mkIf isWorkstation {
     source = (pkgs.formats.toml { }).generate "agent.toml" {
       "ssh-keys" = [

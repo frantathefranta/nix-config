@@ -83,6 +83,11 @@ in
           Nick = "franta";
           AltNick = "frantathefranta";
           Ident = "franta";
+          LoadModule = [
+            "clientbuffer"
+            "log"
+          ];
+
           Network."hackint" = {
             LoadModule = [
               "simple_away"

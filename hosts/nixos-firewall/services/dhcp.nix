@@ -63,7 +63,7 @@ in
             interface = "lan0.20";
             subnet = "10.0.20.0/24";
             pools = [ { pool = "10.0.20.50 - 10.0.20.199"; } ];
-            ddns-qualifying-suffix = "wifi.franta.us";
+            ddns-qualifying-suffix = "internal";
             option-data = [
               {
                 name = "routers";
@@ -71,11 +71,11 @@ in
               }
               {
                 name = "domain-name";
-                data = "wifi.franta.us";
+                data = "internal";
               }
               {
                 name = "domain-search";
-                data = "local, wifi.franta.us";
+                data = "internal";
               }
             ]
             ++ commonDhcpOptions;
@@ -88,7 +88,7 @@ in
             interface = "lan0.50";
             subnet = "10.0.50.0/24";
             pools = [ { pool = "10.0.50.50 - 10.0.50.199"; } ];
-            ddns-qualifying-suffix = "local";
+            ddns-qualifying-suffix = "internal";
             option-data = [
               {
                 name = "routers";
@@ -96,11 +96,11 @@ in
               }
               {
                 name = "domain-name";
-                data = "local";
+                data = "internal";
               }
               {
                 name = "domain-search";
-                data = "local";
+                data = "internal";
               }
             ]
             ++ commonDhcpOptions;
@@ -208,7 +208,7 @@ in
       ddns-update-on-renew = true; # always update when a lease is renewed, in case I lost the DNS server database
       ddns-override-client-update = true; # always generate ddns update request ignoring the client's wishes not to
       ddns-override-no-update = true; # same as above but for different client's wishes
-      ddns-qualifying-suffix = "local.";
+      ddns-qualifying-suffix = "internal.";
       /*
         This could fix errors in PowerDNS like:
         UPDATE (44091) from 10.0.10.1 for 10.in-addr.arpa: Failed PreRequisites check (RRs differ), returning NXRRSet
@@ -243,12 +243,7 @@ in
                 dns-servers = pdnsServer;
               }
               {
-                name = "local.";
-                key-name = "kea";
-                dns-servers = pdnsServer;
-              }
-              {
-                name = "wifi.franta.us.";
+                name = "internal.";
                 key-name = "kea";
                 dns-servers = pdnsServer;
               }

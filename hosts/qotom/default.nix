@@ -81,6 +81,7 @@
     };
     dns = [ "10.0.10.1" ];
     domains = [
+      "internal"
       "franta.us"
       "infra.franta.us"
     ];

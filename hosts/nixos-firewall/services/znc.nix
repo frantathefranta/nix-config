@@ -57,7 +57,7 @@ in
     useLegacyConfig = false;
     modulePackages = [
       pkgs.zncModules.playback
-      pkgs.zncModules.clientbuffer
+      pkgs.zncModules.push
     ];
     config =
       let
@@ -92,10 +92,10 @@ in
 
           Network."hackint" = {
             LoadModule = [
-              "clientbuffer"
               "simple_away"
               "chansaver"
               "sasl"
+              "push"
             ];
             Server = "irc.hackint.org +6697";
             Chan = {

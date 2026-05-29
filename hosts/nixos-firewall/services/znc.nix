@@ -86,6 +86,8 @@ in
           Nick = "franta";
           AltNick = "frantathefranta";
           Ident = "franta";
+          AutoClearChanBuffer = false;
+          AutoClearQueryBuffer = false;
           LoadModule = [
             "log"
           ];
@@ -99,12 +101,14 @@ in
             ];
             Server = "irc.hackint.org +6697";
             Chan = {
-              "#dn42" = {
-                Detached = false;
-              };
-              "#dn42-registry" = {
-                Detached = false;
-              };
+              "#dn42".Detached = false;
+              "#dn42-dns".Detached = false;
+              "#dn42-multicast".Detached = false;
+              "#dn42-offtopic".Detached = false;
+              "#dn42-peering".Detached = false;
+              "#dn42-registry".Detached = false;
+              "#dn42-social".Detached = false;
+              "#dn42-wiki".Detached = false;
             };
           };
         };

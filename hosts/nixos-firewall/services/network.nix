@@ -283,24 +283,14 @@
       "50_wg_iphone" = {
         matchConfig.Name = "wg_iphone";
         addresses = [
-          # {
-          #   Address = "172.16.255.1/32";
-          #   Peer = "172.16.255.2/32";
-          # }
+          {
+            Address = "172.16.255.1/24";
+          }
           {
             Address = "2600:1702:6630:3fe4::1/64";
-            # Peer = "2600:1702:6630:3fe4::2/128";
           }
         ];
       };
-      # "50_wg_macbook" = {
-      #   matchConfig.Name = "wg_macbook";
-      #   addresses = [
-      #     {
-      #       Address = "2600:1702:6630:3fe5::1/64";
-      #     }
-      #   ];
-      # };
     };
   };
   # Override sshd so it listens in mgmt vrf

@@ -4,14 +4,12 @@
     globalConfig = ''
       auto_https off
     '';
-    virtualHosts."qotom.infra.franta.us:80" = {
+    virtualHosts."qotom.infra.franta.us" = {
       extraConfig = ''
         root * /var/www
         file_server browse
       '';
     };
+    openFirewall = true;
   };
-  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [
-   80
-  ];
 }

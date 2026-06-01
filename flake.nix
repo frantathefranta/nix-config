@@ -22,15 +22,26 @@
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
     systems.url = "github:nix-systems/default";
-    hardware.url = "github:nixos/nixos-hardware";
-    srvos.url = "github:nix-community/srvos";
+    hardware = {
+      url = "github:nixos/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    srvos = {
+      url = "github:nix-community/srvos";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    };
     gobgp = {
       url = "github:wavelens/gobgp.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
-    direnv-instant.url = "github:Mic92/direnv-instant";
+    direnv-instant = {
+      url = "github:Mic92/direnv-instant";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    };
     nnf.url = "github:thelegy/nixos-nftables-firewall";
     nixos-dns = {
       url = "github:Janik-Haag/nixos-dns";
@@ -51,12 +62,15 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager-unstable.url = "github:nix-community/home-manager";
-    home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    home-manager = {
+      # Home manager
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     # Emacs
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -90,7 +104,10 @@
       mkServer =
         hostname:
         nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; isStableHM = true; };
+          specialArgs = {
+            inherit inputs outputs;
+            isStableHM = true;
+          };
           modules = [ ./hosts/${hostname} ];
         };
       mkWorkstation =
@@ -207,7 +224,10 @@
             system = "aarch64-darwin";
             config.allowUnfree = true;
           };
-          extraSpecialArgs = { inherit inputs outputs; isStableHM = false; };
+          extraSpecialArgs = {
+            inherit inputs outputs;
+            isStableHM = false;
+          };
           modules = [
             ./home/fbartik/NC312237.nix
             ./home/fbartik/nixpkgs.nix

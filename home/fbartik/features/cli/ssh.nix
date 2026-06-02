@@ -39,11 +39,9 @@ in
           "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
             user = "admin";
             inherit identityAgent;
-            extraOptions = {
-              KexAlgorithms = "+diffie-hellman-group1-sha1";
-              HostKeyAlgorithms = "+ssh-rsa";
-              PubkeyAcceptedAlgorithms = "+ssh-rsa";
-            };
+            KexAlgorithms = "+diffie-hellman-group1-sha1";
+            HostKeyAlgorithms = "+ssh-rsa";
+            PubkeyAcceptedAlgorithms = "+ssh-rsa";
           };
           "*.infra.franta.us" = lib.mkIf pkgs.stdenv.isDarwin {
             proxyJump = "ssh.franta.dev";

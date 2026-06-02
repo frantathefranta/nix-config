@@ -113,10 +113,12 @@ in
 
         $cmd create-zone franta.us. || true
         $cmd create-zone internal. || true
+        $cmd create-zone infra.franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
         add_record_if_missing franta.us. ns1 A 10.0.10.1
         add_record_if_missing 10.in-addr.arpa. @ NS 1.10.0.10.in-addr.arpa.
         add_record_if_missing franta.us. @ NS ns1.franta.us.
+        add_record_if_missing franta.us. infra NS ns1.franta.us.
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

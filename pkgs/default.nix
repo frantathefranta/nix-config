@@ -14,7 +14,6 @@ rec {
   vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
   bird-lsp = pkgs.callPackage ./bird-lsp {  };
   kubectl-passman = pkgs.callPackage ./kubectl-passman {};
-  wrtag-dev = pkgs.callPackage ./wrtag-dev {  };
   varroa = pkgs.callPackage ./varroa {  };
   rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
   udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay {};

@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   dn42_dummy_ipv6 = "fdb7:c21f:f30f:200::1";
@@ -6,7 +6,6 @@ in
 {
 
   imports = [
-    inputs.nixos-dns.nixosModules.dns
     ./bird.nix
     ./peers/wireguard.nix
   ];
@@ -22,12 +21,15 @@ in
   };
   networking = {
     domains = {
-      enable = true;
-      defaultTTL = 86400;
-      baseDomains."franta.dn42" = { };
-      subDomains."cz-prg.franta.dn42" = {
-        a.data = "172.23.234.19";
-        aaaa.data = dn42_dummy_ipv6;
+      subDomains = {
+        "${config.networking.hostName}.${config.networking.domain}" = {
+          a.data = "172.23.234.19";
+          aaaa.data = dn42_dummy_ipv6;
+        };
+        "cz-prg.franta.dn42" = {
+          a.data = "172.23.234.19";
+          aaaa.data = dn42_dummy_ipv6;
+        };
       };
     };
   };

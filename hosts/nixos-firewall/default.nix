@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  config,
   ...
 }:
 {
@@ -18,6 +19,21 @@
   ];
   networking = {
     hostName = "nixos-firewall";
+    domain = "infra.franta.us";
+    domains.subDomains = {
+      "${config.networking.hostName}-lan0.${config.networking.domain}" = {
+        a.data = [ "10.0.10.1" ];
+        aaaa.data = [ "2600:1702:6630:3fe0:10:0:10:1" ];
+      };
+      "${config.networking.hostName}-mgmt.${config.networking.domain}" = {
+        a.data = [ "10.32.10.230" ];
+        aaaa.data = [ "2600:1702:6630:3fed:10:32:10:230" ];
+      };
+      "${config.networking.hostName}.${config.networking.domain}".cname.data = "${config.networking.hostName}-lan0";
+      "time.${config.networking.domain}".cname.data = "${config.networking.hostName}";
+      "logs.${config.networking.domain}".cname.data = "${config.networking.hostName}";
+      "nut.${config.networking.domain}".cname.data = "${config.networking.hostName}";
+    };
   };
   time.timeZone = "America/Detroit";
   environment.systemPackages = [

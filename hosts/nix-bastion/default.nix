@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 let
   lo_ipv6 = "2600:1702:6630:3fec::10:11";
   dn42_ipv6 = "fdb7:c21f:f30f:10::11";
@@ -18,6 +18,10 @@ in
     hostName = "nix-bastion";
     useDHCP = false;
     enableIPv6 = true;
+    domains.subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+      a.data = [ "10.32.10.11" ];
+      aaaa.data = [ "2600:1702:6630:3fed:10:32:10:11" ];
+    };
     firewall.interfaces.ens18 = {
       allowedTCPPorts = [
         80

@@ -56,6 +56,7 @@ in
       "infra.franta.us" = "10.33.10.0:53";
       "internal" = "10.0.10.1:8853";
       "10.in-addr.arpa" = "10.0.10.1:8853";
+      "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = "10.0.10.1:8853";
     };
     # yaml-settings.dnssec.negative_trustanchors = [
     #   {
@@ -104,7 +105,7 @@ in
 
         add_record_if_missing() {
           local zone="$1" name="$2" type="$3" content="$4"
-          if $cmd list-zone "$zone" 2>/dev/null | grep -qF "$content"; then
+          if $cmd list-zone "$zone" 2>/dev/null | grep -F "$name" | grep -qF "$content"; then
             echo "INIT: record $name $type $content already exists, skipping"
           else
             $cmd add-record "$zone" "$name" "$type" "$content"
@@ -115,10 +116,13 @@ in
         $cmd create-zone internal. || true
         $cmd create-zone infra.franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
-        add_record_if_missing franta.us. ns1 A 10.0.10.1
-        add_record_if_missing 10.in-addr.arpa. @ NS 1.10.0.10.in-addr.arpa.
-        add_record_if_missing franta.us. @ NS ns1.franta.us.
-        add_record_if_missing franta.us. infra NS ns1.franta.us.
+        $cmd create-zone e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. || true
+        add_record_if_missing franta.us. ns1.franta.us. A 10.0.10.1
+        add_record_if_missing 10.in-addr.arpa. 10.in-addr.arpa. NS 1.10.0.10.in-addr.arpa.
+        add_record_if_missing franta.us. franta.us. NS ns1.franta.us.
+        add_record_if_missing franta.us. infra.franta.us. NS ns1.franta.us.
+        add_record_if_missing infra.franta.us. infra.franta.us. NS ns1.franta.us.
+        add_record_if_missing e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. NS ns1.franta.us.
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

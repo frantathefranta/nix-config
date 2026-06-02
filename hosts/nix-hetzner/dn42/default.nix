@@ -17,7 +17,6 @@ in
 
 {
   imports = [
-    inputs.nixos-dns.nixosModules.dns
     inputs.nnf.nixosModules.default
     ./bird.nix
     ./peers/wireguard.nix
@@ -31,9 +30,7 @@ in
   };
   networking = {
     domains = {
-      enable = true;
       defaultTTL = 86400;
-      baseDomains."franta.dn42" = { };
       subDomains."us-pdx.franta.dn42" = {
         a.data = "172.23.234.18";
         aaaa.data = dn42_dummy_ipv6;

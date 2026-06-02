@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   outputs,
+  config,
   ...
 }:
 
@@ -19,6 +20,11 @@
   networking = {
     hostName = "nix-vps-cz";
     domain = "eu.franta.us";
+    # domains.subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+    #   a.data = [ "37.205.9.92" ];
+    #   # aaaa.data = [ "2a03:3b40:fe:b3::1" ];
+    # };
+
     nftables = {
       enable = true;
     };

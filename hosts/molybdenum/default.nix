@@ -1,11 +1,10 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 let
   hostIPv4 = "10.32.10.242";
 in
 {
   imports = [
     #./services
-    inputs.nixos-dns.nixosModules.dns
     ./dn42
     ./hardware-configuration.nix
 
@@ -14,15 +13,12 @@ in
     ../common/optional/dn42.nix
     ../common/optional/qemu-guest-agent.nix
     ../common/optional/autoupgrade.nix
-    #../common/optional/1password.nix
     ../common/users/fbartik
   ];
   networking = {
     hostName = "molybdenum";
     domains = {
-      enable = true;
       defaultTTL = 86400;
-      baseDomains."franta.dn42" = { };
       subDomains."ns0.franta.dn42" = {
         a.data = "172.23.234.30";
         aaaa.data = "fdb7:c21f:f30f:53::";
@@ -36,6 +32,10 @@ in
       };
       subDomains."lg.franta.dn42" = {
         cname.data = "us-cmh";
+      };
+      subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+        a.data = hostIPv4;
+        aaaa.data = "2600:1702:6630:3fed::242";
       };
     };
     nameservers = [

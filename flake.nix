@@ -158,6 +158,11 @@
                   key_secret = "env/AXFR_KEY_SECRET";
                   key_algorithm = "hmac-sha256";
                 };
+                powerdns = {
+                  class = "octodns_powerdns.PowerDnsProvider";
+                  host = "ns1.franta.us";
+                  api_key = "env/POWERDNS_API_KEY";
+                };
               };
             };
             zones = {
@@ -168,6 +173,22 @@
                   "auto-arpa"
                 ];
                 targets = [ "bind" ];
+              };
+              "infra.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
+              # "10.in-addr.arpa." = {
+              #   sources = [
+              #     "config"
+              #     "auto-arpa"
+              #   ];
+              #   targets = [ "powerdns" ];
+              # };
+              "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa." = {
+                sources = [
+                  "config"
+                  "auto-arpa"
+                ];
+                # processors = [ "ownership" ];
+                targets = [ "powerdns" ];
               };
             };
             manager.auto_arpa = true;

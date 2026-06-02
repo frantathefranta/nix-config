@@ -20,6 +20,7 @@
     ./openssh.nix
     ./postfix.nix
     ./time.nix
+    ./dns.nix
     # ./optin-persistence.nix
     # ./podman.nix
     ./sops.nix

@@ -8,7 +8,6 @@
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
     inputs.hardware.nixosModules.common-pc-ssd
-    inputs.nixos-dns.nixosModules.dns
     # inputs.gobgp.nixosModules.gobgp
     ./services
     ./hardware-configuration.nix
@@ -24,10 +23,14 @@
   networking = {
     hostName = "qotom";
     domains = {
-      enable = true;
-      baseDomains."franta.dn42" = { };
-      subDomains."${config.networking.hostName}.franta.dn42" = {
-        aaaa.data = "fdb7:c21f:f30f:99:10:32:10:10";
+      subDomains = {
+        "${config.networking.hostName}.franta.dn42" = {
+          aaaa.data = "fdb7:c21f:f30f:99:10:32:10:10";
+        };
+        "${config.networking.hostName}.${config.networking.domain}" = {
+          a.data = [ "10.32.10.10" ];
+          aaaa.data = [ "2600:1702:6630:3fed:10:32:10:10" ];
+        };
       };
     };
 

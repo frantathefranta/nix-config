@@ -15,6 +15,7 @@
         age
         opentofu
         tofu-ls
+        just
         (octodns.withProviders (ps: [ octodns-providers.bind octodns-providers.powerdns ]))
       ]
       ++ lib.optionals stdenv.isLinux [

@@ -173,6 +173,7 @@
         allow_dns_api = {
           from = [
             "lab_space"
+            "local_interfaces"
             "wg"
           ];
           to = [ "fw" ];

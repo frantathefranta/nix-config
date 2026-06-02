@@ -7,6 +7,7 @@
     ../common/roles/server.nix
     ../common/users/fbartik
     ../common/optional/autoupgrade.nix
+    ../common/dn42
     ./dn42
   ];
   networking = {

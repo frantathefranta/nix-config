@@ -54,6 +54,10 @@
       };
       "protactinium-mgmt".a.data = [ "10.32.10.70" ];
       "thorium-mgmt".a.data = [ "10.32.10.60" ];
+      "eth-ex3400" = {
+        a.data = [ "10.32.10.204" ];
+        aaaa.data = [ "2600:1702:6630:3fed:10:32:10:204" ];
+      };
     };
     # "10.in-addr.arpa" = {
     #   "" = {

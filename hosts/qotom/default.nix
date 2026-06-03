@@ -78,6 +78,7 @@
     networkConfig = {
       IPv6AcceptRA = true;
       IPv6PrivacyExtensions = false;
+      EmitLLDP = true;
     };
     ipv6AcceptRAConfig = {
       Token = "::10:32:10:10";

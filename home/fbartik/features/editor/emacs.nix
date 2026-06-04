@@ -170,6 +170,7 @@ in
       aporetic # fonts
       imagemagick
       pinentry-emacs
+      just
       texliveFull
       # texlive.combined.scheme-medium
       texlivePackages.fontawesome.tex

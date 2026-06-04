@@ -45,7 +45,8 @@ in
   services.pdns-recursor = {
     enable = true;
     dns = {
-      allowFrom = [ # Default is only private IPs (including IPv6 ULAs)
+      allowFrom = [
+        # Default is only private IPs (including IPv6 ULAs)
         "::/0"
         "0.0.0.0/0"
       ];
@@ -58,17 +59,21 @@ in
       "10.in-addr.arpa" = "10.0.10.1:8853";
       "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = "10.0.10.1:8853";
     };
-    settings.recursor.forward_zones_recurse = [
-      {
-        zone = ".";
-        forwarders = [
-          "1.1.1.1"
-          "1.0.0.1"
-          "2606:4700:4700::1111"
-          "2606:4700:4700::1001"
-        ];
-      }
-    ];
+    settings = {
+      dnssec.validation = "off";
+      recursor.forward_zones_recurse = [
+        {
+          zone = ".";
+          forwarders = [
+            "1.1.1.1"
+            "1.0.0.1"
+            "2606:4700:4700::1111"
+            "2606:4700:4700::1001"
+          ];
+        }
+      ];
+    };
+
   };
   systemd.services.pdns.serviceConfig = {
     # powerdns doesn't create the sqlite database for us

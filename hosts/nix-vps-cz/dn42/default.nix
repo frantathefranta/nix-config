@@ -22,10 +22,6 @@ in
   networking = {
     domains = {
       subDomains = {
-        "${config.networking.hostName}.${config.networking.domain}" = {
-          a.data = "172.23.234.19";
-          aaaa.data = dn42_dummy_ipv6;
-        };
         "cz-prg.franta.dn42" = {
           a.data = "172.23.234.19";
           aaaa.data = dn42_dummy_ipv6;

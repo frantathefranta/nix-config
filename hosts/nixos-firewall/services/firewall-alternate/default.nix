@@ -80,6 +80,7 @@
         ipv4Addresses = [
           "10.32.10.0/24"
           "10.33.0.0/16"
+          "10.40.0.0/16"
         ];
         ipv6Addresses = [ "2600:1702:6630:3fec::/62" ];
       };
@@ -202,6 +203,7 @@
           from = [
             "untrusted"
             "wifi"
+            "wg"
           ];
           to = [ "fw" ];
           allowedTCPPorts = [ config.services.znc.config.Listener.l.Port ];

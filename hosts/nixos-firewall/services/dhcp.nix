@@ -184,6 +184,68 @@ in
           }
           // leaseOption
         )
+        (
+          {
+            id = 5;
+            subnet = "10.40.0.0/16";
+            pools = [ { pool = "10.40.100.0 - 10.40.100.199"; } ];
+            option-data = [
+              {
+                name = "routers";
+                data = "10.40.0.1";
+              }
+            ]
+            ++ commonDhcpOptions;
+          }
+          // leaseOption
+        )
+        (
+          {
+            id = 6;
+            subnet = "10.33.0.0/16";
+            pools = [ { pool = "10.33.100.0 - 10.33.100.199"; } ];
+            option-data = [
+              {
+                name = "routers";
+                data = "10.33.0.1";
+              }
+              {
+                name = "domain-name";
+                data = "infra.franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
+            reservations = [
+
+              {
+                hostname = "talos-actinium";
+                hw-address = "7c:fe:90:6d:c3:b0";
+                ip-address = "10.33.35.1";
+              }
+              {
+                hostname = "talos-thorium";
+                hw-address = "0a:5e:d4:7a:39:5a";
+                ip-address = "10.33.35.2";
+              }
+              {
+                hostname = "talos-protactinium";
+                hw-address = "9a:b2:f3:00:c6:a9";
+                ip-address = "10.33.35.3";
+              }
+              {
+                hostname = "talos-g3-mini";
+                hw-address = "10:62:e5:18:1a:2e";
+                ip-address = "10.33.35.21";
+              }
+              {
+                hostname = "talos-n150-01";
+                hw-address = "e0:51:d8:18:aa:26";
+                ip-address = "10.33.35.22";
+              }
+            ];
+          }
+          // leaseOption
+        )
       ];
     };
   };

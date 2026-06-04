@@ -53,19 +53,12 @@ in
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";
       "us.franta.us" = "10.33.10.0:53";
-      "infra.franta.us" = "10.33.10.0:53";
+      "infra.franta.us" = "10.0.10.1:8853";
       "internal" = "10.0.10.1:8853";
       "10.in-addr.arpa" = "10.0.10.1:8853";
       "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = "10.0.10.1:8853";
     };
-    # yaml-settings.dnssec.negative_trustanchors = [
-    #   {
-    #     name = "internal";
-    #   }
-    #   # "internal."
-    #   # "10.in-addr.arpa."
-    # ];
-    yaml-settings.recursor.forward_zones_recurse = [
+    settings.recursor.forward_zones_recurse = [
       {
         zone = ".";
         forwarders = [

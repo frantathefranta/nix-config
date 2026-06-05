@@ -26,8 +26,10 @@ in
     enable = true;
     extraConfig = ''
       webserver=yes
+
       # webserver cannot listen on more than 1 endpoint
       webserver-address=:: # TODO: Move this to a reverse proxy
+
       # ::ffff:127.0.0.1/32 allows IPv4 traffic
       webserver-allow-from=2600:1702:6630:3fe0::/60,::ffff:127.0.0.1/32
       allow-dnsupdate-from=10.0.10.1/32
@@ -53,25 +55,26 @@ in
     };
     forwardZones = {
       "franta.us" = "10.0.10.1:8853";
-      "us.franta.us" = "10.33.10.0:53";
-      "infra.franta.us" = "10.0.10.1:8853";
       "internal" = "10.0.10.1:8853";
       "10.in-addr.arpa" = "10.0.10.1:8853";
       "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = "10.0.10.1:8853";
     };
     settings = {
       dnssec.validation = "off";
-      recursor.forward_zones_recurse = [
-        {
-          zone = ".";
-          forwarders = [
-            "1.1.1.1"
-            "1.0.0.1"
-            "2606:4700:4700::1111"
-            "2606:4700:4700::1001"
-          ];
-        }
-      ];
+      recordcache.max_negative_ttl = 60;
+      recursor = {
+        forward_zones_recurse = [
+          {
+            zone = ".";
+            forwarders = [
+              "1.1.1.1"
+              "1.0.0.1"
+              "2606:4700:4700::1111"
+              "2606:4700:4700::1001"
+            ];
+          }
+        ];
+      };
     };
 
   };
@@ -113,15 +116,21 @@ in
         $cmd create-zone franta.us. || true
         $cmd create-zone internal. || true
         $cmd create-zone infra.franta.us. || true
+        $cmd create-zone cloud.franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
         $cmd create-zone e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. || true
+        # Set up ns1.franta.us record
         add_record_if_missing franta.us. ns1.franta.us. A 10.0.10.1
         add_record_if_missing franta.us. ns1.franta.us. AAAA 2600:1702:6630:3fe0:10:0:10:1
         add_record_if_missing 10.in-addr.arpa. 10.in-addr.arpa. NS 1.10.0.10.in-addr.arpa.
+        add_record_if_missing e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. NS ns1.franta.us.
+
         add_record_if_missing franta.us. franta.us. NS ns1.franta.us.
+        # Glue records
         add_record_if_missing franta.us. infra.franta.us. NS ns1.franta.us.
         add_record_if_missing infra.franta.us. infra.franta.us. NS ns1.franta.us.
-        add_record_if_missing e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. NS ns1.franta.us.
+        add_record_if_missing franta.us. cloud.franta.us. NS ns1.franta.us.
+        add_record_if_missing cloud.franta.us. cloud.franta.us. NS ns1.franta.us.
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

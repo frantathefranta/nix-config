@@ -175,19 +175,12 @@
                 targets = [ "bind" ];
               };
               "infra.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
-              # "10.in-addr.arpa." = {
-              #   sources = [
-              #     "config"
-              #     "auto-arpa"
-              #   ];
-              #   targets = [ "powerdns" ];
-              # };
+              "cloud.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
               "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa." = {
                 sources = [
                   "config"
                   "auto-arpa"
                 ];
-                # processors = [ "ownership" ];
                 targets = [ "powerdns" ];
               };
             };

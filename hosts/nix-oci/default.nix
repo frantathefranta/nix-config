@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -11,7 +16,10 @@
 
   networking = {
     hostName = "nix-oci";
-    domain = "us.franta.us";
+    domain = "cloud.franta.us";
+    domains.subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+      aaaa.data = [ "2603:c028:4507:4100:0:d10f:fabd:239c" ];
+    };
     nameservers = [
       "1.1.1.1"
       "1.0.0.1"
@@ -23,7 +31,7 @@
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "enp0s6";
-      # Only "required" for IPv6
+    # Only "required" for IPv6
     networkConfig.DHCP = "ipv6";
     address = [
       "10.0.0.98/24"

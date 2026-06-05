@@ -1,4 +1,9 @@
-{ inputs, lib, config, ... }:
+{
+  inputs,
+  lib,
+  config,
+  ...
+}:
 
 {
   imports = [
@@ -12,8 +17,14 @@
   ];
   networking = {
     hostName = "nix-hetzner";
-    domain = "us.franta.us";
-    nameservers = [ ];
+    domain = "cloud.franta.us";
+    domains.subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+      aaaa.data = [ "2a01:4ff:1f0:d924::1" ];
+    };
+    nameservers = [
+      "2a01:4ff:ff00::add:1"
+      "2a01:4ff:ff00::add:2"
+    ];
   };
   time.timeZone = "America/Seattle";
   systemd.network.enable = true;
@@ -21,8 +32,7 @@
     matchConfig.Name = "eth0";
     networkConfig.DHCP = "ipv4";
     dhcpV4Config.UseDNS = false;
-    # ipv6AcceptRAConfig.UseDNS = false;
-    dns = [ "2a01:4ff:ff00::add:1" "2a01:4ff:ff00::add:2"];
+    dns = config.networking.nameservers;
     address = [
       "2a01:4ff:1f0:d924::1/64"
     ];

@@ -11,4 +11,4 @@ else
     fqdn="$1"
 fi
 
-nh os switch . --hostname $hostname --target-host $hostname.infra.franta.us --elevation-program passwordless
+nh os switch . --hostname "$hostname" --target-host "$fqdn" --elevation-program passwordless

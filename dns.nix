@@ -19,6 +19,7 @@ in
         aaaa.data = "fdb7:c21f:f30f:53::";
       };
     };
+
     "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
       "" = {
         ns = {
@@ -26,6 +27,7 @@ in
         };
       };
     };
+
     "infra.franta.us" = {
       "" = {
         ns = {
@@ -64,14 +66,16 @@ in
         aaaa.data = [ "${dSubnet}:10:32:10:204" ];
       };
     };
-    # "10.in-addr.arpa" = {
-    #   "" = {
-    #     ns = {
-    #       data = [ "ns1.franta.us" ];
-    #       ttl = 3600;
-    #     };
-    #   };
-    # };
+
+    "cloud.franta.us" = {
+      "" = {
+        ns = {
+          data = [ "ns1.franta.us" ];
+          ttl = 3600;
+        };
+      };
+    };
+
     "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = {
       "" = {
         ns = {

@@ -246,6 +246,32 @@ in
           }
           // leaseOption
         )
+        (
+          {
+            id = 7;
+            subnet = "10.32.10.0/24";
+            pools = [ { pool = "10.32.10.100 - 10.32.10.199"; } ];
+            option-data = [
+              {
+                name = "routers";
+                data = "10.32.10.254";
+              }
+              {
+                name = "domain-name";
+                data = "infra.franta.us";
+              }
+            ]
+            ++ commonDhcpOptions;
+            reservations = [
+              {
+                hostname = "platinum";
+                hw-address = "b8:85:84:b9:44:6e";
+                ip-address = "10.32.10.210";
+              }
+            ];
+          }
+          // leaseOption
+        )
       ];
     };
   };

@@ -111,6 +111,11 @@ in
                 hw-address = "94:54:c5:eb:33:9f";
               }
               {
+                hostname = "thread-poe";
+                ip-address = "10.0.50.41";
+                hw-address = "ea:f6:0a:cf:1e:68";
+              }
+              {
                 hostname = "upper-bathroom-presence-sensor";
                 ip-address = "10.0.50.94";
                 hw-address = "f0:f5:bd:f8:88:b0";

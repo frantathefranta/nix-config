@@ -163,6 +163,10 @@
                   host = "ns1.franta.us";
                   api_key = "env/POWERDNS_API_KEY";
                 };
+                desec = {
+                  class = "octodns_desec.DesecProvider";
+                  token = "env/DESEC_TOKEN";
+                };
               };
             };
             zones = {
@@ -175,7 +179,9 @@
                 targets = [ "bind" ];
               };
               "infra.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
-              "cloud.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
+              "cloud.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [
+                "desec"
+              ];
               "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa." = {
                 sources = [
                   "config"

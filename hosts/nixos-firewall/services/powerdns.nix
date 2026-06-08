@@ -116,7 +116,6 @@ in
         $cmd create-zone franta.us. || true
         $cmd create-zone internal. || true
         $cmd create-zone infra.franta.us. || true
-        $cmd create-zone cloud.franta.us. || true
         $cmd create-zone 10.in-addr.arpa. || true
         $cmd create-zone e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa. || true
         # Set up ns1.franta.us record
@@ -129,8 +128,9 @@ in
         # Glue records
         add_record_if_missing franta.us. infra.franta.us. NS ns1.franta.us.
         add_record_if_missing infra.franta.us. infra.franta.us. NS ns1.franta.us.
-        add_record_if_missing franta.us. cloud.franta.us. NS ns1.franta.us.
-        add_record_if_missing cloud.franta.us. cloud.franta.us. NS ns1.franta.us.
+
+        add_record_if_missing franta.us. cloud.franta.us. NS ns1.desec.io.
+        add_record_if_missing franta.us. cloud.franta.us. NS ns1.desec.org.
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

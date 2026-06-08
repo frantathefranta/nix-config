@@ -16,7 +16,14 @@
         opentofu
         tofu-ls
         just
-        (octodns.withProviders (ps: [ octodns-providers.bind octodns-providers.powerdns ]))
+        gum
+        minijinja
+        talosctl
+        (octodns.withProviders (ps: [
+          octodns-providers.bind
+          octodns-providers.powerdns
+          octodns-providers.desec
+        ]))
       ]
       ++ lib.optionals stdenv.isLinux [
         home-manager

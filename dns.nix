@@ -70,7 +70,10 @@ in
     "cloud.franta.us" = {
       "" = {
         ns = {
-          data = [ "ns1.franta.us" ];
+          data = [
+            "ns1.desec.io"
+            "ns2.desec.org"
+          ];
           ttl = 3600;
         };
       };

@@ -98,6 +98,7 @@ in
               "chansaver"
               "sasl"
               "push"
+              "log"
             ];
             Server = "irc.hackint.org +6697";
             Chan = {

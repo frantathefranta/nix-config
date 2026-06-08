@@ -20,7 +20,7 @@
       };
       "apc-usb" = {
         driver = "usbhid-ups";
-        port = "/dev/input/event0";
+        port = "auto";
       };
     };
     users."nut-admin" = {

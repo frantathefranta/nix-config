@@ -40,8 +40,8 @@ in
     nftables.chains.forward.filter = {
       after = [ "hook" ];
       rules = [
-        "iifname wg* accept"
-        "oifname wg* accept"
+        "iifname { wg*, ospf* } accept"
+        "oifname { wg*, ospf* } accept"
       ];
     };
     nftables.firewall = {

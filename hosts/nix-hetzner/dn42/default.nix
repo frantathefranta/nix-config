@@ -23,10 +23,7 @@ in
   ];
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 0;
-    "net.ipv4.conf.all.forwarding" = 1;
     "net.ipv4.conf.default.rp_filter" = 0;
-    "net.ipv4.ip_forward" = 1;
-    "net.ipv6.conf.all.forwarding" = 1;
   };
   networking = {
     domains = {
@@ -40,9 +37,19 @@ in
     firewall = {
       enable = lib.mkForce false;
     };
+    nftables.chains.forward.filter = {
+      after = [ "hook" ];
+      rules = [
+        "iifname wg* accept"
+        "oifname wg* accept"
+      ];
+    };
     nftables.firewall = {
       enable = true;
-      snippets.nnf-common.enable = true;
+      snippets = {
+        nnf-common.enable = true;
+      };
+      # snippets.nnf-conntrack.enable = false;
       zones.untrusted.interfaces = [ "eth0" ];
       zones.wg_dn42.interfaces = networkInterfaces "50-wg";
       zones.ospf_wg.interfaces = networkInterfaces "50-ospf";
@@ -118,6 +125,10 @@ in
   };
   environment.systemPackages = [ pkgs.wireguard-tools ];
 
+  systemd.network.config.networkConfig = {
+    IPv4Forwarding = true;
+    IPv6Forwarding = true;
+  };
   systemd.network.netdevs."10-dummy_ospf" = {
     netdevConfig = {
       Name = "dummy_ospf";

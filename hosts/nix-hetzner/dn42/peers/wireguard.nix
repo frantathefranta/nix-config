@@ -62,7 +62,7 @@
       peerPublicKey = "3GAUz/+Q81eblrA78/LfkLs4X2CAsfnIHgw0R8LT9GE=";
       peerAddressV6 = "fe80::1033/128";
       localAddressV6 = "fe80::1:1033/128";
-      peerAddressV4 = "169.254.1.1/31";
+      peerAddressV4 = "169.254.1.3/31";
       localAddressV4 = "169.254.1.2/31";
     };
     "50-ospf_nix-vps-cz" = {

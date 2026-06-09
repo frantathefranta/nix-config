@@ -1,6 +1,7 @@
 { config, ... }:
 {
   services.bind = {
+    checkConfig = false;
     cacheNetworks = [
       "127.0.0.1/32"
       "172.20.0.0/14"

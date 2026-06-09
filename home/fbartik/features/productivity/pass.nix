@@ -4,5 +4,6 @@
   programs.password-store = {
     enable = true;
     # package = pkgs.passage;
+    settings = {  };
   };
 }

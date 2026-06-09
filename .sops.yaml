@@ -16,6 +16,7 @@ keys:
     - &nix-vps-cz age1zqggxdatjwcryu5qgr9ge0gewzvvfpjv630h4mmc9d6xunufcayq3xvg02
     - &nix-oci age1xvgv8wtj4yaeu80qk549a279mdr9xzw9yg0qat7hdrpvejhcc98qphsg5e
     - &silicium age1rtkde8zynkul4y7ufxwvs2axp842u4wexynn9ypf8zv7egzs8azs5ue8je
+    - &hydrogen age10aj5h0t6jaazlayfvzugfrgzfjwqqgz8atj74rlfvw59a0zjjd4qx0y7sz 
     # age-plugin-yubikey -g -f --touch-policy cached --pin-policy never --slot 2 --name age-sops-nix
     - &NC312237 age1yubikey1qt2ve24yxkrvzuagxzjjp4lud44k4fwfw38345q0q7lveuyla3upjw9mjgm
 creation_rules:
@@ -33,6 +34,7 @@ creation_rules:
           - *nix-hetzner
           - *nix-vps-cz
           - *silicium
+          - *hydrogen
         pgp:
           - *franta-gpg
   - path_regex: hosts/qotom/secrets.ya?ml$

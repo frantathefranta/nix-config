@@ -221,6 +221,7 @@
         nixos-firewall = mkServer "nixos-firewall";
         qotom = mkServer "qotom";
         r2s = mkServer "r2s";
+        hydrogen = mkServer "hydrogen";
       };
 
       # Standalone home-manager configuration entrypoint

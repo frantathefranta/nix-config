@@ -40,5 +40,6 @@
     pkgs.i2c-tools
     pkgs.vep14xx-diags
   ];
+  documentation.man.man-db.enable = false;
   system.stateVersion = "25.11";
 }

@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 
 {
   imports = [
@@ -13,14 +13,20 @@
       efi.canTouchEfiVariables = true;
     };
     kernelParams = [ "console=ttyS0,115200n8" ];
-    initrd.availableKernelModules = [
-      "xhci_pci"
-      "ahci"
-      "nvme"
-      "usbhid"
-      "usb_storage"
-      "sd_mod"
-    ];
+    initrd = {
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+        "tpm_crb"
+      ];
+      # luks.devices."${config.disko.devices.disk.main.content.partitions.luks.content.name}".crypttabExtraOpts = [
+      #   "tpm2-device=auto"
+      # ];
+    };
   };
   hardware.i2c.enable = true;
   disko.devices.disk.main = {

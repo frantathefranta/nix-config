@@ -83,21 +83,36 @@ else
     echo "    Created 1Password document: '$OP_ITEM_TITLE'"
 fi
 
-# --- 3. Retrieve or generate LUKS encryption key ---
+# --- 3. Retrieve or generate LUKS passphrase ---
+# Stored as a Password item (visible in 1Password UI) so it can be typed
+# manually for emergency access. Written without a trailing newline so that
+# key-file unlock and interactive passphrase entry match exactly.
 LUKS_ITEM_TITLE="LUKS Key: $HOSTNAME"
 
-if op document get "$LUKS_ITEM_TITLE" --vault "nix-config" --output "$LUKS_KEY_FILE" 2>/dev/null; then
-    echo "==> Retrieved existing LUKS key from 1Password ('$LUKS_ITEM_TITLE')"
+if op item get "$LUKS_ITEM_TITLE" --vault "nix-config" &>/dev/null 2>&1; then
+    echo "==> Retrieving existing LUKS passphrase from 1Password ('$LUKS_ITEM_TITLE')..."
+    LUKS_PASS=$(op item get "$LUKS_ITEM_TITLE" \
+        --vault "nix-config" \
+        --format json \
+        --reveal \
+        | python3 -c "
+import sys, json
+fields = {f['label']: f['value'] for f in json.load(sys.stdin)['fields'] if 'value' in f}
+print(fields['password'], end='')
+")
 else
-    echo "==> Generating LUKS key..."
-    head -c 32 /dev/urandom | base64 > "$LUKS_KEY_FILE"
-    op document create "$LUKS_KEY_FILE" \
+    echo "==> Generating LUKS passphrase..."
+    LUKS_PASS=$(python3 -c "import secrets, string; print(''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12)), end='')")
+    op item create \
+        --category "Password" \
         --title "$LUKS_ITEM_TITLE" \
         --vault "nix-config" \
-        --file-name luks.key \
+        "password=$LUKS_PASS" \
         --format json >/dev/null
-    echo "    Created 1Password document: '$LUKS_ITEM_TITLE'"
+    echo "    Created 1Password item: '$LUKS_ITEM_TITLE'"
 fi
+
+printf '%s' "$LUKS_PASS" > "$LUKS_KEY_FILE"
 
 # --- 4. Save public key to repo ---
 cp "$PUB_KEY_TMP" "$PUB_KEY_FILE"

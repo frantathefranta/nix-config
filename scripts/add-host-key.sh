@@ -10,10 +10,11 @@ usage() {
     echo "What this does:"
     echo "  1. Reuses existing keys from 1Password if present, otherwise generates a fresh ed25519 pair"
     echo "  2. Stores the private key in 1Password as a document: 'NixOS SSH Host Key: <hostname>'"
-    echo "  3. Saves the public key to hosts/<hostname>/ssh_host_ed25519_key.pub"
-    echo "  4. Derives the age key and wires it into .sops.yaml"
-    echo "  5. Re-encrypts hosts/common/secrets.yaml with the new key"
-    echo "  6. Deploys via nixos-anywhere, placing the key pair on the target"
+    echo "  3. Reuses or generates a LUKS encryption key, stored as: 'LUKS Key: <hostname>'"
+    echo "  4. Saves the public key to hosts/<hostname>/ssh_host_ed25519_key.pub"
+    echo "  5. Derives the age key and wires it into .sops.yaml"
+    echo "  6. Re-encrypts hosts/common/secrets.yaml with the new key"
+    echo "  7. Deploys via nixos-anywhere with SSH host keys and LUKS key"
     echo ""
     echo "Requires: ssh-keygen, ssh-to-age, sops, op, nixos-anywhere"
     exit 1
@@ -44,9 +45,10 @@ COMMON_SECRETS="$REPO_ROOT/hosts/common/secrets.yaml"
 
 mkdir -p "$HOST_PATH"
 
-# --- 1. Prepare extra-files tree ---
+# --- 1. Prepare temp files ---
 EXTRA_FILES="$(mktemp -d)"
-trap 'rm -rf "$EXTRA_FILES"' EXIT
+LUKS_KEY_FILE="$(mktemp)"
+trap 'rm -rf "$EXTRA_FILES"; rm -f "$LUKS_KEY_FILE"' EXIT
 
 SSH_DIR="$EXTRA_FILES/etc/ssh"
 install -d -m755 "$EXTRA_FILES/etc"
@@ -81,11 +83,27 @@ else
     echo "    Created 1Password document: '$OP_ITEM_TITLE'"
 fi
 
-# --- 3. Save public key to repo ---
+# --- 3. Retrieve or generate LUKS encryption key ---
+LUKS_ITEM_TITLE="LUKS Key: $HOSTNAME"
+
+if op document get "$LUKS_ITEM_TITLE" --vault "nix-config" --output "$LUKS_KEY_FILE" 2>/dev/null; then
+    echo "==> Retrieved existing LUKS key from 1Password ('$LUKS_ITEM_TITLE')"
+else
+    echo "==> Generating LUKS key..."
+    head -c 32 /dev/urandom | base64 > "$LUKS_KEY_FILE"
+    op document create "$LUKS_KEY_FILE" \
+        --title "$LUKS_ITEM_TITLE" \
+        --vault "nix-config" \
+        --file-name luks.key \
+        --format json >/dev/null
+    echo "    Created 1Password document: '$LUKS_ITEM_TITLE'"
+fi
+
+# --- 4. Save public key to repo ---
 cp "$PUB_KEY_TMP" "$PUB_KEY_FILE"
 echo "==> Saved public key to $PUB_KEY_FILE"
 
-# --- 4. Derive age key and update .sops.yaml ---
+# --- 5. Derive age key and update .sops.yaml ---
 echo "==> Deriving age key..."
 AGE_KEY=$(ssh-to-age -i "$PUB_KEY_FILE")
 echo "    Age key: $AGE_KEY"
@@ -158,15 +176,16 @@ with open(sops_yaml, 'w') as f:
     f.write(''.join(lines))
 PYEOF
 
-# --- 5. Re-encrypt common secrets ---
+# --- 6. Re-encrypt common secrets ---
 echo "==> Re-encrypting hosts/common/secrets.yaml..."
 sops updatekeys "$COMMON_SECRETS"
 
-# --- 6. Deploy with nixos-anywhere ---
+# --- 7. Deploy with nixos-anywhere ---
 echo "==> Deploying $HOSTNAME via nixos-anywhere..."
 nixos-anywhere \
     --flake "$REPO_ROOT#$HOSTNAME" \
     --extra-files "$EXTRA_FILES" \
+    --disk-encryption-keys /tmp/secret.key "$LUKS_KEY_FILE" \
     --target-host "$SSH_HOST"
 
 echo ""

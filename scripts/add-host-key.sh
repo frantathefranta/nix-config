@@ -9,7 +9,7 @@ usage() {
     echo ""
     echo "What this does:"
     echo "  1. Reuses existing keys from 1Password if present, otherwise generates a fresh ed25519 pair"
-    echo "  2. Stores both keys in 1Password (item: 'NixOS SSH Host Key: <hostname>')"
+    echo "  2. Stores the private key in 1Password as a document: 'NixOS SSH Host Key: <hostname>'"
     echo "  3. Saves the public key to hosts/<hostname>/ssh_host_ed25519_key.pub"
     echo "  4. Derives the age key and wires it into .sops.yaml"
     echo "  5. Re-encrypts hosts/common/secrets.yaml with the new key"
@@ -57,14 +57,15 @@ PUB_KEY_TMP="$SSH_DIR/ssh_host_ed25519_key.pub"
 
 OP_ITEM_TITLE="NixOS SSH Host Key: $HOSTNAME"
 
-# --- 2. Retrieve existing keys from 1Password, or generate and store new ones ---
-if op item get "$OP_ITEM_TITLE" --vault "nix-config" &>/dev/null 2>&1; then
-    echo "==> Retrieving existing keys from 1Password..."
-    op item get "$OP_ITEM_TITLE" --vault "nix-config" --fields "private_key" --reveal > "$PRIV_KEY"
-    op item get "$OP_ITEM_TITLE" --vault "nix-config" --fields "public_key" > "$PUB_KEY_TMP"
+# --- 2. Retrieve existing key from 1Password, or generate and store a new one ---
+# Use op document (binary attachment) rather than a text field so the private
+# key bytes are preserved exactly — JSON string encoding corrupts PEM data.
+if op document get "$OP_ITEM_TITLE" --vault "nix-config" --output "$PRIV_KEY" 2>/dev/null; then
+    echo "==> Retrieved existing private key from 1Password ('$OP_ITEM_TITLE')"
     chmod 600 "$PRIV_KEY"
+    # Derive the public key from the retrieved private key
+    ssh-keygen -y -f "$PRIV_KEY" > "$PUB_KEY_TMP"
     chmod 644 "$PUB_KEY_TMP"
-    echo "    Re-using keys from '$OP_ITEM_TITLE'"
 else
     echo "==> Generating ed25519 SSH host key pair..."
     ssh-keygen -t ed25519 -C "root@$HOSTNAME" -f "$PRIV_KEY" -N ""
@@ -72,15 +73,12 @@ else
     chmod 644 "$PUB_KEY_TMP"
     echo "    Generated key: $(cat "$PUB_KEY_TMP")"
 
-    echo "==> Saving keys to 1Password..."
-    op item create \
-        --category "Secure Note" \
+    echo "==> Saving private key to 1Password..."
+    op document create "$PRIV_KEY" \
         --title "$OP_ITEM_TITLE" \
         --vault "nix-config" \
-        "private_key[concealed]=$(cat "$PRIV_KEY")" \
-        "public_key[text]=$(cat "$PUB_KEY_TMP")" \
         --format json >/dev/null
-    echo "    Created 1Password item: '$OP_ITEM_TITLE'"
+    echo "    Created 1Password document: '$OP_ITEM_TITLE'"
 fi
 
 # --- 3. Save public key to repo ---

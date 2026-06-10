@@ -47,7 +47,9 @@
           content = {
             type = "luks";
             name = "crypted";
-            settings.allowDiscards = true;
+            settings = {
+              allowDiscards = true;
+            };
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ]; # override existing partiion

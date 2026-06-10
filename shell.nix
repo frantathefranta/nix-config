@@ -16,9 +16,7 @@
         opentofu
         tofu-ls
         just
-        gum
-        minijinja
-        talosctl
+        nixos-anywhere
         (octodns.withProviders (ps: [
           octodns-providers.bind
           octodns-providers.powerdns

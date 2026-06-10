@@ -39,38 +39,50 @@
             type = "filesystem";
             format = "vfat";
             mountpoint = "/boot";
+            mountOptions = [ "umask=0077" ];
           };
         };
-        root = {
+        luks = {
           size = "100%";
           content = {
-            type = "btrfs";
-            extraArgs = [ "-f" ]; # override existing partiion
-            subvolumes = {
-              "/root" = {
-                mountOptions = [ "compress=zstd" ];
-                mountpoint = "/";
-              };
-              "/nix" = {
-                mountpoint = "/nix";
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
-              };
-              "/persist" = {
-                mountOptions = [ "compress=zstd" ];
-                mountpoint = "/persist";
-              };
-              "/swap" = {
-                mountOptions = [
-                  "compress=zstd"
-                  "noatime"
-                ];
-                mountpoint = "/swap";
-                swap.swapfile = {
-                  size = "16G";
-                  path = "swapfile";
+            type = "luks";
+            name = "crypted";
+            settings.allowDiscards = true;
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" ]; # override existing partiion
+              subvolumes = {
+                "/root" = {
+                  mountpoint = "/";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "/nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "/persist" = {
+                  mountpoint = "/persist";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "/swap" = {
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                  mountpoint = "/swap";
+                  swap.swapfile = {
+                    size = "16G";
+                    path = "swapfile";
+                  };
                 };
               };
             };

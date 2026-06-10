@@ -4,6 +4,7 @@
     # ./syslog.nix
     ./conman.nix
     ./caddy.nix
+    ./containers.nix
   ];
   services = {
     atftpd.enable = true;

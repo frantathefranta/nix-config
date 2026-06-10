@@ -170,92 +170,6 @@
       peerAddressV6 = "fe80::2";
     };
   };
-  # services.gobgpd = {
-  #   enable = true;
-  #   zebra = true;
-  #   validateConfig = false;
-  #   config = {
-  #     global = {
-  #       as = 65032;
-  #       router-id = "10.0.10.10";
-  #       # apply-policy.default-import-policy = "reject-route";
-  #         apply-policy.import-policy-list = [
-  #           "allow-dn42"
-  #         ];
-  #     };
-  #     neighbors = {
-  #       "arista" = {
-  #         peer-as = 65033;
-  #         neighbor-address = "fe80::464c:a8ff:fede:3cf7%enp1s0";
-  #         afi-safis.ipv4-unicast = { };
-  #         afi-safis.ipv6-unicast = { };
-  #         # apply-policy.default-import-policy = "reject-route";
-  #         apply-policy.import-policy-list = [
-  #           "allow-dn42"
-  #         ];
-  #       };
-  #     };
-  #     defined-sets = {
-  #       prefix-sets = {
-  #         "dn42" = {
-  #           prefix-list = [
-  #             {
-  #               ip-prefix = "fd00::/8";
-  #               masklength-range = "48..128";
-  #             }
-  #           ];
-  #         };
-  #       };
-  #     };
-  #     policy-definitions = {
-  #       "allow-dn42" = {
-  #         statements = {
-  #           "match-prefix-set" = {
-  #             actions.route-disposition = "accept-route";
-  #             conditions = {
-  #               match-prefix-set = {
-  #                 prefix-set = "dn42";
-  #                 match-set-options = "any";
-  #               };
-  #             };
-  #           };
-  #         };
-  #       };
-  #     };
-  #   };
-  # };
-  # services.frr = {
-  #   bgpd.enable = true;
-  #   config = ''
-  #     router bgp 65032
-  #       no bgp ebgp-requires-policy
-  #       no bgp network import-check
-  #       bgp router-id 10.32.10.10
-  #       neighbor 2600:1702:6630:3fed::1 remote-as 65033
-  #       neighbor fe80::aaaa:2 remote-as 65534
-  #       neighbor fe80::aaaa:2 description mikrotik
-  #       neighbor fe80::aaaa:2 interface wg_mikrotik
-  #       neighbor fe80::aaaa:2 capability extended-nexthop
-  #       address-family ipv4 unicast
-  #         network 10.0.10.10/32
-  #       address-family ipv6
-  #         network fdb7:c21f:f30f:10::10/128
-  #         network 2600:1702:6630:3fec::10:10/128
-  #         neighbor 2600:1702:6630:3fed::1 activate
-  #         neighbor 2600:1702:6630:3fed::1 route-map correct_src in
-  #         neighbor fe80::aaaa:2 activate
-  #         neighbor fe80::aaaa:2 route-map to_mikrotik out
-  #     ipv6 prefix-list dn42_ips seq 10 permit fd00::/8 ge 48
-  #     ipv6 prefix-list loopback_ips seq 10 permit 2600:1702:6630:3fec::10:10/128
-  #     route-map to_mikrotik deny 1
-  #       match ipv6 address prefix-list dn42_ips
-  #     route-map to_mikrotik permit 2
-  #       match ipv6 address prefix-list loopback_ips
-  #     route-map correct_src permit 1
-  #       match ipv6 address prefix-list dn42_ips
-  #       set src fdb7:c21f:f30f:10::10
-  #   '';
-  # };
   services.bird = {
     enable = true;
     config = ''
@@ -265,6 +179,7 @@
         }
         protocol direct {
           interface "lo";
+          interface "ve-*";
           ipv4;
           ipv6;
         }
@@ -324,11 +239,12 @@
       }
       function is_loopback_v6() -> bool {
         return net ~ [
-          fd00::/8{128,128}
+          fd00::/8{128,128},
+          2600:1702:6630:3fed::/64{128,128}
         ];
       }
        protocol bgp molybdenum {
-         local as 65032;
+         local fe80::6:5032:1033 as 65032;
          neighbor fe80::1033:6:5032%wg_molybdenum as 4242421033;
          ipv4 {
            extended next hop on;
@@ -353,7 +269,6 @@
        protocol bgp mikrotik {
          local fe80::aaaa:1 as 65032;
          neighbor fe80::aaaa:2%wg_mikrotik as 65534;
-         strict bind yes;
          ipv4 {
            extended next hop on;
            table master4;
@@ -383,10 +298,8 @@
        protocol bgp arista {
          local fe80::20e:c4ff:fed3:d40b as 65032;
          neighbor fe80::464c:a8ff:fede:3cf7%enp1s0 as 65033;
-         strict bind yes;
          ipv4 {
            extended next hop on;
-           import all;
            import filter {
              if ( is_loopback_v4() ) 
              then {

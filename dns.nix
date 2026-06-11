@@ -1,5 +1,6 @@
 let
   _60Prefix = "2600:1702:6630:3fe";
+  aSubnet = "${_60Prefix}a";
   dSubnet = "${_60Prefix}d";
   fSubnet = "${_60Prefix}f";
 in
@@ -52,6 +53,11 @@ in
       "bmc-actinium".a.data = [ "10.32.10.5" ];
       "bmc-thorium".a.data = [ "10.32.10.6" ];
       "bmc-protactinium".a.data = [ "10.32.10.7" ];
+      "arista-lo0" = {
+        a.data = [ "10.0.0.2" ];
+        aaaa.data = [ "${aSubnet}::2" ];
+      };
+      "arista".cname.data = "arista-lo0.infra.franta.us";
       "brocade-garage" = {
         a.data = [ "10.32.10.205" ];
         aaaa.data = [ "${dSubnet}:629c:9fff:fe37:cbac" ];

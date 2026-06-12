@@ -16,6 +16,6 @@
     ./fail2ban.nix
     ./rust-motd.nix
     ./syslog.nix
-    # ./oxidized.nix
+    ./oxidized.nix
   ];
 }

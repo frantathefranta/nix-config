@@ -64,7 +64,7 @@ in
       };
       "brocade01-poe" = {
         a.data = [ "10.32.10.202" ];
-        aaaa.data = [ "${dSubnet}:d6c1:9eff:fe43:1d00" ];
+        aaaa.data = [ "${dSubnet}:10:32:10:205" ];
       };
       "platinum" = {
         a.data = [ "10.32.10.210" ];
@@ -73,6 +73,10 @@ in
       "eth-ex3400" = {
         a.data = [ "10.32.10.204" ];
         aaaa.data = [ "${dSubnet}:10:32:10:204" ];
+      };
+      "mikrotik" = {
+        a.data = [ "10.0.0.250" ];
+        aaaa.data = [ "${aSubnet}::250" ];
       };
     };
 
@@ -86,6 +90,7 @@ in
           ttl = 3600;
         };
       };
+      "mikrotik".cname.data = "ed330fd7bf47.sn.mynetname.net";
     };
 
     "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = {

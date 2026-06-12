@@ -58,6 +58,7 @@
     tcpdump
     traceroute
     inetutils
+    git
   ];
 
   hardware.enableRedistributableFirmware = lib.mkIf (config.services.qemuGuest.enable != true) true;

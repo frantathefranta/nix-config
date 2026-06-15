@@ -64,7 +64,7 @@
     kubecolor
     kubectl
     kubectl-passman
-    kubernetes-helm
+    # kubernetes-helm # TODO: Reactivate next week when #530941 is in nixpkgs-unstable
     kustomize
     stern # Logs
   ];

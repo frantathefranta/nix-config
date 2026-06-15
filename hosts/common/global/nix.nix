@@ -4,7 +4,7 @@
   ...
 }:
 let
-  flakeInputs = lib.filterAttrs (n: v: n != "nixpkgs" && lib.isType "flake" v) inputs;
+  flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
 in
 {
   nix = {
@@ -37,11 +37,9 @@ in
       ];
       flake-registry = ""; # Disable global flake registry
     };
-    # Pin each flake input in the registry and NIX_PATH so that ad-hoc commands
-    # (nix shell, nix build, nix-shell -p, import <name>) resolve to the same
-    # revisions the system was built from. nixpkgs is excluded because NixOS
-    # registers it automatically via nixpkgs-flake.nix; including it here
-    # causes a conflicting definition error on newer nixpkgs.
+    # Pin each flake input (including nixpkgs) in the registry and NIX_PATH
+    # so that ad-hoc commands (nix shell, nix build, nix-shell -p,
+    # import <name>) resolve to the same revisions the system was built from.
     registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };

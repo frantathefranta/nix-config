@@ -15,6 +15,10 @@
   ];
   home.packages = with pkgs; [
     symbola
+    # nix.enable is false on Darwin (see nixpkgs.nix), so pkgs.nix itself
+    # isn't installed. Pull in just its "man" output for nix*/nix.conf man pages
+    # without putting a nixpkgs `nix` binary on PATH ahead of Determinate's.
+    nix.man
     # d2
   ];
   programs.nh = {

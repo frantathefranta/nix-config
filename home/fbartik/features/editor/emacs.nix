@@ -162,7 +162,6 @@ in
       sqlite
       nil
       nixd # Nix LSP
-      unstable.claude-agent-acp # agent-shell
       bird-lsp
       mu.mu4e # Mail
       python3Minimal
@@ -176,6 +175,7 @@ in
       texlivePackages.fontawesome.tex
       texlivePackages.academicons
     ]
+    ++ lib.optionals config.programs.claude-code.enable [ unstable.claude-agent-acp ] # agent-shell
     ++ lib.optionals isDarwin [ emacsClientApp ]
     ++ lib.optionals (!isDarwin) [
       xclip

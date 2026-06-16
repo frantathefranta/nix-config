@@ -15,6 +15,7 @@
     ../common/roles/server.nix
 
     ../common/optional/fwupd.nix
+    ../common/optional/secure-boot.nix
   ];
   networking = {
     hostName = "hydrogen";

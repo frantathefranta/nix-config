@@ -6,13 +6,15 @@
   ];
   boot = {
     loader = {
-      timeout = 1;
-      systemd-boot = {
-        enable = true;
-      };
+      # timeout = 1;
+      # systemd-boot = {
+      #   enable = true;
+      # };
       efi.canTouchEfiVariables = true;
     };
-    kernelParams = [ "console=ttyS0,115200n8" ];
+    kernelParams = [
+      "console=ttyS0,115200n8"
+    ];
     initrd = {
       availableKernelModules = [
         "xhci_pci"
@@ -55,7 +57,7 @@
             name = "crypted";
             settings = {
               allowDiscards = true;
-              keyFile = "/tmp/secret.key";
+              # keyFile = "/tmp/secret.key";
             };
             content = {
               type = "btrfs";

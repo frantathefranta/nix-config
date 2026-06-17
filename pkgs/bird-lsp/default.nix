@@ -12,13 +12,13 @@
   makeWrapper,
 }:
 let
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "bird-chinese-community";
     repo = "BIRD-LSP";
     tag = "v${version}";
-    hash = "sha256-1wVxRCgNrhG1zPK9iswOVylDOLK73zTPZ9ia/vgtjnI=";
+    hash = "sha256-GvEO9Ps7CcKZKrQRvOHZ6vbOLOcbfCaHeUef6UXkM5w=";
   };
 
   # Build the dprint BIRD formatter plugin as wasm32-unknown-unknown.
@@ -32,7 +32,7 @@ let
     src = "${src}/packages/@birdcc/dprint-plugin-bird";
 
     cargoLock = {
-      lockFile = "${src}/packages/@birdcc/dprint-plugin-bird/Cargo.lock";
+      lockFile = ./Cargo.lock;
     };
 
     nativeBuildInputs = [ lld ];
@@ -57,6 +57,10 @@ stdenv.mkDerivation {
   pname = "bird-lsp";
   inherit version src;
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   buildInputs = [
     typescript
   ];
@@ -73,7 +77,7 @@ stdenv.mkDerivation {
     inherit version src;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-CcLRymDxvPLUQUWjTDCEkci+aCWAKboIBrTyDM/1nYI=";
+    hash = "sha256-UAH9PmaS+Jph9mAgRKFmzU8ejX+o5CoQKIHEvup1/X4=";
   };
 
   postPatch = ''
@@ -115,7 +119,7 @@ stdenv.mkDerivation {
     description = "Modern Language Server Protocol support for BIRD2 configuration files";
     homepage = "https://github.com/bird-chinese-community/BIRD-LSP";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ frantathefranta ];
     mainProgram = "bird-lsp";
   };
 }

@@ -8,6 +8,7 @@
   systemd.services.conmand.after = [ "sys-devices-pci0000:00-0000:00:14.0-usb2-2-4-2-4:1.0-ttyUSB0-tty-ttyUSB0.device" ];
   sops.secrets."conman.conf" = {
     sopsFile = ../secrets.yaml;
+    restartUnits = [ config.systemd.services.conmand.name ];
   };
   networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 7890 ];
 }

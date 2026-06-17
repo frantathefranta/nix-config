@@ -40,5 +40,25 @@
   targets.darwin.linkApps.enable = false;
   targets.darwin.copyApps.enable = true;
 
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [
+      {
+        # "hydrogen.infra.franta.us" = {
+        hostName = "hydrogen.infra.franta.us";
+        protocol = "ssh-ng";
+        # mandatoryFeatures = [
+        #   "kvm"
+        #   "big-parallel"
+        #   "nixos-test"
+        # ];
+        systems = [ "x86_64-linux" ];
+        sshUser = "fbartik";
+        sshKey = "/etc/ssh/ssh_host_ed25519_key";
+        # };
+      }
+    ];
+  };
   # TODO: Consider adding https://github.com/DivitMittal/hammerspoon-nix
+
 }

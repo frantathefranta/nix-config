@@ -95,6 +95,10 @@
       zones.molybdenum = {
         ipv6Addresses = [ "2600:1702:6630:3fed::242" ];
       };
+      zones.hydrogen = {
+        ipv4Addresses = [ "10.32.10.90" ];
+        ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:90" ];
+      };
       zones.qotom = {
         ipv4Addresses = [ "10.32.10.10" ];
         ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:10" ];
@@ -256,6 +260,11 @@
           allowedTCPPorts = [
             179
           ];
+        };
+        allow_http_and_https = {
+          from = [ "untrusted" ];
+          to = [ "hydrogen" ];
+          allowedTCPPorts = [ 80 443 ];
         };
         allow_wg_mikrotik = {
           from = [ "untrusted" ];

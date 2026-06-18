@@ -203,6 +203,7 @@
       formatter = forEachSystem (pkgs: pkgs.alejandra);
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 
+      hydraJobs = import ./hydra.nix {inherit inputs outputs;};
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs outputs; };
       # Reusable nixos modules you might want to export

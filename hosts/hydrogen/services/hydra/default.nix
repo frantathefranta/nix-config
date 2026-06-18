@@ -43,11 +43,16 @@ in
       };
     };
   };
-  networking.domains.subDomains."hydra.${config.networking.domain}".cname.data = "${config.networking.hostName}";
+  networking.domains.subDomains."hydra.${config.networking.domain}".cname.data =
+    "${config.networking.hostName}";
   users.users = {
     hydra-queue-runner.extraGroups = [ hydraGroup ];
     hydra-www.extraGroups = [ hydraGroup ];
   };
+
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+
   sops.secrets = {
     # Might need a Gitea/Forgejo equivalent
     # hydra-gh-auth = {

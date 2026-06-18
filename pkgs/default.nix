@@ -9,13 +9,13 @@ rec {
   # conman = pkgs.callPackage ./conman { };
   etBembo = pkgs.callPackage ./etbembo { };
   akeyless = pkgs.callPackage ./akeyless-cli { };
-  fake-hwclock = pkgs.callPackage ./fake-hwclock {  };
-  bird-lg-custom = pkgs.callPackage ./bird-lg {  };
+  fake-hwclock = pkgs.callPackage ./fake-hwclock { };
+  # bird-lg-custom = pkgs.callPackage ./bird-lg {  };
   vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
-  bird-lsp = pkgs.callPackage ./bird-lsp {  };
-  kubectl-passman = pkgs.callPackage ./kubectl-passman {};
-  varroa = pkgs.callPackage ./varroa {  };
+  bird-lsp = pkgs.callPackage ./bird-lsp { };
+  kubectl-passman = pkgs.callPackage ./kubectl-passman { };
+  varroa = pkgs.callPackage ./varroa { };
   rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
-  udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay {};
+  udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

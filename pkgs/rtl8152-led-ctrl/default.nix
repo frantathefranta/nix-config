@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to configure LEDs on RTL8152/RTL8153 series USB NICs.";
     homepage = "https://github.com/EHfive/${pname}";
     # Upstream has this license, which does not work with Hydra
-    # license = "Apache-2.0 OR MIT";
+    license = [ "Apache-2.0 OR MIT" ];
   };
 }

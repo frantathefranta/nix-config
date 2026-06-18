@@ -50,8 +50,15 @@ in
     hydra-www.extraGroups = [ hydraGroup ];
   };
 
-  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  # So Hydra doesn't need to work as hard
+  nix.settings.substituters = [
+    "https://attic.xuyh0120.win/lantian"
+    "https://niri.cachix.org"
+  ];
+  nix.settings.trusted-public-keys = [
+    "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+    "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+  ];
 
   sops.secrets = {
     # Might need a Gitea/Forgejo equivalent

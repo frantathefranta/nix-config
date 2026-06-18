@@ -71,6 +71,10 @@
   # security.pam.loginLimits = [
   #   { domain = "*"; item = "memlock"; type = "-"; value = 8192; }
   # ];
+  meta.ipam.host = {
+    ipv4 = "37.205.9.92";
+    ipv6 = "2a03:3b40:fe:b3::1";
+  };
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "25.11";
   nixpkgs.hostPlatform = "x86_64-linux";

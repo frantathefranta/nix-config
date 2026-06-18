@@ -9,5 +9,6 @@
   fake-hwclock = import ./fake-hwclock.nix;
   udp-broadcast-relay = import ./udp-broadcast-relay.nix;
   forgejo-runner = import ./forgejo-runner.nix;
+  ipam = import ./ipam.nix;
   # conman = import ./conman.nix;
 }

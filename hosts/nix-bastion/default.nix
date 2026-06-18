@@ -286,6 +286,10 @@ in
     listenAddress = "10.32.10.11";
   };
 
+  meta.ipam.host = {
+    ipv4 = "10.32.10.11";
+    ipv6Suffix = "10:32:10:11";
+  };
   security.sudo.wheelNeedsPassword = lib.mkForce true;
 
   system.stateVersion = "24.11";

@@ -28,6 +28,8 @@
     };
   };
   networking.nameservers = [ "10.0.10.1" ];
+
+  services.prometheus.exporters.node.listenAddress = "0.0.0.0";
   systemd.network.enable = true;
 
   systemd.network.networks."10-enp2s0" = {
@@ -53,6 +55,10 @@
         Destination = "0.0.0.0/0";
       }
     ];
+  };
+  meta.ipam.host = {
+    ipv4 = "10.32.10.90";
+    ipv6Suffix = "10:32:10:90";
   };
   time.timeZone = "America/Detroit";
   system.stateVersion = "26.05";

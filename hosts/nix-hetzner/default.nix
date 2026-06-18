@@ -48,6 +48,9 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM"
   ];
 
+  meta.ipam.host = {
+    ipv6 = "2a01:4ff:1f0:d924::1";
+  };
   system.stateVersion = "25.05";
   nixpkgs.hostPlatform = "x86_64-linux";
 }

@@ -330,6 +330,10 @@
        }
     '';
   };
+  meta.ipam.host = {
+    ipv4 = "10.32.10.10";
+    ipv6Suffix = "10:32:10:10";
+  };
   services.prometheus.exporters.node = {
     listenAddress = "10.32.10.10";
   };

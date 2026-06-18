@@ -35,6 +35,8 @@
   ]
   ++ (builtins.attrValues outputs.nixosModules);
 
+  meta.ipam.ipv6Prefix = "2600:1702:6630:3fed";
+
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = {
     inherit inputs outputs isStableHM;

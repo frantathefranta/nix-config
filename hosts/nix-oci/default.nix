@@ -48,6 +48,10 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHXiHtQnI5YhZX9eVBdwHJlWm+5O08rCUtyWKTqq9zLM"
   ];
 
+  meta.ipam.host = {
+    ipv4 = "10.0.0.98";
+    ipv6 = "2603:c028:4507:4100:0:d10f:fabd:239c";
+  };
   services.prometheus.exporters.node.openFirewall = false;
   system.stateVersion = "25.11";
   nixpkgs.hostPlatform = "aarch64-linux";

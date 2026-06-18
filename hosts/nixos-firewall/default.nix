@@ -32,6 +32,10 @@
       "nut.${config.networking.domain}".cname.data = "${config.networking.hostName}";
     };
   };
+  meta.ipam.host = {
+    ipv4 = "10.0.10.1";
+    ipv6 = "2600:1702:6630:3fe0:10:0:10:1";
+  };
   time.timeZone = "America/Detroit";
   environment.systemPackages = [
     pkgs.i2c-tools

@@ -63,6 +63,10 @@ in
     dns = [ "10.0.10.1" ];
     vlan = [ "ens18.2000" ];
   };
+  meta.ipam.host = {
+    ipv4 = hostIPv4;
+    ipv6 = "2600:1702:6630:3fed::242";
+  };
   time.timeZone = "America/Detroit";
   services.prometheus.exporters.node = {
     openFirewall = true;

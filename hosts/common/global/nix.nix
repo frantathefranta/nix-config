@@ -40,7 +40,7 @@ in
     # Pin each flake input (including nixpkgs) in the registry and NIX_PATH
     # so that ad-hoc commands (nix shell, nix build, nix-shell -p,
     # import <name>) resolve to the same revisions the system was built from.
-    registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+    registry = lib.mapAttrs (_: flake: { inherit flake; }) (lib.filterAttrs (n: _: n != "nixpkgs") flakeInputs);
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 }

@@ -227,7 +227,7 @@
         nix-vps-cz = mkServer "nix-vps-cz";
         nixos-firewall = mkServer "nixos-firewall";
         qotom = mkServer "qotom";
-        r2s = mkServer "r2s";
+        # r2s = mkServer "r2s";
         hydrogen = mkServer "hydrogen";
       };
 

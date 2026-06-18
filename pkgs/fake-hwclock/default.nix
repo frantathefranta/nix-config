@@ -11,5 +11,6 @@ writeShellScriptBin "fake-hwclock" ''
   meta = {
     description = "Fake hardware clock";
     license = lib.licenses.gpl3;
+    platforms = [ "aarch64-linux" ];
   };
 }

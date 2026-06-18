@@ -1,11 +1,33 @@
 {
+  ipamOf,
   inputs,
+  outputs,
   config,
   lib,
   pkgs,
   ...
 }:
-
+let
+  # Build one firewall zone per host in infra.franta.us using their IPAM data.
+  # Self is excluded to avoid infinite recursion during flake evaluation.
+  infraHostZones =
+    let
+      otherHosts = builtins.removeAttrs outputs.nixosConfigurations [ config.networking.hostName ];
+      infraHosts = lib.filterAttrs (
+        _: hostCfg: hostCfg.config.networking.domain == "infra.franta.us"
+      ) otherHosts;
+    in
+    lib.mapAttrs (
+      _: hostCfg:
+      let
+        host = hostCfg.config.meta.ipam.host;
+      in
+      lib.filterAttrs (_: v: v != [ ]) {
+        ipv4Addresses = lib.optional (host.ipv4 != null) host.ipv4;
+        ipv6Addresses = lib.optional (host.resolvedIPv6 != null) host.resolvedIPv6;
+      }
+    ) infraHosts;
+in
 {
   imports = [
     inputs.nnf.nixosModules.default
@@ -17,8 +39,7 @@
       after = [ "hook" ];
       rules = [
         "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
-        "iifname wan0 udp dport 40002 dnat ip to 10.32.10.10" # Qotom wireguard to R2s
-        "iifname wan0 udp dport 44069 dnat ip to 10.32.10.10" # Qotom wireguard to Mikrotik
+        "iifname wan0 udp dport { 40002, 44069 } dnat ip to ${(ipamOf "qotom").ipv4}" # Qotom wireguard to R2s and Mikrotik
         "iifname wan0 tcp dport 18903 dnat ip to 10.33.40.63"
         "iifname wan0 tcp dport 51413 dnat ip to 10.33.40.64"
         "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
@@ -46,86 +67,73 @@
         nnf-ssh.enable = true;
         nnf-nixos-firewall.enable = false;
       };
-      zones.untrusted = {
-        interfaces = [ "wan0" ];
-      };
-      zones.mgmt = {
-        interfaces = [
-          "eth6"
-          "mgmt"
-        ];
-      };
-      zones.local_interfaces = {
-        interfaces = [
-          "lan0"
-          "lan0.20"
-          "lan0.50"
-          "lan0.920"
-        ];
-      };
-      zones.wg = {
-        interfaces = [ "wg_iphone" ];
-      };
-      zones.wifi = {
-        interfaces = [
-          "lan0.20"
-        ];
-      };
-      zones.iot = {
-        interfaces = [
-          "lan0.50"
-        ];
-      };
-      zones.lab_space = {
-        ipv4Addresses = [
-          "10.0.0.0/24"
-          "10.32.10.0/24"
-          "10.33.0.0/16"
-          "10.40.0.0/16"
-        ];
-        ipv6Addresses = [
-          "2600:1702:6630:3fec::/62"
-          "2600:1702:6630:3fea::/64"
-        ];
-      };
-      zones.plex = {
-        ipv4Addresses = [ "10.32.10.210/32" ];
-        ipv6Addresses = [ "2600:1702:6630:3fed:ba85:84ff:feb9:446e/128" ];
-      };
-      zones.molybdenum = {
-        ipv6Addresses = [ "2600:1702:6630:3fed::242" ];
-      };
-      zones.hydrogen = {
-        ipv4Addresses = [ "10.32.10.90" ];
-        ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:90" ];
-      };
-      zones.qotom = {
-        ipv4Addresses = [ "10.32.10.10" ];
-        ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:10" ];
-      };
-      zones.nix-bastion = {
-        ipv4Addresses = [ "10.32.10.11" ];
-        ipv6Addresses = [ "2600:1702:6630:3fed:10:32:10:11" ];
-      };
-      zones.qbittorrent = {
-        ipv4Addresses = [ "10.33.40.63" ];
-        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:63" ];
-      };
-      zones.transmission_jeopardy = {
-        ipv4Addresses = [ "10.33.40.64" ];
-        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:64" ];
-      };
-      zones.transmission_music = {
-        ipv4Addresses = [ "10.33.40.65" ];
-        ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
-      };
-      zones.hass = {
-        ipv4Addresses = [
-          "10.0.50.30"
-        ];
-      };
-      zones.lan950 = {
-        interfaces = [ "lan0.950" ];
+      zones = infraHostZones // {
+        untrusted = {
+          interfaces = [ "wan0" ];
+        };
+        mgmt = {
+          interfaces = [
+            "eth6"
+            "mgmt"
+          ];
+        };
+        local_interfaces = {
+          interfaces = [
+            "lan0"
+            "lan0.20"
+            "lan0.50"
+            "lan0.920"
+          ];
+        };
+        wg = {
+          interfaces = [ "wg_iphone" ];
+        };
+        wifi = {
+          interfaces = [
+            "lan0.20"
+          ];
+        };
+        iot = {
+          interfaces = [
+            "lan0.50"
+          ];
+        };
+        lab_space = {
+          ipv4Addresses = [
+            "10.0.0.0/24"
+            "10.32.10.0/24"
+            "10.33.0.0/16"
+            "10.40.0.0/16"
+          ];
+          ipv6Addresses = [
+            "2600:1702:6630:3fec::/62"
+            "2600:1702:6630:3fea::/64"
+          ];
+        };
+        plex = {
+          ipv4Addresses = [ "10.32.10.210/32" ];
+          ipv6Addresses = [ "2600:1702:6630:3fed:ba85:84ff:feb9:446e/128" ];
+        };
+        qbittorrent = {
+          ipv4Addresses = [ "10.33.40.63" ];
+          ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:63" ];
+        };
+        transmission_jeopardy = {
+          ipv4Addresses = [ "10.33.40.64" ];
+          ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:64" ];
+        };
+        transmission_music = {
+          ipv4Addresses = [ "10.33.40.65" ];
+          ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
+        };
+        hass = {
+          ipv4Addresses = [
+            "10.0.50.30"
+          ];
+        };
+        lan950 = {
+          interfaces = [ "lan0.950" ];
+        };
       };
       rules = {
         wan_egress = {

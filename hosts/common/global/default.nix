@@ -37,6 +37,8 @@
 
   meta.ipam.ipv6Prefix = "2600:1702:6630:3fed";
 
+  _module.args.ipamOf = hostname: outputs.nixosConfigurations.${hostname}.config.meta.ipam.host;
+
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = {
     inherit inputs outputs isStableHM;

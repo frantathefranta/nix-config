@@ -28,7 +28,7 @@ in
           "lan0"
           "lan0.20"
           "lan0.50"
-          "lan0.920"
+          "lan0.999"
         ];
       };
       subnet4 = [
@@ -56,7 +56,6 @@ in
           }
           // leaseOption
         )
-
         (
           {
             id = 2;
@@ -167,25 +166,27 @@ in
         (
           {
             id = 4;
-            interface = "lan0.920";
-            subnet = "10.9.20.0/24";
-            pools = [ { pool = "10.9.20.50 - 10.9.20.199"; } ];
-            ddns-qualifying-suffix = "iot.franta.us";
+            interface = "lan0.999";
+            subnet = "10.0.99.0/24";
+            pools = [ { pool = "10.0.99.10 - 10.0.99.250"; } ];
             option-data = [
               {
                 name = "routers";
-                data = "10.9.20.1";
+                data = "10.0.99.1";
               }
+              # {
+              #   name = "domain-name";
+              #   data = "internal";
+              # }
+              # {
+              #   name = "domain-search";
+              #   data = "internal";
+              # }
               {
-                name = "domain-name";
-                data = "iot.franta.us";
+                name = "domain-name-servers";
+                data = "1.1.1.1";
               }
-              {
-                name = "domain-search";
-                data = "iot.franta.us";
-              }
-            ]
-            ++ commonDhcpOptions;
+            ];
           }
           // leaseOption
         )

@@ -63,7 +63,6 @@
       # };
     };
     netdevs = {
-      # VLANs
       "10-mgmt" = {
         netdevConfig = {
           Name = "mgmt";
@@ -73,6 +72,7 @@
           Table = 1000;
         };
       };
+      # VLANs
       "20-lan0.20" = {
         netdevConfig = {
           Name = "lan0.20";
@@ -89,22 +89,15 @@
         };
         vlanConfig.Id = 50;
       };
-      "20-lan0.920" = {
+      "20-lan0.999" = {
         netdevConfig = {
-          Name = "lan0.920";
-          Description = "test";
+          Name = "lan0.999";
+          Description = "Guest";
           Kind = "vlan";
         };
-        vlanConfig.Id = 920;
+        vlanConfig.Id = 999;
       };
-      "20-lan0.950" = {
-        netdevConfig = {
-          Name = "lan0.950";
-          Description = "test2";
-          Kind = "vlan";
-        };
-        vlanConfig.Id = 950;
-      };
+      # Wireguard
       "50-wg_iphone" = {
         netdevConfig = {
           Name = "wg_iphone";
@@ -201,6 +194,7 @@
           { Address = "10.32.10.230/24"; }
           { Address = "2600:1702:6630:3fed:10:32:10:230/64"; }
         ];
+        linkConfig.RequiredForOnline = false;
       };
 
       # LAN0
@@ -217,14 +211,11 @@
           SubnetId = 0;
           Token = "::10:0:10:1";
         };
-        linkConfig.RequiredForOnline = "routable"; # TODO: Change when interface is connected
+        linkConfig.RequiredForOnline = "routable";
         vlan = [
           "lan0.20" # WIFI
           "lan0.50" # IOT
-          "lan0.920" # test
-          "lan0.950" # test2
-          # "lan0.200" # SERVER
-          # "lan0.250" # GUEST
+          "lan0.999" # GUEST
         ];
       };
 
@@ -269,14 +260,25 @@
         linkConfig.RequiredForOnline = "routable";
       };
 
-      "30-lan0.920" = {
-        matchConfig.Name = "lan0.920";
-        address = [ "10.9.20.1/24" ];
-        linkConfig.RequiredForOnline = "routable";
-      };
-      "30-lan0.950" = {
-        matchConfig.Name = "lan0.950";
-        address = [ "10.9.50.1/24" ];
+      "30-lan0.999" = {
+        matchConfig.Name = "lan0.999";
+        address = [ "10.0.99.1/24" ];
+        networkConfig = {
+          DHCPPrefixDelegation = true;
+          # DHCPServer = true;
+          IPv6AcceptRA = false;
+          IPv6SendRA = true;
+          IPv6PrivacyExtensions = false;
+        };
+        # dhcpServerConfig = {
+        #   PoolOffset = 10;
+        #   DNS = "1.1.1.1";
+        #   ServerAddress = "10.0.99.1/24";
+        #   BindToInterface = true;
+        # };
+        dhcpPrefixDelegationConfig = {
+          SubnetId = 3;
+        };
         linkConfig.RequiredForOnline = "routable";
       };
 
@@ -486,4 +488,5 @@
       localAddressV6 = "fe80::2/64";
     };
   };
+  systemd.network.networks."50-wg_mikrotik".linkConfig.RequiredForOnline = false;
 }

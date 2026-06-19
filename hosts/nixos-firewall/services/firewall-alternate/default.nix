@@ -82,7 +82,11 @@ in
             "lan0"
             "lan0.20"
             "lan0.50"
-            "lan0.920"
+          ];
+        };
+        guest = {
+          interfaces = [
+            "lan0.999"
           ];
         };
         wg = {
@@ -131,14 +135,12 @@ in
             "10.0.50.30"
           ];
         };
-        lan950 = {
-          interfaces = [ "lan0.950" ];
-        };
       };
       rules = {
         wan_egress = {
           from = [
             "local_interfaces"
+            "guest"
             "wg"
           ];
           to = [ "untrusted" ];

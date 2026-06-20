@@ -15,7 +15,8 @@ let
     ) pkgs;
 in
 {
-  pkgs = lib.mapAttrs filterValidPkgs outputs.packages;
+  pkgs = lib.mapAttrs filterValidPkgs (lib.filterAttrs (sys: _: !(lib.hasSuffix "darwin" sys)) outputs.packages);
   hosts = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) outputs.nixosConfigurations;
-  homes = lib.mapAttrs (_: cfg: cfg.activationPackage) outputs.homeConfigurations;
+  homes = lib.mapAttrs (_: cfg: cfg.activationPackage)
+    (lib.filterAttrs (_: cfg: !(lib.hasSuffix "darwin" cfg.pkgs.stdenv.system)) outputs.homeConfigurations);
 }

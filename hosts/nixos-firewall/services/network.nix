@@ -36,11 +36,8 @@
     wait-online = {
       anyInterface = false;
       ignoredInterfaces = [
-        # "wan0"
-        # "wan1"
         "lan1"
         "mgmt"
-        # "wg0"
       ];
     };
     links = {
@@ -194,7 +191,6 @@
           { Address = "10.32.10.230/24"; }
           { Address = "2600:1702:6630:3fed:10:32:10:230/64"; }
         ];
-        linkConfig.RequiredForOnline = false;
       };
 
       # LAN0

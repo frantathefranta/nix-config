@@ -54,6 +54,7 @@ in
         uri = "localhost";
         systems = [
           "x86_64-linux"
+          "aarch64-linux"
         ];
         maxJobs = 3;
         supportedFeatures = [

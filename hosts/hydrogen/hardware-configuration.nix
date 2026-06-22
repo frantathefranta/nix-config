@@ -1,4 +1,4 @@
-{ config, inputs, ... }:
+{ inputs, ... }:
 
 {
   imports = [
@@ -6,10 +6,6 @@
   ];
   boot = {
     loader = {
-      # timeout = 1;
-      # systemd-boot = {
-      #   enable = true;
-      # };
       efi.canTouchEfiVariables = true;
     };
     kernelParams = [
@@ -25,10 +21,8 @@
         "sd_mod"
         "tpm_crb"
       ];
-      # luks.devices."${config.disko.devices.disk.main.content.partitions.luks.content.name}".crypttabExtraOpts = [
-      #   "tpm2-device=auto"
-      # ];
     };
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
   hardware.i2c.enable = true;
   disko.devices.disk.main = {

@@ -14,8 +14,8 @@
     ];
     domain = lib.mkDefault "infra.franta.us";
     nameservers = lib.mkDefault [
-      "10.33.10.0"
-      "10.33.10.1"
+      "10.0.10.1"
+      "2600:1702:6630:3fe0:10:0:10:1"
     ];
   };
   # Fast boot for headless systems

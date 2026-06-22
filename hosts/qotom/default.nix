@@ -18,10 +18,14 @@
 
     ../common/optional/smartd.nix
     ../common/optional/fwupd.nix
+    # ../common/optional/prometheus-node-exporter.nix
+    # ../common/optional/autoupgrade.nix
     # ../common/optional/netlogd.nix
   ];
   networking = {
     hostName = "qotom";
+    domain = "infra.franta.us";
+    useDHCP = false;
     domains = {
       subDomains = {
         "${config.networking.hostName}.franta.dn42" = {
@@ -174,17 +178,20 @@
     enable = true;
     config = ''
         router id 10.0.10.10;
+
         protocol device {
             scan time 10;
         }
         protocol direct {
           interface "lo";
-          interface "ve-*";
+          interface "br*";
           ipv4;
           ipv6;
         }
+
        ipv4 table DN42v4;
        ipv6 table DN42v6;
+
        protocol static S_VRF_DN42v6 {
          vrf "dn42";
          route fdb7:c21f:f30f:10::10/128 reject;
@@ -240,7 +247,7 @@
       function is_loopback_v6() -> bool {
         return net ~ [
           fd00::/8{128,128},
-          2600:1702:6630:3fed::/64{128,128}
+          2600:1702:6630:3fed::/64{80,128}
         ];
       }
        protocol bgp molybdenum {
@@ -337,5 +344,6 @@
   services.prometheus.exporters.node = {
     listenAddress = "10.32.10.10";
   };
+  documentation.man.man-db.enable = false;
   system.stateVersion = "24.11";
 }

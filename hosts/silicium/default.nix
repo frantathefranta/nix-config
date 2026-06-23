@@ -16,6 +16,7 @@
 
     ../common/optional/kde.nix
     ../common/optional/fwupd.nix
+    ../common/optional/secure-boot.nix
     ../common/optional/evremap.nix
   ];
   networking = {

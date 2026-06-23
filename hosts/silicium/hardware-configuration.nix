@@ -22,11 +22,11 @@
     # boot.kernelParams = [ "psmouse.proto=imps" ]; # This fixes trackpoint choppiness
     extraModulePackages = [ ];
     loader = {
-      systemd-boot = {
-        enable = true;
-        consoleMode = "max";
-        configurationLimit = 5;
-      };
+      # systemd-boot = {
+      #   enable = true;
+      #   consoleMode = "max";
+      #   configurationLimit = 5;
+      # };
       efi.canTouchEfiVariables = true;
     };
     tmp.cleanOnBoot = true;
@@ -60,7 +60,7 @@
             name = "root";
             type = "luks";
             settings.allowDiscards = true;
-            passwordFile = "/tmp/secret.key";
+            # passwordFile = "/tmp/secret.key";
             content = {
               type = "btrfs";
               # postCreateHook = ''

@@ -23,7 +23,7 @@
       ignoreUnstable: false,
     },
     {
-      matchManagers: ['terraform'],
+      matchDatasources: ['terraform-provider'],
       registryUrls: ['https://registry.opentofu.org'],
     },
     {

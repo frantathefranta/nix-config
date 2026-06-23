@@ -3,5 +3,22 @@
   extends: [
     "github>frantathefranta/renovate-config",
   ],
-  "nix": { "enabled": true }
+  "nix": { "enabled": true },
+  packageRules: [
+    {
+      matchDepNames: ["nix-community/nh"],
+      ignoreUnstable: false,
+    },
+  ],
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Update flake inputs pinned with ?tag=",
+      fileMatch: ["^flake\\.nix$"],
+      matchStrings: [
+        '"github:(?<depName>[^?"]+)\\?tag=(?<currentValue>[^"]+)"',
+      ],
+      datasourceTemplate: "github-tags",
+    },
+  ],
 }

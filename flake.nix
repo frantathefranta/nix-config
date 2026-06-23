@@ -39,7 +39,7 @@
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote";
+      url = "github:nix-community/lanzaboote?tag=v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -84,7 +84,7 @@
 
     nh.url = "github:nix-community/nh?tag=v4.4.0-beta1";
     disko = {
-      url = "github:nix-community/disko";
+      url = "github:nix-community/disko?tag=v1.12.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

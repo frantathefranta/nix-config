@@ -37,12 +37,12 @@
   customManagers: [
     {
       customType: 'regex',
-      description: 'Update flake inputs pinned with ?tag=',
+      description: 'Update flake inputs pinned with ?ref=refs/tags/',
       managerFilePatterns: [
         '/^flake\\.nix$/',
       ],
       matchStrings: [
-        '"github:(?<depName>[^?"]+)\\?tag=(?<currentValue>[^"]+)"',
+        '"github:(?<depName>[^?"]+)\\?ref=refs/tags/(?<currentValue>[^"]+)"',
       ],
       datasourceTemplate: 'github-tags',
     },

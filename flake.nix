@@ -39,12 +39,12 @@
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote?tag=v1.1.0";
+      url = "github:nix-community/lanzaboote?ref=refs/tags/v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     direnv-instant = {
-      url = "github:Mic92/direnv-instant?tag=1.2.0";
+      url = "github:Mic92/direnv-instant";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     };
@@ -82,9 +82,9 @@
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
     # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    nh.url = "github:nix-community/nh?tag=v4.4.0-beta1";
+    nh.url = "github:nix-community/nh?ref=refs/tags/v4.4.0-beta1";
     disko = {
-      url = "github:nix-community/disko?tag=v1.12.0";
+      url = "github:nix-community/disko?ref=refs/tags/v1.12.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

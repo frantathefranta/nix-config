@@ -8,7 +8,7 @@ terraform {
     }
     akeyless = {
       source  = "akeyless-community/akeyless"
-      version = "~> 2.0"
+      version = "~> 2.0.1"
     }
   }
 }

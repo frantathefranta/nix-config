@@ -1,29 +1,39 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: [
-    "github>frantathefranta/renovate-config",
+    'github>frantathefranta/renovate-config',
   ],
-  "nix": { "enabled": true },
+  nix: {
+    enabled: true,
+  },
   postUpgradeTasks: {
-    commands: ["/run/current-system/sw/bin/nix flake lock"],
-    fileFilters: ["flake.lock"],
-    executionMode: "branch",
+    commands: [
+      '/run/current-system/sw/bin/nix flake lock',
+    ],
+    fileFilters: [
+      'flake.lock',
+    ],
+    executionMode: 'branch',
   },
   packageRules: [
     {
-      matchDepNames: ["nix-community/nh"],
+      matchDepNames: [
+        'nix-community/nh',
+      ],
       ignoreUnstable: false,
     },
   ],
   customManagers: [
     {
-      customType: "regex",
-      description: "Update flake inputs pinned with ?tag=",
-      fileMatch: ["^flake\\.nix$"],
+      customType: 'regex',
+      description: 'Update flake inputs pinned with ?tag=',
+      managerFilePatterns: [
+        '/^flake\\.nix$/',
+      ],
       matchStrings: [
         '"github:(?<depName>[^?"]+)\\?tag=(?<currentValue>[^"]+)"',
       ],
-      datasourceTemplate: "github-tags",
+      datasourceTemplate: 'github-tags',
     },
   ],
 }

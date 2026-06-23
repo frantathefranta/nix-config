@@ -3,4 +3,5 @@
   extends: [
     "github>frantathefranta/renovate-config",
   ],
+  "nix": { "enabled": true }
 }

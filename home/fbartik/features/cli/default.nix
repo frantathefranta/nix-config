@@ -61,7 +61,7 @@
       nvd # Differ
       nix-diff # Differ, more detailed
       nix-output-monitor
-      unstable.nh # Nice wrapper for NixOS and HM
+      # unstable.nh # Nice wrapper for NixOS and HM
       unstable.snitch # TODO: Change to stable when 26.05 is
 
       # Rust

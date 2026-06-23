@@ -27,7 +27,7 @@
     };
     enable = true;
     homeFlake = "${config.home.homeDirectory}/git/nix-config";
-    package = pkgs.unstable.nh;
+    package = inputs.nh.packages.aarch64-darwin.nh;
   };
   sops.age.keyFile = "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt";
   sops.defaultSopsFile = ./NC312237-secrets.yaml;
@@ -52,7 +52,7 @@
         #   "big-parallel"
         #   "nixos-test"
         # ];
-        systems = [ "x86_64-linux" ];
+        systems = [ "x86_64-linux" "aarch64-linux" ];
         sshUser = "fbartik";
         sshKey = "/etc/ssh/ssh_host_ed25519_key";
         # };

@@ -22,6 +22,10 @@
       ],
       ignoreUnstable: false,
     },
+    {
+      matchManagers: ['terraform'],
+      registryUrls: ['https://registry.opentofu.org'],
+    },
   ],
   customManagers: [
     {

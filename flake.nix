@@ -44,7 +44,7 @@
     };
 
     direnv-instant = {
-      url = "github:Mic92/direnv-instant";
+      url = "github:Mic92/direnv-instant?tag=1.2.0";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     };

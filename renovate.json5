@@ -4,6 +4,11 @@
     "github>frantathefranta/renovate-config",
   ],
   "nix": { "enabled": true },
+  postUpgradeTasks: {
+    commands: ["nix flake lock"],
+    fileFilters: ["flake.lock"],
+    executionMode: "branch",
+  },
   packageRules: [
     {
       matchDepNames: ["nix-community/nh"],

@@ -17,6 +17,7 @@
       endpoint = "https://git.franta.us";
       gitAuthor = "Lord of Lighting [bot] <lol@franta.us>";
       autodiscover = true;
+      allowedCommands = [ "^nix flake lock$" ];
     };
     schedule = "*:0/10";
   };

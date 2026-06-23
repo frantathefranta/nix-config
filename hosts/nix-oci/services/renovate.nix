@@ -14,7 +14,7 @@
     package = pkgs.unstable.renovate;
     settings = {
       platform = "forgejo";
-      endpoint = "https://codeberg.org";
+      endpoint = "https://git.franta.us";
       gitAuthor = "Lord of Lighting [bot] <lol@franta.us>";
       autodiscover = true;
     };

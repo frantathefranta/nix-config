@@ -6,21 +6,24 @@
   nix: {
     enabled: true,
   },
-  postUpgradeTasks: {
-    commands: [
-      '/run/current-system/sw/bin/nix flake lock',
-    ],
-    fileFilters: [
-      'flake.lock',
-    ],
-    executionMode: 'branch',
-  },
   packageRules: [
     {
       matchDepNames: [
         'nix-community/nh',
       ],
       ignoreUnstable: false,
+    },
+    {
+      matchFileNames: ['flake.nix'],
+      postUpgradeTasks: {
+        commands: [
+          '/run/current-system/sw/bin/nix flake lock --accept-flake-config',
+        ],
+        fileFilters: [
+          'flake.lock',
+        ],
+        executionMode: 'branch',
+      },
     },
     {
       matchDatasources: ['terraform-provider'],

@@ -22,7 +22,7 @@
       endpoint = "https://git.franta.us";
       gitAuthor = "Lord of Lighting [bot] <lol@franta.us>";
       autodiscover = true;
-      allowedCommands = [ "^/run/current-system/sw/bin/nix flake lock$" ];
+      allowedCommands = [ "^/run/current-system/sw/bin/nix flake lock --accept-flake-config$" ];
     };
     schedule = "*:0/10";
   };

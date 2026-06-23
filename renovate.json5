@@ -26,6 +26,10 @@
       matchManagers: ['terraform'],
       registryUrls: ['https://registry.opentofu.org'],
     },
+    {
+      matchDepNames: ['hashicorp/terraform'],
+      enabled: false,
+    },
   ],
   customManagers: [
     {

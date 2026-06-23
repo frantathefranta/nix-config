@@ -36,4 +36,5 @@
       datasourceTemplate: 'github-tags',
     },
   ],
+  gitAuthor: 'Lord of Lighting [bot] <lol@franta.us>',
 }

@@ -130,6 +130,9 @@ in
           ipv4Addresses = [ "10.33.40.65" ];
           ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
         };
+        envoy_external = {
+          ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:14" ];
+        };
         hass = {
           ipv4Addresses = [
             "10.0.50.30"
@@ -256,6 +259,15 @@ in
           to = [ "transmission_music" ];
           allowedTCPPorts = [ 51414 ];
         };
+        allow_envoy_external = {
+          from = [ "untrusted" ];
+          to = [ "envoy_external" ];
+          allowedTCPPorts = [
+            22
+            80
+            443
+          ];
+        };
         allow_qotom_wg = {
           from = [ "untrusted" ];
           to = [ "qotom" ];
@@ -274,7 +286,10 @@ in
         allow_http_and_https = {
           from = [ "untrusted" ];
           to = [ "hydrogen" ];
-          allowedTCPPorts = [ 80 443 ];
+          allowedTCPPorts = [
+            80
+            443
+          ];
         };
         allow_wg_mikrotik = {
           from = [ "untrusted" ];

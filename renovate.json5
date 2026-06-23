@@ -5,7 +5,7 @@
   ],
   "nix": { "enabled": true },
   postUpgradeTasks: {
-    commands: ["nix flake lock"],
+    commands: ["/run/current-system/sw/bin/nix flake lock"],
     fileFilters: ["flake.lock"],
     executionMode: "branch",
   },

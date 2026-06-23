@@ -4,7 +4,7 @@
         "type": 1,
         "hidden": false,
         "description": "Build main branch",
-        "flake": "git+https://codeberg.org/franta/nix-config?ref=main",
+        "flake": "git+https://git.franta.us/franta/nix-config?ref=main",
         "checkinterval": 60,
         "schedulingshares": 100,
         "enableemail": false,

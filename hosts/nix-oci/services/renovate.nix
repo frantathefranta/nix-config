@@ -5,6 +5,8 @@
 }:
 
 {
+  environment.systemPackages = [ pkgs.opentofu ];
+
   services.renovate = {
     enable = true;
     credentials = {
@@ -12,6 +14,9 @@
       RENOVATE_GITHUB_COM_TOKEN = config.sops.secrets."renovate/GITHUB_TOKEN".path;
     };
     package = pkgs.unstable.renovate;
+    environment = {
+      LOG_LEVEL = "debug";
+    };
     settings = {
       platform = "forgejo";
       endpoint = "https://git.franta.us";

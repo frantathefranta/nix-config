@@ -225,6 +225,7 @@
         nix-bastion = mkServer "nix-bastion";
         nix-hetzner = mkServer "nix-hetzner";
         nix-oci = mkServer "nix-oci";
+        nix-vultr = mkServer "nix-vultr";
         nix-vps-cz = mkServer "nix-vps-cz";
         nixos-firewall = mkServer "nixos-firewall";
         qotom = mkServer "qotom";

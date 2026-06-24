@@ -192,6 +192,11 @@ in
           allowedTCPPorts = [ 8853 ];
           to = [ "fw" ];
         };
+        allow_prometheus_node_exporter = {
+          from = [ "lab_space" ];
+          allowedTCPPorts = [ 9100 ];
+          to = [ "fw" ];
+        };
         allow_dns_api = {
           from = [
             "lab_space"

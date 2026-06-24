@@ -294,13 +294,10 @@
   # Override sshd so it listens in mgmt vrf
   services.prometheus.exporters.node = {
     listenAddress = "0.0.0.0";
+    openFirewall = false;
   };
   systemd.services.prometheus-node-exporter = {
-    after = [ "pyvrf@mgmt.service" ];
-    unitConfig = {
-      Requires = "pyvrf@mgmt.service";
-    };
-    serviceConfig.BPFProgram = "sock_create:/sys/fs/bpf/pyvrf_mgmt";
+    serviceConfig.BindNetworkInterface = "mgmt";
   };
   systemd.services.sshd = {
     after = [ "pyvrf@mgmt.service" ];

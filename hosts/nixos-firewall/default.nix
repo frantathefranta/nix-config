@@ -13,6 +13,7 @@
 
     ../common/global
     ../common/users/fbartik
+    ../common/optional/prometheus-node-exporter.nix
   ];
   networking = {
     hostName = "nixos-firewall";

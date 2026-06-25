@@ -13,10 +13,6 @@ in
         "https://frantathefranta.cachix.org"
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
-        "https://eh5.cachix.org"
-      ];
-      extra-trusted-public-keys = lib.mkAfter [
-        "eh5.cachix.org-1:pNWZ2OMjQ8RYKTbMsiU/AjztyyC8SwvxKOf6teMScKQ="
       ];
       trusted-users = [
         "root"

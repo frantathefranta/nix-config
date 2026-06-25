@@ -11,6 +11,10 @@
     ../common/global
     ../common/roles/server.nix
 
+    ../common/dn42
+    ./dn42
+
+
     # ./services
   ];
   hardware.facter.reportPath = ./facter.json;
@@ -32,7 +36,6 @@
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "enp1s0";
-    # Only "required" for IPv6
     networkConfig.DHCP = true;
   };
   time.timeZone = "Europe/Warsaw";

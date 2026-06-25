@@ -29,7 +29,7 @@
     # ./systemd-initrd.nix
     # ./tailscale.nix
     # ./gamemode.nix
-    ./nix-ld.nix
+    # ./nix-ld.nix
     # ./kdeconnect.nix
     # ./upower.nix
   ]

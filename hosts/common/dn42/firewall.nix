@@ -39,8 +39,8 @@ in
       };
       zones.untrusted.interfaces = [ wanInterface ];
       zones.dummy_ospf.interfaces = [ "dummy_ospf" ];
-      zones.wg_dn42 = lib.mkIf (wgInterfaces != []) { interfaces = wgInterfaces; };
-      zones.ospf_wg = lib.mkIf (ospfInterfaces != []) { interfaces = ospfInterfaces; };
+      zones.wg_dn42 = lib.mkIf (wgInterfaces != [ ]) { interfaces = wgInterfaces; };
+      zones.ospf_wg = lib.mkIf (ospfInterfaces != [ ]) { interfaces = ospfInterfaces; };
       zones.my_dn42_prefix.ipv6Addresses = [
         "${config.meta.dn42.ipv6Prefix48}::/48"
       ];
@@ -70,9 +70,11 @@ in
           ];
         };
         allow_bgp_from_peers = {
-          from = [ "dummy_ospf" ]
-            ++ lib.optionals (ospfInterfaces != []) [ "ospf_wg" ]
-            ++ lib.optionals (wgInterfaces != []) [ "wg_dn42" ];
+          from = [
+            "dummy_ospf"
+          ]
+          ++ lib.optionals (ospfInterfaces != [ ]) [ "ospf_wg" ]
+          ++ lib.optionals (wgInterfaces != [ ]) [ "wg_dn42" ];
           to = [ "fw" ];
           allowedTCPPorts = [ 179 ];
         };
@@ -81,7 +83,7 @@ in
           to = [ "fw" ];
           verdict = "accept";
         };
-        allow_ospf_bfd = lib.mkIf (ospfInterfaces != []) {
+        allow_ospf_bfd = lib.mkIf (ospfInterfaces != [ ]) {
           from = [ "ospf_wg" ];
           to = [ "fw" ];
           allowedUDPPorts = [ 3784 ];

@@ -14,10 +14,11 @@
     ../common/dn42
     ./dn42
 
-
     # ./services
   ];
   hardware.facter.reportPath = ./facter.json;
+  # Vultr adds a network configuration that breaks IPv6 in the way I want to use it
+  services.cloud-init.network.enable = false;
 
   networking = {
     hostName = "nix-vultr";
@@ -36,7 +37,10 @@
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "enp1s0";
-    networkConfig.DHCP = true;
+    networkConfig = {
+      DHCP = "ipv4";
+      IPv6AcceptRA = true;
+    };
   };
   time.timeZone = "Europe/Warsaw";
 

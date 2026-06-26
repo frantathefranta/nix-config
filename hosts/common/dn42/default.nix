@@ -14,6 +14,8 @@
   
   systemd.network.config.networkConfig = {
     IPv4Forwarding = true;
+
+    # This will break IPv6 RA if IPv6AcceptRA is not explicitly set
     IPv6Forwarding = true;
   };
 }

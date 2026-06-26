@@ -12,8 +12,8 @@ let
     lib.mapAttrsToList (_name: net: net.matchConfig.Name) (
       lib.filterAttrs (name: _: lib.hasPrefix prefix name) config.systemd.network.networks
     );
-  wgInterfaces = networkInterfaces "50-wg";
-  ospfInterfaces = networkInterfaces "50-ospf";
+  wgInterfaces = networkInterfaces "ibgp";
+  ospfInterfaces = networkInterfaces "ebgp";
 in
 {
   imports = [
@@ -28,14 +28,15 @@ in
     nftables.chains.forward.filter = {
       after = [ "hook" ];
       rules = [
-        "iifname { wg*, ospf* } accept"
-        "oifname { wg*, ospf* } accept"
+        "iifname { ibgp*, ebgp* } accept"
+        "oifname { ibgp*, ebgp* } accept"
       ];
     };
     nftables.firewall = {
       enable = true;
       snippets = {
         nnf-common.enable = true;
+        nnf-conntrack.enable = false;
       };
       zones.untrusted.interfaces = [ wanInterface ];
       zones.dummy_ospf.interfaces = [ "dummy_ospf" ];
@@ -50,12 +51,12 @@ in
       };
       zones.ospf = {
         ingressExpression = [
-          "ip protocol ospfigp"
-          "ip6 nexthdr ospfigp"
+          "ip protocol ospfigp counter"
+          "ip6 nexthdr ospfigp counter"
         ];
         egressExpression = [
-          "ip protocol ospfigp"
-          "ip6 nexthdr ospfigp"
+          "ip protocol ospfigp counter"
+          "ip6 nexthdr ospfigp counter"
         ];
       };
       rules = {

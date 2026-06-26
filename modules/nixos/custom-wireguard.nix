@@ -6,13 +6,6 @@
 with lib;
 let
   cfg = config.services.custom-wireguard;
-
-  # Strip any leading "digits-" prefix from the interface key to get the actual name.
-  interfaceName = name:
-    let
-      m = builtins.match "([0-9]+-)(.*)" name;
-    in
-    if m != null then builtins.elemAt m 1 else name;
 in
 {
   options.services.custom-wireguard = {
@@ -92,6 +85,13 @@ in
                 Which VRF this interface should be added to
               '';
             };
+            latency = mkOption {
+              default = null;
+              type = types.nullOr types.int;
+              description = ''
+                DN42 link latency community value (1-9) for BGP import/export filters.
+              '';
+            };
           };
         });
     };
@@ -122,7 +122,7 @@ in
     );
     systemd.network.netdevs = builtins.mapAttrs (interface: data: {
       netdevConfig = {
-        Name = interfaceName interface;
+        Name = interface;
         Kind = "wireguard";
       };
       wireguardConfig = {
@@ -145,7 +145,7 @@ in
     }) cfg.interfaces;
 
     systemd.network.networks = builtins.mapAttrs (interface: data: {
-      matchConfig.Name = interfaceName interface;
+      matchConfig.Name = interface;
       addresses =
         lib.optional (data.localAddressV6 != null) {
           Address = data.localAddressV6;

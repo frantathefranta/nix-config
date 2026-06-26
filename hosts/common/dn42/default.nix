@@ -4,6 +4,7 @@
     ./dns.nix
     ./interfaces.nix
     ./firewall.nix
+    ./bird
     ./stayrtr.nix
     ../../../modules/nixos/dn42-ipam.nix
   ];

@@ -112,5 +112,21 @@ in
         }
       '';
     };
+
+    region = lib.mkOption {
+      type = lib.types.int;
+      default = { };
+      description = "DN42 region configuration for this host.";
+      example = "42";
+    };
+    country = lib.mkOption {
+      type = lib.types.int;
+      default = { };
+      description = ''
+        DN42 country configuration for this host.
+        Uses ISO-3166 country-code https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv
+      '';
+      example = "840";
+    };
   };
 }

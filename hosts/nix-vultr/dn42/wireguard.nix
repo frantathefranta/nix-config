@@ -13,7 +13,7 @@ in
     "ibgp_us1" = {
       listenPort = 24001;
       peerEndpoint = "us1.dn42.franta.us:21033";
-      peerPublicKey = "3GAUz/+Q81eblrA78/LfkLs4X2CAsfnIHgw0R8LT9GE=";
+      peerPublicKey = "us1UyUrDb+609N10WRholfb4Q6XuOGvx23uPMQbJdTg=";
       localAddressV6 = "fe80::${subnet}:1033/128";
       peerAddressV6 = "fe80::3:1033/128";
       latency = 5;

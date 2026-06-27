@@ -9,6 +9,13 @@
       peerAddressV4 = "169.254.2.0/31";
       localAddressV4 = "169.254.2.1/31";
     };
+    "50-ospf_nix-vultr" = {
+      listenPort = 24003;
+      peerEndpoint = "eu1.dn42.franta.us:24001";
+      peerPublicKey = "5SqQoNhZQuFY93I5Gbfks1xoOqOH4GfeSLkCcJ1v6WY=";
+      localAddressV6 = "fe80::3:1033/128";
+      peerAddressV6 = "fe80::300:1033/64";
+    };
     "50-wg4242420454" = {
       listenPort = 20454;
       peerEndpoint = "dn42b.nedifinita.com:44280";

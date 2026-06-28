@@ -36,7 +36,8 @@ in
       enable = true;
       snippets = {
         nnf-common.enable = true;
-        nnf-conntrack.enable = false;
+        # nnf-conntrack.enable = false;
+        # nnf-drop.enable = false;
       };
       zones.untrusted.interfaces = [ wanInterface ];
       zones.dummy_ospf.interfaces = [ "dummy_ospf" ];

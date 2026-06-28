@@ -21,6 +21,7 @@
     kdePackages.ksystemlog
     kdePackages.powerdevil # Configuration module for SDDM
     kdePackages.sddm-kcm # Configuration module for SDDM
+    kdePackages.krfb # Virtual desktop
     # krohnkite # Dynamic tiling manager
     (where-is-my-sddm-theme.override {
       themeConfig.General = {
@@ -89,4 +90,5 @@
       };
     })
   ];
+  networking.firewall.allowedTCPPorts = [ 5900 ];
 }

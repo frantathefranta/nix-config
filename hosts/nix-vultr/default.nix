@@ -35,7 +35,7 @@
     nftables.enable = true;
   };
   systemd.network.enable = true;
-  systemd.network.networks."10-wan" = {
+  systemd.network.networks."05-wan" = {
     matchConfig.Name = "enp1s0";
     networkConfig = {
       DHCP = "ipv4";

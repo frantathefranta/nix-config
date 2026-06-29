@@ -6,7 +6,7 @@
 }:
 
 let
-  wanInterface = config.systemd.network.networks."10-wan".matchConfig.Name;
+  wanInterface = config.systemd.network.networks."05-wan".matchConfig.Name;
   networkInterfaces =
     prefix:
     lib.mapAttrsToList (_name: net: net.matchConfig.Name) (
@@ -25,19 +25,21 @@ in
     firewall = {
       enable = lib.mkForce false;
     };
-    nftables.chains.forward.filter = {
-      after = [ "hook" ];
-      rules = [
-        "iifname { ibgp*, ebgp* } accept"
-        "oifname { ibgp*, ebgp* } accept"
-      ];
+    nftables.chains.forward = {
+      conntrack.enable = false;
+      drop.enable = false;
+      filter = {
+        after = [ "hook" ];
+        rules = [
+          "iifname { ibgp*, ebgp* } accept"
+          "oifname { ibgp*, ebgp* } accept"
+        ];
+      };
     };
     nftables.firewall = {
       enable = true;
       snippets = {
         nnf-common.enable = true;
-        # nnf-conntrack.enable = false;
-        # nnf-drop.enable = false;
       };
       zones.untrusted.interfaces = [ wanInterface ];
       zones.dummy_ospf.interfaces = [ "dummy_ospf" ];
@@ -52,11 +54,9 @@ in
       };
       zones.ospf = {
         ingressExpression = [
-          "ip protocol ospfigp counter"
           "ip6 nexthdr ospfigp counter"
         ];
         egressExpression = [
-          "ip protocol ospfigp counter"
           "ip6 nexthdr ospfigp counter"
         ];
       };

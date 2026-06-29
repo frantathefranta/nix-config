@@ -32,8 +32,8 @@ let
       template = if isIbgp then "ibgp_peers" else "dnpeers";
       neighborLine =
         if isIbgp
-        # then "neighbor ${stripPrefixLen iface.peerAddressV6}%${name};"
-        then "neighbor range OWNNETv6 internal;"
+        then "neighbor ${stripPrefixLen iface.peerAddressV6}%${name} internal;"
+        # then "neighbor range OWNNETv6 internal;"
         else "neighbor ${stripPrefixLen iface.peerAddressV6}%${name} as ${lib.last (lib.splitString "_" name)};";
       latency = if iface.latency != null then iface.latency else 1;
       exportFilter = if isIbgp then "ibgp_export_filter" else "dn42_export_filter";

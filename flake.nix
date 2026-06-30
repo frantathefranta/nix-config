@@ -36,7 +36,10 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    vpsadminos.url = "github:vpsfreecz/vpsadminos";
+    vpsadminos = {
+      url = "github:vpsfreecz/vpsadminos";
+      inputs.nixpkgsUnstable.follows = "nixpkgs-unstable";
+    };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote?ref=refs/tags/v1.1.0";
@@ -204,7 +207,7 @@
       formatter = forEachSystem (pkgs: pkgs.alejandra);
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 
-      hydraJobs = import ./hydra.nix {inherit inputs outputs;};
+      hydraJobs = import ./hydra.nix { inherit inputs outputs; };
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs outputs; };
       # Reusable nixos modules you might want to export

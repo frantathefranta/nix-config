@@ -1,17 +1,118 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  dn42Of,
+  ...
+}:
 {
   imports = [
     ./wireguard.nix
-    ./bird2.nix
     ./bind.nix
     ./caddy.nix
     ./peers/wireguard.nix
   ];
 
+  meta.dn42.host = {
+    ipv4 = "172.23.234.17";
+    ipv6Subnet = "0000";
+    ipv6 = "fdb7:c21f:f30f::1";
+  };
+  meta.dn42.region = 42;
+  meta.dn42.country = 840;
+
+  # iBGP to nix-hetzner runs over OSPF-routed loopback path (via ibgp_pdx multi-peer tunnel).
+  # There is no dedicated WG interface for it, so it cannot be auto-generated from ibgp_* interfaces.
+  meta.dn42.extraBirdConfig = ''
+        protocol bgp ibgp_pdx from ibgp_peers {
+          neighbor ${(dn42Of "nix-hetzner").resolvedIPv6} as 4242421033;
+          bfd on;
+          source address OWNIPv6;
+          ipv4 { extended next hop on; next hop self; import all; export where dn42_export_filter(4,25,34); import keep filtered; };
+          ipv6 { extended next hop on; next hop self; import all; export where ibgp_export_filter(4,25,34); import keep filtered; };
+        }
+
+        protocol direct dn42_extra {
+          interface "dummy53", "ens18.2000", "wg_home";
+          ipv4;
+          ipv6;
+        }
+    protocol bgp qotom
+     {
+      local as 4242421033;
+      neighbor fe80::6:5032:1033%wg_qotom as 65032;
+      ipv4 {
+        extended next hop on;
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_valid_network() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+
+      ipv6 {
+        extended next hop on;
+        import filter {
+          if ( is_loopback_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+        export filter {
+          # export all valid routes
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+    }
+    protocol bgp arista
+     {
+      local as 4242421033;
+      neighbor fe80::464c:a8ff:fede:3cf7%ens18 as 65033;
+
+      ipv4 {
+        # import/export filters
+        import none;
+        export filter {
+          # export all valid routes
+          if ( is_self_net() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+
+      ipv6 {
+        # import/export filters
+        import filter {
+          if ( is_loopback_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+        export filter {
+          # export all valid routes
+          if ( is_valid_network_v6() && source ~ [ RTS_STATIC, RTS_BGP ] )
+          then {
+            accept;
+          }
+          reject;
+        };
+      };
+    }
+  '';
+
   boot.kernel.sysctl = {
-    "net.ipv4.conf.all.rp_filter" = 0;
     "net.ipv4.conf.all.forwarding" = 1;
-    "net.ipv4.conf.default.rp_filter" = 0;
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
@@ -41,22 +142,8 @@
     nftables = {
       enable = true;
     };
-    interfaces.lo = {
-      ipv4.addresses = [
-        {
-          address = "172.23.234.17";
-          prefixLength = 32;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = "fdb7:c21f:f30f::1";
-          prefixLength = 128;
-        }
-      ];
-    };
   };
-  systemd.network.enable = true;
+
   systemd.network.netdevs."10-dummy53" = {
     netdevConfig = {
       Name = "dummy53";
@@ -84,6 +171,7 @@
       "~d.f.ip6.arpa"
     ];
   };
+
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
       "wg_home_key:${config.sops.secrets."wireguard/50-wg_home".path}"
@@ -144,7 +232,7 @@
         IPv6PrivacyExtensions = false;
       };
       ipv6SendRAConfig = {
-        RouterLifetimeSec = 0; # Don't advertise a default route. Doesn't interfere with ipv6RoutePrefixes
+        RouterLifetimeSec = 0;
         DNS = "fdb7:c21f:f30f:53::";
       };
       ipv6Prefixes = [ { Prefix = "fdb7:c21f:f30f:0099::/64"; } ];
@@ -155,5 +243,40 @@
         "~d.f.ip6.arpa"
       ];
     };
+  };
+
+  services.bird-lg = {
+    proxy = {
+      enable = true;
+      listenAddresses = "0.0.0.0:8000";
+      allowedIPs = [
+        config.meta.dn42.host.ipv4
+        config.meta.dn42.host.resolvedIPv6
+        (dn42Of "nix-hetzner").resolvedIPv6
+        (dn42Of "nix-vps-cz").resolvedIPv6
+      ];
+      birdSocket = "/var/run/bird/bird.ctl";
+    };
+    frontend = {
+      enable = true;
+      whois = "whois.dn42";
+      netSpecificMode = "dn42";
+      servers = [
+        "us-cmh"
+        "us-pdx"
+        "cz-prg"
+      ];
+      domain = "franta.dn42";
+      listenAddresses = [
+        "10.32.10.242:5000"
+        "[${config.meta.dn42.host.resolvedIPv6}]:5000"
+      ];
+    };
+  };
+
+  services.prometheus.exporters.bird = {
+    enable = true;
+    openFirewall = false;
+    listenAddress = "10.32.10.242";
   };
 }

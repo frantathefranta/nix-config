@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, outputs, ... }:
 {
   imports = [
     ./dns.nix
@@ -10,6 +10,8 @@
   ];
 
   meta.dn42.ipv6Prefix48 = "fdb7:c21f:f30f";
+
+  _module.args.dn42Of = hostname: outputs.nixosConfigurations.${hostname}.config.meta.dn42.host;
 
   environment.systemPackages = [ pkgs.wireguard-tools ];
   

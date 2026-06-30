@@ -92,6 +92,14 @@ in
                 DN42 link latency community value (1-9) for BGP import/export filters.
               '';
             };
+            peerHostname = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                NixOS hostname of the peer. Required on ibgp_* interfaces so the
+                common bird module can resolve the peer's DN42 loopback via dn42Of.
+              '';
+            };
           };
         });
     };

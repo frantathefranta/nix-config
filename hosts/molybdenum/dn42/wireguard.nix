@@ -7,17 +7,16 @@
   environment.systemPackages = [ pkgs.wireguard-tools ];
   systemd.services.systemd-networkd.serviceConfig = {
     LoadCredential = [
-      "network.wireguard.private.89-ospf_wg:${config.sops.secrets."wireguard/hetzner-private-key".path}"
-      # "network.wireguard.private.50-wg_radxa-eu:${config.sops.secrets."wireguard/50-wg_radxa-eu".path}"
+      "network.wireguard.private.89-ibgp_pdx:${config.sops.secrets."wireguard/hetzner-private-key".path}"
     ];
   };
-  systemd.network.netdevs."89-ospf_wg" = {
+  systemd.network.netdevs."89-ibgp_pdx" = {
     netdevConfig = {
-      Name = "ospf_wg";
+      Name = "ibgp_pdx";
       Kind = "wireguard";
     };
     wireguardConfig = {
-      PrivateKey = "@network.wireguard.private.89-ospf_wg";
+      PrivateKey = "@network.wireguard.private.89-ibgp_pdx";
       ListenPort = 21033;
     };
     wireguardPeers = [
@@ -39,8 +38,8 @@
       }
     ];
   };
-  systemd.network.networks."89-ospf_wg" = {
-    matchConfig.Name = "ospf_wg";
+  systemd.network.networks."89-ibgp_pdx" = {
+    matchConfig.Name = "ibgp_pdx";
     addresses = [
       {
         Address = "fe80::1033/128";
@@ -59,46 +58,10 @@
       LinkLocalAddressing = false;
     };
   };
-  # systemd.network.netdevs."50-wg_radxa-eu" = {
-  #   netdevConfig = {
-  #     Name = "wg_radxa-eu";
-  #     Kind = "wireguard";
-  #   };
-  #   wireguardConfig = {
-  #     PrivateKey = "@network.wireguard.private.50-wg_radxa-eu";
-  #     ListenPort = 51820;
-  #   };
-  #   wireguardPeers = [
-  #     {
-  #       Endpoint = "10.32.10.119:51821";
-  #       PersistentKeepalive = 5;
-  #       PublicKey = "Cgseg7RDeS4hDU1L8kj4yfxqvSGC3/l84NkUORz5DRo=";
-  #       AllowedIPs = [
-  #         "0.0.0.0/0"
-  #         "::/0"
-  #       ];
-  #     }
-  #   ];
-  # };
-  # systemd.network.networks."50-wg_radxa-eu" = {
-  #   matchConfig.Name = "wg_radxa-eu";
-  #   addresses = [
-  #     {
-  #       Address = "fe80::faaa:1/64";
-  #       Peer = "fe80::faaa:2";
-  #     }
-  #   ];
-  #   networkConfig = {
-  #     LinkLocalAddressing = false;
-  #   };
-  # };
 
   sops.secrets = {
     "wireguard/hetzner-private-key" = {
       sopsFile = ../secrets.yaml;
     };
-    # "wireguard/50-wg_radxa-eu" = {
-    #   sopsFile = ../secrets.yaml;
-    # };
   };
 }

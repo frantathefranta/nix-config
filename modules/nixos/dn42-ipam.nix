@@ -128,5 +128,15 @@ in
       '';
       example = "840";
     };
+
+    extraBirdConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        Additional BIRD configuration appended after the auto-generated BGP
+        sessions. Use for sessions that cannot be expressed as ibgp_* or
+        ebgp_* wireguard interfaces (e.g. multi-hop iBGP over transitive OSPF).
+      '';
+    };
   };
 }

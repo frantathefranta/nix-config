@@ -12,8 +12,8 @@ let
         let
           host = cfg.config.meta.dn42.host;
         in
-        lib.optional (host.ipv4 != null) host.ipv4
-        ++ lib.optional (host.resolvedIPv6 != null) host.resolvedIPv6
+        # lib.optional (host.ipv4 != null) host.ipv4
+        lib.optional (host.resolvedIPv6 != null) host.resolvedIPv6
     ) dn42Hosts
   );
 in

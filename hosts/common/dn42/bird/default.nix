@@ -35,7 +35,7 @@ let
       template = if isIbgp then "ibgp_peers" else "dnpeers";
       neighborLine =
         if isIbgp
-        then "neighbor ${(dn42Of iface.peerHostname).resolvedIPv6} as 4242421033;"
+        then "neighbor ${(dn42Of iface.peerHostname).resolvedIPv6} internal;"
         else "neighbor ${stripPrefixLen iface.peerAddressV6}%${name} as ${lib.last (lib.splitString "_" name)};";
       latency = if iface.latency != null then iface.latency else 1;
     in
@@ -44,7 +44,7 @@ let
         ${neighborLine}
         bfd on;
         source address OWNIPv6;
-        ipv4 { extended next hop on; next hop self; import all; export where dn42_export_filter(${toString latency},25,34); import keep filtered; };
+        ipv4 { extended next hop on; next hop self; import all; export where ibgp_export_filter(${toString latency},25,34); import keep filtered; };
         ipv6 { extended next hop on; next hop self; import all; export where ibgp_export_filter(${toString latency},25,34); import keep filtered; };
       }
     ''

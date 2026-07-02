@@ -53,6 +53,7 @@ in
     matchConfig.Name = "ens18";
     networkConfig = {
       IPv6PrivacyExtensions = false;
+      IPv6AcceptRA = true;
     };
     address = [
       "${hostIPv4}/24"

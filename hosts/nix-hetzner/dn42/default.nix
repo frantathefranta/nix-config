@@ -6,8 +6,9 @@
 
   meta.dn42.host = {
     ipv4 = "172.23.234.18";
+    ipv4PrefixLength = 32;
     ipv6Subnet = "0100";
-    ipv6 = "fdb7:c21f:f30f:100::1";
+    ipv6Suffix = ":1";
   };
   meta.dn42.region = 44;
   meta.dn42.country = 840;

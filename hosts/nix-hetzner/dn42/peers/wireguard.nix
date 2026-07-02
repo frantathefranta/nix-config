@@ -1,28 +1,37 @@
+{ config, dn42Of, ... }:
+let
+  hostSubnet = config.meta.dn42.host.ipv6Subnet;
+  peerSubnet = peer: (dn42Of peer).ipv6Subnet;
+in
 {
   services.custom-wireguard.interfaces = {
     # iBGP over OSPF links — peerHostname drives dn42Of resolution in bird module
-    "ibgp_cmh" = {
-      listenPort = 21033;
-      peerEndpoint = "cmh.dn42.franta.us:21033";
-      peerPublicKey = "3GAUz/+Q81eblrA78/LfkLs4X2CAsfnIHgw0R8LT9GE=";
-      peerAddressV6 = "fe80::1033/128";
-      localAddressV6 = "fe80::1:1033/128";
-      peerAddressV4 = "169.254.1.3/31";
-      localAddressV4 = "169.254.1.2/31";
-      peerHostname = "molybdenum";
-      latency = 4;
-    };
-    "ibgp_prg" = {
-      listenPort = 24002;
-      peerEndpoint = "prg.dn42.franta.us:24002";
-      peerPublicKey = "I9U/GISDI42GHTv9CtDSmaoJTxzx1BQnrmFQcL/wazo=";
-      peerAddressV6 = "fe80::2:1033/128";
-      localAddressV6 = "fe80::1:1033/128";
-      peerAddressV4 = "169.254.1.0/31";
-      localAddressV4 = "169.254.1.1/31";
-      peerHostname = "nix-vps-cz";
-      latency = 6;
-    };
+    "ibgp_us1" =
+      let
+        peer = "molybdenum";
+      in
+      {
+        listenPort = 21033;
+        peerEndpoint = "us1.dn42.franta.us:21033";
+        peerPublicKey = "us1g2aIOkDgZcij/pAZQktBQIZ4W+xKV78O7mgZpfl8=";
+        peerAddressV6 = "fe80::${peerSubnet peer}:1033/128";
+        localAddressV6 = "fe80::${hostSubnet}:1033/128";
+        peerHostname = peer;
+        latency = 4;
+      };
+    "ibgp_eu1" =
+      let
+        peer = "nix-vultr";
+      in
+      {
+        listenPort = 24002;
+        peerEndpoint = "eu1.dn42.franta.us:24002";
+        peerPublicKey = "eu1vqr7Lpnz6wHtV1stMaBhCCotl3gkGu2X6lYzd0g0=";
+        peerAddressV6 = "fe80::${peerSubnet peer}:1033/128";
+        localAddressV6 = "fe80::${hostSubnet}:1033/128";
+        peerHostname = peer;
+        latency = 6;
+      };
     # eBGP peers
     "ebgp_4242420253" = {
       listenPort = 20253;

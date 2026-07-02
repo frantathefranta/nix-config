@@ -1,18 +1,44 @@
+{ config, dn42Of, ... }:
+let
+  hostSubnet = config.meta.dn42.host.ipv6Subnet;
+  peerSubnet = peer: (dn42Of peer).ipv6Subnet;
+in
 {
   services.custom-wireguard.interfaces = {
     # iBGP over OSPF link — peerHostname drives dn42Of resolution in bird module
-    "ibgp_prg" = {
-      listenPort = 24001;
-      peerEndpoint = "prg.dn42.franta.us:24001";
-      peerPublicKey = "NDQyX3K9piwzVi30GDqudZLjgDsAZsBIndtqI4I5k2A=";
-      localAddressV6 = "fe80::1033/128";
-      peerAddressV6 = "fe80::2:1033/64";
-      peerAddressV4 = "169.254.2.0/31";
-      localAddressV4 = "169.254.2.1/31";
-      peerHostname = "nix-vps-cz";
-      latency = 5;
-    };
-    # eBGP peers
+    "ibgp_eu1" =
+      let
+        peer = "nix-vultr";
+      in
+      {
+        listenPort = 24001;
+        peerEndpoint = "eu1.dn42.franta.us:24001";
+        peerPublicKey = "eu1Qgv9o0PSRXerUcYI7W+8Mb8LWg2NDVmnbmXWXUB0=";
+        peerAddressV6 = "fe80::${peerSubnet peer}:1033/128";
+        localAddressV6 = "fe80::${hostSubnet}:1033/128";
+        peerHostname = peer;
+        latency = 5;
+      };
+    "ibgp_us2" =
+      let
+        peer = "nix-hetzner";
+      in
+      {
+        listenPort = 21033;
+        peerEndpoint = "us2.dn42.franta.us:21033";
+        peerPublicKey = "us2pm4+Wtwcyo6qTdUd/+QEAW2UJsQRe/UV1LBOzDwY=";
+        peerAddressV6 = "fe80::${peerSubnet peer}:1033/128";
+        localAddressV6 = "fe80::${hostSubnet}:1033/128";
+        peerHostname = peer;
+        latency = 5;
+      };
+    # "50-ospf_nix-vultr" = {
+    #   listenPort = 24003;
+    #   peerEndpoint = "eu1.dn42.franta.us:24001";
+    #   peerPublicKey = "5SqQoNhZQuFY93I5Gbfks1xoOqOH4GfeSLkCcJ1v6WY=";
+    #   localAddressV6 = "fe80::3:1033/128";
+    #   peerAddressV6 = "fe80::300:1033/64";
+    # };
     "ebgp_4242420454" = {
       listenPort = 20454;
       peerEndpoint = "dn42b.nedifinita.com:44280";

@@ -34,7 +34,7 @@ let
         ipv6Suffix = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
-          example = "0:0:0:1";
+          example = ":0:0:0:1";
           description = ''
             IPv6 interface identifier (last 4 groups of a /64 address).
             Combined with resolvedIPv6Prefix64 to form the full address.

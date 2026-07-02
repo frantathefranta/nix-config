@@ -1,12 +1,11 @@
 {
   config,
-  lib,
   dn42Of,
   ...
 }:
 {
   imports = [
-    ./wireguard.nix
+    # ./wireguard.nix
     ./bind.nix
     ./caddy.nix
     ./peers/wireguard.nix
@@ -14,8 +13,9 @@
 
   meta.dn42.host = {
     ipv4 = "172.23.234.17";
+    ipv4PrefixLength = 32;
     ipv6Subnet = "0000";
-    ipv6 = "fdb7:c21f:f30f::1";
+    ipv6Suffix = ":1";
   };
   meta.dn42.region = 42;
   meta.dn42.country = 840;
@@ -23,19 +23,11 @@
   # iBGP to nix-hetzner runs over OSPF-routed loopback path (via ibgp_pdx multi-peer tunnel).
   # There is no dedicated WG interface for it, so it cannot be auto-generated from ibgp_* interfaces.
   meta.dn42.extraBirdConfig = ''
-        protocol bgp ibgp_pdx from ibgp_peers {
-          neighbor ${(dn42Of "nix-hetzner").resolvedIPv6} as 4242421033;
-          bfd on;
-          source address OWNIPv6;
-          ipv4 { extended next hop on; next hop self; import all; export where dn42_export_filter(4,25,34); import keep filtered; };
-          ipv6 { extended next hop on; next hop self; import all; export where ibgp_export_filter(4,25,34); import keep filtered; };
-        }
-
-        protocol direct dn42_extra {
-          interface "dummy53", "ens18.2000", "wg_home";
-          ipv4;
-          ipv6;
-        }
+    protocol direct dn42_extra {
+        interface "dummy53", "ens18.2000", "wg_home";
+        ipv4;
+        ipv6;
+    }
     protocol bgp qotom
      {
       local as 4242421033;
@@ -117,33 +109,18 @@
     "net.ipv6.conf.all.forwarding" = 1;
   };
 
-  networking = {
-    firewall = {
-      checkReversePath = false;
-      interfaces.ens18.allowedUDPPortRanges = [
-        {
-          from = 20000;
-          to = 30000;
-        }
-      ];
-      extraInputRules = /* nftables */ ''
-        ip protocol ospfigp counter accept
-        ip6 nexthdr ospfigp counter accept
-        ip saddr 172.20.0.0/14 counter accept
-        ip6 saddr fd00::/8 counter accept
-        ip6 saddr fe80::/64 counter accept
-        ip saddr 10.33.0.0/16 accept
-        ip saddr 10.32.10.0/24 accept
-        ip6 saddr 2600:1702:6630:3fec::/62 accept
-        ip6 saddr 2600:1702:6630:3fe4::/64 accept
-        ip6 saddr 2600:1702:6630:3fe1::/64 accept
-      '';
+  networking.nftables.firewall = {
+    zones.dns = {
+      ipv4Addresses = [ "172.23.234.30/32" ];
+      ipv6Addresses = [ "fdb7:c21f:f30f:53::/128" ];
     };
-    nftables = {
-      enable = true;
+    rules.dns_allow = {
+      from = [ "dn42_subnets" ];
+      to = [ "dns" ];
+      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ 53 ];
     };
   };
-
   systemd.network.netdevs."10-dummy53" = {
     netdevConfig = {
       Name = "dummy53";
@@ -253,7 +230,7 @@
         config.meta.dn42.host.ipv4
         config.meta.dn42.host.resolvedIPv6
         (dn42Of "nix-hetzner").resolvedIPv6
-        (dn42Of "nix-vps-cz").resolvedIPv6
+        (dn42Of "nix-vultr").resolvedIPv6
       ];
       birdSocket = "/var/run/bird/bird.ctl";
     };

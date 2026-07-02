@@ -15,7 +15,7 @@
     ../common/optional/autoupgrade.nix
     # ../common/dn42
 
-    ./dn42
+    # ./dn42
   ];
   networking = {
     hostName = "nix-vps-cz";

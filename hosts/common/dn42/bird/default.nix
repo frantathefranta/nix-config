@@ -20,9 +20,6 @@ let
     ./communities.conf
     ./peers.conf
   ];
-  # TODO: Remove if unnecessary
-  # bgp = import ../../../${config.networking.hostName}/dn42/peers/bgp.nix { };
-
   stripPrefixLen = addr: builtins.head (lib.splitString "/" addr);
 
   wgSessions = lib.filterAttrs
@@ -57,9 +54,13 @@ let
     '';
 in
 {
+  imports = [
+    ./exporter.nix
+  ];
   services.bird = {
     enable = true;
     config = ''
+      timeformat protocol iso long;
       define OWNAS = 4242421033;
       define OWNIP = ${routerID};
       define OWNIPv6 = ${OWNIPv6};

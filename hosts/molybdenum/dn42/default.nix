@@ -110,13 +110,9 @@
   };
 
   networking.nftables.firewall = {
-    zones.dns = {
-      ipv4Addresses = [ "172.23.234.30/32" ];
-      ipv6Addresses = [ "fdb7:c21f:f30f:53::/128" ];
-    };
     rules.dns_allow = {
       from = [ "dn42_subnets" ];
-      to = [ "dns" ];
+      to = [ "fw" ];
       allowedUDPPorts = [ 53 ];
       allowedTCPPorts = [ 53 ];
     };
@@ -249,11 +245,5 @@
         "[${config.meta.dn42.host.resolvedIPv6}]:5000"
       ];
     };
-  };
-
-  services.prometheus.exporters.bird = {
-    enable = true;
-    openFirewall = false;
-    listenAddress = "10.32.10.242";
   };
 }

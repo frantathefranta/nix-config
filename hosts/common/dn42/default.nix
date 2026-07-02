@@ -6,6 +6,7 @@
     ./firewall.nix
     ./bird
     ./stayrtr.nix
+    ./ping-exporter.nix
     ../../../modules/nixos/dn42-ipam.nix
   ];
 

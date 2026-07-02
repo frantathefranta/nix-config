@@ -8,6 +8,8 @@
       "fd00::/8"
       "::1/128"
     ];
+    listenOn = [ config.meta.dn42.host.ipv4 ];
+    listenOnIpv6 = [ "${config.meta.dn42.ipv6Prefix48}:53::" ];
     enable = true;
     extraOptions = ''
       empty-zones-enable no;

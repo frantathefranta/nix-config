@@ -45,6 +45,9 @@ in
       zones.dummy_ospf.interfaces = [ "dummy_ospf" ];
       zones.wg_dn42 = lib.mkIf (wgInterfaces != [ ]) { interfaces = wgInterfaces; };
       zones.ospf_wg = lib.mkIf (ospfInterfaces != [ ]) { interfaces = ospfInterfaces; };
+      zones.my_home_prefix.ipv6Addresses = [
+        "2600:1702:6630:3fe0::/60"
+      ];
       zones.my_dn42_prefix.ipv6Addresses = [
         "${config.meta.dn42.ipv6Prefix48}::/48"
       ];

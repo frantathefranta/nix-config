@@ -21,7 +21,6 @@ in
   services.prometheus.exporters.ping = {
     enable = true;
     openFirewall = false;
-    listenAddress = "::";
     settings.targets = pingTargets;
   };
   networking.nftables.firewall.rules.allow_ping_exporter = {

@@ -9,8 +9,9 @@ in
     ./hardware-configuration.nix
 
     ../common/global
+    ../common/dn42
     ../common/roles/server.nix
-    ../common/optional/dn42.nix
+    # ../common/optional/dn42.nix
     ../common/optional/qemu-guest-agent.nix
     ../common/optional/autoupgrade.nix
     ../common/users/fbartik
@@ -24,8 +25,8 @@ in
         aaaa.data = "fdb7:c21f:f30f:53::";
       };
       subDomains."us-cmh.franta.dn42" = {
-        a.data = "172.23.234.17";
-        aaaa.data = "fdb7:c21f:f30f::1";
+        a.data = config.meta.dn42.host.ipv4;
+        aaaa.data = config.meta.dn42.host.resolvedIPv6;
       };
       subDomains."us-cmh-wg-home.franta.dn42" = {
         aaaa.data = "fdb7:c21f:f30f:98::1";
@@ -48,10 +49,11 @@ in
   systemd.network = {
     enable = true;
   };
-  systemd.network.networks."10-wan" = {
+  systemd.network.networks."05-wan" = {
     matchConfig.Name = "ens18";
     networkConfig = {
       IPv6PrivacyExtensions = false;
+      IPv6AcceptRA = true;
     };
     address = [
       "${hostIPv4}/24"
@@ -63,6 +65,7 @@ in
     dns = [ "10.0.10.1" ];
     vlan = [ "ens18.2000" ];
   };
+  
   meta.ipam.host = {
     ipv4 = hostIPv4;
     ipv6 = "2600:1702:6630:3fed::242";

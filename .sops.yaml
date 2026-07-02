@@ -15,6 +15,7 @@ keys:
     - &nix-hetzner age1req8f3xmj706n3sy68zavrs4uexgsp4e5ejtpfqdszw5qw37fp9sjkwa8x
     - &nix-vps-cz age1zqggxdatjwcryu5qgr9ge0gewzvvfpjv630h4mmc9d6xunufcayq3xvg02
     - &nix-oci age1xvgv8wtj4yaeu80qk549a279mdr9xzw9yg0qat7hdrpvejhcc98qphsg5e
+    - &nix-vultr age1ew90y64q09vw2x2788tme6gyhajs7g5trvwg7g9hqu7yy93vypxs6pf0ym
     - &silicium age1rtkde8zynkul4y7ufxwvs2axp842u4wexynn9ypf8zv7egzs8azs5ue8je
     - &hydrogen age16us9ncwx6vgdrvwep3hjxl537hz0qh27ufn09dj7dtqgld9hs4lq3ne4t8 
     # age-plugin-yubikey -g -f --touch-policy cached --pin-policy never --slot 2 --name age-sops-nix
@@ -91,6 +92,13 @@ creation_rules:
       - age:
           - *franta
           - *nix-oci
+        pgp:
+          - *franta-gpg
+  - path_regex: hosts/nix-vultr/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *nix-vultr
         pgp:
           - *franta-gpg
   - path_regex: hosts/silicium/secrets.ya?ml$

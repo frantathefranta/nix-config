@@ -159,6 +159,11 @@ in
                 ip-address = "10.0.50.203";
                 hw-address = "9c:8e:cd:3e:32:31";
               }
+              {
+                hostname = "amcrest-wifi";
+                ip-address = "10.0.50.204";
+                hw-address = "24:14:07:4b:81:97";
+              }
             ];
           }
           // leaseOption

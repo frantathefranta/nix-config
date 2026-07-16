@@ -2,11 +2,13 @@
   description = "My nix config";
   nixConfig = {
     extra-substituters = [
+      "https://nix-cache.infra.franta.us"
       "https://frantathefranta.cachix.org"
       "https://nix-community.cachix.org"
       "https://attic.xuyh0120.win/lantian"
     ];
     extra-trusted-public-keys = [
+      "nix-cache.infra.franta.us:0CrUfMACpZRvB1x9CkcHs54BSqjz6L3TAZYRbI/YpCo="
       "frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
@@ -18,8 +20,13 @@
     # Nixpkgs
     # You can access packages and modules from different nixpkgs revs
     # at the same time. Here's an working example:
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     systems.url = "github:nix-systems/default";
     hardware = {

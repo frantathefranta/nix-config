@@ -111,7 +111,7 @@
 
   networking.nftables.firewall = {
     rules.dns_allow = {
-      from = [ "dn42_subnets" ];
+      from = [ "dn42_subnets" "my_home_prefix" ];
       to = [ "fw" ];
       allowedUDPPorts = [ 53 ];
       allowedTCPPorts = [ 53 ];

@@ -34,4 +34,6 @@
     #   '';
     # };
   };
+  networking.domains.subDomains."nix-cache.${config.networking.domain}".cname.data =
+    "${config.networking.hostName}";
 }

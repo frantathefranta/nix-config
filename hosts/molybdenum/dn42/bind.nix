@@ -9,7 +9,10 @@
       "::1/128"
     ];
     listenOn = [ config.meta.dn42.host.ipv4 ];
-    listenOnIpv6 = [ "${config.meta.dn42.ipv6Prefix48}:53::" ];
+    listenOnIpv6 = [
+      "${config.meta.dn42.ipv6Prefix48}:53::"
+      config.meta.ipam.host.ipv6
+    ];
     enable = true;
     extraOptions = ''
       empty-zones-enable no;

@@ -23,10 +23,10 @@
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # colmena = {
-    #   url = "github:zhaofengli/colmena";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     systems.url = "github:nix-systems/default";
     hardware = {
@@ -124,8 +124,19 @@
           specialArgs = {
             inherit inputs outputs;
             isStableHM = true;
+            name = hostname;
           };
-          modules = [ ./hosts/${hostname} ];
+          modules = [
+            /*
+              Declares the `deployment.*` option namespace so hosts can set
+              e.g. `deployment.tags` in their own default.nix even though
+              this evaluation path (plain nixosConfigurations) isn't run
+              through colmena. The values are inert here; colmena's own hive
+              evaluation is what actually reads them.
+            */
+            inputs.colmena.nixosModules.deploymentOptions
+            ./hosts/${hostname}
+          ];
         };
       mkWorkstation =
         hostname:
@@ -143,6 +154,22 @@
         inherit (self) nixosConfigurations;
         extraConfig = import ./dns.nix;
       };
+      /*
+      Servers managed with both nixosConfigurations and colmena (see below).
+      installer-iso and the workstations are declared
+      separately since they aren't colmena deploy targets.
+      */
+      serverHosts = [
+        "hydrogen"
+        "molybdenum"
+        "nix-bastion"
+        "nix-hetzner"
+        "nix-oci"
+        "nix-vultr"
+        "nix-vps-cz"
+        "nixos-firewall"
+        "qotom"
+      ];
     in
     {
       inherit lib;
@@ -212,9 +239,44 @@
         }
       );
       formatter = forEachSystem (pkgs: pkgs.alejandra);
-      devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
+      devShells = forEachSystem (
+        pkgs:
+        import ./shell.nix {
+          inherit pkgs;
+          colmena = inputs.colmena.packages.${pkgs.system}.colmena;
+        }
+      );
 
       hydraJobs = import ./hydra.nix { inherit inputs outputs; };
+
+      colmena = {
+        meta = {
+          nixpkgs = pkgsFor.x86_64-linux;
+          specialArgs = {
+            inherit inputs outputs;
+            isStableHM = true;
+          };
+          /*
+            Derived from each host's own nixpkgs.hostPlatform, so a host
+            declaring a non-default system (e.g. nix-oci on aarch64-linux)
+            doesn't need a separate manual entry here.
+          */
+          nodeNixpkgs = lib.genAttrs serverHosts (
+            hostname: pkgsFor.${self.nixosConfigurations.${hostname}.config.nixpkgs.hostPlatform.system}
+          );
+        };
+      }
+      // lib.genAttrs serverHosts (
+        hostname:
+        { config, ... }:
+        {
+          imports = [ ./hosts/${hostname} ];
+          deployment.targetHost = "${hostname}.${config.networking.domain}";
+          deployment.targetUser = "fbartik";
+        }
+      );
+      colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
+
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs outputs; };
       # Reusable nixos modules you might want to export
@@ -231,17 +293,9 @@
         silicium = mkWorkstation "silicium";
 
         installer-iso = mkServer "installer-iso";
-        molybdenum = mkServer "molybdenum";
-        nix-bastion = mkServer "nix-bastion";
-        nix-hetzner = mkServer "nix-hetzner";
-        nix-oci = mkServer "nix-oci";
-        nix-vultr = mkServer "nix-vultr";
-        nix-vps-cz = mkServer "nix-vps-cz";
-        nixos-firewall = mkServer "nixos-firewall";
-        qotom = mkServer "qotom";
         # r2s = mkServer "r2s";
-        hydrogen = mkServer "hydrogen";
-      };
+      }
+      // lib.genAttrs serverHosts mkServer;
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'

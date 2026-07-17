@@ -1,0 +1,80 @@
+#+TITLE: Plans
+
+* TODO Replace ~nh os switch~ with colmena for server deploys
+
+The ~colmena~/~colmenaHive~ flake outputs now exist (reusing the same
+~./hosts/<name>~ modules as ~nixosConfigurations~, via ~mkServer~), covering the
+9 server hosts: hydrogen, molybdenum, nix-bastion, nix-hetzner, nix-oci,
+nix-vultr, nix-vps-cz, nixos-firewall, qotom. ~colmena build --on nix-hetzner~
+has been verified to work.
+
+Still needed before ~scripts/deploy.sh~ (~nh os switch
+.#nixosConfigurations.$hostname --target-host $fqdn --ask~) can be retired in
+favor of ~colmena apply~:
+
+** DONE Set ~deployment.targetHost~ per node
+
+Not all hosts are on ~infra.franta.us~ — ~nix-hetzner~, ~nix-oci~,
+~nix-vultr~, and ~nix-vps-cz~ are on ~cloud.franta.us~ (per-host
+~networking.domain~, defaulting to ~infra.franta.us~ via
+~hosts/common/roles/server.nix:15~). Rather than hardcode either domain,
+each colmena node is now a module function that reads its own
+~config.networking.domain~:
+~deployment.targetHost = "${hostname}.${config.networking.domain}";~ — this
+tracks the existing per-host source of truth automatically. Verified via
+~nix eval .#colmenaHive.nodes~ that all 9 hosts resolve to the correct FQDN.
+
+** DONE Set ~deployment.targetUser~
+
+Colmena defaults to ~root~, but ~PermitRootLogin = "no"~ is set globally
+(~hosts/common/global/openssh.nix:21~). Set
+~deployment.targetUser = "fbartik";~ for all nodes in ~flake.nix~.
+
+** DONE Verify passwordless sudo works non-interactively
+
+~security.sudo.wheelNeedsPassword = lib.mkDefault false;~
+(~hosts/common/users/fbartik/default.nix:54~) satisfies colmena's
+non-interactive ~sudo -H --~ privilege escalation. Confirmed live against
+~nix-hetzner.cloud.franta.us~ with ~ssh ... sudo -n true~ (read-only check,
+no production changes) — passwordless sudo works as expected.
+
+** DONE Preserve ~NIX_SSHOPTS="-A"~
+
+Kept in the rewritten ~scripts/deploy.sh~ for the agent-forwarding hop
+through ~hydrogen.infra.franta.us~ acting as a remote Linux builder from the
+Darwin laptop.
+
+** DONE Replace the ~justfile~ ~deploy~ recipe
+
+~scripts/deploy.sh~ now runs ~colmena apply --on "$hostname"~ instead of
+~nh os switch~. The ~justfile~ ~deploy~ recipe itself needed no change since
+it already just forwards to the script. ~colmena~ was already present in
+~shell.nix~'s dev shell.
+
+Behavior change: the old script accepted an arbitrary FQDN override as the
+argument (~just deploy host.some.domain~) to redirect the SSH target
+ad-hoc. Since ~deployment.targetHost~ is now fixed per node in ~flake.nix~,
+~just deploy <host>~ must use the plain colmena node name (matching the
+~nixosConfigurations~ attribute name) — no more ad-hoc target override.
+
+** TODO Test end-to-end per host
+
+~colmena build~ is verified. ~apply~/activation (SSH connect + sudo
+elevation + activation) hasn't been tested yet — validate one host at a time
+before trusting it for all 9.
+
+** Out of scope / unaffected
+
+- ~scripts/add-host-key.sh~ — bootstraps brand-new machines via
+  ~nixos-anywhere~, a different lifecycle stage than ongoing config deploys.
+- ~scripts/darwin-deploy.sh~ — nix-darwin (lanthanum, silicium), not NixOS;
+  colmena doesn't apply here.
+- ~nixosConfigurations~ itself stays in ~flake.nix~ regardless — it's still
+  used by ~hydraJobs~ (~hydra.nix~), ~just list-settings~, workstations, and
+  the installer ISO.
+
+** TODO (optional payoff) Tag nodes for fleet-wide deploys
+
+Once per-host targeting works, add ~deployment.tags = [ "server" ];~ to all
+9 nodes so ~colmena apply --on @server~ can deploy/parallelize the whole
+fleet in one command — the main capability ~nh os switch~ doesn't have.

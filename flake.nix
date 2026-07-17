@@ -23,10 +23,10 @@
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    colmena = {
-      url = "github:zhaofengli/colmena";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # colmena = {
+    #   url = "github:zhaofengli/colmena";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     systems.url = "github:nix-systems/default";
     hardware = {

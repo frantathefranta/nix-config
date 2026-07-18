@@ -41,7 +41,7 @@ let
         "steam://open/bigpicture"
       ];
     in
-    pkgs.writeTextDir "share/wayland-sessions/steam-sesson.desktop" # ini
+    pkgs.writeTextDir "share/wayland-sessions/steam-session.desktop" # ini
 
       ''
         [Desktop Entry]

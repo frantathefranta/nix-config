@@ -2,12 +2,11 @@
   pkgs,
   inputs,
   ...
-}:
-{
+}: {
   imports = [
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
-    inputs.niri.nixosModules.niri
+    # inputs.niri.nixosModules.niri
     # inputs.stylix.nixosModules.stylix
     ./services
     ./hardware-configuration.nix
@@ -17,7 +16,8 @@
     ../common/users/fbartik
     ../common/roles/workstation.nix
 
-    ../common/optional/niri.nix
+    # ../common/optional/niri.nix
+    ../common/optional/kde.nix
     ../common/optional/fwupd.nix
   ];
   networking = {
@@ -37,6 +37,21 @@
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
+      package = pkgs.steam.override {
+        extraPkgs = pkgs:
+          with pkgs; [
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXinerama
+            xorg.libXScrnSaver
+            libpng
+            libpulseaudio
+            libvorbis
+            stdenv.cc.cc.lib
+            libkrb5
+            keyutils
+          ];
+      };
     };
     gamescope = {
       enable = true;
@@ -45,7 +60,7 @@
     pulseview.enable = true;
     flashrom.enable = true;
   };
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
   hardware = {
     graphics.enable = true;
     nvidia.modesetting.enable = true;
@@ -66,6 +81,7 @@
     vial
     via
     qmk
+    gamescope
     # lattice-diamond
     #    libusb1
     #    libusb-compat-0_1
@@ -81,7 +97,7 @@
   # nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4;
   # Binary cache
-  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  nix.settings.substituters = ["https://attic.xuyh0120.win/lantian"];
+  nix.settings.trusted-public-keys = ["lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="];
   system.stateVersion = "24.11";
 }

@@ -7,7 +7,7 @@
     ./features/games
     ./features/editor
     ./features/desktop/common
-    ./features/desktop/niri
+    # ./features/desktop/niri
     ./features/productivity/claude-code.nix
   ];
   home.packages = with pkgs; [

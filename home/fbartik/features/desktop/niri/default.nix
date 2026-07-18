@@ -34,6 +34,7 @@ in
         "Mod+J".action.focus-window-down = { };
         "Mod+K".action.focus-window-up = { };
         "Mod+L".action.focus-column-right = { };
+        "Mod+F".action.maximize-column = { };
         "Mod+Alt+L".action.spawn = hyprlock;
       };
       environment = {

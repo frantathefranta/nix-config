@@ -11,9 +11,6 @@ in
     settings = {
       extra-substituters = lib.mkAfter [
         "https://nix-cache.infra.franta.us"
-        "https://frantathefranta.cachix.org"
-        "https://cache.nixos.org"
-        "https://nix-community.cachix.org"
       ];
       extra-trusted-public-keys = [ "nix-cache.infra.franta.us:0CrUfMACpZRvB1x9CkcHs54BSqjz6L3TAZYRbI/YpCo=" ];
       trusted-users = [

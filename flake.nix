@@ -3,13 +3,11 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-cache.infra.franta.us"
-      "https://frantathefranta.cachix.org"
       "https://nix-community.cachix.org"
       "https://attic.xuyh0120.win/lantian"
     ];
     extra-trusted-public-keys = [
       "nix-cache.infra.franta.us:0CrUfMACpZRvB1x9CkcHs54BSqjz6L3TAZYRbI/YpCo="
-      "frantathefranta.cachix.org-1:7bZkmbZyIToRYYH7uI7ItS9l8/X5Hw2TPzAfqOIme1I="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];

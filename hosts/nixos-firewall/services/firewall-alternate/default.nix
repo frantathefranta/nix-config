@@ -312,6 +312,7 @@ in
               to = 30000;
             }
           ];
+          allowedTCPPorts = [ 9000 ];
         };
       };
     };

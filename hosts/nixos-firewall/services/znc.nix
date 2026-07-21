@@ -58,6 +58,7 @@ in
     modulePackages = [
       pkgs.zncModules.playback
       pkgs.zncModules.push
+      pkgs.zncModules.clientbuffer
     ];
     config =
       let
@@ -99,6 +100,9 @@ in
               "sasl"
               "push"
               "log"
+              /* tracks per-device read position so reconnecting clients
+                 only see messages they haven't already received */
+              "clientbuffer autoadd"
             ];
             Server = "irc.hackint.org +6697";
             Chan = {

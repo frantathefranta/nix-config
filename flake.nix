@@ -160,6 +160,7 @@
       serverHosts = [
         "hydrogen"
         "molybdenum"
+        "ytterbium"
         "nix-bastion"
         "nix-hetzner"
         "nix-oci"

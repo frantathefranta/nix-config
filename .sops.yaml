@@ -18,6 +18,7 @@ keys:
     - &nix-vultr age1ew90y64q09vw2x2788tme6gyhajs7g5trvwg7g9hqu7yy93vypxs6pf0ym
     - &silicium age1rtkde8zynkul4y7ufxwvs2axp842u4wexynn9ypf8zv7egzs8azs5ue8je
     - &hydrogen age16us9ncwx6vgdrvwep3hjxl537hz0qh27ufn09dj7dtqgld9hs4lq3ne4t8 
+    - &ytterbium age13pwgwfwkyyr2le0urz70l59dyf4lla3cjeexq96qgjcth66n5vcqu8edd5
     # age-plugin-yubikey -g -f --touch-policy cached --pin-policy never --slot 2 --name age-sops-nix
     - &NC312237 age1yubikey1qt2ve24yxkrvzuagxzjjp4lud44k4fwfw38345q0q7lveuyla3upjw9mjgm
 creation_rules:
@@ -36,6 +37,7 @@ creation_rules:
           - *nix-vps-cz
           - *silicium
           - *hydrogen
+          - *ytterbium
         pgp:
           - *franta-gpg
   - path_regex: hosts/qotom/secrets.ya?ml$

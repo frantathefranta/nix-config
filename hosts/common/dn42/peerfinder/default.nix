@@ -8,6 +8,7 @@ let
   };
 in
 {
+  # https://peerfinder.dn42.dev
   systemd.services."peerfinder-agent" = {
     description = "DN42 Peer Finder Measurement Agent";
     after = [ "network.target" ];

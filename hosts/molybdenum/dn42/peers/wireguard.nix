@@ -119,6 +119,14 @@ in
       localAddressV6 = "fe80::3999:1033/64";
       latency = 2;
     };
+    "ebgp_4242422466" = {
+      listenPort = 22466;
+      peerEndpoint = "antarctica-gateway.xhustudio.eu.org:21033";
+      peerPublicKey = "huBBjePFmL3fELCh54yKrQjcCzv+8zYkEweMteJttS4=";
+      peerAddressV6 = "fe80::2466/128";
+      localAddressV6 = "fe80::1033:2466/128";
+      latency = 3;
+    };
     # Local BGP peer — not a DN42 peer, uses dedicated WG tunnel
     "50-wg_qotom" = {
       listenPort = 40001;

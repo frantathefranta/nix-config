@@ -105,5 +105,13 @@ in
       localAddressV6 = "fe80::2213:1033/128";
       latency = 3;
     };
+    "ebgp_4242422466" = {
+      listenPort = 22466;
+      peerEndpoint = "chron-nection.xhustudio.eu.org:21033";
+      peerPublicKey = "tA6SZZYpCdr4zkkk2pCpuDDiyxcHIsksOhwWnzLIVw8=";
+      peerAddressV6 = "fe80::2466/128";
+      localAddressV6 = "fe80::1033:2466/128";
+      latency = 2;
+    };
   };
 }

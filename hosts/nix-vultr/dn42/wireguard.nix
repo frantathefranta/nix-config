@@ -85,5 +85,13 @@ in
       peerAddressV6 = "fe80::401/128";
       localAddressV6 = "fe80::1033:0401/128";
     };
+    "ebgp_4242423999" = {
+      listenPort = 23999;
+      peerEndpoint = "fra.node.cowgl.tech:31033";
+      peerPublicKey = "sHPUV74X+hqUK5wFj3m5kCga0rlPCxImUBwZ/oLiEn4=";
+      peerAddressV6 = "fe80::3:3999/64";
+      localAddressV6 = "fe80::3999:1033/64";
+      latency = 2;
+    };
   };
 }

@@ -111,6 +111,14 @@ in
       localAddressV6 = "fe80::1033:0401/128";
       latency = 3;
     };
+    "ebgp_4242423999" = {
+      listenPort = 23999;
+      peerEndpoint = "yyz.node.cowgl.tech:31033";
+      peerPublicKey = "XGIBvqoUOgb8IiLIWtO9JVNZc4SEpEAM1eWh26MtoRE=";
+      peerAddressV6 = "fe80::5:3999/64";
+      localAddressV6 = "fe80::3999:1033/64";
+      latency = 2;
+    };
     # Local BGP peer — not a DN42 peer, uses dedicated WG tunnel
     "50-wg_qotom" = {
       listenPort = 40001;

@@ -38,7 +38,7 @@ in
   users.groups.peerfinder = { };
 
   sops.secrets.peerfinder = {
-    sopsFile = ../../${config.networking.hostName}/secrets.yaml;
+    sopsFile = ../../../${config.networking.hostName}/secrets.yaml;
     group = "peerfinder";
     mode = "0440";
   };

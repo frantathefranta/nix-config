@@ -17,6 +17,7 @@
     p11-kit
     gnutls
     tpm2-tools
+    telegram-desktop
   ];
   programs.ssh = {
     enable = true;

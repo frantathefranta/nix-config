@@ -219,17 +219,17 @@
   };
 
   services.bird-lg = {
-    proxy = {
-      enable = true;
-      listenAddresses = "0.0.0.0:8000";
-      allowedIPs = [
-        config.meta.dn42.host.ipv4
-        config.meta.dn42.host.resolvedIPv6
-        (dn42Of "nix-hetzner").resolvedIPv6
-        (dn42Of "nix-vultr").resolvedIPv6
-      ];
-      birdSocket = "/var/run/bird/bird.ctl";
-    };
+    # proxy = {
+    #   enable = true;
+    #   listenAddresses = "0.0.0.0:8000";
+    #   allowedIPs = [
+    #     config.meta.dn42.host.ipv4
+    #     config.meta.dn42.host.resolvedIPv6
+    #     (dn42Of "nix-hetzner").resolvedIPv6
+    #     (dn42Of "nix-vultr").resolvedIPv6
+    #   ];
+    #   birdSocket = "/var/run/bird/bird.ctl";
+    # };
     frontend = {
       enable = true;
       whois = "whois.dn42";
@@ -237,7 +237,7 @@
       servers = [
         "us-cmh"
         "us-pdx"
-        "cz-prg"
+        "pl-waw"
       ];
       domain = "franta.dn42";
       listenAddresses = [

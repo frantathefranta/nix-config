@@ -26,8 +26,14 @@
   networking = {
     hostName = "nix-vultr";
     domain = "cloud.franta.us";
-    domains.subDomains."${config.networking.hostName}.${config.networking.domain}" = {
-      aaaa.data = [ config.meta.ipam.host.ipv6 ];
+    domains = {
+      subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+        aaaa.data = [ config.meta.ipam.host.ipv6 ];
+      };
+      subDomains."pl-waw.franta.dn42" = {
+        a.data = config.meta.dn42.host.ipv4;
+        aaaa.data = config.meta.dn42.host.resolvedIPv6;
+      };
     };
     nameservers = [
       "1.1.1.1"

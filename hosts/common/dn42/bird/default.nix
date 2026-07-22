@@ -56,6 +56,7 @@ in
 {
   imports = [
     ./exporter.nix
+    ./lg.nix
   ];
   services.bird = {
     enable = true;

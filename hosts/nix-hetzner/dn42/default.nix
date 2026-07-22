@@ -21,10 +21,10 @@
     };
   };
 
-  services.bird-lg.proxy = {
-    enable = true;
-    listenAddresses = "[${config.meta.dn42.host.resolvedIPv6}]:8000";
-    allowedIPs = [ "${config.meta.dn42.ipv6Prefix48}::/48" ];
-    birdSocket = "/var/run/bird/bird.ctl";
-  };
+  # services.bird-lg.proxy = {
+  #   enable = true;
+  #   listenAddresses = "[${config.meta.dn42.host.resolvedIPv6}]:8000";
+  #   allowedIPs = [ "${config.meta.dn42.ipv6Prefix48}::/48" ];
+  #   birdSocket = "/var/run/bird/bird.ctl";
+  # };
 }

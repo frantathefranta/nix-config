@@ -93,5 +93,13 @@ in
       localAddressV6 = "fe80::3999:1033/64";
       latency = 2;
     };
+    "ebgp_4242422213" = {
+      listenPort = 22213;
+      peerEndpoint = "de1.115411.xyz:21033";
+      peerPublicKey = "73FCWf+KvJ+bUHxJ6mpbEzmcELImdasIMB64zCf3sBQ=";
+      peerAddressV6 = "fe80::2213/128";
+      localAddressV6 = "fe80::2213:1033/128";
+      latency = 3;
+    };
   };
 }

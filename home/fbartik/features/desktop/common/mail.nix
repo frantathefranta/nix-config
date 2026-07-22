@@ -122,7 +122,8 @@ in
         smtp = {
           host = "smtp.mail.me.com";
           tls.enable = true;
-          port = 465;
+          tls.useStartTls = true;
+          port = 587;
         };
       };
       gmail-oz = {

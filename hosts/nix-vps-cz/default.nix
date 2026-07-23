@@ -9,7 +9,7 @@
 {
   imports = [
     inputs.vpsadminos.nixosConfigurations.container
-    ../common/users/fbartik
+    ../common/users/admin
     ../common/global
     ../common/roles/server.nix
     ../common/optional/autoupgrade.nix

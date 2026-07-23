@@ -14,12 +14,10 @@
 in {
   imports = [
 #    ./tide.nix
-    ./bindings.nix
   ];
   home.packages = [pkgs.bash-completion];
   programs.zoxide.enableFishIntegration = true;
   programs.fish = {
-    enable = true;
     shellAbbrs = rec {
       doom = "~/.config/emacs/bin/doom";
       jqless = "jq -C | less -r";

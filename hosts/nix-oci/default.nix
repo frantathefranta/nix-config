@@ -10,6 +10,7 @@
     ./hardware-configuration.nix
     ../common/global
     ../common/roles/server.nix
+    ../common/users/admin
 
     ./services
   ];

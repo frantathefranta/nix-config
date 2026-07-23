@@ -10,7 +10,7 @@
     inputs.srvos.nixosModules.hardware-hetzner-cloud
     ../common/global
     ../common/roles/server.nix
-    ../common/users/fbartik
+    ../common/users/admin
     ../common/optional/autoupgrade.nix
     ../common/dn42
     ./dn42

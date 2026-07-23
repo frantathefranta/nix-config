@@ -12,8 +12,8 @@ let
     lib.mapAttrsToList (_name: net: net.matchConfig.Name) (
       lib.filterAttrs (name: _: lib.hasPrefix prefix name) config.systemd.network.networks
     );
-  wgInterfaces = networkInterfaces "ibgp";
-  ospfInterfaces = networkInterfaces "ebgp";
+  wgInterfaces = networkInterfaces "ebgp";
+  ospfInterfaces = networkInterfaces "ibgp";
 in
 {
   imports = [

@@ -113,5 +113,22 @@ in
       localAddressV6 = "fe80::1033:2466/128";
       latency = 2;
     };
+    "ebgp_4242420998" = {
+      listenPort = 20998;
+      peerEndpoint = "us2.dn42.moenet.work:31033";
+      peerPublicKey = "/6gWzUgBEh8yPp6zdRfgJI9q3xSq7j+pv1hyW6NzsH8=";
+      peerAddressV6 = "fe80::998:203:22:1/128";
+      localAddressV6 = "fe80::1033:0998/128";
+      latency = 3;
+    };
+    # https://peer.dn42.hk/
+    "ebgp_4242421733" = {
+      listenPort = 21733;
+      peerEndpoint = "las.entry.dn42.hk:21033";
+      peerPublicKey = "td/JcMulHppDgcdjf+u8qH6muCfFwhIrMzn0MMKKOSk=";
+      peerAddressV6 = "fe80::1733/128";
+      localAddressV6 = "fe80::1033:1773/128";
+      latency = 3;
+    };
   };
 }

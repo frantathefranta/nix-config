@@ -88,6 +88,11 @@ in
           to = [ "fw" ];
           verdict = "accept";
         };
+        allow_babel_traffic = {
+          from = [ "ospf_wg" ];
+          to = [ "fw" ];
+          allowedUDPPorts = [ 6696 ];
+        };
         allow_ospf_bfd = lib.mkIf (ospfInterfaces != [ ]) {
           from = [ "ospf_wg" ];
           to = [ "fw" ];

@@ -41,8 +41,8 @@ let
         ${neighborLine}
         bfd on;
         source address OWNIPv6;
-        ipv4 { extended next hop on; next hop self; import all; export where ibgp_export_filter(${toString latency},25,34); import keep filtered; };
-        ipv6 { extended next hop on; next hop self; import all; export where ibgp_export_filter(${toString latency},25,34); import keep filtered; };
+        ipv4 { extended next hop on; next hop self; import where source = RTS_BGP && is_valid_network() && !is_self_net(); export where source = RTS_BGP && is_valid_network() && !is_self_net(); };
+        ipv6 { extended next hop on; next hop self; import where source = RTS_BGP && is_valid_network_v6() && !is_self_net_v6(); export where source = RTS_BGP && is_valid_network_v6() && !is_self_net_v6(); };
       }
     ''
     else ''

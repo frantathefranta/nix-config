@@ -127,13 +127,13 @@ in
       localAddressV6 = "fe80::1033:2466/128";
       latency = 3;
     };
-    # Local BGP peer — not a DN42 peer, uses dedicated WG tunnel
-    "50-wg_qotom" = {
-      listenPort = 40001;
-      peerEndpoint = "qotom.infra.franta.us:40001";
-      peerPublicKey = "nVTI9kySAfJGAAEVjrVLLbWVESNVgl+n1d7RJzMyqRw=";
-      localAddressV6 = "fe80::1033:6:5032/64";
-      peerAddressV6 = "fe80::6:5032:1033";
-    };
+    # # Local BGP peer — not a DN42 peer, uses dedicated WG tunnel
+    # "50-wg_qotom" = {
+    #   listenPort = 40001;
+    #   peerEndpoint = "qotom.infra.franta.us:40001";
+    #   peerPublicKey = "nVTI9kySAfJGAAEVjrVLLbWVESNVgl+n1d7RJzMyqRw=";
+    #   localAddressV6 = "fe80::1033:6:5032/64";
+    #   peerAddressV6 = "fe80::6:5032:1033";
+    # };
   };
 }

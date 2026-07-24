@@ -165,6 +165,7 @@ in
         };
       networkConfig = {
         LinkLocalAddressing = false;
+        IPv4ReversePathFilter = "no";
       } // lib.optionalAttrs (data.vrf != null) {
         VRF = data.vrf;
       };

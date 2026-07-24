@@ -115,7 +115,7 @@ in
       peerEndpoint = "nue.entry.dn42.hk:21033";
       peerPublicKey = "Q7pleX/k7NKlhUMJUaKwF2b7MQifriTcsu5uCKyVEHk=";
       peerAddressV6 = "fe80::1733/128";
-      localAddressV6 = "fe80::1033:1773/128";
+      localAddressV6 = "fe80::1033:1733/128";
       latency = 3;
     };
     # https://windmill.esd.cc/public/imlonghao/8e55177563d0bf6aa6399466830ff100
@@ -126,6 +126,14 @@ in
       peerAddressV6 = "fe80::1888/128";
       localAddressV6 = "fe80::1033:1888/128";
       latency = 2;
+    };
+    "ebgp_4242422189" = {
+      listenPort = 22189;
+      peerEndpoint = "pl-waw.dn42.iedon.net:47664";
+      peerPublicKey = "pl7Ed1WgQq7FQgEN4LghPeABUILjgSdA2H9u5nB33FQ=";
+      localAddressV6 = "fe80::1033:2189/128";
+      peerAddressV6 = "fe80::2189:123/128";
+      latency = 1;
     };
   };
 }

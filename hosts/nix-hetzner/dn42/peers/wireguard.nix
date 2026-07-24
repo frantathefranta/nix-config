@@ -127,7 +127,7 @@ in
       peerEndpoint = "las.entry.dn42.hk:21033";
       peerPublicKey = "td/JcMulHppDgcdjf+u8qH6muCfFwhIrMzn0MMKKOSk=";
       peerAddressV6 = "fe80::1733/128";
-      localAddressV6 = "fe80::1033:1773/128";
+      localAddressV6 = "fe80::1033:1733/128";
       latency = 3;
     };
   };

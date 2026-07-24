@@ -79,4 +79,8 @@ in
     + lib.concatStrings (lib.mapAttrsToList mkWgBgpSession wgSessions)
     + config.meta.dn42.extraBirdConfig;
   };
+
+  programs.fish.shellAbbrs = {
+    bsp = "birdc show protocols";
+  };
 }

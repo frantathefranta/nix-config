@@ -10,6 +10,12 @@
   imports = [
     inputs.sops-nix.homeManagerModules.sops
     inputs.direnv-instant.homeModules.direnv-instant
+    ./atuin.nix
+    ./bat.nix
+    ./fzf.nix
+    ./zoxide.nix
+    ./packages.nix
+
     ./fish
   ]
   ++ (builtins.attrValues outputs.homeManagerModules);

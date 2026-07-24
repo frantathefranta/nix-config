@@ -4,5 +4,4 @@
       fish_config theme choose dracula
     '';
   };
-
 }

@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   packageNames = map (p: p.pname or p.name or null) config.home.packages;
   hasPackage = name: lib.any (x: x == name) packageNames;
@@ -11,12 +12,8 @@
   hasSpecialisationCli = hasPackage "specialisation";
   # hasAwsCli = hasPackage "awscli2";
   hasNeomutt = config.programs.neomutt.enable;
-in {
-  imports = [
-#    ./tide.nix
-  ];
-  home.packages = [pkgs.bash-completion];
-  programs.zoxide.enableFishIntegration = true;
+in
+{
   programs.fish = {
     shellAbbrs = rec {
       doom = "~/.config/emacs/bin/doom";
@@ -24,14 +21,6 @@ in {
 
       em = "emacsclient -nw";
 
-      bsp = "birdc show protocols";
-
-      ctl = "systemctl";
-      ctlrt = "systemctl restart";
-      ctls = "systemctl status";
-
-      jc = "journalctl";
-      
       n = "nix";
       nd = "nix develop -c $SHELL";
       ns = "nix shell";
@@ -58,7 +47,8 @@ in {
 
       # aws-switch = mkIf hasAwsCli "export AWS_PROFILE=(aws configure list-profiles | fzf)";
       # awssw = aws-switch;
-    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+    }
+    // lib.optionalAttrs pkgs.stdenv.isDarwin {
       sftp = "${pkgs.openssh}/bin/sftp";
     };
     shellAliases = {
@@ -79,31 +69,33 @@ in {
         bash -ic "source ${./get-bash-completions.sh}; get_completions '$cmd'"
       '';
     };
-    shellInit = /* fish */ ''
-      # Pin SSH_AUTH_SOCK to the fixed symlink path inside tmux so agent
-      # forwarding works across reconnects regardless of session environment.
-      if set -q TMUX
-        set -gx SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
-      end
-    '' + lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
-      # Source Nix profile scripts for non-system fish on Darwin
-      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix.fish
-        source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
-      end
-      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
-        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
-      end
-      # fish_user_paths (universal var) is prepended before inherited PATH on every shell start.
-      # In nested shells (tmux), this pushes entries like homebrew in front of the inherited nix
-      # paths, while the nix.fish guard (__ETC_PROFILE_NIX_SOURCED) prevents re-anchoring them.
-      # Unconditionally move nix paths to front to fix ordering in every shell.
-      fish_add_path --prepend --global --move /nix/var/nix/profiles/default/bin
-      if test -d $HOME/.local/state/nix/profile/bin
-        fish_add_path --prepend --global --move $HOME/.local/state/nix/profile/bin
-      else if test -d $HOME/.nix-profile/bin
-        fish_add_path --prepend --global --move $HOME/.nix-profile/bin
-      end
-    '';
+    shellInit =
+      /* fish */ ''
+        # Pin SSH_AUTH_SOCK to the fixed symlink path inside tmux so agent
+        # forwarding works across reconnects regardless of session environment.
+        if set -q TMUX
+          set -gx SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+        end
+      ''
+      + lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
+        # Source Nix profile scripts for non-system fish on Darwin
+        if test -e /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+          source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+        end
+        if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+        end
+        # fish_user_paths (universal var) is prepended before inherited PATH on every shell start.
+        # In nested shells (tmux), this pushes entries like homebrew in front of the inherited nix
+        # paths, while the nix.fish guard (__ETC_PROFILE_NIX_SOURCED) prevents re-anchoring them.
+        # Unconditionally move nix paths to front to fix ordering in every shell.
+        fish_add_path --prepend --global --move /nix/var/nix/profiles/default/bin
+        if test -d $HOME/.local/state/nix/profile/bin
+          fish_add_path --prepend --global --move $HOME/.local/state/nix/profile/bin
+        else if test -d $HOME/.nix-profile/bin
+          fish_add_path --prepend --global --move $HOME/.nix-profile/bin
+        end
+      '';
     interactiveShellInit = /* fish */ ''
       # Open command buffer in editor when alt+e is pressed
       bind \ee edit_command_buffer

@@ -26,6 +26,13 @@ creation_rules:
     key_groups:
       - age:
           - *franta
+          - *nixos-firewall
+        pgp:
+          - *franta-gpg
+  - path_regex: hosts/common/users/fbartik/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
           - *nix-bastion
           - *qotom
           - *lanthanum
@@ -33,11 +40,19 @@ creation_rules:
           - *nixos-firewall
           - *r2s
           - *molybdenum
-          - *nix-hetzner
-          - *nix-vps-cz
           - *silicium
           - *hydrogen
           - *ytterbium
+        pgp:
+          - *franta-gpg
+  - path_regex: hosts/common/users/admin/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *nix-hetzner
+          - *nix-vps-cz
+          - *nix-oci
+          - *nix-vultr
         pgp:
           - *franta-gpg
   - path_regex: hosts/qotom/secrets.ya?ml$

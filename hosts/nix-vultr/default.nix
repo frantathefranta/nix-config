@@ -1,7 +1,6 @@
 {
   config,
   inputs,
-  lib,
   ...
 }:
 
@@ -11,6 +10,7 @@
     ./hardware-configuration.nix
     ../common/global
     ../common/roles/server.nix
+    ../common/users/admin
 
     ../common/dn42
     ./dn42
@@ -19,7 +19,6 @@
   ];
   hardware.facter.reportPath = ./facter.json;
 
-  deployment.targetUser = lib.mkForce "root";
   # Vultr adds a network configuration that breaks IPv6 in the way I want to use it
   services.cloud-init.network.enable = false;
 

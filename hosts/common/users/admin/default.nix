@@ -9,42 +9,34 @@ let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
+  deployment.targetUser = lib.mkForce "admin";
+
   users.mutableUsers = false;
-  users.users.fbartik = {
-    description = "Franta Bartik";
+  users.users.admin = {
+    description = "Admin";
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = ifTheyExist [
-      "audio"
       "bird"
       "caddy"
-      "dialout"
-      "frrvty" # For inspecting vtysh
-      "ftdi"
       "git"
-      "i2c"
-      "incus-admin"
       "network"
-      "plugdev"
-      "pdns" # PowerDNS group
-      "video"
       "wheel"
-      "_lldp"
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (
       builtins.readFile ../../../../home/fbartik/ssh.pub
     );
-    hashedPasswordFile = config.sops.secrets.fbartik-password.path;
+    hashedPasswordFile = config.sops.secrets.admin-password.path;
     packages = [ pkgs.home-manager ];
   };
 
-  sops.secrets.fbartik-password = {
+  sops.secrets.admin-password = {
     sopsFile = ./secrets.yaml;
     neededForUsers = true;
   };
 
-  home-manager.users.fbartik = import ../../../../home/fbartik/${config.networking.hostName}.nix;
+  home-manager.users.admin = import ../../../../home/admin/${config.networking.hostName}.nix;
 
   security.pam = {
     # rssh allows approving sudo using the ssh-agent (in my case 1password)

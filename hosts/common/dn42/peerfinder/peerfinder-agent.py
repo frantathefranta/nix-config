@@ -3,7 +3,7 @@
 # Measurement agent for the dn42 Peer Finder.
 # https://peerfinder.dn42.dev
 #
-# The agent listens on a TCP port for measurement requests sent by the backend.
+# The agent listens on a TCP port for measurement requests sent by the peerfinder.
 #
 # Setup (standard library only):
 #
@@ -34,7 +34,7 @@ LISTEN_HOST, LISTEN_PORT = "::", int(os.environ.get("LISTEN_PORT", "9000"))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 # --- Constants ---
-AGENT_VERSION = "1.0.4"
+AGENT_VERSION = "1.0.6"
 NB_PINGS = 4
 MAX_TIMESTAMP_SKEW = 30
 CONN_TIMEOUT = 15
@@ -73,32 +73,34 @@ except ValueError:
     logger.error("The secret key must be a hex string and of correct length")
     sys.exit(1)
 
+
 class NonceCache:
-    """Tracks nonces seen within MAX_TIMESTAMP_SKEW of the request's own
-    timestamp"""
+    """Tracks nonces seen within MAX_TIMESTAMP_SKEW of the request's own timestamp"""
 
     def __init__(self, window):
         self.window = window
         self.lock = threading.Lock()
         self.seen = {}
 
-    def check_and_add(self, nonce, now):
+    def check_and_add(self, nonce, req_ts, now):
         with self.lock:
             # Cleanup expired nonces
-            self.seen = {n: exp for n, exp in self.seen.items() if exp > now}
+            self.seen = {n: exp for n, exp in self.seen.items() if exp >= now}
             if nonce in self.seen:
                 return False
-            self.seen[nonce] = now + self.window
+            self.seen[nonce] = req_ts + self.window
             return True
 
-# Skew covers an interval corresponding to double its value [T-30, T+30]
-nonce_cache = NonceCache(MAX_TIMESTAMP_SKEW * 2)
+
+nonce_cache = NonceCache(MAX_TIMESTAMP_SKEW)
+
 
 def sign(ts_buf: bytes, nonce_buf: bytes, body: bytes) -> bytes:
     mac = hmac.new(HMAC_KEY, digestmod=hashlib.sha256)
     for part in (ts_buf, nonce_buf, body):
         mac.update(part)
     return mac.digest()
+
 
 def recv_exact(sock, n: int, deadline: float):
     chunks = []
@@ -130,6 +132,7 @@ def is_valid_ip(address: str) -> bool:
         pass
     return False
 
+
 class PingResult(TypedDict):
     reachable: bool
     sent: int
@@ -140,19 +143,22 @@ class PingResult(TypedDict):
     max_rtt: Optional[float]
     version: Optional[str]
 
+
 def get_default_ping_result() -> PingResult:
     return {"reachable": False, "sent": 0, "recv": 0,
-                           "latency": None, "jitter": None, "min_rtt": None, "max_rtt": None, "version": None}
+            "latency": None, "jitter": None, "min_rtt": None, "max_rtt": None, "version": None}
+
 
 def run_ping(ip: str) -> PingResult:
     if not is_valid_ip(ip):
         raise ValueError("Invalid IP address")
 
-    # -n (numeric), -c (count), -w (deadline in seconds), -q (quiet)
+    # -n (numeric), -q (quiet), -c (count), -w (deadline in seconds)
     cmd = ["ping", "-n", "-q", "-c", str(NB_PINGS), "-w", "6", ip]
 
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        env = {"LANG": "C", "LC_ALL": "C", "PATH": os.environ.get("PATH", "/usr/bin:/bin")}
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=10, env=env)
         return parse_ping_output(proc.stdout)
     except Exception as e:
         logger.error(f"Ping to {ip} failed: {e}")
@@ -197,7 +203,7 @@ def handle_connection(conn, addr):
     #
     # Responses must echo the request timestamp and nonce exactly (request binding) and must never
     # include a JSON key with the name "command" (request vs response domain separation).
-    # Both "version" and "ping" commands are used.
+    # Both "version" and "ping" commands are used by the backend.
     try:
         deadline = time.monotonic() + AUTH_DEADLINE
 
@@ -217,7 +223,7 @@ def handle_connection(conn, addr):
             logger.warning("rejected stale request from %s" % (addr,))
             return
 
-        if not nonce_cache.check_and_add(nonce_buf, time.time()):
+        if not nonce_cache.check_and_add(nonce_buf, req_ts, time.time()):
             logger.warning("rejected replayed nonce from %s" % (addr,))
             return
 
@@ -256,13 +262,16 @@ def handle_connection(conn, addr):
         except Exception:
             pass
 
+
 slots = threading.BoundedSemaphore(MAX_WORKERS)
+
 
 def serve(conn, addr):
     try:
         handle_connection(conn, addr)
     finally:
         slots.release()
+
 
 def main():
     # Use dual-stack socket if possible
@@ -298,6 +307,7 @@ def main():
                     continue
         except KeyboardInterrupt:
             logger.info("Shutting down...")
+
 
 if __name__ == "__main__":
     main()

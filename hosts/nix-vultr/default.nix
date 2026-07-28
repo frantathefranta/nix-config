@@ -27,6 +27,7 @@
     domain = "cloud.franta.us";
     domains = {
       subDomains."${config.networking.hostName}.${config.networking.domain}" = {
+        a.data = [ "64.176.75.13" ];
         aaaa.data = [ config.meta.ipam.host.ipv6 ];
       };
       subDomains."pl-waw.franta.dn42" = {

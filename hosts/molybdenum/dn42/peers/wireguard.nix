@@ -79,14 +79,6 @@ in
       peerAddressV6 = "fe80::3035:137";
       latency = 3;
     };
-    "ebgp_4242420253" = {
-      listenPort = 20253;
-      peerEndpoint = "lv.dn42.moe233.net:21033";
-      peerPublicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
-      localAddressV6 = "fe80::1033/64";
-      peerAddressV6 = "fe80::0253";
-      latency = 5;
-    };
     "ebgp_4242421588" = {
       listenPort = 21588;
       peerEndpoint = "us-chi01.dn42.tech9.io:52581";

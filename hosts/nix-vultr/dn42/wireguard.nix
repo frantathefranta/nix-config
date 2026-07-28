@@ -135,5 +135,13 @@ in
       peerAddressV6 = "fe80::2189:123/128";
       latency = 1;
     };
+    # https://dn42.fly.dev/peering
+    "ebgp_4242421123" = {
+      listenPort = 21123;
+      peerPublicKey = "e5X1ZlZUOVtTFeWi+d6cUqqNaXB0F2UHwbquAKU4z3I=";
+      peerAddressV6 = "fe80::1123/128";
+      localAddressV6 = "fe80::1033:1123/128";
+      latency = 3;
+    };
   };
 }

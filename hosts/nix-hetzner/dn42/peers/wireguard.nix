@@ -139,5 +139,13 @@ in
       localAddressV6 = "fe80::1033:1123/128";
       latency = 3;
     };
+    # https://peer42.tmpfs.dev/#/node/lax01
+    "ebgp_4242423310" = {
+      listenPort = 23310;
+      peerPublicKey = "qEffOA35Oe2IFUFXv7KTGGZ5SV3XmrM+IxTdzHEDmCg=";
+      peerAddressV6 = "fe80::1033:3310/128";
+      localAddressV6 = "fe80::1033/128";
+      latency = 3;
+    };
   };
 }

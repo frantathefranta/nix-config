@@ -19,6 +19,7 @@
   };
   meta.dn42.region = 42;
   meta.dn42.country = 840;
+   meta.dn42.bandwidth = 25;
 
   # iBGP to nix-hetzner runs over OSPF-routed loopback path (via ibgp_pdx multi-peer tunnel).
   # There is no dedicated WG interface for it, so it cannot be auto-generated from ibgp_* interfaces.

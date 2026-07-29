@@ -12,6 +12,7 @@
   };
   meta.dn42.region = 44;
   meta.dn42.country = 840;
+  meta.dn42.bandwidth = 25;
 
   networking.domains = {
     defaultTTL = 86400;

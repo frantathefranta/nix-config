@@ -19,5 +19,6 @@
     };
     region = 41; # Europe
     country = 616;
+    bandwidth = 25;
   };
 }

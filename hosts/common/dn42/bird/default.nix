@@ -12,6 +12,7 @@ let
   loopback = config.systemd.network.netdevs."10-dummy_ospf".netdevConfig.Name;
   region = config.meta.dn42.region;
   country = config.meta.dn42.country + 1000;
+  bandwidth = config.meta.dn42.bandwidth;
   confFiles = map builtins.readFile [
     ./filters.conf
     ./protocols.conf
@@ -69,6 +70,7 @@ in
       define OWNNETv6 = fdb7:c21f:f30f::/48;
       define OWNNETSET = [172.23.234.16/28+];
       define OWNNETSETv6 = [fdb7:c21f:f30f::/48+];
+      define DN42_BANDWIDTH = ${bandwidth};
       define DN_REGION_GEO = ${builtins.toString region};
       define DN_REGION_COUNTRY = ${builtins.toString country};
       define LOOPBACK = "${loopback}";

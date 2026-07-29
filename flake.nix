@@ -95,6 +95,10 @@
       url = "github:nix-community/disko?ref=refs/tags/v1.13.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dn42-nix = {
+      url = "git+https://git.franta.us/franta/dn42-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -182,6 +182,26 @@
         "type": "github"
       }
     },
+    "dn42-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785335964,
+        "narHash": "sha256-DUkGELusRUoAc9b06oQw9SH7Z3VNGmP12jJvvYn8A3o=",
+        "ref": "refs/heads/main",
+        "rev": "9f46491b1e095f6c7e44a8eb218403e84407d665",
+        "revCount": 3,
+        "type": "git",
+        "url": "https://git.franta.us/franta/dn42-nix"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.franta.us/franta/dn42-nix"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -961,6 +981,7 @@
         "colmena": "colmena",
         "direnv-instant": "direnv-instant",
         "disko": "disko",
+        "dn42-nix": "dn42-nix",
         "gobgp": "gobgp",
         "hardware": "hardware",
         "home-manager": "home-manager",

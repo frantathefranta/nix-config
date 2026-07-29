@@ -128,6 +128,14 @@ in
       '';
       example = "840";
     };
+    bandwidth = lib.mkOption {
+      type = lib.types.int;
+      default = { };
+      description = ''
+        Bandwidth value based on https://dn42.dev/howto/BGP-communities.
+      '';
+      example = "21";
+    };
 
     extraBirdConfig = lib.mkOption {
       type = lib.types.lines;

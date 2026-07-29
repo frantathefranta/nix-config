@@ -19,7 +19,11 @@ in
         };
         aaaa.data = "fdb7:c21f:f30f:53::";
       };
+      "yukisino-ix" = {
+        aaaa.data = "fd42:23eb:6cf:1103:1266:6aff:fe73:f8b5";
+      };
     };
+    
 
     "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
       "" = {

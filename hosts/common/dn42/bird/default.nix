@@ -70,7 +70,7 @@ in
       define OWNNETv6 = fdb7:c21f:f30f::/48;
       define OWNNETSET = [172.23.234.16/28+];
       define OWNNETSETv6 = [fdb7:c21f:f30f::/48+];
-      define DN42_BANDWIDTH = ${bandwidth};
+      define DN42_BANDWIDTH = ${builtins.toString bandwidth};
       define DN_REGION_GEO = ${builtins.toString region};
       define DN_REGION_COUNTRY = ${builtins.toString country};
       define LOOPBACK = "${loopback}";

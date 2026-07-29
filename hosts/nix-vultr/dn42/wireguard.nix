@@ -36,6 +36,14 @@ in
         peerHostname = peer;
         latency = 5;
       };
+    "ix_yukisino" = {
+      listenPort = 24999;
+      peerEndpoint = "yukisino.dn42.franta.us:21033";
+      peerPublicKey = "gCgaRferi9b2HXB+PdXxaLD59VaTdBtWmIMmpMC64wE=";
+      peerAddressV6 = "fe80::ff00:1033/128";
+      localAddressV6 = "fe80::0200:1033/128";
+      latency = 3;
+    };
     "ebgp_4242423914" = {
       listenPort = 23914;
       peerEndpoint = "de2.g-load.eu:20003";

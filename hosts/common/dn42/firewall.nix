@@ -55,6 +55,9 @@ in
         ipv4Addresses = [ "172.20.0.0/14" ];
         ipv6Addresses = [ "fd00::/8" ];
       };
+      zones.link_local = {
+        ipv6Addresses = [ "fe80::/10" ];
+      };
       zones.ospf = {
         ingressExpression = [
           "ip6 nexthdr ospfigp counter"
@@ -93,13 +96,19 @@ in
           to = [ "fw" ];
           allowedUDPPorts = [ 6696 ];
         };
-        allow_ospf_bfd = lib.mkIf (ospfInterfaces != [ ]) {
-          from = [ "ospf_wg" ];
+        allow_single_hop_bfd = lib.mkIf (ospfInterfaces != [ ]) {
+          from = [
+            "link_local" # BFD for directly connected BGP sessions (over IPv6-LL) use port 3784 instead of 4784.
+            "ospf_wg"
+          ];
           to = [ "fw" ];
           allowedUDPPorts = [ 3784 ];
         };
-        allow_ibgp_bfd = {
-          from = [ "my_dn42_prefix" ];
+        allow_multihop_bfd = {
+          from = [
+            "link_local"
+            "my_dn42_prefix"
+          ];
           to = [ "fw" ];
           allowedUDPPorts = [ 4784 ];
         };

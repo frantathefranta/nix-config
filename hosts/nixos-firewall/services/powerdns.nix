@@ -131,6 +131,7 @@ in
 
         add_record_if_missing franta.us. cloud.franta.us. NS ns1.desec.io.
         add_record_if_missing franta.us. cloud.franta.us. NS ns1.desec.org.
+        add_record_if_missing franta.us. cloud.franta.us. DS "58784 13 2 a66800e19d1390892768b35bdeabddc22dd580fdd4f1596ef4f01cdf6f03807e"
 
         $cmd import-tsig-key kea hmac-sha512 $KEA_TSIG_KEY
         $cmd set-meta franta.us. TSIG-ALLOW-DNSUPDATE kea

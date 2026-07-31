@@ -20,6 +20,8 @@ in
       "actinium".cname.data = "actinium-mgmt.infra.franta.us";
       "thorium".cname.data = "thorium-mgmt.infra.franta.us";
       "protactinium".cname.data = "protactinium-mgmt.infra.franta.us";
+      "molybdenum".a.data = [ "10.32.10.242" ];
+      "molybdenum".aaaa.data = [ "${dSubnet}::242" ];
       "actinium-nfs" = {
         a.data = [ "10.33.1.50" ];
         aaaa.data = [ "${fSubnet}:10:33:1:50" ];

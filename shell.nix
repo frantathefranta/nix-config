@@ -20,6 +20,7 @@
         just
         nixos-anywhere
         (octodns.withProviders (ps: [
+          octodns-providers.bind
           octodns-providers.powerdns
         ]))
       ]

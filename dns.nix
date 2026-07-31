@@ -7,32 +7,6 @@ in
 {
   defaultTTL = 86400;
   zones = {
-    "franta.dn42" = {
-      "" = {
-        ns = {
-          data = [
-            "ns0.franta.dn42"
-          ];
-        };
-        a = {
-          data = [ "172.23.234.30" ];
-        };
-        aaaa.data = "fdb7:c21f:f30f:53::";
-      };
-      "yukisino-ix" = {
-        aaaa.data = "fd42:23eb:6cf:1103:1266:6aff:fe73:f8b5";
-      };
-    };
-    
-
-    "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa" = {
-      "" = {
-        ns = {
-          data = [ "ns0.franta.dn42" ];
-        };
-      };
-    };
-
     "infra.franta.us" = {
       "" = {
         ns = {
@@ -82,19 +56,6 @@ in
         a.data = [ "10.0.0.250" ];
         aaaa.data = [ "${aSubnet}::250" ];
       };
-    };
-
-    "cloud.franta.us" = {
-      "" = {
-        ns = {
-          data = [
-            "ns1.desec.io"
-            "ns2.desec.org"
-          ];
-          ttl = 3600;
-        };
-      };
-      "mikrotik".cname.data = "ed330fd7bf47.sn.mynetname.net";
     };
 
     "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa" = {

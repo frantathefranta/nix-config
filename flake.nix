@@ -163,13 +163,8 @@
       */
       serverHosts = [
         "hydrogen"
-        "molybdenum"
         "ytterbium"
         "nix-bastion"
-        "nix-hetzner"
-        "nix-oci"
-        "nix-vultr"
-        "nix-vps-cz"
         "nixos-firewall"
         "qotom"
       ];
@@ -196,39 +191,15 @@
             inherit dnsConfig;
             config = {
               providers = {
-                bind = {
-                  class = "octodns_bind.Rfc2136Provider";
-                  host = "2600:1702:6630:3fed::242";
-                  port = 53;
-                  ipv6 = true;
-                  key_name = "env/AXFR_KEY_NAME";
-                  key_secret = "env/AXFR_KEY_SECRET";
-                  key_algorithm = "hmac-sha256";
-                };
                 powerdns = {
                   class = "octodns_powerdns.PowerDnsProvider";
                   host = "ns1.franta.us";
                   api_key = "env/POWERDNS_API_KEY";
                 };
-                desec = {
-                  class = "octodns_desec.DesecProvider";
-                  token = "env/DESEC_TOKEN";
-                };
               };
             };
             zones = {
-              "franta.dn42." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "bind" ];
-              "f.0.3.f.f.1.2.c.7.b.d.f.ip6.arpa." = {
-                sources = [
-                  "config"
-                  "auto-arpa"
-                ];
-                targets = [ "bind" ];
-              };
               "infra.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [ "powerdns" ];
-              "cloud.franta.us." = inputs.nixos-dns.utils.octodns.generateZoneAttrs [
-                "desec"
-              ];
               "e.f.3.0.3.6.6.2.0.7.1.0.0.6.2.ip6.arpa." = {
                 sources = [
                   "config"

@@ -65,7 +65,7 @@
         wireguardPeers = [
           {
             PublicKey = "homewu6grFdjuoFxfXh1hLNdB9wvaO1m7/ZtCe1o/1o=";
-            Endpoint = "molybdenum.infra.franta.us:51820";
+            Endpoint = "molybdenum.cloud.franta.us:51820";
             AllowedIPs = [
               "fd00::/8"
             ];

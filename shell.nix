@@ -20,9 +20,7 @@
         just
         nixos-anywhere
         (octodns.withProviders (ps: [
-          octodns-providers.bind
           octodns-providers.powerdns
-          octodns-providers.desec
         ]))
       ]
       ++ lib.optionals stdenv.isLinux [

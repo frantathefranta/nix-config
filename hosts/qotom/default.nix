@@ -160,7 +160,7 @@
     };
     "50-wg_molybdenum" = {
       listenPort = 40001;
-      peerEndpoint = "molybdenum.infra.franta.us:40001";
+      peerEndpoint = "molybdenum.cloud.franta.us:40001";
       peerPublicKey = "NFfWiBeN7shLWNQOtl8rAvBp36gbqLZu+MeDVCGyMg4=";
       localAddressV6 = "fe80::6:5032:1033/64";
       peerAddressV6 = "fe80::1033:6:5032";

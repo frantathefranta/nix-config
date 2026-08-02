@@ -16,15 +16,13 @@
     #   iptables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
     #   ip6tables -A nixos-fw -p 89 -j nixos-fw-accept -m comment --comment "Allow OSPF multicast"
     # '';
+
+    interfaces.eno1.wakeOnLan.enable = true;
   };
   networking.wireless = {
     enable = true;
     # Imperative
     allowAuxiliaryImperativeNetworks = true;
-    extraConfig = ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${config.users.groups.network.name}
-      update_config=1
-    '';
   };
   # Ensure group exists
   users.groups.network = { };

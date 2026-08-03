@@ -1,14 +1,24 @@
 {
-   "main": {
-        "enabled": 1,
-        "type": 1,
-        "hidden": false,
-        "description": "Build main branch",
-        "flake": "git+https://git.franta.us/franta/nix-home?ref=main",
-        "checkinterval": 60,
-        "schedulingshares": 100,
-        "enableemail": false,
-        "emailoverride": "",
-        "keepnr": 1
+    "enabled": 1,
+    "hidden": false,
+    "description": "Generate jobsets: main + open Forgejo PRs",
+    "nixexprinput": "src",
+    "nixexprpath": "hydra-generate-jobsets.nix",
+    "checkinterval": 60,
+    "schedulingshares": 100,
+    "enableemail": false,
+    "emailoverride": "",
+    "keepnr": 1,
+    "inputs": {
+        "src": {
+            "type": "git",
+            "value": "https://git.franta.us/franta/nix-home.git main",
+            "emailresponsible": false
+        },
+        "pulls": {
+            "type": "giteapulls",
+            "value": "git.franta.us franta nix-home",
+            "emailresponsible": false
+        }
     }
 }

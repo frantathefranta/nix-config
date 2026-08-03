@@ -9,9 +9,6 @@ on:
 jobs:
   update-flake-inputs:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     
     steps:
       - name: Generate GitHub App Token
@@ -43,6 +40,8 @@ jobs:
 
       - name: Update flake inputs
         uses: https://github.com/mfenniak/update-flake-inputs-forgejo@b5614c72bdce961524fe3ca2daad7de2d2d8f46f
+        env:
+          AUD: u:1:3d509604-6d09-4ca3-8361-e76da380619e
         with:
           # gitea-token: ${{ secrets.GITEA_TOKEN }}
           forgejo-token: ${{ secrets.BOT_FORGEJO_TOKEN }}

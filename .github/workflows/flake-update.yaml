@@ -3,12 +3,12 @@ name: Update Flake Inputs
 
 on:
   schedule:
-    - cron: '0 2 * * 0'
+    - cron: '* 2 * * 0'
   workflow_dispatch:
 
 jobs:
   update-flake-inputs:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
@@ -51,5 +51,5 @@ jobs:
           git-author-email: "lol@franta.us"
           git-committer-name: "lordoflightning-bot"
           git-committer-email: "lol@franta.us"
-          auto-merge: 'true'
-          delete-branch: 'true'
+          auto-merge: 'false'
+          # delete-branch: 'true'

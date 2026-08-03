@@ -44,9 +44,7 @@ in
       extraConfig = /* xml */ ''
         max_unsupported_time = 30
         allow_import_from_derivation = true
-        <gitea_authorization>
-          Include ${config.sops.secrets."hydra/gitea-token".path}
-        </gitea_authorization>
+        Include ${config.sops.secrets."hydra/gitea-token".path}
       '';
       extraEnv = {
         HYDRA_DISALLOW_UNFREE = "0";

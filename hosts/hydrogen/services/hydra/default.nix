@@ -7,6 +7,24 @@
 let
   hydraUser = config.users.users.hydra.name;
   hydraGroup = config.users.users.hydra.group;
+
+  # Backports the (unmerged) GiteaPulls plugin from
+  # https://github.com/NixOS/hydra/pull/1431, so declarative jobsets can use
+  # a `giteapulls` input to build open Forgejo PRs. Drop this once that PR
+  # (or an equivalent) lands upstream.
+  #
+  # NOTE: as of pkgs.hydra 0-unstable-2026-03-13, the Perl plugin tree still
+  # lives at src/lib/Hydra/Plugin/. Hydra's repo moved this under
+  # subprojects/hydra/lib/Hydra/Plugin/ a few days later upstream -- if a
+  # nixpkgs bump ever pulls that layout in, this path will need updating
+  # (check `pkgs.hydra.src` for a `subprojects/` dir).
+  hydraPackage = pkgs.hydra.overrideAttrs (old: {
+    postPatch =
+      (old.postPatch or "")
+      + ''
+        cp ${./plugins/GiteaPulls.pm} src/lib/Hydra/Plugin/GiteaPulls.pm
+      '';
+  });
 in
 {
   imports = [ ./machines.nix ];
@@ -17,7 +35,7 @@ in
   services = {
     hydra = {
       enable = true;
-      package = pkgs.hydra;
+      package = hydraPackage;
       hydraURL = "https://hydra.infra.franta.us";
       notificationSender = "hydra@franta.us";
       listenHost = "localhost";
@@ -26,6 +44,9 @@ in
       extraConfig = /* xml */ ''
         max_unsupported_time = 30
         allow_import_from_derivation = true
+        <gitea_authorization>
+          Include ${config.sops.secrets."hydra/gitea-token".path}
+        </gitea_authorization>
       '';
       extraEnv = {
         HYDRA_DISALLOW_UNFREE = "0";
@@ -61,13 +82,16 @@ in
   ];
 
   sops.secrets = {
-    # Might need a Gitea/Forgejo equivalent
-    # hydra-gh-auth = {
-    #   sopsFile = ../../secrets.yaml;
-    #   owner = hydraUser;
-    #   group = hydraGroup;
-    #   mode = "0440";
-    # };
+    # Contains a single line `franta = <token>`, Include'd into
+    # extraConfig's <gitea_authorization> block above. Used by both the
+    # giteapulls and gitea-status Hydra plugins. Add the value yourself
+    # with `sops hosts/hydrogen/secrets.yaml`.
+    "hydra/gitea-token" = {
+      sopsFile = ../../secrets.yaml;
+      owner = hydraUser;
+      group = hydraGroup;
+      mode = "0440";
+    };
     # Only needed if I add remote-builders
     # nix-ssh-key = {
     #   sopsFile = ../../secrets.yaml;

@@ -602,11 +602,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1785702556,
-        "narHash": "sha256-J8MYHlQThSGI3pxCsgy0UGQoZ9g5MSjnPw4RW3epUHI=",
+        "lastModified": 1785742472,
+        "narHash": "sha256-WGTEzEQeZ5t5PHtMTcxE/utJHbtqqsk5Ir867/wNz9g=",
         "owner": "hgaiser",
         "repo": "moonshine",
-        "rev": "873d58358db044b2bb2c253464aca9b0d0c860c0",
+        "rev": "d66e811a85a62d67181bcdcbb58eef14ad921df5",
         "type": "github"
       },
       "original": {

@@ -91,12 +91,12 @@ in
       mode = "0440";
     };
     # Only needed if I add remote-builders
-    # nix-ssh-key = {
-    #   sopsFile = ../../secrets.yaml;
-    #   owner = hydraUser;
-    #   group = hydraGroup;
-    #   mode = "0440";
-    # };
+    "hydra/nix-ssh-key" = {
+      sopsFile = ../../secrets.yaml;
+      owner = hydraUser;
+      group = hydraGroup;
+      mode = "0440";
+    };
   };
 
   # environment.persistence = {

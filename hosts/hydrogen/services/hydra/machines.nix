@@ -36,20 +36,19 @@ in
 {
   services.hydra.buildMachinesFiles = [
     (mkBuildMachines [
-      # {
-      #   uri = "ssh://nix-ssh@taygeta";
-      #   systems = [
-      #     "x86_64-linux"
-      #     "i686-linux"
-      #   ];
-      #   sshKey = config.sops.secrets.nix-ssh-key.path;
-      #   maxJobs = 8;
-      #   supportedFeatures = [
-      #     "kvm"
-      #     "big-parallel"
-      #     "nixos-test"
-      #   ];
-      # }
+      {
+        uri = "ssh://nix-ssh@nix-oci.infra.franta.us";
+        systems = [
+          "aarch64-linux"
+        ];
+        sshKey = config.sops.secrets."hydra/nix-ssh-key".path;
+        maxJobs = 1;
+        supportedFeatures = [
+          "kvm"
+          "big-parallel"
+          "nixos-test"
+        ];
+      }
       {
         uri = "localhost";
         systems = [
@@ -57,7 +56,7 @@ in
           "aarch64-linux"
           "i686-linux"
         ];
-        maxJobs = 3;
+        maxJobs = 1;
         supportedFeatures = [
           "kvm"
           "big-parallel"

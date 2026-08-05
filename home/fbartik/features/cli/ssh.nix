@@ -38,11 +38,8 @@ in
         HostKeyAlgorithms = "+ssh-rsa";
         PubkeyAcceptedAlgorithms = "+ssh-rsa";
       };
-      "*.infra.franta.us" = lib.mkIf pkgs.stdenv.isDarwin {
-        proxyJump = "ssh.franta.dev";
-      };
-      "hetzner.vm.franta.us" = {
-        user = "root";
+      "*.cloud.franta.us" = {
+        user = "admin";
       };
       net = {
         forwardAgent = true;

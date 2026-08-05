@@ -19,18 +19,18 @@ let
   # nixpkgs bump ever pulls that layout in, this path will need updating
   # (check `pkgs.hydra.src` for a `subprojects/` dir).
   hydraPackage = pkgs.hydra.overrideAttrs (old: {
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        cp ${./plugins/GiteaPulls.pm} src/lib/Hydra/Plugin/GiteaPulls.pm
-      '';
+    postPatch = (old.postPatch or "") + ''
+      cp ${./plugins/GiteaPulls.pm} src/lib/Hydra/Plugin/GiteaPulls.pm
+    '';
   });
 in
 {
   imports = [ ./machines.nix ];
+  
 
-  # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
-  systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";
+    # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
+    systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";
+  
 
   services = {
     hydra = {
@@ -43,6 +43,7 @@ in
       useSubstitutes = true;
       extraConfig = /* xml */ ''
         max_unsupported_time = 30
+        max_concurrent_evals = 2
         allow_import_from_derivation = true
         Include ${config.sops.secrets."hydra/gitea-token".path}
       '';

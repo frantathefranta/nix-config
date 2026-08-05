@@ -37,7 +37,7 @@ in
   services.hydra.buildMachinesFiles = [
     (mkBuildMachines [
       {
-        uri = "ssh://nix-ssh@nix-oci.infra.franta.us";
+        uri = "ssh://nix-ssh@nix-oci.cloud.franta.us";
         systems = [
           "aarch64-linux"
         ];

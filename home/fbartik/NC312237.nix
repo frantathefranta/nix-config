@@ -25,6 +25,8 @@
   programs.nh = {
     clean = {
       enable = true;
+      dates = "weekly";
+      extraArgs = "--keep-since 14d";
     };
     enable = true;
     homeFlake = "${config.home.homeDirectory}/git/nix-config";

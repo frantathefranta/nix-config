@@ -37,7 +37,7 @@ in
         add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
       };
       signing = {
-        # commit.gpgSign = lib.mkDefault true;
+        commit.gpgSign = lib.mkDefault true;
         format = "openpgp";
         key = defaultKey;
       };
@@ -53,6 +53,11 @@ in
       push.autoSetupRemote = true;
       # Reuse merge conflict fixes when rebasing
       rerere.enabled = true;
+    };
+    signing = {
+      format = "openpgp";
+      key = defaultKey;
+      signByDefault = true;
     };
     lfs.enable = true;
     ignores = [

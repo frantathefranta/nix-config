@@ -26,11 +26,9 @@ let
 in
 {
   imports = [ ./machines.nix ];
-  
 
-    # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
-    systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";
-  
+  # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
+  systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";
 
   services = {
     hydra = {
@@ -70,16 +68,6 @@ in
     hydra-www.extraGroups = [ hydraGroup ];
   };
 
-  # So Hydra doesn't need to work as hard
-  nix.settings.substituters = [
-    "https://attic.xuyh0120.win/lantian"
-    "https://niri.cachix.org"
-  ];
-  nix.settings.trusted-public-keys = [
-    "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-    "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-  ];
-
   sops.secrets = {
     # Contains a single line `franta = <token>`, Include'd into
     # extraConfig's <gitea_authorization> block above. Used by both the
@@ -96,7 +84,7 @@ in
       sopsFile = ../../secrets.yaml;
       owner = hydraUser;
       group = hydraGroup;
-      mode = "0440";
+      mode = "0600";
     };
   };
 

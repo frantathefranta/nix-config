@@ -84,7 +84,7 @@ in
       sopsFile = ../../secrets.yaml;
       owner = hydraUser;
       group = hydraGroup;
-      mode = "0600";
+      mode = "0440";
     };
   };
 

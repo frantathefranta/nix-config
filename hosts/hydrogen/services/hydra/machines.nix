@@ -42,7 +42,9 @@ in
           "aarch64-linux"
         ];
         sshKey = config.sops.secrets."hydra/nix-ssh-key".path;
+        publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUVLV3JmS2hjK3JvU0l0Z0RCQ1NRZ2ZIWmlLVzFBSmxPKytXRStmU013dXcK";
         maxJobs = 1;
+        speedFactor = 2;
         supportedFeatures = [
           "kvm"
           "big-parallel"
@@ -53,6 +55,7 @@ in
         uri = "localhost";
         systems = [
           "x86_64-linux"
+          "aarch64-linux"
           "i686-linux"
         ];
         maxJobs = 1;

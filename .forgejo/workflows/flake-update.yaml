@@ -53,11 +53,11 @@ jobs:
           AUD: u:1:3d509604-6d09-4ca3-8361-e76da380619e
         with:
           # gitea-token: ${{ secrets.GITEA_TOKEN }}
-          forgejo-token: ${{ secrets.BOT_FORGEJO_TOKEN }}
+          forgejo-token: ${{ secrets.MERGE_TOKEN }}
           github-token: ${{ steps.app-token.outputs.token }}
           git-author-name: "lordoflightning-bot"
           git-author-email: "lol@franta.us"
           git-committer-name: "lordoflightning-bot"
           git-committer-email: "lol@franta.us"
-          auto-merge: 'false'
+          auto-merge: 'true'
           # delete-branch: 'true'

@@ -41,10 +41,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    vpsadminos = {
-      url = "github:vpsfreecz/vpsadminos";
-      inputs.nixpkgsUnstable.follows = "nixpkgs-unstable";
-    };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote?ref=refs/tags/v1.1.0";
@@ -91,15 +87,14 @@
     # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     nh.url = "github:nix-community/nh?ref=refs/tags/v4.4.2";
+
     disko = {
       url = "github:nix-community/disko?ref=refs/tags/v1.13.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     moonshine.url = "github:hgaiser/moonshine";
-    dn42-nix = {
-      url = "git+https://git.franta.us/franta/dn42-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
   };
 
   outputs =

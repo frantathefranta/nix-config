@@ -23,7 +23,8 @@ jobs:
       - name: Checkout repository
         uses: https://code.forgejo.org/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: https://code.forgejo.org/actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      - name: Cache
+        uses: https://code.forgejo.org/actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.cache/nix
           key: nix-${{ hashFiles('flake.lock') }}
@@ -35,29 +36,19 @@ jobs:
           git config --global user.name "lordoflightning-bot"
           git config --global init.defaultBranch main
 
-      - name: Configure commit signing
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.BOT_SSH_KEY }}" > ~/.ssh/bot_signing_key
-          chmod 600 ~/.ssh/bot_signing_key
-          git config --global gpg.format ssh
-          git config --global user.signingkey ~/.ssh/bot_signing_key
-          git config --global commit.gpgsign true
-
       - name: Install nix
         uses: https://github.com/DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       - name: Update flake inputs
-        uses: https://github.com/mfenniak/update-flake-inputs-forgejo@b5614c72bdce961524fe3ca2daad7de2d2d8f46f
-        env:
-          AUD: u:1:3d509604-6d09-4ca3-8361-e76da380619e
+        uses: https://git.franta.us/franta/update-flake-inputs-forgejo@main
         with:
-          # gitea-token: ${{ secrets.GITEA_TOKEN }}
           forgejo-token: ${{ secrets.MERGE_TOKEN }}
           github-token: ${{ steps.app-token.outputs.token }}
           git-author-name: "lordoflightning-bot"
           git-author-email: "lol@franta.us"
           git-committer-name: "lordoflightning-bot"
           git-committer-email: "lol@franta.us"
+          git-signing-key: ${{ secrets.BOT_SSH_KEY }}
+          git-signing-pubkey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETVN3DTYcb+pWcX0JR4c2DYvA24lImxVknWPUW2gPzH"
           auto-merge: 'true'
-          # delete-branch: 'true'
+          delete-branch: 'false'

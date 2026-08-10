@@ -28,9 +28,6 @@ in
     enable = true;
     enableDefaultConfig = false;
     settings = {
-      "*" = {
-        inherit identityAgent;
-      };
       "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
         user = "admin";
         inherit identityAgent;

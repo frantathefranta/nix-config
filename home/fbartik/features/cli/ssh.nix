@@ -35,8 +35,15 @@ in
         HostKeyAlgorithms = "+ssh-rsa";
         PubkeyAcceptedAlgorithms = "+ssh-rsa";
       };
-      "*.cloud.franta.us" = {
+      "*.franta.us" = {
+        inherit identityAgent;
         user = "admin";
+      };
+      "git.franta.us" = {
+        inherit identityAgent;
+      };
+      "github.com" = {
+        inherit identityAgent;
       };
       net = {
         forwardAgent = true;

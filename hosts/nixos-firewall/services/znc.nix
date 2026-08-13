@@ -121,6 +121,7 @@ in
   };
   sops.secrets."znc/admin" = {
     sopsFile = ../secrets.yaml;
+    neededForUsers = true;
   };
   sops.secrets."znc/hackint-sasl" = {
     sopsFile = ../secrets.yaml;

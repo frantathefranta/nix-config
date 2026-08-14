@@ -61,6 +61,23 @@
   systemd.services.upsd = {
     wants = [ "network-online.target" ];
   };
+  systemd.services.upsdrv = {
+    /*
+      apc-rack-pdu01 resolves a DNS hostname over the network, but upsdrv.service
+      upstream only depends on upsd.service, not on the network being reachable.
+      upsdrvctl also aborts (and kills already-started drivers, e.g. apc-usb) if
+      any one driver in the batch fails to start, so a boot-time or transient DNS
+      failure takes down both UPS connections. Wait for network-online.target and
+      retry on failure so transient DNS blips self-heal instead of needing a
+      manual restart.
+    */
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "10s";
+    };
+  };
   networking.nftables.firewall.rules.allow_nut_access = {
     from = [
       "iot"

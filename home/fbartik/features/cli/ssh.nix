@@ -37,6 +37,9 @@ in
       };
       "*.franta.us" = {
         inherit identityAgent;
+      };
+      "*.cloud.franta.us" = {
+        inherit identityAgent;
         user = "admin";
       };
       "git.franta.us" = {

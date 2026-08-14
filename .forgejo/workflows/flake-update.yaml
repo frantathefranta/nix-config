@@ -40,7 +40,7 @@ jobs:
         uses: https://github.com/DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       - name: Update flake inputs
-        uses: https://git.franta.us/franta/update-flake-inputs-forgejo@main
+        uses: https://git.franta.us/franta/update-flake-inputs-forgejo@fc557b3e9467d2e02854166fa1ea62375d668b6b
         with:
           forgejo-token: ${{ secrets.MERGE_TOKEN }}
           github-token: ${{ steps.app-token.outputs.token }}

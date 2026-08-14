@@ -31,8 +31,6 @@ export default function (pi: ExtensionAPI) {
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         // --max-model-len 256000 is the *total* context (prompt + output).
         contextWindow: 256_000,
-        // Output cap per request; leaves headroom under the 128k total for the prompt.
-        maxTokens: 32_768,
       },
       {
         id: "qwen35-122b-fp8",
@@ -41,7 +39,6 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 262_144,
-        maxTokens: 32_768,
       },
       {
         id: "gpt-oss-120b",
@@ -50,7 +47,6 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 131_072,
-        maxTokens: 32_768,
       },
       {
         id: "qwen3-coder-30b",
@@ -59,7 +55,6 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 128_000,
-        maxTokens: 32_768,
       },
       {
         id: "qwen36-fp8",
@@ -68,7 +63,6 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 256_000,
-        maxTokens: 32_768,
       },
     ],
   });

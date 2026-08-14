@@ -32,7 +32,6 @@
         "flakes"
         "ca-derivations"
       ];
-      warn-dirty = false;
     };
   };
 

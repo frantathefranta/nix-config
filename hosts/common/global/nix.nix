@@ -24,7 +24,6 @@ in
         "flakes"
         "ca-derivations"
       ];
-      warn-dirty = false;
       system-features = [
         "kvm"
         "big-parallel"

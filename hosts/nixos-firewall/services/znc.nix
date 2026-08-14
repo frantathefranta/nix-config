@@ -89,6 +89,11 @@ in
           Ident = "franta";
           AutoClearChanBuffer = false;
           AutoClearQueryBuffer = false;
+          /* ZNC's buffer is a line count, not a time window - playback can only
+             replay what's still in it. 10000 lines is far more than these channels
+             see in a day, so in practice this covers the last 24h. */
+          ChanBufferSize = 10000;
+          QueryBufferSize = 10000;
           LoadModule = [
             "log"
           ];

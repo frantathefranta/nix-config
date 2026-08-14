@@ -12,6 +12,7 @@
     ./features/kubectl
     ./features/desktop/common/mail.nix
     ./features/productivity/claude-code.nix
+    ./features/productivity/pi
     ./features/productivity/github.nix
   ];
   home.packages = with pkgs; [

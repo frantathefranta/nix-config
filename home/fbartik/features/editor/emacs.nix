@@ -5,7 +5,7 @@
   ...
 }:
 let
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   emacsBase =
     if isDarwin then
       pkgs.emacs

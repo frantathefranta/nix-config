@@ -10,7 +10,7 @@
 
   home = {
     username = "fbartik";
-    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/fbartik" else "/home/fbartik";
+    homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/fbartik" else "/home/fbartik";
   };
 
   # Add stuff for your user as you see fit:

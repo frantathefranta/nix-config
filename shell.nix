@@ -24,7 +24,7 @@
           octodns-providers.powerdns
         ]))
       ]
-      ++ lib.optionals stdenv.isLinux [
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
         home-manager
         nix
       ];

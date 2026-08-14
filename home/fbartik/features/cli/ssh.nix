@@ -11,9 +11,9 @@ let
     builtins.attrNames outputs.homeConfigurations
   );
   hostnames = lib.unique (homeConfigs ++ nixosConfigs);
-  isWorkstation = pkgs.stdenv.isDarwin || (builtins.length config.monitors != 0);
+  isWorkstation = pkgs.stdenv.hostPlatform.isDarwin || (builtins.length config.monitors != 0);
   identityAgent =
-    if pkgs.stdenv.isDarwin then
+    if pkgs.stdenv.hostPlatform.isDarwin then
       "'${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
     else if (builtins.length config.monitors != 0) then
       "${config.home.homeDirectory}/.1password/agent.sock"
@@ -28,7 +28,7 @@ in
     enable = true;
     enableDefaultConfig = false;
     settings = {
-      "brocade*" = lib.mkIf (!pkgs.stdenv.isDarwin) {
+      "brocade*" = lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
         user = "admin";
         inherit identityAgent;
         KexAlgorithms = "+diffie-hellman-group1-sha1";

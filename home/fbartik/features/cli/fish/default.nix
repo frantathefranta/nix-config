@@ -48,7 +48,7 @@ in
       # aws-switch = mkIf hasAwsCli "export AWS_PROFILE=(aws configure list-profiles | fzf)";
       # awssw = aws-switch;
     }
-    // lib.optionalAttrs pkgs.stdenv.isDarwin {
+    // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       sftp = "${pkgs.openssh}/bin/sftp";
     };
     shellAliases = {
@@ -77,7 +77,7 @@ in
           set -gx SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
         end
       ''
-      + lib.optionalString pkgs.stdenv.isDarwin /* fish */ ''
+      + lib.optionalString pkgs.stdenv.hostPlatform.isDarwin /* fish */ ''
         # Source Nix profile scripts for non-system fish on Darwin
         if test -e /nix/var/nix/profiles/default/etc/profile.d/nix.fish
           source /nix/var/nix/profiles/default/etc/profile.d/nix.fish

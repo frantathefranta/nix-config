@@ -35,6 +35,8 @@
     };
   };
 
+  manual.manpages.enable = false;
+  
   sops = {
     age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   };
@@ -47,7 +49,7 @@
     timestamp = "-7 days";
   };
   # Nicely reload system units when changing configs
-  systemd.user.startServices = lib.mkIf pkgs.stdenv.isLinux "sd-switch";
+  systemd.user.startServices = lib.mkIf pkgs.stdenv.hostPlatform.isLinux "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = lib.mkDefault "24.11";

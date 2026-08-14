@@ -12,7 +12,7 @@
     # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
     enableExtraSocket = true;
     enableScDaemon = true;
-    extraConfig = (lib.mkIf (!pkgs.stdenv.isDarwin) ''
+    extraConfig = (lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) ''
       scdaemon-program ${pkgs.gnupg-pkcs11-scd}/bin/gnupg-pkcs11-scd
       allow-emacs-pinentry
     '');
@@ -21,7 +21,7 @@
         osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable
       then
         pkgs.pinentry-qt
-      else if pkgs.stdenv.isDarwin then
+      else if pkgs.stdenv.hostPlatform.isDarwin then
         pkgs.pinentry_mac
       else
         pkgs.pinentry-tty;

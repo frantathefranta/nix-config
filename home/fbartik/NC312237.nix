@@ -29,8 +29,7 @@
       extraArgs = "--keep-since 14d";
     };
     enable = true;
-    flake = "git+https://git.franta.us/franta/nix-home";
-    homeFlake = config.programs.nh.flake;
+    homeFlake = "${config.home.homeDirectory}/git/nix-config";
     package = inputs.nh.packages.aarch64-darwin.nh;
   };
   sops.age.keyFile = "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt";

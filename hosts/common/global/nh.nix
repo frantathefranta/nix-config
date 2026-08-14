@@ -6,6 +6,6 @@
       dates = "Tue, 3:00";
       extraArgs = "--keep-since 14d";
     };
-    flake = "/home/fbartik/nix-config";
+    flake = "git+https://git.franta.us/franta/nix-home";
   };
 }

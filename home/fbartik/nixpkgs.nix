@@ -25,7 +25,9 @@ in
     NIX_PATH = lib.concatStringsSep ":" (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
   };
 
-  nixpkgs.overlays = builtins.attrValues outputs.overlays;
+  nixpkgs.overlays = builtins.attrValues outputs.overlays ++ [
+    inputs.emacs-overlay.overlays.default
+  ];
   nixpkgs.config = {
     allowUnfree = true;
     allowUnfreePredicate = _: true;

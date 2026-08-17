@@ -83,8 +83,8 @@
     };
 
     # Emacs
-    # emacs-overlay.url = "github:nix-community/emacs-overlay";
-    # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     nh.url = "github:nix-community/nh?ref=refs/tags/v4.4.2";
 

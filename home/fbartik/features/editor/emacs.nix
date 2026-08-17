@@ -6,13 +6,7 @@
 }:
 let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  emacsBase =
-    if isDarwin then
-      pkgs.emacs
-    else if (builtins.length config.monitors != 0) then
-      pkgs.emacs-gtk
-    else
-      pkgs.emacs-nox;
+  emacsBase = pkgs.emacs-unstable;
   emacs =
     with pkgs;
     (emacsPackagesFor emacsBase).emacsWithPackages (

@@ -6,7 +6,9 @@
 }:
 let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  emacsBase = pkgs.emacs-unstable;
+  # pgtk gives native Wayland support on Linux; on Darwin it would mean GTK
+  # instead of the native Cocoa toolkit, so stick with plain emacs-unstable there.
+  emacsBase = if isDarwin then pkgs.emacs-unstable else pkgs.emacs-unstable-pgtk;
   emacs =
     with pkgs;
     (emacsPackagesFor emacsBase).emacsWithPackages (

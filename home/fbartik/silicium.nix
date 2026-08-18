@@ -37,6 +37,7 @@
       theme = "Earthsong";
       font-size = "10";
       initial-command = "tmux attach";
+      shell-integration-features = "ssh-env,ssh-terminfo";
       # theme = "light:Belafonte Day,dark:Belafonte Night";
     };
   };

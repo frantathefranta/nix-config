@@ -17,5 +17,6 @@ rec {
   varroa = pkgs.callPackage ./varroa { };
   rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
   udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay { };
+  pi-acp = pkgs.callPackage ./pi-acp { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

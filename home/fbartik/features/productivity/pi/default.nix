@@ -34,4 +34,7 @@
     PI_SKIP_VERSION_CHECK = true;
     PI_TELEMETRY = false;
   };
+  home.packages = [
+    pkgs.pi-acp
+  ];
 }

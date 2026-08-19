@@ -562,11 +562,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1786969701,
-        "narHash": "sha256-LpkXi0pO8JSDCaMwpoWDzmxz7Q5wZgXzD64FllYzmPg=",
+        "lastModified": 1787088788,
+        "narHash": "sha256-cd7IHexHOqcgS/X1362FPQ7F1GmtncXKvCOhx1xCc5w=",
         "owner": "hgaiser",
         "repo": "moonshine",
-        "rev": "6ce84861613e6313be02583ba624b1117f6626f0",
+        "rev": "c2da458ac8de7776086d8814bbeb1a525319b368",
         "type": "github"
       },
       "original": {

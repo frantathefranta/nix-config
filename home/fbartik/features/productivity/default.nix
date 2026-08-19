@@ -5,6 +5,7 @@
     ./github.nix
     ./beets.nix
     ./pass.nix
+    ./nix/nix-init.nix
   ];
   home.packages = with pkgs; [
     hcloud # Hetzner Cloud CLI

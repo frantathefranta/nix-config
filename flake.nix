@@ -95,6 +95,8 @@
 
     moonshine.url = "github:hgaiser/moonshine";
 
+    nix-init.url = "github:nix-community/nix-init";
+
   };
 
   outputs =

@@ -9,6 +9,7 @@
   imports = [ ./packages ];
   programs.pi-coding-agent = {
     enable = true;
+    context = ./context.md;
     settings = {
       compaction = {
         enabled = true;

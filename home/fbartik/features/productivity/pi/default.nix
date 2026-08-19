@@ -6,6 +6,7 @@
 }:
 
 {
+  imports = [ ./packages ];
   programs.pi-coding-agent = {
     enable = true;
     settings = {
@@ -16,6 +17,7 @@
       };
       enableInstallTelemetry = false;
       extensions = [ ./extensions ];
+      skills = [ ./skills ];
     };
   };
   home.sessionVariables = {

@@ -53,7 +53,7 @@
         # runs only inside the FOD, where network is available, and is
         # deterministic because prefetch-npm-deps verifies every tarball against it.
         fetchRealIntegrity = ''
-          for url in $(${lib.getExe jq} -r '[.. | objects | select(has("resolved") and (has("integrity") | not)) | .resolved] | unique | .[]' package-lock.json); do
+          for url in $(${lib.getExe jq} -r '[.. | objects | select(has("resolved") and (has("integrity") | not) and (.resolved | type == "string") and (.resolved | startswith("https://") or startswith("http://"))) | .resolved] | unique | .[]' package-lock.json); do
             tarball="$(mktemp)"
             # Download to a file (not a pipe) so a failed fetch aborts the build
             # instead of silently yielding an empty digest; time out and retry so a

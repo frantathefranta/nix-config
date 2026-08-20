@@ -24,6 +24,7 @@
         "openwebui/qwen35-122b-fp8"
         "openwebui/gpt-oss-120b"
         "openwebui/qwen36-fp8"
+        "openwebui/qwen3.8-27b-fp8"
         "anthropic/claude-opus-4-8"
         "anthropic/claude-opus-5"
         "anthropic/claude-sonnet-5"
@@ -33,6 +34,7 @@
   home.sessionVariables = {
     PI_SKIP_VERSION_CHECK = true;
     PI_TELEMETRY = false;
+    OPENWEBUI_BASE_URL = "https://pzs0708.ai-alpha.osc.edu/api";
   };
   home.packages = [
     pkgs.pi-acp

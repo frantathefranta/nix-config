@@ -62,6 +62,15 @@ export default function (pi: ExtensionAPI) {
         contextWindow: 128_000,
       },
       {
+        id: "qwen3.8-27b-fp8",
+        name: "Qwen/Qwen3.8-27B-FP8",
+        reasoning: true,
+        input: ["text"],
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        compat: { supportsDeveloperRole: false },
+        contextWindow: 262_144,
+      },
+      {
         id: "qwen36-fp8",
         name: "Qwen3.6 FP8",
         reasoning: true,

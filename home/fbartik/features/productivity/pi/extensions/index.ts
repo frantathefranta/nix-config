@@ -39,6 +39,8 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 262_144,
+        // Qwen does not support the `developer` role; fall back to `system`
+        compat: { supportsDeveloperRole: false },
         roleMap: {
           system: "user",
         },

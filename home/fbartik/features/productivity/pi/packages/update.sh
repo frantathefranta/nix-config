@@ -148,7 +148,8 @@ update_npm_package() {
         
         # Regenerate lockfile with npm install (dry-run to avoid actually installing)
         echo "  📝 Regenerating lockfile with npm..."
-        if ! nix shell nixpkgs#nodejs_24 -c sh -c "cd '$work_dir' && npm install --package-lock-only --omit=dev --omit=peer --legacy-peer-deps" 2>&1; then
+        local nodejs_pkg="${PI_UPDATE_NODEJS:-nodejs_24}"
+        if ! nix shell "nixpkgs#${nodejs_pkg}" -c sh -c "cd '$work_dir' && npm install --package-lock-only --omit=dev --omit=peer --legacy-peer-deps" 2>&1; then
             echo "  ⚠️  npm install failed, using existing lockfile"
         fi
         
@@ -158,40 +159,31 @@ update_npm_package() {
             echo "  ✅ Lockfile regenerated"
         fi
         
-        echo "  🔢 Computing npmDepsHash..."
+        echo "  🔢 Computing npmDepsHash via build verification..."
+        # The build system computes npmDepsHash differently than prefetch-npm-deps
+        # We need to do a build to get the correct hash
+        
+        # First, temporarily set a placeholder hash so the build will fail with the correct hash
+        local placeholder_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        local tmp_file="${file}.tmp"
+        awk -v hash="$placeholder_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
+        
+        echo "  🔍 Building to extract correct npmDepsHash..."
+        local target_host="${PI_UPDATE_TARGET_HOST:-fbartik@NC312237}"
+        local build_output
+        build_output=$(cd "$SCRIPT_DIR/../../../../../.." && nix build ".#homeConfigurations.${target_host}.activationPackage" --no-link 2>&1) || true
+        
+        # Extract the correct hash from the build error
         local npm_deps_hash
-        npm_deps_hash=$(nix shell nixpkgs#prefetch-npm-deps -c prefetch-npm-deps "$work_dir/package-lock.json" 2>&1 | grep -oP 'sha256-[A-Za-z0-9+/=]+' | tail -1)
+        npm_deps_hash=$(echo "$build_output" | grep -oP 'got:\s*sha256-[A-Za-z0-9+/=]+' | grep -oP 'sha256-[A-Za-z0-9+/=]+' | head -1)
         
         if [[ -z "$npm_deps_hash" ]]; then
-            echo "  ⚠️  Could not compute npmDepsHash."
+            echo "  ⚠️  Could not extract npmDepsHash from build output."
+            echo "  Build output: $build_output"
             return 1
         fi
         
-        echo "  🆕 Computed npmDepsHash: $npm_deps_hash"
-        # The buildPiPackage uses fetchNpmDeps with fetcherVersion=2
-        # We need to verify the hash by building
-        
-        # Try a quick build to verify the hash
-        echo "  🔍 Verifying npmDepsHash with a quick build..."
-        local build_output
-        build_output=$(cd "$SCRIPT_DIR/../../../../../" && nix build '.#homeConfigurations.fbartik@NC312237.activationPackage' 2>&1) || true
-        
-        # Check if there's a hash mismatch
-        if echo "$build_output" | grep -q "hash mismatch"; then
-            # Extract the correct hash from the error message
-            local correct_hash
-            correct_hash=$(echo "$build_output" | grep -oP 'got:\s*sha256-[A-Za-z0-9+/=]+' | grep -oP 'sha256-[A-Za-z0-9+/=]+' | head -1)
-            
-            if [[ -n "$correct_hash" ]]; then
-                echo "  ⚠️  Hash mismatch detected!"
-                echo "  Computed: $npm_deps_hash"
-                echo "  Expected: $correct_hash"
-                npm_deps_hash="$correct_hash"
-                echo "  ✅ Using correct hash from build error"
-            fi
-        else
-            echo "  ✅ Hash verified successfully"
-        fi
+        echo "  🆕 npmDepsHash: $npm_deps_hash"
         
         # Update the Nix file with all hashes
         local current_hash
@@ -203,11 +195,12 @@ update_npm_package() {
             if [[ "$OSTYPE" == "darwin"* ]]; then
                 sed -i'' "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
                 sed -i'' "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                sed -i'' "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
+                # Use awk for npmDepsHash since it can contain / characters
+                awk -v hash="$npm_deps_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
             else
                 sed -i.bak "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
                 sed -i.bak "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                sed -i.bak "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
+                awk -v hash="$npm_deps_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
                 rm -f "$file".bak
             fi
             echo "  ✅ Updated $file"

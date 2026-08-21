@@ -16,6 +16,7 @@
 
     ../common/optional/fwupd.nix
     ../common/optional/secure-boot.nix
+    ../common/optional/ssh-serve-store.nix
   ];
   networking = {
     hostName = "hydrogen";

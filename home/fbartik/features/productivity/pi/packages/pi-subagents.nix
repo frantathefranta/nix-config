@@ -4,14 +4,14 @@
 }: let
   pisubAgents = pkgs.buildPiPackage {
     pname = "pi-subagents";
-    version = "0.51.0";
+    version = "0.53.0";
     src = pkgs.fetchFromGitHub {
       owner = "nicobailon";
       repo = "pi-subagents";
-      rev = "10f69cdfd1ec384a3d6079b136b88970d79ec09a";
-      hash = "sha256-jCvTUW6u7eHb1+2/qtjGAID5WkxXhjYA4k1HohOCIRQ=";
+      rev = "a2d4452ffe647d1a0a0b765d86327d42dcd839c6";
+      hash = "sha256-WSsCgt/ZyG8KUaB7s0EBtOgdgEkqE+3bgRjOZhpHKbA=";
     };
-    npmDepsHash = "sha256-g9Da56i6YcYZPqR4QUjqG7AFDM5ktYXuns0YknotyPM=";
+    npmDepsHash = "sha256-/7e301fFT7CcSnN3PWqjp4TBtO3oi1OY0Cb/8xEc6s0=";
   };
 in {
   programs.pi-coding-agent.settings.packages = [pisubAgents];

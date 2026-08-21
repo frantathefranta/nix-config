@@ -23,3 +23,6 @@ update-dns:
 
 update-dns-doit:
     nix build .#octodns && octodns-sync --config=./result --doit
+
+update-pi-packages:
+    cd home/fbartik/features/productivity/pi/packages && ./update.sh

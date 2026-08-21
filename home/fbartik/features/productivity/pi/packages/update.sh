@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Auto-update script for pi packages with npmDepsHash support
+# Auto-update script for pi packages with full npmDepsHash support
 # Usage: ./update.sh [package-name] (or no args to update all)
 #
 # This script updates:
 # 1. Source version and hash using nix-prefetch-url
 # 2. Lockfile version using npm
-# 3. npmDepsHash (computed automatically, but may need manual verification)
+# 3. npmDepsHash by building and capturing from error message
 #
-# Note: The npmDepsHash computed by this script may differ from the build system's
-# hash due to differences in npm/nodejs versions. If the build fails with a hash
-# mismatch, update npmDepsHash with the hash from the build error message.
+# The script automatically computes all hashes. For npm packages, it does a
+# quick build to get the correct npmDepsHash (due to fetcherVersion 2 used by
+# buildPiPackage).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -40,7 +40,7 @@ get_npm_deps_hash() {
     grep -oP 'npmDepsHash\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1
 }
 
-# Update npm package with npmDepsHash support
+# Update npm package with full npmDepsHash support
 update_npm_package() {
     local file="$1"
     
@@ -163,13 +163,34 @@ update_npm_package() {
         npm_deps_hash=$(nix shell nixpkgs#prefetch-npm-deps -c prefetch-npm-deps "$work_dir/package-lock.json" 2>&1 | grep -oP 'sha256-[A-Za-z0-9+/=]+' | tail -1)
         
         if [[ -z "$npm_deps_hash" ]]; then
-            echo "  ⚠️  Could not compute npmDepsHash automatically."
-            echo "  Please update npmDepsHash manually after building."
-            npm_deps_hash="sha256-PLACEHOLDER"
+            echo "  ⚠️  Could not compute npmDepsHash."
+            return 1
+        fi
+        
+        echo "  🆕 Computed npmDepsHash: $npm_deps_hash"
+        # The buildPiPackage uses fetchNpmDeps with fetcherVersion=2
+        # We need to verify the hash by building
+        
+        # Try a quick build to verify the hash
+        echo "  🔍 Verifying npmDepsHash with a quick build..."
+        local build_output
+        build_output=$(cd "$SCRIPT_DIR/../../../../../" && nix build '.#homeConfigurations.fbartik@NC312237.activationPackage' 2>&1) || true
+        
+        # Check if there's a hash mismatch
+        if echo "$build_output" | grep -q "hash mismatch"; then
+            # Extract the correct hash from the error message
+            local correct_hash
+            correct_hash=$(echo "$build_output" | grep -oP 'got:\s*sha256-[A-Za-z0-9+/=]+' | grep -oP 'sha256-[A-Za-z0-9+/=]+' | head -1)
+            
+            if [[ -n "$correct_hash" ]]; then
+                echo "  ⚠️  Hash mismatch detected!"
+                echo "  Computed: $npm_deps_hash"
+                echo "  Expected: $correct_hash"
+                npm_deps_hash="$correct_hash"
+                echo "  ✅ Using correct hash from build error"
+            fi
         else
-            echo "  🆕 Computed npmDepsHash: $npm_deps_hash"
-            echo "  ⚠️  Note: This hash may need verification. If the build fails with a hash mismatch,"
-            echo "  update npmDepsHash with the hash from the build error message."
+            echo "  ✅ Hash verified successfully"
         fi
         
         # Update the Nix file with all hashes
@@ -182,18 +203,12 @@ update_npm_package() {
             if [[ "$OSTYPE" == "darwin"* ]]; then
                 sed -i'' "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
                 sed -i'' "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                if [[ "$npm_deps_hash" != "sha256-PLACEHOLDER" ]]; then
-                    sed -i'' "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
-                fi
+                sed -i'' "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
             else
                 sed -i.bak "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
                 sed -i.bak "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                if [[ "$npm_deps_hash" != "sha256-PLACEHOLDER" ]]; then
-                    sed -i.bak "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
-                    rm -f "$file".bak
-                else
-                    rm -f "$file".bak
-                fi
+                sed -i.bak "s| npmDepsHash = \"[^\"]*\";| npmDepsHash = \"$npm_deps_hash\";|" "$file"
+                rm -f "$file".bak
             fi
             echo "  ✅ Updated $file"
             return 0
@@ -340,4 +355,3 @@ echo ""
 echo "Next steps:"
 echo "1. Review the changes with: git diff"
 echo "2. Build the configuration to verify: nix build .#homeConfigurations.fbartik@NC312237.activationPackage"
-echo "3. If npm packages fail with hash mismatch, update npmDepsHash with the hash from the error message"

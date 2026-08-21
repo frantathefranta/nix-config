@@ -3,7 +3,6 @@
   imports = [
     ./syncthing.nix
     ./github.nix
-    ./beets.nix
     ./pass.nix
     ./nix/nix-init.nix
   ];

@@ -4,6 +4,7 @@
     ./syncthing.nix
     ./github.nix
     ./pass.nix
+    ./wrtag.nix
     ./nix/nix-init.nix
   ];
   home.packages = with pkgs; [

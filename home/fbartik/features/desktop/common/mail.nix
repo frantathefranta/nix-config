@@ -22,7 +22,7 @@ let
     boxes = [ "INBOX" ];
     onNotify = "${pkgs.isync}/bin/mbsync ${account}";
     onNotifyPost = ''
-      ${pkgs.emacs}/bin/emacsclient -e '(mu4e-update-index)'
+      ${pkgs.emacs-unstable}/bin/emacsclient -e '(mu4e-update-index)'
     '';
   };
 

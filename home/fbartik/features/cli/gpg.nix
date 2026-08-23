@@ -5,6 +5,9 @@
   pkgs,
   ...
 }:
+let
+  isSilicium = osConfig != null && osConfig.networking.hostName == "silicium";
+in
 {
   services.gpg-agent = {
     enable = true;
@@ -12,10 +15,10 @@
     # sshKeys = [ "149F16412997785363112F3DBD713BC91D51B831" ];
     enableExtraSocket = true;
     enableScDaemon = true;
-    extraConfig = (lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) ''
+    extraConfig = (lib.mkIf (isSilicium && !pkgs.stdenv.hostPlatform.isDarwin) ''
       scdaemon-program ${pkgs.gnupg-pkcs11-scd}/bin/gnupg-pkcs11-scd
       allow-emacs-pinentry
-    '');
+    '';
     pinentry.package =
       if
         osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable
@@ -54,7 +57,7 @@
         ];
       };
     };
-  home.file.".gnupg/gnupg-pkcs11-scd.conf" = {
+  home.file.".gnupg/gnupg-pkcs11-scd.conf" = lib.mkIf isSilicium {
     text = ''
       providers tpm
       provider-tpm-library /run/current-system/sw/lib/libtpm2_pkcs11.so

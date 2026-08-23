@@ -20,6 +20,7 @@
 
       bc # Calculator
       bottom # System viewer
+      caligula # For image flashing
       cyme # Modern lsusb
       ncdu # TUI disk usage
       eza # Better ls

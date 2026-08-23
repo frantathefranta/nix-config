@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
@@ -30,6 +31,14 @@
     #   ];
     # };
     interfaces.wlp9s0.useDHCP = true;
+    hosts = {
+      # BattleEye anticheat DNS blocking
+      "0.0.0.0" = [
+        "paradise-s1.battleye.com"
+        "test-s1.battleye.com"
+        "paradiseenhanced-s1.battleye.com"
+      ];
+    };
   };
 
   programs = {
@@ -38,8 +47,8 @@
       enable = true;
       remotePlay.openFirewall = true;
       package = pkgs.steam.override {
-        extraPkgs = pkgs:
-          with pkgs; [
+        extraPkgs =
+          pkgs: with pkgs; [
             xorg.libXcursor
             xorg.libXi
             xorg.libXinerama
@@ -60,7 +69,7 @@
     pulseview.enable = true;
     flashrom.enable = true;
   };
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
     graphics.enable = true;
     nvidia.modesetting.enable = true;
@@ -97,7 +106,7 @@
   # nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4;
   # Binary cache
-  nix.settings.substituters = ["https://attic.xuyh0120.win/lantian"];
-  nix.settings.trusted-public-keys = ["lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="];
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
   system.stateVersion = "24.11";
 }

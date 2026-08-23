@@ -30,6 +30,8 @@ in
       "video"
       "wheel"
       "_lldp"
+      "moonshine"
+      "input"
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (

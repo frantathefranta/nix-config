@@ -14,6 +14,7 @@
       enable = true;
     };
   };
+  security.pam.services.sddm.kwallet.enable = true;
   environment.systemPackages = with pkgs; [
     kdePackages.konversation # IRC client
     kdePackages.kcalc

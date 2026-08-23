@@ -18,7 +18,7 @@ in
     extraConfig = (lib.mkIf (isSilicium && !pkgs.stdenv.hostPlatform.isDarwin) ''
       scdaemon-program ${pkgs.gnupg-pkcs11-scd}/bin/gnupg-pkcs11-scd
       allow-emacs-pinentry
-    '';
+    '');
     pinentry.package =
       if
         osConfig ? services.desktopManager.plasma6.enable && osConfig.services.desktopManager.plasma6.enable

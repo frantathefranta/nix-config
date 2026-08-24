@@ -33,6 +33,7 @@
     supportedFilesystems = {
       exfat = true;
     };
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
   disko.devices.disk.main = {
     device = "/dev/disk/by-id/nvme-WDC_PC_SN720_SDAQNTW-256G-1001_192846427976";

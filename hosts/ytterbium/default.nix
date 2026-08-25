@@ -16,6 +16,7 @@
 
     ../common/optional/fwupd.nix
     ../common/optional/secure-boot.nix
+    ../common/optional/mlnx-ofed.nix
   ];
 
   hardware.facter.reportPath = ./facter.json;

@@ -97,6 +97,11 @@
 
     nix-init.url = "github:nix-community/nix-init";
 
+    mlnx-ofed-nixos = {
+      url = "github:codgician/mlnx-ofed-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -155,9 +160,9 @@
         extraConfig = import ./dns.nix;
       };
       /*
-      Servers managed with both nixosConfigurations and colmena (see below).
-      installer-iso and the workstations are declared
-      separately since they aren't colmena deploy targets.
+        Servers managed with both nixosConfigurations and colmena (see below).
+        installer-iso and the workstations are declared
+        separately since they aren't colmena deploy targets.
       */
       serverHosts = [
         "hydrogen"

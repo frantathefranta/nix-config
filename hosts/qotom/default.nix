@@ -17,7 +17,6 @@
     ../common/roles/server.nix
 
     ../common/optional/smartd.nix
-    ../common/optional/fwupd.nix
     # ../common/optional/prometheus-node-exporter.nix
     # ../common/optional/autoupgrade.nix
     # ../common/optional/netlogd.nix
@@ -38,14 +37,6 @@
       };
     };
 
-    interfaces.wlp2s0.ipv4 = {
-      addresses = [
-        {
-          address = "172.32.254.1";
-          prefixLength = 27;
-        }
-      ];
-    };
     firewall = {
       interfaces = {
         enp1s0 = {

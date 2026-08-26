@@ -20,42 +20,6 @@
         };
       };
     };
-    kea.dhcp4 = {
-      enable = true;
-      settings = {
-        interfaces-config = {
-          interfaces = [
-            "wlp2s0/172.32.254.1"
-          ];
-        };
-        lease-database = {
-          name = "/var/lib/kea/dhcp4.leases";
-          persist = true;
-          type = "memfile";
-        };
-        rebind-timer = 2000;
-        renew-timer = 1000;
-        subnet4 = [
-          {
-            id = 1;
-            interface = "wlp2s0";
-            pools = [
-              {
-                pool = "172.32.254.16 - 172.32.254.31";
-              }
-            ];
-            option-data = [
-              {
-                name = "routers";
-                data = "172.32.254.1";
-              }
-            ];
-            subnet = "172.32.254.0/27";
-          }
-        ];
-        valid-lifetime = 4000;
-      };
-    };
   };
   networking = {
     firewall.interfaces.wlp2s0.allowedUDPPorts = [
@@ -67,7 +31,16 @@
       externalInterface = "enp1s0";
     };
   };
-  systemd.services.kea-dhcp4-server.after = [ config.systemd.services.systemd-networkd.name ];
+  systemd.network.networks."40-wlp2s0" = {
+    matchConfig.Name = "wlp2s0";
+    address = [ "172.32.254.1/27" ];
+    # networkConfig.DHCPServer = true;
+    # dhcpServerConfig = {
+    #   # PoolSubnet = "172.32.254.16/29"; # 172.32.254.16 - 172.32.254.31
+    #   PoolSize = 16;
+    #   ServerAddress = "172.32.254.1";
+    # };
+  };
 
   sops.secrets.wpa-password = {
     sopsFile = ../secrets.yaml;

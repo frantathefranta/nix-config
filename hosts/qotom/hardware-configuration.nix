@@ -31,6 +31,9 @@
     };
   };
 
+  systemd.tpm2.enable = false;
+  systemd.units."dev-tpmrm0.device".enable = false;
+
   disko.devices.disk.main = {
     device = "/dev/disk/by-id/ata-LITEON_LMH-256V2M-11_MSATA_256GB_TW02HNG6LOH00794B1FQ";
     type = "disk";

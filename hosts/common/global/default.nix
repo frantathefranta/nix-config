@@ -65,6 +65,7 @@
     traceroute
     inetutils
     git
+    pciutils
   ];
 
   hardware.enableRedistributableFirmware = lib.mkIf (config.services.qemuGuest.enable != true) true;

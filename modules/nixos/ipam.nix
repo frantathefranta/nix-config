@@ -6,6 +6,15 @@
 let
   topConfig = config;
 
+  # lib.types.macAddr is not available in the pinned nixpkgs.
+  macAddr = lib.types.mkOptionType {
+    name = "macAddr";
+    description = "a MAC address";
+    check =
+      v: builtins.match "([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}" (toString v) != null;
+    merge = loc: defs: lib.mergeOverrideMerge loc (v: v) defs;
+  };
+
   hostType = lib.types.submodule (
     { config, ... }:
     {
@@ -20,6 +29,15 @@ let
           type = lib.types.int;
           default = 24;
           description = "IPv4 prefix length.";
+        };
+        macAddress = lib.mkOption {
+          type = lib.types.nullOr macAddr;
+          default = null;
+          example = "52:54:00:12:34:56";
+          description = ''
+            Primary NIC MAC address for this host.
+            Used to track hardware identity alongside the IP assignments.
+          '';
         };
         ipv6Suffix = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -82,6 +100,7 @@ in
       example = lib.literalExpression ''
         {
           ipv4 = "10.32.10.90";
+          macAddress = "52:54:00:12:34:56";
           ipv6Suffix = "10:32:10:90";
         }
       '';

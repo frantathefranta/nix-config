@@ -17,5 +17,6 @@
     ./rust-motd.nix
     ./syslog.nix
     ./oxidized.nix
+    ./webdav.nix
   ];
 }

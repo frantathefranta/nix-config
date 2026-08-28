@@ -171,6 +171,27 @@
         "type": "github"
       }
     },
+    "emacs-tramp-rpc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1787803849,
+        "narHash": "sha256-WzmnaaaQSmuGMVaohU2J7XG2P6PR8WiHqIgUdzn8YVU=",
+        "owner": "ArthurHeymans",
+        "repo": "emacs-tramp-rpc",
+        "rev": "193bf6d6f54290b5ae6e3e693bac445c52fc398f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ArthurHeymans",
+        "repo": "emacs-tramp-rpc",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -600,7 +621,7 @@
           "nixpkgs"
         ],
         "pre-commit": "pre-commit",
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay_2"
       },
       "locked": {
         "lastModified": 1782141370,
@@ -1028,6 +1049,7 @@
         "direnv-instant": "direnv-instant",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
+        "emacs-tramp-rpc": "emacs-tramp-rpc",
         "gobgp": "gobgp",
         "hardware": "hardware",
         "home-manager": "home-manager",
@@ -1050,6 +1072,27 @@
       }
     },
     "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "emacs-tramp-rpc",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1768445213,
+        "narHash": "sha256-y0BglISgDr61vvdb35m0O4npuqh1pojlBNDILo9j8AI=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "1cd63408e71cc0e6a89ff2cb7c4107214e2523cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": [
           "lanzaboote",

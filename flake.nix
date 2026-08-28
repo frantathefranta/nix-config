@@ -101,6 +101,10 @@
       url = "github:codgician/mlnx-ofed-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    emacs-tramp-rpc = {
+      url = "github:ArthurHeymans/emacs-tramp-rpc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 

@@ -23,6 +23,12 @@
     # without putting a nixpkgs `nix` binary on PATH ahead of Determinate's.
     nix.man
     # d2
+
+    #work
+    openvox # Puppet
+    puppet-lint
+    r10k
+    bundler
   ];
   programs.nh = {
     clean = {

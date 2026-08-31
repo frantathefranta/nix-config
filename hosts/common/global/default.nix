@@ -47,6 +47,9 @@
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays ++ [
       inputs.emacs-overlay.overlays.default
+      # Adds the `tramp-rpc` package to `emacsPackagesFor` scopes; needed by
+      # the hosts that configure Emacs via home/fbartik/features/editor/emacs.nix
+      inputs.emacs-tramp-rpc.overlays.default
     ];
     config = {
       allowUnfree = true;

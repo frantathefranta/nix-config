@@ -18,6 +18,7 @@ let
         vterm
         mu4e
         pbcopy
+        tramp-rpc
       ]
     );
   /*

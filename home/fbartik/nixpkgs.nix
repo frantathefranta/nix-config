@@ -27,6 +27,7 @@ in
 
   nixpkgs.overlays = builtins.attrValues outputs.overlays ++ [
     inputs.emacs-overlay.overlays.default
+    inputs.emacs-tramp-rpc.overlays.default
   ];
   nixpkgs.config = {
     allowUnfree = true;

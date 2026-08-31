@@ -18,7 +18,6 @@ let
         vterm
         mu4e
         pbcopy
-        tramp-rpc
       ]
     );
   /*
@@ -138,7 +137,6 @@ let
   '';
 in
 {
-  nixpkgs.overlays = [ inputs.emacs-tramp-rpc.overlays.default ];
   programs.emacs = {
     enable = true;
     package = emacs;

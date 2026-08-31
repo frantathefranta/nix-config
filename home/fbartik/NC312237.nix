@@ -73,4 +73,6 @@
   };
   # TODO: Consider adding https://github.com/DivitMittal/hammerspoon-nix
 
+  nixpkgs.overlays = [ inputs.emacs-tramp-rpc.overlays.default ];
+
 }

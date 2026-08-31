@@ -14,6 +14,7 @@
     ./features/productivity/claude-code.nix
     ./features/productivity/pi
     ./features/productivity/github.nix
+    ./features/productivity/forgejo.nix
     ./features/productivity/nix/nix-init.nix
   ];
   home.packages = with pkgs; [

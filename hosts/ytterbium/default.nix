@@ -9,6 +9,7 @@
     inputs.hardware.nixosModules.common-pc-ssd
     inputs.disko.nixosModules.disko
     ./disko.nix
+    ./services
 
     ../common/global
     ../common/users/fbartik

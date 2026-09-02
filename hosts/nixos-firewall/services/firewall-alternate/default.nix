@@ -118,6 +118,9 @@ in
           ipv4Addresses = [ "10.32.10.210/32" ];
           ipv6Addresses = [ "2600:1702:6630:3fed:ba85:84ff:feb9:446e/128" ];
         };
+        molybdenum = {
+          ipv6Addresses = [ "2600:1702:6630:3fed::242/128" ];
+        };
         qbittorrent = {
           ipv4Addresses = [ "10.33.40.63" ];
           ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:63" ];

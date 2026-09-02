@@ -22,7 +22,17 @@
   ];
 
   hardware.facter.reportPath = ./facter.json;
-  boot.kernelParams = [ "console=ttyS1,115200n8" ];
+  boot = {
+    kernelParams = [ "console=ttyS1,115200n8" ];
+    supportedFilesystems = {
+      zfs = true;
+    };
+    zfs = {
+      forceImportRoot = false;
+      extraPools = [ "emc1" ];
+      devNodes = "/dev/disk/by-id";
+    };
+  };
 
   networking = {
     hostName = "ytterbium";
@@ -31,6 +41,10 @@
       "${config.networking.hostName}.${config.networking.domain}" = {
         a.data = [ config.meta.ipam.host.ipv4 ];
         aaaa.data = [ "2600:1702:6630:3fed:${config.meta.ipam.host.ipv6Suffix}" ];
+      };
+      "${config.networking.hostName}-40g.${config.networking.domain}" = {
+        a.data = [ "10.0.0.91" ];
+        aaaa.data = [ "2600:1702:6630:3fea::91" ];
       };
     };
   };
@@ -96,10 +110,10 @@
         neighbor enp1s0np0 capability extended-nexthop
         address-family ipv4 unicast
           network 10.0.0.91/32
-          network 2600:1702:6630:3fea::91/128
         exit-address-family
         address-family ipv6 unicast
           neighbor enp1s0np0 activate
+          network 2600:1702:6630:3fea::91/128
         exit-address-family
       ip prefix-list loopbacks_ips seq 10 permit 0.0.0.0/0 ge 32
       route-map correct_src_ipv4 permit 1

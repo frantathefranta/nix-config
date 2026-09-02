@@ -5,6 +5,6 @@
     openFirewall = true;
   };
   networking.domains.subDomains = {
-    "plex.${config.networking.domain}".cname.data = config.networking.fqdn;
+    "plex.${config.networking.domain}".cname.data = config.networking.hostName;
   };
 }

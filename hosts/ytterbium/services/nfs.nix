@@ -36,6 +36,14 @@
           "mountpoint"
         ];
       };
+      "/emc1/documents" = {
+        "2600:1702:6630:3fe0::/60" = [
+          "sec=sys"
+          "rw"
+          "no_subtree_check"
+          "mountpoint"
+        ];
+      };
     };
   };
   networking.firewall = {

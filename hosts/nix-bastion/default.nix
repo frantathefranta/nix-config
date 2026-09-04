@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, config, ... }:
 let
   lo_ipv6 = "2600:1702:6630:3fec::10:11";
 in
@@ -10,6 +10,7 @@ in
     ../common/roles/server.nix
     ../common/optional/qemu-guest-agent.nix
     ../common/optional/1password.nix
+    ../common/optional/dn42-client.nix
     ../common/users/fbartik
     ./services
   ];
@@ -32,7 +33,6 @@ in
   networking.nameservers = [ ];
 
   time.timeZone = "America/Detroit";
-  security.pki.certificateFiles = [ "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ];
   users.groups = {
     media = {
       gid = 1003;

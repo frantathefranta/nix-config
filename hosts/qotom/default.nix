@@ -17,6 +17,7 @@
     ../common/roles/server.nix
 
     ../common/optional/smartd.nix
+    ../common/optional/dn42-client.nix
     # ../common/optional/prometheus-node-exporter.nix
     # ../common/optional/autoupgrade.nix
     # ../common/optional/netlogd.nix
@@ -49,7 +50,6 @@
     };
   };
   time.timeZone = "America/Detroit";
-  security.pki.certificateFiles = [ "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ];
 
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
   networking.nameservers = [ ];

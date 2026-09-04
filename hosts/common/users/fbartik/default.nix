@@ -32,6 +32,7 @@ in
       "_lldp"
       "moonshine"
       "input"
+      "garage"
     ];
 
     openssh.authorizedKeys.keys = lib.splitString "\n" (

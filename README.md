@@ -43,7 +43,14 @@ nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nix
 
 
 ## Terraform
-Running terraform (tofu) with 1Password CLI secret injection:
+Running terraform (tofu): the repo-root `.envrc` resolves `op://` refs from
+`.1password` into the shell via direnv, so tofu picks up the credentials
+(`TF_VAR_*`, `AWS_*`) directly:
 ``` sh
+$ tofu -chdir=terraform/garage apply
+```
+Without direnv, use `op run` to resolve them for a single command:
+``` sh
+$ op run --env-file=.1password -- tofu -chdir=terraform/garage apply
 $ op run --env-file=terraform/uptimekuma/.env.1password -- tofu -chdir=terraform/uptimekuma apply
 ```

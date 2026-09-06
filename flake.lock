@@ -646,11 +646,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787943973,
-        "narHash": "sha256-+TC38PP7g706strJ2rAcBE5o+3JO/t+wTR6/N1DkEkY=",
+        "lastModified": 1788522452,
+        "narHash": "sha256-uCxjodW7Akg0zIZy+i7DBFQ8tnGnVh3LbXi/SQS4pZU=",
         "owner": "codgician",
         "repo": "mlnx-ofed-nixos",
-        "rev": "cdacbb1edf8aa30f1bdae0243c768f8938f2b38c",
+        "rev": "1cefb659337b61e990105f0cfe3ab1b05c81e4d0",
         "type": "github"
       },
       "original": {

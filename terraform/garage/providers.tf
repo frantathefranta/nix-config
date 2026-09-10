@@ -13,7 +13,7 @@ terraform {
     key    = "garage/terraform.tfstate"
     region = "garage"
     endpoints = {
-      s3 = "http://s3.infra.franta.us:3900"
+      s3 = "http://ytterbium.infra.franta.us:3900"
     }
     use_path_style              = true
     skip_credentials_validation = true

@@ -41,6 +41,6 @@
     3902
     3903
   ];
-  networking.domains.subDomains."s3.${config.networking.domain}".cname.data = config.networking.hostName;
+  networking.domains.subDomains."s3.${config.networking.domain}".cname.data = "${config.networking.hostName}-40g";
   sops.secrets."garage/env".sopsFile = ../secrets.yaml;
 }

@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -20,14 +18,8 @@
       extensions = [ ./extensions ];
       skills = [ ./skills ];
       enabledModels = [
-        "openwebui/qwen3-coder-next"
-        "openwebui/qwen35-122b-fp8"
-        "openwebui/gpt-oss-120b"
-        "openwebui/qwen36-fp8"
         "openwebui/qwen3.8-27b-fp8"
-        "anthropic/claude-opus-4-8"
-        "anthropic/claude-opus-5"
-        "anthropic/claude-sonnet-5"
+        "openwebui/qwen35-122b-fp8"
       ];
     };
   };

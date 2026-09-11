@@ -19,5 +19,6 @@ rec {
   udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay { };
   pi-acp = pkgs.callPackage ./pi-acp { };
   tea-dash = pkgs.callPackage ./tea-dash { };
+  flate = pkgs.callPackage ./flate { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

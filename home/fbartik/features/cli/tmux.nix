@@ -164,6 +164,8 @@
       set -g status-justify centre
       set -g status-right-length 100
       set -g status-position bottom
+
+      set -g extended-keys on
     '';
   };
 

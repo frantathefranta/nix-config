@@ -72,11 +72,58 @@
     };
   };
 
+  systemd.services.edge610-sfp-tx-enable = {
+    description = "Clear VEP1400 CPLD SFP TX_DISABLE bits";
+    wantedBy = [ "network-pre.target" "multi-user.target" ];
+    before = [ "network-pre.target" ];
+    after = [ "systemd-modules-load.service" ];
+    path = [ pkgs.coreutils pkgs.gnugrep pkgs.i2c-tools ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      set -euo pipefail
+      bus=""
+
+      # Wait briefly for the iSMT PCI function and identify its dynamic bus ID.
+      # Linux 6.18 removed /sys/class/i2c-adapter; older kernels still expose it.
+      for _ in $(seq 1 10); do
+        for adapter in /sys/bus/i2c/devices/i2c-* /sys/class/i2c-adapter/i2c-*; do
+          [ -r "$adapter/name" ] || continue
+          if grep -qx "SMBus iSMT adapter at dff3c000" "$adapter/name"; then
+            bus="''${adapter##*/i2c-}"
+            break 2
+          fi
+        done
+        sleep 1
+      done
+
+      [ -n "$bus" ] || {
+        echo "VEP1400 iSMT adapter was not found" >&2
+        exit 1
+      }
+
+      # Exact Dell DiagOS rc.local SFP TX-enable sequence. Do not PCI-rescan.
+      i2cset -y "$bus" 0x31 0x10 0x00 b
+      i2cset -y "$bus" 0x31 0x11 0x00 b
+
+      for reg in 0x10 0x11; do
+        value="$(i2cget -y "$bus" 0x31 "$reg")"
+        if (( value & 0x80 )); then
+          echo "VEP1400 SFP TX_DISABLE remains set: reg $reg = $value" >&2
+          exit 1
+        fi
+      done
+    '';
+  };
+
   services.btrfs.autoScrub = {
     enable = true;
     fileSystems = ["/"];
   };
 
+  boot.kernelParams = ["console=ttyS0,115200n8"];
   # Filesystems not managed by Disko
   fileSystems = {
     "/home" = {

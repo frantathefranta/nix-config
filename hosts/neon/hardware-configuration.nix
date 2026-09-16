@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{ inputs, pkgs, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
   ];
@@ -41,7 +41,7 @@
             };
             content = {
               type = "btrfs";
-              extraArgs = ["-f"];
+              extraArgs = [ "-f" ];
               subvolumes = {
                 "/rootfs" = {
                   mountpoint = "/";
@@ -58,7 +58,7 @@
                 };
                 "/swap" = {
                   mountpoint = "/swap";
-                  mountOptions = ["noatime"];
+                  mountOptions = [ "noatime" ];
                   swap.swapfile = {
                     size = "2G";
                     path = "swapfile";
@@ -74,10 +74,17 @@
 
   systemd.services.edge610-sfp-tx-enable = {
     description = "Clear VEP1400 CPLD SFP TX_DISABLE bits";
-    wantedBy = [ "network-pre.target" "multi-user.target" ];
+    wantedBy = [
+      "network-pre.target"
+      "multi-user.target"
+    ];
     before = [ "network-pre.target" ];
     after = [ "systemd-modules-load.service" ];
-    path = [ pkgs.coreutils pkgs.gnugrep pkgs.i2c-tools ];
+    path = [
+      pkgs.coreutils
+      pkgs.gnugrep
+      pkgs.i2c-tools
+    ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
@@ -120,10 +127,10 @@
 
   services.btrfs.autoScrub = {
     enable = true;
-    fileSystems = ["/"];
+    fileSystems = [ "/" ];
   };
 
-  boot.kernelParams = ["console=ttyS0,115200n8"];
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
   # Filesystems not managed by Disko
   fileSystems = {
     "/home" = {

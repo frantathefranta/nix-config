@@ -6,7 +6,6 @@
 }:
 
 {
-  imports = [ ./edge610-diag.nix ];
   /*
     Only import installation-cd-minimal.nix if using nix build .#nixosConfigurations.installer-iso.config.system.build.isoImage
     If using nixos-rebuild build-image (or nh os build-image), this is not necessary

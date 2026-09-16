@@ -55,6 +55,21 @@
       url = "github:Janik-Haag/nixos-dns";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # ssm (Secure Shell Manager) -- keyboard TUI to browse/tag the nix-generated
+    # SSH hosts. Pulled as a plain source (flake = false) and built ourselves:
+    # the upstream flake's pinned Go-module (vendor) hash is stale for current
+    # nixpkgs, so building via its flake fails a hash check.
+    ssm-src = {
+      url = "github:lfaoro/ssm?rev=f8f1bb65f7012fac5ed302c560a0fe3bd0335fdc";
+      flake = false;
+    };
+    # Cloud hosts (cloud.franta.us) live in a separate repo, pulled in as a plain
+    # source (flake = false) so its flake input graph stays out of our lock.
+    # Only the host list is read from its flake.nix.
+    nix-cloud-src = {
+      url = "git+https://git.franta.us/franta/nix-cloud";
+      flake = false;
+    };
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";

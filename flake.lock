@@ -775,6 +775,22 @@
         "type": "github"
       }
     },
+    "nix-cloud-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789351778,
+        "narHash": "sha256-0VPHeiv87w5oT/YJkdE+0ViSgMPzCDCJPw+dmuBw1Ss=",
+        "ref": "refs/heads/main",
+        "rev": "7d2e6205cb03956f6536712d9ae5054ced1e3cc6",
+        "revCount": 562,
+        "type": "git",
+        "url": "https://git.franta.us/franta/nix-cloud"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.franta.us/franta/nix-cloud"
+      }
+    },
     "nix-github-actions": {
       "inputs": {
         "nixpkgs": [
@@ -1060,6 +1076,7 @@
         "nh": "nh",
         "niri": "niri",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
+        "nix-cloud-src": "nix-cloud-src",
         "nix-init": "nix-init",
         "nixos-dns": "nixos-dns",
         "nixpkgs": "nixpkgs_5",
@@ -1067,6 +1084,7 @@
         "nnf": "nnf",
         "sops-nix": "sops-nix",
         "srvos": "srvos",
+        "ssm-src": "ssm-src",
         "stylix": "stylix",
         "systems": "systems_6"
       }
@@ -1173,6 +1191,23 @@
       "original": {
         "owner": "nix-community",
         "repo": "srvos",
+        "type": "github"
+      }
+    },
+    "ssm-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789416362,
+        "narHash": "sha256-bpPDlAAFIr9DYrjMzaFwWGQmi3qIH5CDMc+t97nBTTI=",
+        "owner": "lfaoro",
+        "repo": "ssm",
+        "rev": "f8f1bb65f7012fac5ed302c560a0fe3bd0335fdc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lfaoro",
+        "repo": "ssm",
+        "rev": "f8f1bb65f7012fac5ed302c560a0fe3bd0335fdc",
         "type": "github"
       }
     },

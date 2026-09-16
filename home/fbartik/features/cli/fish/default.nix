@@ -68,6 +68,10 @@ in
         set cmd (commandline -cp)
         bash -ic "source ${./get-bash-completions.sh}; get_completions '$cmd'"
       '';
+      # ssm: browse the nix-generated host list (~/.ssh/nix_hosts). fish has no
+      # `VAR=x cmd` prefix, so set SSM_SSH_CONFIG_PATH via `env`; `command` calls
+      # the real binary so the function does not recurse into itself.
+      ssm = "env SSM_SSH_CONFIG_PATH=$HOME/.ssh/nix_hosts command ssm $argv";
     };
     shellInit =
       /* fish */ ''

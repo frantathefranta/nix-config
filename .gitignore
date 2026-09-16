@@ -5,6 +5,7 @@ tmp/
 
 .direnv/
 result*
+*.iso
 ssl/*pem
 **/**.key
 **/.terraform

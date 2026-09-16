@@ -6,6 +6,7 @@
 }:
 
 {
+  imports = [ ./edge610-diag.nix ];
   /*
     Only import installation-cd-minimal.nix if using nix build .#nixosConfigurations.installer-iso.config.system.build.isoImage
     If using nixos-rebuild build-image (or nh os build-image), this is not necessary
@@ -25,6 +26,15 @@
   ];
   networking.hostName = "nixos-installer";
   time.timeZone = "America/Detroit";
+  /*
+    Headless boxes boot over the serial console. Bake it into the kernel command
+    line so it's the default for EVERY boot-menu entry: nixpkgs iso-image.nix puts
+    cfg.boot.kernelParams into each isolinux APPEND / grub linux line. boot.kernelParams
+    is an accumulating list option, so this coexists with the CD defaults
+    (nohibernate, root=fstab, loglevel=4, lsm=...). Without this you must pick the
+    "Serial console=ttyS0,115200n8" submenu entry every boot.
+  */
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
   security = {
     sudo.wheelNeedsPassword = false;
   };

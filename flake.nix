@@ -172,6 +172,7 @@
         "nix-bastion"
         "nixos-firewall"
         "qotom"
+        "neon"
       ];
     in
     {

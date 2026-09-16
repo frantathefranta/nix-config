@@ -1,0 +1,62 @@
+diff -ruN a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c	2026-09-15 16:05:34.886278000 -0400
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c	2026-09-15 16:06:50.853532373 -0400
+@@ -156,6 +156,11 @@
+ MODULE_PARM_DESC(allow_unsupported_sfp,
+ 		 "Allow unsupported and untested SFP+ modules on 82599-based adapters");
+ 
++static bool cu_sfp_as_sx;
++module_param(cu_sfp_as_sx, bool, 0);
++MODULE_PARM_DESC(cu_sfp_as_sx,
++		 "Treat 1G Cu (1000BASE-T) SFP modules as 1G SX on X550-based adapters");
++
+ #define DEFAULT_MSG_ENABLE (NETIF_MSG_DRV|NETIF_MSG_PROBE|NETIF_MSG_LINK)
+ static int debug = -1;
+ module_param(debug, int, 0);
+@@ -10766,6 +10771,9 @@
+ 	if (allow_unsupported_sfp)
+ 		hw->allow_unsupported_sfp = allow_unsupported_sfp;
+ 
++	if (cu_sfp_as_sx)
++		hw->cu_sfp_as_sx = cu_sfp_as_sx;
++
+ 	/* reset_hw fills in the perm_addr as well */
+ 	hw->phy.reset_if_overtemp = true;
+ 	err = hw->mac.ops.reset_hw(hw);
+diff -ruN a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h	2026-09-15 16:05:34.886503000 -0400
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h	2026-09-15 16:06:50.854020376 -0400
+@@ -3646,6 +3646,7 @@
+ 	bool				adapter_stopped;
+ 	bool				force_full_reset;
+ 	bool				allow_unsupported_sfp;
++	bool				cu_sfp_as_sx;
+ 	bool				wol_enabled;
+ 	bool				need_crosstalk_fix;
+ };
+diff -ruN a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c	2026-09-15 16:05:34.886724000 -0400
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c	2026-09-15 16:06:50.867276341 -0400
+@@ -1626,9 +1626,21 @@
+ 	case ixgbe_sfp_type_1g_lx_core1:
+ 		*linear = false;
+ 		break;
+-	case ixgbe_sfp_type_unknown:
+ 	case ixgbe_sfp_type_1g_cu_core0:
++		if (hw->cu_sfp_as_sx) {
++			pr_warn("ixgbe: cu_sfp_as_sx: treating 1G Cu SFP as 1G SX (unsupported by Intel)\n");
++			*linear = false;
++			hw->phy.sfp_type = ixgbe_sfp_type_1g_sx_core0;
++			break;
++		}
+ 	case ixgbe_sfp_type_1g_cu_core1:
++		if (hw->cu_sfp_as_sx) {
++			pr_warn("ixgbe: cu_sfp_as_sx: treating 1G Cu SFP as 1G SX (unsupported by Intel)\n");
++			*linear = false;
++			hw->phy.sfp_type = ixgbe_sfp_type_1g_sx_core1;
++			break;
++		}
++	case ixgbe_sfp_type_unknown:
+ 	default:
+ 		return IXGBE_ERR_SFP_NOT_SUPPORTED;
+ 	}

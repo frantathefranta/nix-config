@@ -1,15 +1,15 @@
 {
   "name": "@juicesharp/rpiv-ask-user-question",
-  "version": "2.6.4",
+  "version": "2.10.1",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "@juicesharp/rpiv-ask-user-question",
-      "version": "2.6.4",
+      "version": "2.10.1",
       "license": "MIT",
       "dependencies": {
-        "@juicesharp/rpiv-config": "^2.6.4",
+        "@juicesharp/rpiv-config": "^2.10.1",
         "typebox": "^1.1.24"
       },
       "peerDependencies": {
@@ -24,9 +24,9 @@
       }
     },
     "node_modules/@juicesharp/rpiv-config": {
-      "version": "2.6.4",
-      "resolved": "https://registry.npmjs.org/@juicesharp/rpiv-config/-/rpiv-config-2.6.4.tgz",
-      "integrity": "sha512-nbY5W3kV7D0pVTbWKyi3C74H8QPTmJi4nNo5DelqR4rPOG26i02hqqAH+A3guTP86f/bbwFNUgJ3QQgLZnDoPg==",
+      "version": "2.10.1",
+      "resolved": "https://registry.npmjs.org/@juicesharp/rpiv-config/-/rpiv-config-2.10.1.tgz",
+      "integrity": "sha512-iqW1Vy/2alnzGDVldyOgDfqOE+yy7Ppb61AG9LKWBGdf1RmHsmLBF4GCESL/PmxrtsinskgEoX6nmN5EmVOnbA==",
       "license": "MIT",
       "dependencies": {
         "typebox": "^1.1.24"

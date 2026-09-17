@@ -1,12 +1,12 @@
 { pkgs, ... }:
 let
-  version = "2.6.4";
+  version = "2.10.1";
   rpivAskUserQuestion = pkgs.buildPiPackage {
     pname = "rpiv-ask-user-question";
     inherit version;
     src = pkgs.fetchzip {
       url = "https://registry.npmjs.org/@juicesharp/rpiv-ask-user-question/-/rpiv-ask-user-question-${version}.tgz";
-      hash = "sha256-8WFGH7sA1+k6uJYFr+1flsNlpT9XPTKLoqwznGvoMJs=";
+      hash = "sha256-8gkpIhx0vnb7KX9H0+MdDTtlCHnKnVZPoODLnXF5k/M=";
     };
     prePatch = ''
       ${pkgs.lib.getExe pkgs.jq} 'del(.devDependencies)' package.json > package.json.tmp
@@ -18,7 +18,7 @@ let
       "--omit=peer"
       "--legacy-peer-deps"
     ];
-    npmDepsHash = "sha256-7wxcuLJ5LwG/WrRUaktpiRhfqneI+MjxRNUOWUQLYp0=";
+    npmDepsHash = "sha256-Yxdg6PAoHKlGoZ8k/g81I/VtjQ4qC9Qwsa2jbEEneBI=";
   };
 in
 {

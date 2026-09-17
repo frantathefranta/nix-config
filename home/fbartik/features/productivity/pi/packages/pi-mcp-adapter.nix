@@ -4,14 +4,14 @@
 }: let
   piMcpAdapter = pkgs.buildPiPackage {
     pname = "pi-mcp-adapter";
-    version = "2.32.1";
+    version = "2.34.0";
     src = pkgs.fetchFromGitHub {
       owner = "nicobailon";
       repo = "pi-mcp-adapter";
-      rev = "10a45367e033a32026987a75d6f401e37340c86f";
-      hash = "sha256-/NrC8cVEdhswKEQcuVugNSOCGJ3/c6k2Qg8o6hg0X14=";
+      rev = "ccf0e3e69f5b96adcb99a7bcdc38e0dd4581c71a";
+      hash = "sha256-YpiJROIG0/U81wAoImjktbg/d5wGnc6o130IlOrTyEE=";
     };
-    npmDepsHash = "sha256-dOdYmNJI8oXHMFJTxIlmGsIhpNcSuXrrSkT/u3LmhhM=";
+    npmDepsHash = "sha256-ZxrUJXi/seXm4OhAqbVdJO77J/VhDSRtEFFS5KN8pZA=";
   };
 in {
   programs.pi-coding-agent.settings.packages = [piMcpAdapter];

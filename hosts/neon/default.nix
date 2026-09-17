@@ -21,12 +21,18 @@
   networking = {
     hostName = "neon";
     domain = "infra.franta.us";
+    domains.subDomains = {
+      "${config.networking.hostName}.${config.networking.domain}" = {
+        a.data = [ config.meta.ipam.host.ipv4 ];
+        aaaa.data = [ "2600:1702:6630:3fed:${config.meta.ipam.host.ipv6Suffix}" ];
+      };
+      };
   };
 
   systemd.network.enable = true;
 
   systemd.network.networks."10-mgmt" = {
-    matchConfig.Name = "enp0s31f6";
+    matchConfig.Name = "eno4";
     address = [ "${config.meta.ipam.host.ipv4}/24" ];
     networkConfig = {
       IPv6AcceptRA = true;
@@ -52,7 +58,7 @@
   meta.ipam.host = {
     ipv4 = "10.32.10.92";
     ipv6Suffix = "10:32:10:92";
-    macAddress = "";
+    macAddress = "18:5a:58:c2:74:63";
   };
 
 

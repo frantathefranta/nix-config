@@ -37,7 +37,7 @@
             settings = {
               allowDiscards = true;
               # scripts/add-host-key.sh deploys the 1Password LUKS key here
-              keyFile = "/tmp/secret.key";
+              # keyFile = "/tmp/secret.key";
             };
             content = {
               type = "btrfs";

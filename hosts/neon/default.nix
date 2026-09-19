@@ -3,10 +3,12 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.common-cpu-intel
     inputs.hardware.nixosModules.common-pc-ssd
+    ./services
 
     ./hardware-configuration.nix
 
@@ -26,7 +28,7 @@
         a.data = [ config.meta.ipam.host.ipv4 ];
         aaaa.data = [ "2600:1702:6630:3fed:${config.meta.ipam.host.ipv6Suffix}" ];
       };
-      };
+    };
   };
 
   systemd.network.enable = true;
@@ -60,7 +62,6 @@
     ipv6Suffix = "10:32:10:92";
     macAddress = "18:5a:58:c2:74:63";
   };
-
 
   time.timeZone = "America/Detroit";
   system.stateVersion = "26.05";

@@ -18,15 +18,7 @@ keys:
     # age-plugin-yubikey -g -f --touch-policy cached --pin-policy never --slot 2 --name age-sops-nix
     - &NC312237 age1yubikey1qt2ve24yxkrvzuagxzjjp4lud44k4fwfw38345q0q7lveuyla3upjw9mjgm
 creation_rules:
-  - path_regex: hosts/common/secrets.ya?ml$
-    key_groups:
-      - age:
-          - *franta
-          - *nixos-firewall
-          - *neon
-        pgp:
-          - *franta-gpg
-  - path_regex: hosts/common/users/fbartik/secrets.ya?ml$
+  - path_regex: hosts/common/(.+/)?secrets\.ya?ml$
     key_groups:
       - age:
           - *franta

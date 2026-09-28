@@ -41,7 +41,7 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote?ref=refs/tags/v1.1.0";
+      url = "github:nix-community/lanzaboote?ref=refs/tags/v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

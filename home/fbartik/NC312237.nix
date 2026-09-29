@@ -74,6 +74,30 @@
   };
   # TODO: Consider adding https://github.com/DivitMittal/hammerspoon-nix
 
+  programs.fish.functions.puppet_dev = /* fish */ ''
+    # Run the OSC puppet-dev container with the current directory mounted as /work
+    function puppet_dev --description 'Run the OSC puppet-dev container against the current directory'
+      if test (count $argv) -eq 0
+        echo "puppet_dev needs a command to execute"
+        return
+      end
+
+      if not command -q podman
+        echo "podman must be in PATH"
+        return
+      end
+
+      podman run --rm -it --pull always \
+        -u puppet --userns keep-id:uid=52,gid=52 \
+        -v $HOME/.ssh:/home/puppet/.ssh \
+        -v $HOME/.gitconfig:/home/puppet/.gitconfig:ro \
+        -v (pwd):/work \
+        -w /work \
+        -e DEBUG \
+        docker-registry.osc.edu/osc/puppet-dev:latest $argv
+    end
+  '';
+
   nixpkgs.overlays = [ inputs.emacs-tramp-rpc.overlays.default ];
 
 }

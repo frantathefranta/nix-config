@@ -24,10 +24,7 @@
       enabledModels = [
         "openwebui/qwen3.8-27b-fp8"
         "openwebui/qwen35-122b-fp8"
-        "openai-codex/gpt-5.6-sol"
-        "openai-codex/gpt-5.6-terra"
-        "openai-codex/gpt-5.6-luna"
-        "openai-codex/gpt-6-sol"
+        "openai-codex/gpt-6.1-sol"
         "openai-codex/gpt-6-terra"
         "openai-codex/gpt-6-luna"
       ];

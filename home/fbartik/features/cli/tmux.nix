@@ -166,6 +166,7 @@
       set -g status-position bottom
 
       set -g extended-keys on
+      set -g extended-keys-format csi-u
     '';
   };
 

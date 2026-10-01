@@ -6,11 +6,9 @@ rec {
   # Custom packages, that can be defined similarly to ones from nixpkgs
   # You can build them using 'nix build .#example'
   # example = pkgs.callPackage ./example { };
-  # conman = pkgs.callPackage ./conman { };
   etBembo = pkgs.callPackage ./etbembo { };
   akeyless = pkgs.callPackage ./akeyless-cli { };
   fake-hwclock = pkgs.callPackage ./fake-hwclock { };
-  # bird-lg-custom = pkgs.callPackage ./bird-lg {  };
   vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
   bird-lsp = pkgs.callPackage ./bird-lsp { };
   kubectl-passman = pkgs.callPackage ./kubectl-passman { };
@@ -19,7 +17,6 @@ rec {
   udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay { };
   pi-acp = pkgs.callPackage ./pi-acp { };
   pi-coding-agent = pkgs.callPackage ./pi-coding-agent { };
-  tea-dash = pkgs.callPackage ./tea-dash { };
   flate = pkgs.callPackage ./flate { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };
 }

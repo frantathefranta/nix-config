@@ -7,7 +7,7 @@ rec {
   # You can build them using 'nix build .#example'
   # example = pkgs.callPackage ./example { };
   etBembo = pkgs.callPackage ./etbembo { };
-  akeyless = pkgs.callPackage ./akeyless-cli { };
+  # akeyless = pkgs.callPackage ./akeyless-cli { };
   fake-hwclock = pkgs.callPackage ./fake-hwclock { };
   vep14xx-diags = pkgs.callPackage ./vep14xx-diags { };
   bird-lsp = pkgs.callPackage ./bird-lsp { };

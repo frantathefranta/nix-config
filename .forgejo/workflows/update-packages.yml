@@ -83,6 +83,8 @@ jobs:
               continue
             fi
 
+            new_version=$(nix eval --raw ".#packages.${SYSTEM}.${pkg}.version")
+
             git commit -m "chore: update $pkg"
             git push -f -u origin "$branch"
 
@@ -110,10 +112,10 @@ jobs:
                 -H "Authorization: token ${FORGEJO_TOKEN}" \
                 -H "Content-Type: application/json" \
                 --data "$(jq -n \
-                  --arg title "chore: update $pkg" \
+                  --arg title "chore: update $pkg to $new_version" \
                   --arg head "$branch" \
                   --arg base "$BASE_BRANCH" \
-                  --arg body "This PR updates the \`$pkg\` package using nix-update." \
+                  --arg body "This PR updates the \`$pkg\` package to version \`$new_version\` using nix-update." \
                   '{title: $title, head: $head, base: $base, body: $body}')" \
                 "${API_URL}/pulls"
             fi

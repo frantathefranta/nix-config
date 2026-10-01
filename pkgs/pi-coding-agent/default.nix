@@ -12,7 +12,20 @@
   stdenvNoCC,
   bun,
 }:
-
+let
+  isLinuxX64 = stdenvNoCC.hostPlatform.system == "x86_64-linux";
+  # The standard Linux x64 Bun binary requires AVX2, which hydrogen's N5105 lacks.
+  bunForBuild =
+    if stdenvNoCC.buildPlatform.system == "x86_64-linux" then
+      bun.overrideAttrs (oldAttrs: {
+        src = fetchurl {
+          url = "https://github.com/oven-sh/bun/releases/download/bun-v${oldAttrs.version}/bun-linux-x64-baseline.zip";
+          hash = "sha256-nYokKSpwaAkCBdqsCloiP19pc29Sh+N7+I07QDHtx1A=";
+        };
+      })
+    else
+      bun;
+in
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
   version = "0.99.2";
@@ -46,7 +59,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    bun
+    bunForBuild
   ];
 
   buildPhase = ''
@@ -55,7 +68,8 @@ buildNpmPackage (finalAttrs: {
     npm run build:offline
 
     pushd packages/coding-agent
-    bun build --compile --no-compile-autoload-bunfig \
+    bun build --compile ${lib.optionalString isLinuxX64 "--target=bun-linux-x64-baseline"} \
+      --no-compile-autoload-bunfig \
       ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
       ./src/extensions/codemode/worker.ts \
       --outfile $TMPDIR/pi

@@ -94,7 +94,8 @@ jobs:
                 -H "Authorization: token ${FORGEJO_TOKEN}" \
                 "${API_URL}/pulls?state=open&limit=50&page=${page}")
               existing=$(jq --arg head "$branch" --arg base "$BASE_BRANCH" \
-                '[.[] | select(.head.ref == $head and .base.ref == $base)] | length' \
+                '[.[] | select(.head.ref == $head and .base.ref == $base
+                  and .head.repo_id == .base.repo_id)] | length' \
                 <<< "$pulls")
               if [ "$existing" -gt 0 ] || [ "$(jq 'length' <<< "$pulls")" -lt 50 ]; then
                 break

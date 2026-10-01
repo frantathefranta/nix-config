@@ -32,7 +32,9 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [ gitMinimal ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--flake" ];
+    };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };

@@ -35,7 +35,9 @@ buildGo127Module (finalAttrs: {
   excludedPackages = [ "test/e2e" ];
   env.HOME = "$TMPDIR/home";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--flake" ];
+  };
 
   meta = {
     description = "A Flux resource validator and inflator";

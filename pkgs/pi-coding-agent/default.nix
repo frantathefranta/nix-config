@@ -127,6 +127,7 @@ buildNpmPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+      "--flake"
       "--custom-dep"
       "modelData"
     ];

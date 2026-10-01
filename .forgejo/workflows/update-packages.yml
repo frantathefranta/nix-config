@@ -1,0 +1,123 @@
+---
+name: Update Nix Packages
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays at 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: update-packages
+  cancel-in-progress: false
+
+jobs:
+  update-packages:
+    runs-on: ubuntu-latest
+
+    env:
+      SYSTEM: x86_64-linux
+      API_URL: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
+      BASE_BRANCH: main
+
+    steps:
+      - name: Checkout repository
+        uses: https://code.forgejo.org/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+
+      - name: Install Nix
+        uses: https://github.com/DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      - name: Configure git identity
+        run: |
+          git config --global user.email "lol@franta.us"
+          git config --global user.name "lordoflightning-bot"
+          git config --global init.defaultBranch "$BASE_BRANCH"
+
+      - name: Update packages and open PRs
+        shell: bash
+        env:
+          FORGEJO_TOKEN: ${{ secrets.FORGEJO_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # Enumerate attributes without evaluating every package derivation.
+          packages=$(nix eval --json ".#packages.${SYSTEM}" \
+            --apply 'packages: builtins.attrNames packages' | jq -r '.[]')
+          base=$(git rev-parse HEAD)
+          repo=$PWD
+          workdir=$(mktemp -d)
+
+          cleanup() {
+            if [ -d "$workdir/package" ]; then
+              git -C "$repo" worktree remove --force "$workdir/package"
+            fi
+            rm -rf "$workdir"
+          }
+          trap cleanup EXIT
+
+          for pkg in $packages; do
+            branch="chore/update-$pkg"
+            echo "::group::Processing $pkg"
+
+            # Isolate each update, including partial changes from failed scripts.
+            git worktree add -B "$branch" "$workdir/package" "$base"
+            pushd "$workdir/package"
+
+            if ! nix run github:Mic92/nix-update -- \
+                --flake --use-update-script "packages.${SYSTEM}.$pkg"; then
+              echo "::warning::Failed to update $pkg, skipping."
+              popd
+              git worktree remove --force "$workdir/package"
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Ignore build result links, but include new files from update scripts.
+            git add -A -- . ':!result' ':!result-*'
+            if git diff --cached --quiet; then
+              echo "No changes detected for $pkg."
+              popd
+              git worktree remove --force "$workdir/package"
+              echo "::endgroup::"
+              continue
+            fi
+
+            git commit -m "chore: update $pkg"
+            git push -f -u origin "$branch"
+
+            # Paginate so existing PRs are found even in busy repositories.
+            existing=0
+            page=1
+            while :; do
+              pulls=$(curl --fail-with-body --silent --show-error \
+                -H "Authorization: token ${FORGEJO_TOKEN}" \
+                "${API_URL}/pulls?state=open&limit=50&page=${page}")
+              existing=$(jq --arg head "$branch" --arg base "$BASE_BRANCH" \
+                '[.[] | select(.head.ref == $head and .base.ref == $base)] | length' \
+                <<< "$pulls")
+              if [ "$existing" -gt 0 ] || [ "$(jq 'length' <<< "$pulls")" -lt 50 ]; then
+                break
+              fi
+              page=$((page + 1))
+            done
+
+            if [ "$existing" -gt 0 ]; then
+              echo "An open PR for $branch already exists, skipping PR creation."
+            else
+              curl --fail-with-body --silent --show-error -X POST \
+                -H "Authorization: token ${FORGEJO_TOKEN}" \
+                -H "Content-Type: application/json" \
+                --data "$(jq -n \
+                  --arg title "chore: update $pkg" \
+                  --arg head "$branch" \
+                  --arg base "$BASE_BRANCH" \
+                  --arg body "This PR updates the \`$pkg\` package using nix-update." \
+                  '{title: $title, head: $head, base: $base, body: $body}')" \
+                "${API_URL}/pulls"
+            fi
+
+            popd
+            git worktree remove --force "$workdir/package"
+            echo "::endgroup::"
+          done

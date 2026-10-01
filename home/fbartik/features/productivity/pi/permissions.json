@@ -1,0 +1,21 @@
+{
+  "yoloMode": false,
+  "permission": {
+    "*": "allow",
+    "path": {
+      "*": "allow"
+    },
+    "bash": {
+      "*": "allow"
+    },
+    "mcp": {
+      "*": "allow"
+    },
+    "skill": {
+      "*": "allow"
+    },
+    "external_directory": {
+      "*": "ask"
+    }
+  }
+}

@@ -18,6 +18,7 @@ rec {
   rtl8152-led-ctrl = pkgs.callPackage ./rtl8152-led-ctrl { };
   udpbroadcastrelay = pkgs.callPackage ./udpbroadcastrelay { };
   pi-acp = pkgs.callPackage ./pi-acp { };
+  pi-coding-agent = pkgs.callPackage ./pi-coding-agent { };
   tea-dash = pkgs.callPackage ./tea-dash { };
   flate = pkgs.callPackage ./flate { };
   # ubootNanopiR2s = pkgs.callPackage ./uboot-nanopi-r2s { };

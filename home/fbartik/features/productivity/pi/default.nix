@@ -7,6 +7,7 @@
   imports = [ ./packages ];
   programs.pi-coding-agent = {
     enable = true;
+    package = pkgs.pi-coding-agent;
     extraPackages = [
       pkgs.python3
     ];

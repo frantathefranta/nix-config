@@ -37,12 +37,45 @@
           cacert
           stdenvNoCC
           ;
+        # Pi supplies these modules through its extension loader. Upstream
+        # packages may still declare/install them as runtime dependencies.
+        hostProvidedPackages = [
+          "@earendil-works/pi-ai"
+          "@earendil-works/pi-agent-core"
+          "@earendil-works/pi-coding-agent"
+          "@earendil-works/pi-tui"
+          "typebox"
+        ];
         commonDefaults = {
           pname = "pi-extension";
           version = "unstable";
           installPhase = ''
             mkdir -p $out
             cp -r . $out/
+            # Normalize only the installed output, keeping the npm cache and
+            # lockfile inputs unchanged. Never ship duplicate host modules,
+            # including copies nested under another dependency.
+            if [ -f "$out/package.json" ]; then
+              ${lib.getExe jq} --argjson hostPackages '${builtins.toJSON hostProvidedPackages}' '
+                reduce $hostPackages[] as $name (. ;
+                  if (.dependencies[$name] != null or
+                      .optionalDependencies[$name] != null or
+                      .peerDependencies[$name] != null) then
+                    del(.dependencies[$name], .optionalDependencies[$name])
+                    | .peerDependencies[$name] = "*"
+                  else . end)
+              ' "$out/package.json" > "$out/package.json.tmp"
+              mv "$out/package.json.tmp" "$out/package.json"
+            fi
+            for hostPackage in ${lib.escapeShellArgs hostProvidedPackages}; do
+              find "$out" -path "*/node_modules/$hostPackage" -prune -exec rm -rf {} +
+              # npm also creates CLI links for some host packages.
+              while IFS= read -r -d "" bin; do
+                case "$(readlink "$bin")" in
+                  ../"$hostPackage"/* | */node_modules/"$hostPackage"/*) rm "$bin" ;;
+                esac
+              done < <(find "$out" -path '*/node_modules/.bin/*' -type l -print0)
+            done
           '';
         };
         # Some pi deps ship without a lockfile integrity field

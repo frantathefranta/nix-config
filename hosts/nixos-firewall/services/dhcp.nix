@@ -115,6 +115,11 @@ in
                 hw-address = "ea:f6:0a:cf:1e:68";
               }
               {
+                hostname = "xbox";
+                ip-address = "10.0.50.93";
+                hw-address = "54:4c:8a:91:85:e8";
+              }
+              {
                 hostname = "upper-bathroom-presence-sensor";
                 ip-address = "10.0.50.94";
                 hw-address = "f0:f5:bd:f8:88:b0";

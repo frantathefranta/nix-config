@@ -4,7 +4,6 @@
   outputs,
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -38,8 +37,13 @@ in
     nftables.chains.prerouting.nat = {
       after = [ "hook" ];
       rules = [
+        # Xbox port
+        "iifname wan0 tcp dport 3074 dnat ip to 10.0.50.93" 
+        "iifname wan0 udp dport 3074 dnat ip to 10.0.50.93"
+        # Plex port
         "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
         "iifname wan0 udp dport { 40002, 44069 } dnat ip to ${(ipamOf "qotom").ipv4}" # Qotom wireguard to R2s and Mikrotik
+        # Torrent ports
         "iifname wan0 tcp dport 18903 dnat ip to 10.33.40.63"
         "iifname wan0 tcp dport 51413 dnat ip to 10.33.40.64"
         "iifname wan0 tcp dport 51414 dnat ip to 10.33.40.65"
@@ -139,6 +143,11 @@ in
         hass = {
           ipv4Addresses = [
             "10.0.50.30"
+          ];
+        };
+        xbox = {
+          ipv4Addresses = [
+            "10.0.50.93"
           ];
         };
       };
@@ -251,6 +260,12 @@ in
           from = [ "untrusted" ];
           to = [ "plex" ];
           allowedTCPPorts = [ 32400 ];
+        };
+        allow_xbox = {
+          from = [ "untrusted" ];
+          to = [ "xbox" ];
+          allowedTCPPorts = [ 3074 ];
+          allowedUDPPorts = [ 3074 ];
         };
         allow_qbittorrent = {
           from = [ "untrusted" ];

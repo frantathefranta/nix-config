@@ -14,6 +14,8 @@
       if legacyPackages != { } then legacyPackages else packages
     ) inputs;
   };
+  nix-output-monitor = import ./nix-output-monitor;
+
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: prev: import ../pkgs { pkgs = final; };
 

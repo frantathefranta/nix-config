@@ -39,7 +39,9 @@
     };
     enable = true;
     homeFlake = "${config.home.homeDirectory}/git/nix-config";
-    package = inputs.nh.packages.aarch64-darwin.nh;
+    package = inputs.nh.packages.aarch64-darwin.nh.override {
+      inherit (pkgs) nix-output-monitor;
+    };
   };
   sops.age.keyFile = "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt";
   sops.defaultSopsFile = ./NC312237-secrets.yaml;

@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "sandboxUserShell": true,
+  "permissionPromptTimeoutSeconds": 600,
+  "filesystem": {
+    "denyRead": ["/Users", "/home"],
+    "allowRead": [".", "~/.config", "~/.local", "Library", "/nix/store"],
+    "allowWrite": [".", "/tmp"],
+    "denyWrite": [".env", ".env.*", "*.pem", "*.key"]
+  }
+}

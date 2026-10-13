@@ -5,7 +5,7 @@
   "filesystem": {
     "denyRead": ["/Users", "/home"],
     "allowRead": [".", "~/.config", "~/.local", "Library", "/nix/store"],
-    "allowWrite": [".", "/tmp"],
+    "allowWrite": [".", "/tmp", "/bin/ps"],
     "denyWrite": [".env", ".env.*", "*.pem", "*.key"]
   }
 }

@@ -2,10 +2,42 @@
   "enabled": true,
   "sandboxUserShell": true,
   "permissionPromptTimeoutSeconds": 600,
+  "network": {
+    "allowedDomains": [
+      "github.com",
+      "*.github.com",
+      "api.github.com",
+      "raw.githubusercontent.com",
+      "flakehub.com",
+      "cache.flakehub.com",
+      "edge.cache.flakehub.com",
+      "install.determinate.systems"
+    ]
+  },
   "filesystem": {
-    "denyRead": ["/Users", "/home"],
-    "allowRead": [".", "~/.config", "~/.local", "Library", "/nix/store"],
-    "allowWrite": [".", "/tmp", "/bin/ps"],
-    "denyWrite": [".env", ".env.*", "*.pem", "*.key"]
+    "denyRead": [
+      "/Users",
+      "/home"
+    ],
+    "allowRead": [
+      ".",
+      "~/.config",
+      "~/.local",
+      "Library",
+      "/nix/store",
+      "/nix/var/nix/daemon-socket/socket"
+    ],
+    "allowWrite": [
+      ".",
+      "/tmp",
+      "/bin/ps",
+      "/nix/var/nix/daemon-socket/socket"
+    ],
+    "denyWrite": [
+      ".env",
+      ".env.*",
+      "*.pem",
+      "*.key"
+    ]
   }
 }

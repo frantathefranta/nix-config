@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   typescript,
   stdenv,
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     typescript
     makeWrapper
   ];
@@ -75,12 +75,16 @@ stdenv.mkDerivation {
   pnpmDeps = fetchPnpmDeps {
     pname = "bird-lsp";
     inherit version src;
-    fetcherVersion = 3;
-    pnpm = pnpm_10;
-    hash = "sha256-UAH9PmaS+Jph9mAgRKFmzU8ejX+o5CoQKIHEvup1/X4=";
+    fetcherVersion = 4;
+    pnpm = pnpm_11;
+    hash = "sha256-cCKT+PTseWaWiiFKQPxnQRGjLwef6+sejhZG7uVi06k=";
   };
 
   postPatch = ''
+    # pnpm 11 no longer reads link-workspace-packages from upstream's .npmrc.
+    # Keep local dependencies in the workspace graph for filtering and build order.
+    echo 'linkWorkspacePackages: true' >> pnpm-workspace.yaml
+
     # Skip wasm compilation — we provide a pre-built wasm from Nix
     substituteInPlace packages/@birdcc/dprint-plugin-bird/package.json \
       --replace-fail \
@@ -98,7 +102,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=@birdcc/cli... build
+    pnpm --recursive --filter=@birdcc/cli... build
 
     runHook postBuild
   '';
@@ -115,11 +119,28 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/bin/birdcc" --help > /dev/null
+    printf 'router id 192.0.2.1;\nprotocol device {}\n' > smoke.conf
+    "$out/bin/birdcc" lint smoke.conf
+
+    # Test dprint directly so a fallback to the builtin formatter cannot hide failure.
+    node --input-type=module <<EOF
+    import { formatBirdConfig } from "file://$out/lib/birdcc/packages/@birdcc/formatter/dist/index.js";
+    await formatBirdConfig("router id 192.0.2.1;\\nprotocol device {}\\n", { engine: "dprint" });
+    EOF
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "Modern Language Server Protocol support for BIRD2 configuration files";
     homepage = "https://github.com/bird-chinese-community/BIRD-LSP";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ frantathefranta ];
-    mainProgram = "bird-lsp";
+    mainProgram = "birdcc";
   };
 }

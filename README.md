@@ -42,15 +42,41 @@ nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nix
 ```
 
 
+## Credentials
+Direnv loads only the Nix development shell; entering the repo does not query
+1Password or export credentials. Enable 1Password CLI desktop integration or
+sign in with `op signin`. No service-account token is fetched automatically.
+
+The `just` recipes use `op run` to resolve task-specific `op://` references only
+when invoked. Credentials are scoped to the command and its child processes,
+not exported into your interactive shell.
+
+After updating `.envrc`, run `direnv allow` and let your shell reload it to remove
+the previously injected environment variables.
+
 ## Terraform
-Running terraform (tofu): the repo-root `.envrc` resolves `op://` refs from
-`.1password` into the shell via direnv, so tofu picks up the credentials
-(`TF_VAR_*`, `AWS_*`) directly:
+Use the wrapper with a stack name (`garage` or `uptimekuma`) and tofu arguments:
 ``` sh
-$ tofu -chdir=terraform/garage apply
+$ just tofu garage init
+$ just tofu garage plan
+$ just tofu garage apply
+$ just tofu uptimekuma apply
 ```
-Without direnv, use `op run` to resolve them for a single command:
+Each stack has its own `terraform/<stack>/.env.1password` file. Without `just`:
 ``` sh
-$ op run --env-file=.1password -- tofu -chdir=terraform/garage apply
+$ op run --env-file=terraform/garage/.env.1password -- tofu -chdir=terraform/garage apply
 $ op run --env-file=terraform/uptimekuma/.env.1password -- tofu -chdir=terraform/uptimekuma apply
 ```
+Commands that don't need credentials can still run directly, e.g.
+`tofu -chdir=terraform/garage fmt`.
+
+## DNS
+The root `.1password` file contains only the PowerDNS API key. DNS recipes build
+the config first, then resolve the key for `octodns-sync`:
+``` sh
+$ just update-dns       # Preview
+$ just update-dns-doit  # Apply
+```
+
+`just add-host-key <ssh-host> <hostname>` also uses your 1Password CLI login,
+querying credentials only while provisioning the host.

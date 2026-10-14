@@ -9,21 +9,23 @@ Admin API.
 State is stored in the `terraform-state` bucket on Garage (`garage/terraform.tfstate`),
 created by the `garage` service at boot (`--default-bucket`). Credentials come from
 the `Garage default S3 key` item in the `nix-config` 1Password vault, injected as
-`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` via the repo-root `.1password` file.
+`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` via `terraform/garage/.env.1password`,
+alongside the Garage admin token (`TF_VAR_garage_token`).
 
 Run from a network where `ytterbium.franta.us` resolves to the reachable IPv6 address.
-The repo-root `.envrc` (direnv + `from_op .1password`) injects the token and S3
-credentials, so a plain call works:
+Authenticate using 1Password CLI desktop integration or `op signin`. From the repo
+root, the wrapper resolves only Garage credentials for the command's lifetime:
 
 ```sh
-tofu -chdir=terraform/garage plan
-tofu -chdir=terraform/garage apply
+just tofu garage plan
+just tofu garage apply
 ```
 
-Without direnv, resolve them explicitly for the command instead:
+Direnv loads the development shell, not secrets. Without `just`, resolve the
+credentials explicitly for the command instead:
 
 ```sh
-op run --env-file=.1password -- tofu -chdir=terraform/garage apply
+op run --env-file=terraform/garage/.env.1password -- tofu -chdir=terraform/garage apply
 ```
 
 ### Migrating existing local state
@@ -32,7 +34,7 @@ The first `tofu init` with the s3 backend detects the existing local `terraform.
 and offers to copy it into the bucket — answer yes:
 
 ```sh
-tofu -chdir=terraform/garage init
+just tofu garage init
 ```
 
 ### Locking
@@ -69,5 +71,5 @@ bucket_permissions = {
 ```
 
 Access key secrets are only available at creation time; read them with
-`tofu output -raw access_keys` and store them in sops/1Password for the
+`just tofu garage output -raw access_keys` and store them in sops/1Password for the
 consuming services.

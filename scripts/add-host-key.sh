@@ -32,10 +32,9 @@ for cmd in ssh-to-age sops op nixos-anywhere; do
     fi
 done
 
-if [[ -z "${OP_SERVICE_ACCOUNT_TOKEN:-}" ]]; then
-    echo "error: OP_SERVICE_ACCOUNT_TOKEN is not set" >&2
-    exit 1
-fi
+# Fail before preparing files if the CLI isn't authenticated. Use the user's
+# 1Password login (desktop integration or op signin), not a direnv-injected token.
+op whoami >/dev/null
 
 REPO_ROOT="$(git -C "$(dirname "$(realpath "$0")")" rev-parse --show-toplevel)"
 HOST_PATH="$REPO_ROOT/hosts/$HOSTNAME"

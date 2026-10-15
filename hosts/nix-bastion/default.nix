@@ -63,7 +63,10 @@ in
     ipv6AcceptRAConfig = {
       Token = "::10:32:10:11";
     };
-    dns = [ "10.0.10.1" ];
+    dns = [
+      "10.0.10.1"
+      "2600:1702:6630:3fe0:10:0:10:1"
+    ];
     domains = [
       "franta.us"
       "infra.franta.us"

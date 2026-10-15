@@ -29,6 +29,7 @@
         "openai-codex/gpt-6-terra"
         "openai-codex/gpt-6-luna"
       ];
+      tuiMode = "regular";
     };
   };
   home.sessionVariables = {

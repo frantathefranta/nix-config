@@ -12,7 +12,8 @@
       "cache.flakehub.com",
       "edge.cache.flakehub.com",
       "install.determinate.systems"
-    ]
+    ],
+    "allowLocalBinding": true
   },
   "filesystem": {
     "denyRead": [

@@ -23,9 +23,18 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # example = prev.example.overrideAttrs (oldAttrs: rec {
-    # ...
-    # });
+    # Remove once the pinned nixpkgs includes https://github.com/NixOS/nixpkgs/pull/574509.
+    # The test harness clears its environment, so NOSYSBASHRC must be set by
+    # the shell wrapper, not preCheck. Keep the name "bash" for the PTY proxy.
+    atuin = prev.atuin.overrideAttrs (old: {
+      env = (old.env or { }) // {
+        ATUIN_E2E_BASH = final.lib.getExe (
+          final.writeShellScriptBin "bash" ''
+            NOSYSBASHRC=1 exec ${final.lib.getExe final.bashInteractive} "$@"
+          ''
+        );
+      };
+    });
     # Taken from https://github.com/Misterio77/Foundry/blob/4b90ba3974faae2748c005900f37aaf81a5e16f6/overlays/default.nix#L166
     buildPiPackage =
       let

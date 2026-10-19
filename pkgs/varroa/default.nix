@@ -4,7 +4,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "varroa";
-  version = "master";
+  version = "35";
 
   src = fetchFromGitLab {
     owner = "passelecasque";

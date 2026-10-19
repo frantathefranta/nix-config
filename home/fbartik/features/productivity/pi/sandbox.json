@@ -26,13 +26,15 @@
       "~/.local",
       "Library",
       "/nix/store",
+      "~/.nix-defexpr",
       "/nix/var/nix/daemon-socket/socket"
     ],
     "allowWrite": [
       ".",
       "/tmp",
       "/bin/ps",
-      "/nix/var/nix/daemon-socket/socket"
+      "/nix/var/nix/daemon-socket/socket",
+      "~/.cache"
     ],
     "denyWrite": [
       ".env",

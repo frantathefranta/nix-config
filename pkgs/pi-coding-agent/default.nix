@@ -28,22 +28,22 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "earendil-works";
     repo = "pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CGznIVHXG6gr2F8vzHcR/v4P9xJgZHeMTt/CJ/kB78o=";
+    hash = "sha256-AsutbwnjiwwLkB5tqLW+1GdGZyLmXsU0W+SNdNhJu7U=";
   };
 
-  npmDepsHash = "sha256-ndEvWdB6sa5nNNtabk2OMZKUFG9x3op185deZHxFnXk=";
+  npmDepsHash = "sha256-+gFyvrhkCsF99oNvs0gBmLXnDW0hWnZI/wFId7UbI6Q=";
 
   # The generated provider catalog is absent from git. Restore the catalog
   # shipped with the matching npm release instead of fetching it during build.
   modelData = fetchurl {
     url = "https://registry.npmjs.org/@earendil-works/pi-ai/-/pi-ai-${finalAttrs.version}.tgz";
-    hash = "sha256-85uZwpuFmPF1sQhA5dKoGYPnwM5crk19+DoQB0R9LCs=";
+    hash = "sha256-U0PhY5vzQ73DNE3zrWwxwFpQtoutB6xrzhCJDUtrimE=";
   };
 
   preConfigure = ''
@@ -88,11 +88,12 @@ buildNpmPackage (finalAttrs: {
 
     # Workspace links point into the build tree. Retain built packages for
     # extension imports and SDK consumers, replacing those links with copies.
-    for ws in chord ai agent client protocol telemetry tui codemode mcp durable server; do
-      pkg=$(node -p "require('./packages/$ws/package.json').name")
+    for manifest in packages/*/package.json; do
+      ws=$(dirname "$manifest")
+      pkg=$(node -p "require('./$manifest').name")
       if [ -L "$nm/$pkg" ]; then
         rm "$nm/$pkg"
-        cp -r "packages/$ws" "$nm/$pkg"
+        cp -r "$ws" "$nm/$pkg"
       fi
     done
     find "$nm" -type l -lname '*/packages/*' -delete

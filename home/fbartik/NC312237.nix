@@ -11,7 +11,6 @@
     ./features/editor
     ./features/kubectl
     ./features/desktop/common/mail.nix
-    ./features/productivity/claude-code.nix
     ./features/productivity/pi
     ./features/productivity/github.nix
     ./features/productivity/forgejo.nix

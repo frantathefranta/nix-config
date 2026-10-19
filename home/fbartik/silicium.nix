@@ -6,7 +6,6 @@
     ./features/productivity
     ./features/editor
     ./features/desktop/common
-    ./features/productivity/claude-code.nix
     ./features/productivity/rclone-music.nix
     ./features/productivity/pi
   ];

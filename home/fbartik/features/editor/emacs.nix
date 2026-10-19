@@ -173,7 +173,6 @@ in
       texlivePackages.fontawesome.tex
       texlivePackages.academicons
     ]
-    ++ lib.optionals config.programs.claude-code.enable [ unstable.claude-agent-acp ] # agent-shell
     ++ lib.optionals isDarwin [ emacsClientApp ]
     ++ lib.optionals (!isDarwin) [
       xclip

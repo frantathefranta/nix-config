@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (import ./container-addresses.nix) omp;
+  inherit (import ../container-addresses.nix) omp;
 in
 {
   # The shared daemon authenticates by host UID. Reserve a non-wheel identity
@@ -35,6 +35,7 @@ in
           interface = "eth0";
         };
         nameservers = config.systemd.network.networks."10-ens18".dns;
+        firewall.trustedInterfaces = [ "eth0" ];
       };
       services.openssh.enable = false;
 
@@ -43,6 +44,7 @@ in
       environment.systemPackages = [
         inputs.oh-my-pi.packages.${pkgs.stdenv.hostPlatform.system}.omp
         pkgs.python3
+        pkgs.unstable.paseo
       ];
       users.groups.omp.gid = 1100;
       users.users.fbartik = {
@@ -65,4 +67,5 @@ in
       system.stateVersion = "26.05";
     };
   };
+  networking.firewall.allowedTCPPorts = [ 6767 ];
 }

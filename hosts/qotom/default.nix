@@ -333,8 +333,9 @@
     ipv6Suffix = "10:32:10:10";
   };
   services.prometheus.exporters.node = {
-    listenAddress = "10.32.10.10";
+    listenAddress = "0.0.0.0";
   };
+  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 9100 ];
   documentation.man.man-db.enable = false;
   system.stateVersion = "24.11";
 }

@@ -14,9 +14,18 @@ in
           ttl = 3600;
         };
       };
-      "actinium-mgmt".a.data = [ "10.32.10.50" ];
-      "protactinium-mgmt".a.data = [ "10.32.10.70" ];
-      "thorium-mgmt".a.data = [ "10.32.10.60" ];
+      "actinium-mgmt" = {
+        a.data = [ "10.32.10.50" ];
+        aaaa.data = [ "${dSubnet}:10:32:10:50" ];
+      };
+      "protactinium-mgmt" = {
+        a.data = [ "10.32.10.70" ];
+        aaaa.data = [ "${dSubnet}:10:32:10:70" ];
+      };
+      "thorium-mgmt" = {
+        a.data = [ "10.32.10.60" ];
+        aaaa.data = [ "${dSubnet}:10:32:10:60" ];
+      };
       "actinium".cname.data = "actinium-mgmt.infra.franta.us";
       "thorium".cname.data = "thorium-mgmt.infra.franta.us";
       "protactinium".cname.data = "protactinium-mgmt.infra.franta.us";

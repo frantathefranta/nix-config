@@ -1,9 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{ config, inputs, pkgs, lib, ... }:
 {
   imports = [ inputs.comin.nixosModules.comin ];
 
   services.comin = {
-    enable = true;
+    enable = lib.mkDefault true;
     package = inputs.comin.packages.${pkgs.stdenv.hostPlatform.system}.comin;
     executor = {
       type = "hydra";

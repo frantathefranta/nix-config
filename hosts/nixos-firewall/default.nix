@@ -28,7 +28,8 @@
         a.data = [ "10.32.10.230" ];
         aaaa.data = [ "2600:1702:6630:3fed:10:32:10:230" ];
       };
-      "${config.networking.hostName}.${config.networking.domain}".cname.data = "${config.networking.hostName}-lan0";
+      "${config.networking.hostName}.${config.networking.domain}".cname.data =
+        "${config.networking.hostName}-lan0";
       "time.${config.networking.domain}".cname.data = "${config.networking.hostName}";
       "logs.${config.networking.domain}".cname.data = "${config.networking.hostName}";
       "nut.${config.networking.domain}".cname.data = "${config.networking.hostName}";
@@ -43,6 +44,9 @@
     pkgs.i2c-tools
     pkgs.vep14xx-diags
   ];
+
+  services.comin.enable = false;
+
   documentation.man.man-db.enable = false;
   system.stateVersion = "25.11";
 }

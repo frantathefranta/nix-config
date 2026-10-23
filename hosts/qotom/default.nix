@@ -19,7 +19,6 @@
     ../common/optional/smartd.nix
     ../common/optional/dn42-client.nix
     # ../common/optional/prometheus-node-exporter.nix
-    # ../common/optional/autoupgrade.nix
     # ../common/optional/netlogd.nix
   ];
   networking = {

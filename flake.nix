@@ -24,8 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    colmena = {
-      url = "github:zhaofengli/colmena";
+    comin = {
+      url = "github:frantathefranta/comin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -154,14 +154,6 @@
             name = hostname;
           };
           modules = [
-            /*
-              Declares the `deployment.*` option namespace so hosts can set
-              e.g. `deployment.tags` in their own default.nix even though
-              this evaluation path (plain nixosConfigurations) isn't run
-              through colmena. The values are inert here; colmena's own hive
-              evaluation is what actually reads them.
-            */
-            inputs.colmena.nixosModules.deploymentOptions
             ./hosts/${hostname}
           ];
         };
@@ -181,11 +173,7 @@
         inherit (self) nixosConfigurations;
         extraConfig = import ./dns.nix;
       };
-      /*
-        Servers managed with both nixosConfigurations and colmena (see below).
-        installer-iso and the workstations are declared
-        separately since they aren't colmena deploy targets.
-      */
+      # Servers managed by comin; workstations and the installer stay manual.
       serverHosts = [
         "hydrogen"
         "ytterbium"
@@ -243,39 +231,10 @@
         pkgs:
         import ./shell.nix {
           inherit pkgs;
-          colmena = inputs.colmena.packages.${pkgs.system}.colmena;
         }
       );
 
       hydraJobs = import ./hydra.nix { inherit inputs outputs; };
-
-      colmena = {
-        meta = {
-          nixpkgs = pkgsFor.x86_64-linux;
-          specialArgs = {
-            inherit inputs outputs;
-            isStableHM = true;
-          };
-          /*
-            Derived from each host's own nixpkgs.hostPlatform, so a host
-            declaring a non-default system (e.g. nix-oci on aarch64-linux)
-            doesn't need a separate manual entry here.
-          */
-          nodeNixpkgs = lib.genAttrs serverHosts (
-            hostname: pkgsFor.${self.nixosConfigurations.${hostname}.config.nixpkgs.hostPlatform.system}
-          );
-        };
-      }
-      // lib.genAttrs serverHosts (
-        hostname:
-        { config, ... }:
-        {
-          imports = [ ./hosts/${hostname} ];
-          deployment.targetHost = "${hostname}.${config.networking.domain}";
-          deployment.targetUser = "fbartik";
-        }
-      );
-      colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
 
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs outputs; };

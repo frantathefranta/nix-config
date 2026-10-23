@@ -3,7 +3,7 @@
   imports = [
     inputs.srvos.nixosModules.server
     ../optional/prometheus-node-exporter.nix
-    ../optional/autoupgrade.nix
+    ../optional/comin.nix
   ];
 
   networking = {

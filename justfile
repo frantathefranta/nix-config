@@ -6,9 +6,6 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 default:
     just -l
 
-deploy host:
-    scripts/deploy.sh {{ host }}
-
 deploy-darwin host:
     scripts/darwin-deploy.sh {{ host }}
 

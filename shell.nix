@@ -1,6 +1,5 @@
 {
   pkgs ? import <nixpkgs> { },
-  colmena ? pkgs.colmena,
   ...
 }:
 {
@@ -14,7 +13,6 @@
         ssh-to-age
         gnupg
         age
-        colmena
         opentofu
         tofu-ls
         just

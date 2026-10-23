@@ -12,12 +12,12 @@
   };
   inputs = {
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
     # Nixpkgs
     # You can access packages and modules from different nixpkgs revs
     # at the same time. Here's an working example:
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
 
     oh-my-pi = {
       url = "github:can1357/oh-my-pi";

@@ -20,5 +20,6 @@
         branches.main.name = "main";
       }
     ];
+    exporter.openFirewall = true;
   };
 }

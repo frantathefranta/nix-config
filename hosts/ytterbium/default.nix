@@ -23,7 +23,7 @@
 
   hardware.facter.reportPath = ./facter.json;
   boot = {
-    kernelParams = [ "console=ttyS1,115200n8" ];
+    kernelParams = [ "console=ttyS1,115200n8" "pci=assign-busses" ];
     supportedFilesystems = {
       zfs = true;
     };

@@ -120,6 +120,13 @@
               "2600:1702:6630:3fe4::3/128"
             ];
           }
+          {
+            PublicKey = "ozpcN3hxxOZGclDVfr0ci/aVPkIqLxNT/nGaZ2GuymE=";
+            AllowedIPs = [
+              "172.16.255.4/32"
+              "2600:1702:6630:3fe4::4/128"
+            ];
+          }
         ];
       };
     };

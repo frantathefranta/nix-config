@@ -45,8 +45,6 @@
     pkgs.vep14xx-diags
   ];
 
-  services.comin.enable = false;
-
   documentation.man.man-db.enable = false;
   system.stateVersion = "25.11";
 }

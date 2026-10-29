@@ -9,9 +9,14 @@
       devNodes = "/dev/disk/by-id";
     };
   };
-
-  services.prometheus.exporters.zfs = {
-    enable = true;
-    openFirewall = true;
+  services.prometheus.exporters = {
+    smartctl = {
+      enable = true;
+      openFirewall = true;
+    };
+    zfs = {
+      enable = true;
+      openFirewall = true;
+    };
   };
 }

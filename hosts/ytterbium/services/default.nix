@@ -1,7 +1,8 @@
 {
   imports = [
-    ./plex.nix
-    ./nfs.nix
     ./garage.nix
+    ./nfs.nix
+    ./plex.nix
+    ./zfs.nix
   ];
 }

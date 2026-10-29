@@ -22,16 +22,9 @@
   ];
 
   hardware.facter.reportPath = ./facter.json;
+
   boot = {
     kernelParams = [ "console=ttyS1,115200n8" "pci=assign-busses" ];
-    supportedFilesystems = {
-      zfs = true;
-    };
-    zfs = {
-      forceImportRoot = false;
-      extraPools = [ "emc1" ];
-      devNodes = "/dev/disk/by-id";
-    };
   };
 
   networking = {

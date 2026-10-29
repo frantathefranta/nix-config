@@ -25,7 +25,10 @@ let
   });
 in
 {
-  imports = [ ./machines.nix ];
+  imports = [
+    ./machines.nix
+    ./metrics.nix
+  ];
 
   # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
   systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";

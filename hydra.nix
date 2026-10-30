@@ -27,11 +27,11 @@ in {
   pkgs = pkgsOut;
   hosts = hostsOut;
   homes = homesOut;
-  required = aggregatePkgs.releaseTools.aggregate {
+  # Resolve job names after evaluation instead of loading every host in one worker.
+  required = (aggregatePkgs.releaseTools.aggregate {
     name = "required";
-    constituents =
-      lib.concatMap lib.attrValues (lib.attrValues pkgsOut)
-      ++ lib.attrValues hostsOut
-      ++ lib.attrValues homesOut;
+    constituents = [ "*" ];
+  }).overrideAttrs {
+    _hydraGlobConstituents = true;
   };
 }

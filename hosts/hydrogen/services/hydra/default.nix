@@ -24,9 +24,6 @@ in
     ./metrics.nix
   ];
 
-  # https://github.com/NixOS/nix/issues/4178#issuecomment-738886808
-  systemd.services.hydra-evaluator.environment.GC_DONT_GC = "true";
-
   services = {
     hydra = {
       enable = true;

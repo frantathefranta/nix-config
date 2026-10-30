@@ -12,21 +12,18 @@
   };
   inputs = {
 
-    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
-    # Nixpkgs
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
-    nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
 
     oh-my-pi = {
       url = "github:can1357/oh-my-pi";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
     };
 
     comin = {
       url = "github:frantathefranta/comin";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     systems.url = "github:nix-systems/default";
@@ -36,14 +33,17 @@
     };
     srvos = {
       url = "github:nix-community/srvos";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
 
     };
     gobgp = {
       url = "github:wavelens/gobgp.nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote?ref=refs/tags/v1.2.0";
@@ -52,7 +52,7 @@
 
     direnv-instant = {
       url = "github:Mic92/direnv-instant";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
 
     };
     nnf.url = "github:thelegy/nixos-nftables-firewall";
@@ -78,6 +78,7 @@
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     stylix = {
       url = "github:nix-community/stylix/master";
@@ -91,29 +92,36 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      # Home manager
-      url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager-unstable = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Emacs
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+    };
 
-    nh.url = "github:nix-community/nh?ref=refs/tags/v4.4.2";
+    nh = {
+      url = "github:nix-community/nh?ref=refs/tags/v4.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     disko = {
       url = "github:nix-community/disko?ref=refs/tags/v1.13.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    moonshine.url = "github:hgaiser/moonshine";
+    moonshine = {
+      url = "github:hgaiser/moonshine";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    nix-init.url = "github:nix-community/nix-init";
+    nix-init = {
+      url = "github:nix-community/nix-init";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     mlnx-ofed-nixos = {
       url = "github:codgician/mlnx-ofed-nixos";
@@ -145,30 +153,12 @@
           config.allowUnfree = true;
         }
       );
-      mkServer =
+      mkHost =
         hostname:
-        { stableHM ? true, isStableHM ? true }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit outputs isStableHM;
+            inherit inputs outputs;
             name = hostname;
-            inputs = if stableHM then inputs else inputs // {
-              home-manager = inputs.home-manager-unstable;
-            };
-          };
-          modules = [
-            ./hosts/${hostname}
-          ];
-        };
-      mkWorkstation =
-        hostname:
-        inputs.nixpkgs-unstable.lib.nixosSystem {
-          specialArgs = {
-            inherit outputs;
-            isStableHM = false;
-            inputs = inputs // {
-              home-manager = inputs.home-manager-unstable;
-            };
           };
           modules = [ ./hosts/${hostname} ];
         };
@@ -197,10 +187,6 @@
         in
         (import ./pkgs {
           inherit pkgs;
-          pkgs-unstable = import inputs.nixpkgs-unstable {
-            inherit (pkgs) system;
-            config.allowUnfree = true;
-          };
         })
         // {
           zoneFiles = generate.zoneFiles dnsConfig;
@@ -251,33 +237,21 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        lanthanum = mkWorkstation "lanthanum";
-        silicium = mkWorkstation "silicium";
+        lanthanum = mkHost "lanthanum";
+        silicium = mkHost "silicium";
 
-        installer-iso = mkServer "installer-iso" { };
-        # r2s = mkServer "r2s" { };
+        installer-iso = mkHost "installer-iso";
+        # r2s = mkHost "r2s";
       }
-      // lib.genAttrs serverHosts (hostname: mkServer hostname { })
-      // {
-        # Stable Home Manager (release-26.05) predates the modules
-        # nix-bastion's home config needs (pi-coding-agent), so track the
-        # same Home Manager as the workstations. isStableHM stays true to
-        # keep the stable fzf config, since the unstable fzf module pulls
-        # in fzf >= 0.73 requirements the stable nixpkgs pin doesn't meet.
-        nix-bastion = mkServer "nix-bastion" { stableHM = false; };
-      };
+      // lib.genAttrs serverHosts mkHost;
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
-        "fbartik@NC312237" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
-          pkgs = import inputs.nixpkgs-unstable {
-            system = "aarch64-darwin";
-            config.allowUnfree = true;
-          };
+        "fbartik@NC312237" = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgsFor.aarch64-darwin;
           extraSpecialArgs = {
             inherit inputs outputs;
-            isStableHM = false;
           };
           modules = [
             ./home/fbartik/NC312237.nix

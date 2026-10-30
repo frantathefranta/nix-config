@@ -46,10 +46,9 @@
      binary into /run/fwupd-efi and (in fwupd < 2.1.6) relied on the
      FWUPD_EFIAPPDIR env var to point fwupd there. That env var was removed
      upstream, so we now have to bake /run/fwupd-efi in at build time via
-     the efi_app_location meson option instead (needs fwupd from
-     nixpkgs-unstable for that option to exist). */
+     the efi_app_location meson option instead. */
   services.fwupd.package = lib.mkIf config.services.fwupd.enable (
-    pkgs.unstable.fwupd.overrideAttrs (old: {
+    pkgs.fwupd.overrideAttrs (old: {
       mesonFlags = map (
         flag: if lib.hasPrefix "-Defi_app_location=" flag then "-Defi_app_location=/run/fwupd-efi" else flag
       ) old.mesonFlags;

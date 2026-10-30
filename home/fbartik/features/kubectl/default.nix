@@ -3,7 +3,6 @@
 {
   programs.k9s = {
     enable = true;
-    package = pkgs.unstable.k9s;
     plugins = {
       reconcile-git = {
         shortCut = "Shift-R";
@@ -14,7 +13,7 @@
         background = false;
         args = [
           "-c"
-          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile source git -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
+          ">- ${pkgs.fluxcd}/bin/flux --context $CONTEXT reconcile source git -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };
       reconcile-ks = {
@@ -26,7 +25,7 @@
         background = false;
         args = [
           "-c"
-          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile kustomization -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
+          ">- ${pkgs.fluxcd}/bin/flux --context $CONTEXT reconcile kustomization -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };
       reconcile-hr = {
@@ -38,7 +37,7 @@
         background = false;
         args = [
           "-c"
-          ">- ${pkgs.unstable.fluxcd}/bin/flux --context $CONTEXT reconcile helmrelease -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
+          ">- ${pkgs.fluxcd}/bin/flux --context $CONTEXT reconcile helmrelease -n $NAMESPACE $NAME | ${pkgs.less}/bin/less -K"
         ];
       };
       stern = {
@@ -56,8 +55,8 @@
   };
   home.packages = with pkgs; [
     #akeyless
-    unstable.fluxcd
-    unstable.talosctl
+    fluxcd
+    talosctl
     go-task
     jq
     krew

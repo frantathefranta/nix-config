@@ -24,7 +24,7 @@
       eza # Better ls
       file
       minijinja
-      unstable.managarr # Sonarr/Radarr TUI
+      managarr # Sonarr/Radarr TUI
       sops
       screen
       s5cmd
@@ -35,8 +35,8 @@
       nvd # Differ
       nix-diff # Differ, more detailed
       nix-output-monitor
-      # unstable.nh # Nice wrapper for NixOS and HM
-      unstable.snitch # TODO: Change to stable when 26.05 is
+      # nh # Nice wrapper for NixOS and HM
+      snitch
 
       # Rust
       cargo

@@ -1,19 +1,18 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 
 let
-  haPython = pkgs.unstable.home-assistant.python3Packages;
+  haPython = pkgs.home-assistant.python3Packages;
 
   scryptedSdk = haPython.buildPythonPackage rec {
     pname = "scrypted-sdk";
     version = "0.1.1";
     pyproject = true;
 
-    src = pkgs.unstable.fetchPypi {
+    src = pkgs.fetchPypi {
       pname = "scrypted_sdk";
       inherit version;
       hash = "sha256-4RWoY5ANCs1V64/rw4HVCpx+x62/nbk/sO29Y7aDkvA=";
@@ -34,12 +33,12 @@ let
     };
   };
 
-  scrypted = pkgs.unstable.buildHomeAssistantComponent rec {
+  scrypted = pkgs.buildHomeAssistantComponent rec {
     owner = "koush";
     domain = "scrypted";
     version = "0.1.0";
 
-    src = pkgs.unstable.fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       inherit owner;
       repo = "ha_scrypted";
       rev = "1486ca336170da4f9b335fea4ac20652ca333e4f";
@@ -55,12 +54,12 @@ let
     };
   };
 
-  keymaster = pkgs.unstable.buildHomeAssistantComponent rec {
+  keymaster = pkgs.buildHomeAssistantComponent rec {
     owner = "FutureTense";
     domain = "keymaster";
     version = "0.6.1";
 
-    src = pkgs.unstable.fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       inherit owner;
       repo = domain;
       tag = "v${version}";
@@ -78,7 +77,7 @@ in
   services.home-assistant = {
     enable = true;
     package =
-      (pkgs.unstable.home-assistant.override {
+      (pkgs.home-assistant.override {
         extraPackages =
           python3Packages: with python3Packages; [
             psycopg2
@@ -95,14 +94,14 @@ in
       # https://www.home-assistant.io/integrations/isal
       "isal"
     ];
-    customComponents = with pkgs.unstable.home-assistant-custom-components; [
+    customComponents = with pkgs.home-assistant-custom-components; [
       scheduler
       browser-mod
       frigate
       keymaster
       scrypted
     ];
-    customLovelaceModules = with pkgs.unstable.home-assistant-custom-lovelace-modules; [
+    customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
       mini-graph-card
       button-card
       scheduler-card
@@ -123,7 +122,7 @@ in
     };
   };
   networking.firewall.allowedTCPPorts = [
-    config.services.home-assistant.config.http.server_port
+    8123 # The HTTP integration now manages its port in the Home Assistant UI.
   ];
 
 }

@@ -5,7 +5,6 @@
   pkgs,
   lib,
   config,
-  isStableHM ? true,
   ...
 }:
 {
@@ -41,7 +40,7 @@
 
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = {
-    inherit inputs outputs isStableHM;
+    inherit inputs outputs;
   };
 
   nixpkgs = {

@@ -10,7 +10,7 @@
     # ./features/desktop/niri
   ];
   home.packages = with pkgs; [
-    unstable.prusa-slicer
+    prusa-slicer
     wpa_supplicant_gui
     winbox4
     prismlauncher

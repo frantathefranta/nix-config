@@ -12,15 +12,9 @@ let
   # https://github.com/NixOS/hydra/pull/1431, so declarative jobsets can use
   # a `giteapulls` input to build open Forgejo PRs. Drop this once that PR
   # (or an equivalent) lands upstream.
-  #
-  # NOTE: as of pkgs.hydra 0-unstable-2026-03-13, the Perl plugin tree still
-  # lives at src/lib/Hydra/Plugin/. Hydra's repo moved this under
-  # subprojects/hydra/lib/Hydra/Plugin/ a few days later upstream -- if a
-  # nixpkgs bump ever pulls that layout in, this path will need updating
-  # (check `pkgs.hydra.src` for a `subprojects/` dir).
   hydraPackage = pkgs.hydra.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
-      cp ${./plugins/GiteaPulls.pm} src/lib/Hydra/Plugin/GiteaPulls.pm
+      cp ${./plugins/GiteaPulls.pm} lib/Hydra/Plugin/GiteaPulls.pm
     '';
   });
 in
@@ -37,15 +31,15 @@ in
     hydra = {
       enable = true;
       package = hydraPackage;
+      evaluatorSettings.max_concurrent_evals = 2;
       hydraURL = "https://hydra.infra.franta.us";
       notificationSender = "hydra@franta.us";
       listenHost = "localhost";
       smtpHost = "localhost";
       useSubstitutes = true;
       extraConfig = /* xml */ ''
-        max_unsupported_time = 30
-        max_concurrent_evals = 2
         allow_import_from_derivation = true
+        ws_endpoint = wss://hydra.infra.franta.us/ws
         Include ${config.sops.secrets."hydra/gitea-token".path}
       '';
       extraEnv = {
@@ -58,7 +52,12 @@ in
           extraConfig = ''
             @home-subnets not client_ip 10.32.10.0/24 2600:1702:6630:3fe0::/60
             abort @home-subnets
-            reverse_proxy localhost:${toString config.services.hydra.port}
+            handle /ws {
+              reverse_proxy [::1]:${toString config.services.hydra.ws.bind.port}
+            }
+            handle {
+              reverse_proxy localhost:${toString config.services.hydra.port}
+            }
           '';
         };
       };
@@ -82,12 +81,13 @@ in
       group = hydraGroup;
       mode = "0440";
     };
-    # Only needed if I add remote-builders
+    # Also authenticates the loopback-only reverse tunnel to the ARM builder.
     "hydra/nix-ssh-key" = {
       sopsFile = ../../secrets.yaml;
       owner = hydraUser;
       group = hydraGroup;
       mode = "0440";
+      restartUnits = [ "hydra-builder-tunnel.service" ];
     };
   };
 

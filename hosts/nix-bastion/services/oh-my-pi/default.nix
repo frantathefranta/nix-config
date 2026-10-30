@@ -44,8 +44,8 @@ in
       environment.systemPackages = [
         inputs.oh-my-pi.packages.${pkgs.stdenv.hostPlatform.system}.omp
         pkgs.python3
-        pkgs.unstable.paseo
-        pkgs.unstable.herdr
+        pkgs.paseo
+        pkgs.herdr
       ];
       users.groups.omp.gid = 1100;
       users.users.fbartik = {

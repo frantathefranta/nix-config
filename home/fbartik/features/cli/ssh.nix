@@ -42,8 +42,7 @@ let
 
   # ssm (Secure Shell Manager) is not in nixpkgs, so build it from source. The
   # upstream flake's pinned Go-module (vendor) hash is stale for current nixpkgs
-  # and fails a hash check; this one is stable across nixpkgs revs and systems
-  # (verified for aarch64-darwin/unstable and x86_64-linux/stable).
+  # and fails a hash check; this one is stable across nixpkgs revs and systems.
   ssmPkg = pkgs.buildGoModule rec {
     pname = "ssm";
     version = "0.1.0";

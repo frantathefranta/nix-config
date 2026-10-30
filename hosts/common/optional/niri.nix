@@ -5,7 +5,7 @@
   ...
 }:
 let
-  xwayland-satellite-package = pkgs.unstable.xwayland-satellite;
+  xwayland-satellite-package = pkgs.xwayland-satellite;
 in
 {
   programs.niri.enable = true;

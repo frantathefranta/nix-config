@@ -1,8 +1,7 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
   services.iperf3 = {
     enable = true;
-    package = pkgs.unstable.iperf3;
     openFirewall = true;
     port = 52001;
     bind = "2600:1702:6630:3fed:10:32:10:11";

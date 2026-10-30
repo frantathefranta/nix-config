@@ -18,7 +18,7 @@
     gnutls
     tpm2-tools
     telegram-desktop
-    unstable.prusa-slicer
+    prusa-slicer
   ];
   programs.ssh = {
     enable = true;

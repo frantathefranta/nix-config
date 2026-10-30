@@ -4,7 +4,7 @@
 }:
 {
   home.packages = with pkgs; [
-    unstable.wrtag
+    wrtag
   ];
   home.file.".config/wrtag/config" = {
     text = ''

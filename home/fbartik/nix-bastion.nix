@@ -10,11 +10,8 @@
   home.packages = with pkgs; [
     # Binary only; the herdr config from features/productivity stays
     # off the bastion.
-    unstable.herdr
+    herdr
   ];
-  # Unstable Home Manager enables nushell shell integration for fzf by
-  # default, asserting fzf >= 0.73; the stable nixpkgs pin is older.
-  programs.fzf.enableNushellIntegration = false;
   programs.irssi = {
     enable = true;
     networks = {

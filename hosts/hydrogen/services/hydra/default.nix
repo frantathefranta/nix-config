@@ -86,7 +86,7 @@ in
       sopsFile = ../../secrets.yaml;
       owner = hydraUser;
       group = hydraGroup;
-      mode = "0440";
+      mode = "0400";
       restartUnits = [ "hydra-builder-tunnel.service" ];
     };
   };

@@ -4,6 +4,7 @@
     ./syncthing.nix
     ./github.nix
     ./forgejo.nix
+    ./herdr.nix
     ./pass.nix
     ./wrtag.nix
     ./nix/nix-init.nix

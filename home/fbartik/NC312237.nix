@@ -12,6 +12,7 @@
     ./features/kubectl
     ./features/desktop/common/mail.nix
     ./features/productivity/pi
+    ./features/productivity/herdr.nix
     ./features/productivity/github.nix
     ./features/productivity/forgejo.nix
     ./features/productivity/nix/nix-init.nix

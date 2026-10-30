@@ -13,7 +13,8 @@
       "edge.cache.flakehub.com",
       "install.determinate.systems"
     ],
-    "allowLocalBinding": true
+    "allowLocalBinding": true,
+    "allowUnauthenticatedSocksProxy": true
   },
   "filesystem": {
     "denyRead": [
@@ -25,15 +26,16 @@
       "~/.config",
       "~/.local",
       "Library",
-      "/nix/store",
       "~/.nix-defexpr",
-      "/nix/var/nix/daemon-socket/socket"
+      "/nix/var/nix/daemon-socket/socket",
+      "~/.gitconfig"
     ],
     "allowWrite": [
       ".",
       "/tmp",
       "/bin/ps",
       "/nix/var/nix/daemon-socket/socket",
+      "/nix/store",
       "~/.cache"
     ],
     "denyWrite": [

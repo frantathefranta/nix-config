@@ -2,17 +2,28 @@
 {
   programs.herdr = {
     enable = true;
-    # Preserve settings changed in Herdr (including the existing theme), while
-    # keeping the shell and keybindings below declarative.
+    # Preserve other settings changed in Herdr, while keeping the theme,
+    # shell, and keybindings below declarative.
     mutableSettings = true;
     settings = {
       onboarding = false;
+      theme = {
+        name = "one-dark";
+        auto_switch = true;
+        dark_name = "one-dark";
+        light_name = "one-light";
+      };
       terminal = {
         default_shell = "${pkgs.fish}/bin/fish";
         new_cwd = "follow";
       };
       keys = {
         prefix = "ctrl+space";
+        previous_workspace = "alt+shift+k";
+        next_workspace = "alt+shift+j";
+        switch_workspace = "prefix+shift+1..9";
+        previous_agent = "prefix+k";
+        next_agent = "prefix+j";
         new_tab = "prefix+c";
         previous_tab = "prefix+ctrl+h";
         next_tab = "prefix+ctrl+l";

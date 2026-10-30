@@ -147,11 +147,14 @@
       );
       mkServer =
         hostname:
+        { stableHM ? true, isStableHM ? true }:
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs outputs;
-            isStableHM = true;
+            inherit outputs isStableHM;
             name = hostname;
+            inputs = if stableHM then inputs else inputs // {
+              home-manager = inputs.home-manager-unstable;
+            };
           };
           modules = [
             ./hosts/${hostname}
@@ -251,27 +254,22 @@
         lanthanum = mkWorkstation "lanthanum";
         silicium = mkWorkstation "silicium";
 
-        installer-iso = mkServer "installer-iso";
-        # r2s = mkServer "r2s";
+        installer-iso = mkServer "installer-iso" { };
+        # r2s = mkServer "r2s" { };
       }
-      // lib.genAttrs serverHosts mkServer;
+      // lib.genAttrs serverHosts (hostname: mkServer hostname { })
+      // {
+        # Stable Home Manager (release-26.05) predates the modules
+        # nix-bastion's home config needs (pi-coding-agent), so track the
+        # same Home Manager as the workstations. isStableHM stays true to
+        # keep the stable fzf config, since the unstable fzf module pulls
+        # in fzf >= 0.73 requirements the stable nixpkgs pin doesn't meet.
+        nix-bastion = mkServer "nix-bastion" { stableHM = false; };
+      };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
-        "fbartik@nix-bastion" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = {
-            inherit inputs outputs;
-            hostname = "nix-bastion";
-            isStableHM = true;
-          };
-          modules = [
-            # > Our main home-manager configuration file <
-            ./home/fbartik/nix-bastion.nix
-            ./home/fbartik/nixpkgs.nix
-          ];
-        };
         "fbartik@NC312237" = inputs.home-manager-unstable.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
             system = "aarch64-darwin";

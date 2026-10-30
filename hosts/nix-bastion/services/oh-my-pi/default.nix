@@ -37,7 +37,7 @@ in
         nameservers = config.systemd.network.networks."10-ens18".dns;
         firewall.trustedInterfaces = [ "eth0" ];
       };
-      services.openssh.enable = false;
+      services.openssh.enable = true;
 
       # Only OMP beyond the NixOS base tools and Nix. No host user configuration,
       # Home Manager, secrets or additional host filesystem mounts.

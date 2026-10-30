@@ -42,7 +42,6 @@ in
       bash.profileExtra = fixGpg;
       fish.loginShellInit = fixGpg;
       zsh.loginExtra = fixGpg;
-      nushell.extraLogin = fixGpg;
 
       gpg = {
         enable = true;

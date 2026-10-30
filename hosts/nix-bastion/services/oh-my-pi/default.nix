@@ -45,12 +45,14 @@ in
         inputs.oh-my-pi.packages.${pkgs.stdenv.hostPlatform.system}.omp
         pkgs.python3
         pkgs.unstable.paseo
+        pkgs.unstable.herdr
       ];
       users.groups.omp.gid = 1100;
       users.users.fbartik = {
         isNormalUser = true;
         uid = 1100;
         group = "omp";
+        openssh.authorizedKeys.keys = config.users.users.fbartik.openssh.authorizedKeys.keys;
       };
 
       # nixos-container supplies the read-only host store and daemon socket;

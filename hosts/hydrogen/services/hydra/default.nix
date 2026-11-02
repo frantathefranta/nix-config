@@ -29,6 +29,11 @@ in
       enable = true;
       package = hydraPackage;
       evaluatorSettings.max_concurrent_evals = 2;
+      # Backport https://github.com/NixOS/hydra/pull/1988 until it lands in nixpkgs.
+      # Legacy substitution records can mislabel sibling outputs as "out".
+      queueRunner.package = pkgs.hydra-queue-runner.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./patches/static-output-paths.patch ];
+      });
       hydraURL = "https://hydra.infra.franta.us";
       notificationSender = "hydra@franta.us";
       listenHost = "localhost";

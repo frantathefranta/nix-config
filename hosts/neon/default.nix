@@ -37,6 +37,8 @@
     settings.Resolve.MulticastDNS = "resolve";
   };
 
+services.comin.autoReboot = true;
+
   systemd.network.enable = true;
 
   systemd.network.netdevs = lib.listToAttrs (

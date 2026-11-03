@@ -104,7 +104,7 @@
     };
 
     nh = {
-      url = "github:nix-community/nh?ref=refs/tags/v4.4.2";
+      url = "github:nix-community/nh?ref=refs/tags/v4.5.0-beta3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

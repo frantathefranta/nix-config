@@ -81,7 +81,7 @@
   };
   fileSystems."/mnt/media" = {
     # TODO: This should probably be a global optional option
-    device = "actinium-nfs.infra.franta.us:/emc1/media";
+    device = "ytterbium.infra.franta.us:/emc1/media";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
@@ -90,7 +90,7 @@
   };
   fileSystems."/music" = {
     # TODO: This should probably be a global optional option
-    device = "actinium-nfs.infra.franta.us:/emc1/music";
+    device = "ytterbium.infra.franta.us:/emc1/music";
     fsType = "nfs";
     options = [
       "x-systemd.automount"

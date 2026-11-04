@@ -15,15 +15,14 @@ in
     default = false;
     type = lib.types.bool;
     description = ''
-      Reboot the host after a successful deployment when
-      `comin status` reports a reboot is needed (e.g. kernel update),
-      like `system.autoUpgrade.allowReboot`.
+      Reboot the host after a deployment when `comin status` reports a
+      reboot is needed (e.g. kernel update), like
+      `system.autoUpgrade.allowReboot`.
     '';
   };
 
-  services.comin = {
+  config.services.comin = {
     enable = lib.mkDefault true;
-    autoReboot = lib.mkDefault false;
     postDeploymentCommand = lib.mkIf cfg.autoReboot rebootScript;
     package = inputs.comin.packages.${pkgs.stdenv.hostPlatform.system}.comin;
     executor = {

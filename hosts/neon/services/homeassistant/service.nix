@@ -94,6 +94,7 @@ in
       # https://www.home-assistant.io/integrations/isal
       "isal"
       "met"
+      "radio_browser"
       "esphome"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [

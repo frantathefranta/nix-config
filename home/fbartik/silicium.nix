@@ -8,6 +8,7 @@
     ./features/desktop/common
     ./features/productivity/rclone-music.nix
     ./features/productivity/pi
+    ./features/productivity/herdr
   ];
   home.packages = with pkgs; [
     wpa_supplicant_gui

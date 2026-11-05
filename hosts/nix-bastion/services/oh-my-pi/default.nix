@@ -39,14 +39,39 @@ in
       };
       services.openssh.enable = true;
 
-      # Only OMP beyond the NixOS base tools and Nix. No host user configuration,
-      # Home Manager, secrets or additional host filesystem mounts.
+      # Agent runtimes and a noninteractive tooling baseline. No host user
+      # configuration, Home Manager, secrets or additional filesystem mounts.
       environment.systemPackages = [
         inputs.oh-my-pi.packages.${pkgs.stdenv.hostPlatform.system}.omp
         pkgs.python3
         pkgs.paseo
         pkgs.herdr
+
+        # Frequent primitives only; fetch task-specific tools through Nix.
+        pkgs.curl
+        pkgs.jq
       ];
+      programs.git = {
+        enable = true;
+        config = {
+          user = {
+            name = "Franta Bartik";
+            email = "fb@franta.us";
+          };
+          init.defaultBranch = "main";
+          pull.ff = "only";
+          merge.conflictStyle = "zdiff3";
+          diff.algorithm = "histogram";
+        };
+      };
+      # Expose the managed skill through OMP's native user-level discovery.
+      systemd.tmpfiles.rules = [
+        "d /home/fbartik/.omp 0755 fbartik omp -"
+        "d /home/fbartik/.omp/agent 0755 fbartik omp -"
+        "d /home/fbartik/.omp/agent/skills 0755 fbartik omp -"
+        "L+ /home/fbartik/.omp/agent/skills/nix-tools - - - - ${./skills/nix-tools}"
+      ];
+
       users.groups.omp.gid = 1100;
       users.users.fbartik = {
         isNormalUser = true;

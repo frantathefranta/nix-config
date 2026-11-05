@@ -1,7 +1,9 @@
 {
   imports = [
     ./service.nix
-    ./postgres.nix
+
+    ./matter.nix
     ./mosquitto.nix
+    ./postgres.nix
   ];
 }

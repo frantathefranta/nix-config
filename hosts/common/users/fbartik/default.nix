@@ -13,7 +13,7 @@ in
   users.users.fbartik = {
     description = "Franta Bartik";
     isNormalUser = true;
-    shell = "${pkgs.fish}/bin/fish";
+    shell = pkgs.fish;
     extraGroups = ifTheyExist [
       "audio"
       "bird"

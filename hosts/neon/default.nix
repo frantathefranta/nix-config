@@ -37,21 +37,26 @@
     settings.Resolve.MulticastDNS = "resolve";
   };
 
-services.comin.autoReboot = true;
+  services.comin.autoReboot = true;
 
   systemd.network.enable = true;
 
   systemd.network.netdevs = lib.listToAttrs (
-    map (
-      id:
-      lib.nameValuePair "20-eno3.${toString id}" {
-        netdevConfig = {
-          Name = "eno3.${toString id}";
-          Kind = "vlan";
-        };
-        vlanConfig.Id = id;
-      }
-    ) [ 20 50 ]
+    map
+      (
+        id:
+        lib.nameValuePair "20-eno3.${toString id}" {
+          netdevConfig = {
+            Name = "eno3.${toString id}";
+            Kind = "vlan";
+          };
+          vlanConfig.Id = id;
+        }
+      )
+      [
+        20
+        50
+      ]
   );
 
   systemd.network.networks = {
@@ -105,32 +110,38 @@ services.comin.autoReboot = true;
         }
       ];
     };
-  } // lib.listToAttrs (
-    map (
-      id:
-      lib.nameValuePair "20-eno3.${toString id}" {
-        matchConfig.Name = "eno3.${toString id}";
-        address = [ "10.0.${toString id}.92/24" ];
-        networkConfig = {
-          DHCP = "no";
-          IPv6AcceptRA = true;
-          IPv6PrivacyExtensions = false;
-          IPv4Forwarding = false;
-          IPv6Forwarding = false;
-          DNSDefaultRoute = false;
-          MulticastDNS = "resolve";
-        };
-        # Learn only SLAAC addresses and on-link prefixes, never router routes.
-        ipv6AcceptRAConfig = {
-          Token = "::10:0:${toString id}:92";
-          UseGateway = false;
-          UseRoutePrefix = false;
-          UseDNS = false;
-          UseDomains = false;
-          DHCPv6Client = false;
-        };
-      }
-    ) [ 20 50 ]
+  }
+  // lib.listToAttrs (
+    map
+      (
+        id:
+        lib.nameValuePair "20-eno3.${toString id}" {
+          matchConfig.Name = "eno3.${toString id}";
+          address = [ "10.0.${toString id}.92/24" ];
+          networkConfig = {
+            DHCP = "no";
+            IPv6AcceptRA = true;
+            IPv6PrivacyExtensions = false;
+            IPv4Forwarding = false;
+            IPv6Forwarding = false;
+            DNSDefaultRoute = false;
+            MulticastDNS = "resolve";
+          };
+          # Learn only SLAAC addresses and on-link prefixes, never router routes.
+          ipv6AcceptRAConfig = {
+            Token = "::10:0:${toString id}:92";
+            UseGateway = false;
+            UseRoutePrefix = false;
+            UseDNS = false;
+            UseDomains = false;
+            DHCPv6Client = false;
+          };
+        }
+      )
+      [
+        20
+        50
+      ]
   );
 
   meta.ipam.host = {

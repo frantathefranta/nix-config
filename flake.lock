@@ -942,11 +942,11 @@
     },
     "nnf": {
       "locked": {
-        "lastModified": 1774778550,
-        "narHash": "sha256-sz7uRra2VvVm5OV3hUiS2X9ePceTVRLyzKNU5VAHp+k=",
+        "lastModified": 1794091289,
+        "narHash": "sha256-vRHPCWD+2HtZ4PWg/NM9p0Mdj33knH9LUCr1o04yYDQ=",
         "owner": "thelegy",
         "repo": "nixos-nftables-firewall",
-        "rev": "85e1a85ef9a15419ee9ed06db9c86204c7897bce",
+        "rev": "16d733d3ab6d89d3bdf30a77de355a5258b60ac6",
         "type": "github"
       },
       "original": {

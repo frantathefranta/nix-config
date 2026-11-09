@@ -12,6 +12,7 @@
       pkgs.python3
     ];
     context = ./context.md;
+    mutableSettings = true;
     settings = {
       compaction = {
         enabled = true;

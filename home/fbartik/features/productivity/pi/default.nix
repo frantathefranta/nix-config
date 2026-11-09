@@ -26,8 +26,8 @@
         "openwebui/qwen3.8-27b-fp8"
         "openwebui/qwen35-122b-fp8"
         "openai/gpt-6.1-sol"
-        "openai/gpt-6-terra"
         "openai/gpt-6-luna"
+        "openai/gpt-6-astra"
       ];
       tuiMode = "regular";
     };
@@ -39,5 +39,6 @@
   };
   home.packages = [
     pkgs.pi-acp
+    pkgs.nono
   ];
 }

@@ -16,6 +16,9 @@
     ../common/optional/comin.nix
     ../common/optional/prometheus-node-exporter.nix
   ];
+  # Keep reboots manual until firewall-specific safety checks are in place.
+  services.comin.autoReboot = false;
+
   networking = {
     hostName = "nixos-firewall";
     domain = "infra.franta.us";

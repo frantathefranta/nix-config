@@ -12,7 +12,7 @@ in
   imports = [ inputs.comin.nixosModules.comin ];
 
   options.services.comin.autoReboot = lib.mkOption {
-    default = false;
+    default = true;
     type = lib.types.bool;
     description = ''
       Reboot the host after a deployment when `comin status` reports a
@@ -25,14 +25,7 @@ in
     enable = lib.mkDefault true;
     postDeploymentCommand = lib.mkIf cfg.autoReboot rebootScript;
     package = inputs.comin.packages.${pkgs.stdenv.hostPlatform.system}.comin;
-    executor = {
-      type = "hydra";
-      hydra = {
-        base_url = "https://hydra.infra.franta.us";
-        project = "nix-home";
-        job_name = "hosts.${config.networking.hostName}";
-      };
-    };
+    executor.type = "nix";
     remotes = [
       {
         name = "origin";

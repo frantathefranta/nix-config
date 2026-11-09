@@ -39,25 +39,26 @@ nix run github:nix-community/nixos-anywhere -- --flake .#qotom --target-host nix
 
 Servers use [comin](https://github.com/frantathefranta/comin), following the
 [nix-cloud deployment](https://git.franta.us/franta/nix-cloud/src/branch/main/hosts/common/global/comin.nix).
-The Hydra executor follows
-[molybdenum's configuration](https://git.franta.us/franta/nix-cloud/src/branch/main/hosts/molybdenum/default.nix).
 The shared configuration is `hosts/common/optional/comin.nix`; it is enabled on
 hydrogen, ytterbium, nix-bastion, nixos-firewall, qotom, and neon.
 Workstations and the installer ISO do not run comin.
 
 Comin polls `https://git.franta.us/franta/nix-home.git` every 60 seconds. For each
-commit on `main`, its Hydra executor waits for a successful
-`nix-home/main/hosts.<hostname>` build at `https://hydra.infra.franta.us`, then
-downloads the system closure through the existing trusted
-`https://nix-cache.infra.franta.us` binary cache and activates it. Servers do not
-evaluate or build their configurations locally. Merge changes into `main` to
-deploy; unattended pulls use public HTTPS, not SSH agent forwarding or a deploy
-key.
+commit on `main`, its Nix executor evaluates and builds the host configuration,
+using the existing trusted `https://nix-cache.infra.franta.us` binary cache for
+available store paths, then activates it. Deployments do not wait for Hydra;
+Hydra remains available for CI builds and cache population. Merge changes into
+`main` to deploy; unattended pulls use public HTTPS, not SSH agent forwarding
+or a deploy key.
 
 The weekly `system.autoUpgrade` job has been removed so it cannot race comin.
 Unlike nix-cloud, this configuration does not install its cloud-specific remote
 builder credentials or BGP-gated reboot hook.
-Reboots are manual; check `sudo comin status` for pending reboots.
+After deployments, servers reboot automatically when `comin status` reports
+`Need to reboot: yes`, with a five-second delay before rebooting.
+`nixos-firewall` explicitly disables automatic reboots until firewall-specific
+safety checks are implemented; check `sudo comin status` there for pending
+reboots.
 
 ### Initial rollout and recovery
 
@@ -86,10 +87,8 @@ sudo journalctl -u comin -f
 ```
 
 Comin supports `testing-<hostname>` branches based on `main`, using
-`switch-to-configuration test` without changing the boot default. The Hydra
-executor also needs a matching `testing-<hostname>` jobset. This repository's
-jobset generator creates only `main` and `pr-<number>` jobsets, so testing branches
-will wait for a build unless their Hydra jobsets are provisioned separately.
+`switch-to-configuration test` without changing the boot default. The Nix
+executor builds these directly; no matching Hydra jobset is required.
 PR builds validate changes before merging them into `main` for deployment.
 
 For manual recovery, stop comin (`sudo systemctl stop comin`) before applying

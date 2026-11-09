@@ -32,6 +32,11 @@ in
   # The networking.nameservers get prepended to /etc/resolv.conf, defeating the purpose of selecting a DNS server per domain
   networking.nameservers = [ ];
 
+  services.comin = {
+    executor = lib.mkForce { type = "nix"; };
+    autoReboot = true;
+  };
+
   time.timeZone = "America/Detroit";
   users.groups = {
     media = {

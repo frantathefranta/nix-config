@@ -39,6 +39,5 @@
   };
   home.packages = [
     pkgs.pi-acp
-    pkgs.nono
   ];
 }

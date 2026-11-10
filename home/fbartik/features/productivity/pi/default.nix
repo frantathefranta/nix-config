@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 
@@ -39,6 +40,6 @@
     OPENWEBUI_BASE_URL = "https://pzs0708.ai-alpha.osc.edu/api";
   };
   home.packages = [
-    pkgs.pi-acp
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi-acp
   ];
 }

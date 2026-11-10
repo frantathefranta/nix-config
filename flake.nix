@@ -20,6 +20,11 @@
       inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
     };
 
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     comin = {
       url = "github:frantathefranta/comin";
       inputs.nixpkgs.follows = "nixpkgs";

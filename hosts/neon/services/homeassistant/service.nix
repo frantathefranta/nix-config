@@ -96,6 +96,16 @@ in
       "met"
       "radio_browser"
       "esphome"
+      "homekit_controller"
+      "apple_tv"
+      "sonos"
+      "ibeacon"
+      "govee_ble"
+      "kegron"
+      "cast"
+      "bthome"
+      "shelly"
+      "nut"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       scheduler

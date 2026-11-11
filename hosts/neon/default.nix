@@ -15,8 +15,12 @@
     ../common/global
     ../common/users/fbartik
     ../common/roles/server.nix
-    ../common/optional/secure-boot.nix
   ];
+
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
 
   # Temporary root access using the same SSH keys as fbartik; no passwords.
   services.openssh.settings.PermitRootLogin = "prohibit-password";

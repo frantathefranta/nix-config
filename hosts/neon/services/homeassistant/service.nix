@@ -109,6 +109,7 @@ in
       "mqtt"
       "heos"
       "androidtv_remote"
+      "go2rtc"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       scheduler
@@ -134,6 +135,7 @@ in
       system_log = { };
       zeroconf = { };
 
+      go2rtc.url = "http://127.0.0.1:1984";
       recorder.db_url = "postgresql://@/hass";
     };
   };

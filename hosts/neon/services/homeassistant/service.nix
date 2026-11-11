@@ -110,6 +110,8 @@ in
       "heos"
       "androidtv_remote"
       "go2rtc"
+      "generic"
+      "stream"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       scheduler

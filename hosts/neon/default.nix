@@ -22,6 +22,10 @@
   # Temporary override while debugging fish on neon.
   users.users.fbartik.shell = lib.mkForce "${pkgs.bashInteractive}/bin/bash";
 
+  # Temporary root access using the same SSH keys as fbartik; no passwords.
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
+  users.users.root.openssh.authorizedKeys.keys = config.users.users.fbartik.openssh.authorizedKeys.keys;
+
   hardware.facter.reportPath = ./facter.json;
 
   networking = {

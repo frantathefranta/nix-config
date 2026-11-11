@@ -5,5 +5,6 @@
     ./matter.nix
     ./mosquitto.nix
     ./postgres.nix
+    ./proxy.nix
   ];
 }

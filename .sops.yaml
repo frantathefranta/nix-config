@@ -41,6 +41,13 @@ creation_rules:
           - *qotom
         pgp:
           - *franta-gpg
+  - path_regex: hosts/neon/secrets.ya?ml$
+    key_groups:
+      - age:
+          - *franta
+          - *neon
+        pgp:
+          - *franta-gpg
   - path_regex: hosts/nixos-firewall/secrets.ya?ml$
     key_groups:
       - age:

@@ -1,6 +1,5 @@
 {
   inputs,
-  lib,
   config,
   ...
 }:
@@ -47,23 +46,13 @@
 
   systemd.network.enable = true;
 
-  systemd.network.netdevs = lib.listToAttrs (
-    map
-      (
-        id:
-        lib.nameValuePair "20-eno3.${toString id}" {
-          netdevConfig = {
-            Name = "eno3.${toString id}";
-            Kind = "vlan";
-          };
-          vlanConfig.Id = id;
-        }
-      )
-      [
-        20
-        50
-      ]
-  );
+  systemd.network.netdevs."20-eno3.20" = {
+    netdevConfig = {
+      Name = "eno3.20";
+      Kind = "vlan";
+    };
+    vlanConfig.Id = 20;
+  };
 
   systemd.network.networks = {
     "05-disabled" = {
@@ -81,10 +70,7 @@
 
     "10-vlan-trunk" = {
       matchConfig.Name = "eno3";
-      vlan = [
-        "eno3.20"
-        "eno3.50"
-      ];
+      vlan = [ "eno3.20" ];
       networkConfig = {
         DHCP = "no";
         IPv6AcceptRA = false;
@@ -116,44 +102,30 @@
         }
       ];
     };
-  }
-  // lib.listToAttrs (
-    map
-      (
-        id:
-        lib.nameValuePair "20-eno3.${toString id}" {
-          matchConfig.Name = "eno3.${toString id}";
-          # Temporarily disable VLAN 50 while investigating Wi-Fi disruption.
-          linkConfig = lib.optionalAttrs (id == 50) {
-            ActivationPolicy = "always-down";
-            RequiredForOnline = false;
-          };
-          address = [ "10.0.${toString id}.92/24" ];
-          networkConfig = {
-            DHCP = "no";
-            IPv6AcceptRA = true;
-            IPv6PrivacyExtensions = false;
-            IPv4Forwarding = false;
-            IPv6Forwarding = false;
-            DNSDefaultRoute = false;
-            MulticastDNS = "resolve";
-          };
-          # Learn only SLAAC addresses and on-link prefixes, never router routes.
-          ipv6AcceptRAConfig = {
-            Token = "::10:0:${toString id}:92";
-            UseGateway = false;
-            UseRoutePrefix = false;
-            UseDNS = false;
-            UseDomains = false;
-            DHCPv6Client = false;
-          };
-        }
-      )
-      [
-        20
-        50
-      ]
-  );
+
+    "20-eno3.20" = {
+      matchConfig.Name = "eno3.20";
+      address = [ "10.0.20.92/24" ];
+      networkConfig = {
+        DHCP = "no";
+        IPv6AcceptRA = true;
+        IPv6PrivacyExtensions = false;
+        IPv4Forwarding = false;
+        IPv6Forwarding = false;
+        DNSDefaultRoute = false;
+        MulticastDNS = "resolve";
+      };
+      # Learn Thread border-router routes, but no default gateways.
+      ipv6AcceptRAConfig = {
+        Token = "::10:0:20:92";
+        UseGateway = false;
+        UseRoutePrefix = true;
+        UseDNS = false;
+        UseDomains = false;
+        DHCPv6Client = false;
+      };
+    };
+  };
 
   meta.ipam.host = {
     ipv4 = "10.32.10.92";

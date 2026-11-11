@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -18,9 +17,6 @@
     ../common/roles/server.nix
     ../common/optional/secure-boot.nix
   ];
-
-  # Temporary override while debugging fish on neon.
-  users.users.fbartik.shell = lib.mkForce "${pkgs.bashInteractive}/bin/bash";
 
   # Temporary root access using the same SSH keys as fbartik; no passwords.
   services.openssh.settings.PermitRootLogin = "prohibit-password";

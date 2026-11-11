@@ -101,7 +101,7 @@ in
       "sonos"
       "ibeacon"
       "govee_ble"
-      "kegron"
+      "kegtron"
       "cast"
       "bthome"
       "shelly"

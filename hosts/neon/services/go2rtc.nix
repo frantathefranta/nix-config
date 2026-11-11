@@ -1,4 +1,7 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
+let
+  configFile = (pkgs.formats.yaml { }).generate "go2rtc.yaml" config.services.go2rtc.settings;
+in
 {
   services.go2rtc = {
     enable = true;
@@ -26,7 +29,17 @@
     sopsFile = ../secrets.yaml;
     restartUnits = [ "go2rtc.service" ];
   };
-  systemd.services.go2rtc.serviceConfig.EnvironmentFile = config.sops.secrets."go2rtc/env".path;
+  systemd.services.go2rtc = {
+    # HA registers streams through the API, which also writes to this file.
+    # Restore the declarative base on restart; HA recreates its dynamic streams.
+    preStart = ''
+      ${pkgs.coreutils}/bin/install -m 0600 ${configFile} /var/lib/go2rtc/go2rtc.yaml
+    '';
+    serviceConfig = {
+      EnvironmentFile = config.sops.secrets."go2rtc/env".path;
+      ExecStart = lib.mkForce "${lib.getExe config.services.go2rtc.package} -config /var/lib/go2rtc/go2rtc.yaml";
+    };
+  };
 
   networking.firewall = {
     allowedTCPPorts = [ 8555 ];

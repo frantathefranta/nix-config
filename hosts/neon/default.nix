@@ -119,6 +119,11 @@
         id:
         lib.nameValuePair "20-eno3.${toString id}" {
           matchConfig.Name = "eno3.${toString id}";
+          # Temporarily disable VLAN 50 while investigating Wi-Fi disruption.
+          linkConfig = lib.optionalAttrs (id == 50) {
+            ActivationPolicy = "always-down";
+            RequiredForOnline = false;
+          };
           address = [ "10.0.${toString id}.92/24" ];
           networkConfig = {
             DHCP = "no";

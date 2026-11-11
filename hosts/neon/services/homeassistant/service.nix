@@ -106,6 +106,9 @@ in
       "bthome"
       "shelly"
       "nut"
+      "mqtt"
+      "heos"
+      "androidtv_remote"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       scheduler

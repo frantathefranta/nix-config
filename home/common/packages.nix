@@ -16,5 +16,6 @@
       tree
       viddy # Better watch
       wget # I will simply not learn curl syntax for downloading files
+      rom
     ];
 }

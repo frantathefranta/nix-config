@@ -35,7 +35,6 @@
       nvd # Differ
       nix-diff # Differ, more detailed
       nix-output-monitor
-      rom
       # nh # Nice wrapper for NixOS and HM
       snitch
 

@@ -51,7 +51,8 @@
     };
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote?ref=refs/tags/v1.2.0";
+      # Upstream PR #673: named system profiles and activated-system boot defaults.
+      url = "git+https://git.franta.us/franta/lanzaboote.git?ref=system-profiles&rev=4a4bb2a8bcbd5247e41a063abdbd74222621de4b";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

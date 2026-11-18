@@ -91,6 +91,12 @@ Comin supports `testing-<hostname>` branches based on `main`, using
 executor builds these directly; no matching Hydra jobset is required.
 PR builds validate changes before merging them into `main` for deployment.
 
+The `testing-hydrogen` branch pins [Lanzaboote PR #673](https://github.com/nix-community/lanzaboote/pull/673)
+through the [Forgejo fork](https://git.franta.us/franta/lanzaboote), at commit
+`4a4bb2a8bcbd5247e41a063abdbd74222621de4b`. This tests the build and live
+activation, not boot-entry installation or selection. The existing reboot hook
+also runs after testing deployments, so `test` does not guarantee no reboot.
+
 For manual recovery, stop comin (`sudo systemctl stop comin`) before applying
 another configuration so reconciliation cannot race the repair. Revert the bad
 commit on `main`, then restart comin when ready (`sudo systemctl start comin`).

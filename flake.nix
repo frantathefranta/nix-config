@@ -125,7 +125,6 @@
 
     nix-init = {
       url = "github:nix-community/nix-init";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     mlnx-ofed-nixos = {

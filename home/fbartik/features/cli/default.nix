@@ -24,7 +24,7 @@
       eza # Better ls
       file
       minijinja
-      managarr # Sonarr/Radarr TUI
+      # managarr # Sonarr/Radarr TUI
       sops
       screen
       s5cmd

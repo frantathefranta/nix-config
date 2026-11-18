@@ -11,8 +11,12 @@ in
     settings = {
       extra-substituters = lib.mkAfter [
         "https://nix-cache.infra.franta.us"
+        "https://nix-community.cachix.org"
       ];
-      extra-trusted-public-keys = [ "nix-cache.infra.franta.us:0CrUfMACpZRvB1x9CkcHs54BSqjz6L3TAZYRbI/YpCo=" ];
+      extra-trusted-public-keys = [
+        "nix-cache.infra.franta.us:0CrUfMACpZRvB1x9CkcHs54BSqjz6L3TAZYRbI/YpCo="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
       trusted-users = [
         "root"
         "@wheel"
@@ -34,7 +38,9 @@ in
     # Pin each flake input (including nixpkgs) in the registry and NIX_PATH
     # so that ad-hoc commands (nix shell, nix build, nix-shell -p,
     # import <name>) resolve to the same revisions the system was built from.
-    registry = lib.mapAttrs (_: flake: { inherit flake; }) (lib.filterAttrs (n: _: n != "nixpkgs") flakeInputs);
+    registry = lib.mapAttrs (_: flake: { inherit flake; }) (
+      lib.filterAttrs (n: _: n != "nixpkgs") flakeInputs
+    );
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 }

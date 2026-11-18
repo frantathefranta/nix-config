@@ -4,14 +4,14 @@
 }: let
   piWebAccess = pkgs.buildPiPackage {
     pname = "pi-web-access";
-    version = "0.37.0";
+    version = "0.48.0";
     src = pkgs.fetchFromGitHub {
       owner = "nicobailon";
       repo = "pi-web-access";
-      rev = "ca30f5d00a9f587cd30d1ca044ef4cdcdc59bdea";
-      hash = "sha256-iD8q2t6OdbVmV7BKaKn8EhNqCeMnv25WyZNuVOEI9bw=";
+      rev = "896d75bec55e316726db287a870eb166c4e3f40c";
+      hash = "sha256-kvxwqQzvUEvBU8URxTCe4hGbWiUa41TbsdtdiM6+GqE=";
     };
-    npmDepsHash = "sha256-RXW3ymqoqq6AnYqmfhgPrMhwB/6jYmaFQdT196vKvf4=";
+    npmDepsHash = "sha256-6H9htKfObygFn6ZUOz6NwzsSXdSSYCXlkZYSc1Mq4oM=";
   };
 in {
   programs.pi-coding-agent.settings.packages = [piWebAccess];

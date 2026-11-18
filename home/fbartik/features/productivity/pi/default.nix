@@ -27,9 +27,7 @@
       enabledModels = [
         "openwebui/qwen3.8-27b-fp8"
         "openwebui/qwen35-122b-fp8"
-        "openai/gpt-6.1-sol"
-        "openai/gpt-6-luna"
-        "openai/gpt-6-astra"
+        "openai-codex/gpt-6.2-sol"
       ];
       tuiMode = "regular";
     };

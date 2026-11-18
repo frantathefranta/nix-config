@@ -1,350 +1,183 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Auto-update script for pi packages with full npmDepsHash support
-# Usage: ./update.sh [package-name] (or no args to update all)
-#
-# This script updates:
-# 1. Source version and hash using nix-prefetch-url
-# 2. Lockfile version using npm
-# 3. npmDepsHash by building and capturing from error message
-#
-# The script automatically computes all hashes. For npm packages, it does a
-# quick build to get the correct npmDepsHash (due to fetcherVersion 2 used by
-# buildPiPackage).
-
+# Usage: ./update.sh [package-name] (no argument updates all supported packages)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
+REPO_ROOT=$(git rev-parse --show-toplevel)
+FAKE_HASH='sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
 
-# Get current version from a Nix file
-get_current_version() {
-    local file="$1"
-    grep -oP 'version\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1
+fail() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 1
 }
 
-# Get current hash from a Nix file
-get_current_hash() {
-    local file="$1"
-    grep -oP 'hash\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1
+nix_field() {
+    awk -v key="$2" '$0 ~ "^[[:space:]]*" key "[[:space:]]*=[[:space:]]*\"" {
+        split($0, fields, "\""); print fields[2]; exit
+    }' "$1"
 }
 
-# Get current rev from a Nix file  
-get_current_rev() {
-    local file="$1"
-    grep -oP 'rev\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1
+set_nix_field() {
+    local file="$1" key="$2" value="$3"
+    awk -v key="$key" -v value="$value" '
+        $0 ~ "^[[:space:]]*" key "[[:space:]]*=[[:space:]]*\"" {
+            sub(/"[^"]*"/, "\"" value "\""); count++
+        }
+        { print }
+        END { if (count != 1) exit 1 }
+    ' "$file" > "$file.tmp" || fail "Expected exactly one $key assignment in $(basename "$file")"
+    mv "$file.tmp" "$file"
 }
 
-# Get npmDepsHash from a Nix file
-get_npm_deps_hash() {
-    local file="$1"
-    grep -oP 'npmDepsHash\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1
+build_npm_deps() {
+    # Evaluate the staged module directly: it may not be enabled on any host.
+    # Use the repo's pinned nixpkgs and real overlay, including its lockfile
+    # patches and npmDepsFetcherVersion, rather than prefetch-npm-deps defaults.
+    PI_UPDATE_ROOT="$REPO_ROOT" PI_UPDATE_FILE="$1" nix build --impure --no-link --expr '
+      let
+        flake = builtins.getFlake (builtins.getEnv "PI_UPDATE_ROOT");
+        overlays = import (flake.outPath + "/overlays") { inherit (flake) inputs; };
+        pkgs = import flake.inputs.nixpkgs {
+          system = builtins.currentSystem;
+          overlays = [ overlays.modifications ];
+        };
+        module = import (/. + builtins.getEnv "PI_UPDATE_FILE") { inherit pkgs; };
+        package = builtins.head module.programs.pi-coding-agent.settings.packages;
+      in package.npmDeps
+    '
 }
 
-# Update npm package with full npmDepsHash support
-update_npm_package() {
-    local file="$1"
-    
-    # Get the package name from lockfile if available
-    local file_basename
-    file_basename=$(basename "$file")
-    local lockfile_base="${file_basename%.nix}.json"
-    local lockfile_dir
-    lockfile_dir=$(cd "${file%/*}" && pwd)
-    local lockfile="$lockfile_dir/locks/$lockfile_base"
-    local npm_package_name=""
-    
-    if [[ -f "$lockfile" ]]; then
-        npm_package_name=$(jq -r '.name' "$lockfile" 2>/dev/null | head -1)
-    fi
-    
-    # Try to extract from URL pattern as fallback
-    if [[ -z "$npm_package_name" ]] || [[ "$npm_package_name" == "null" ]]; then
-        npm_package_name=$(grep 'registry.npmjs.org' "$file" | awk -F'registry.npmjs.org/' '{print $2}' | sed 's|-.*||')
-    fi
-    
-    if [[ -z "$npm_package_name" ]]; then
-        echo "  ⚠️  Could not determine package name from $file"
-        return 1
-    fi
-    
-    echo "  📦 Processing npm package: $npm_package_name"
-    
-    # Get latest version from npm registry
-    local latest_version
-    latest_version=$(curl -s "https://registry.npmjs.org/$npm_package_name" | jq -r '.time | keys[]' | sort -V | grep -v modified | grep -v created | grep -v last | tail -1)
-    
-    if [[ -z "$latest_version" ]]; then
-        echo "  ❌ Failed to get latest version"
-        return 1
-    fi
-    
-    local current_version
-    current_version=$(get_current_version "$file")
-    
-    echo "  📋 Current version: $current_version"
-    echo "  🆕 Latest version: $latest_version"
-    
-    # Build URL for the tarball
-    local url
-    if [[ "$npm_package_name" == *"@"* ]]; then
-        local base_name
-        base_name=$(echo "$npm_package_name" | sed 's|@.*/||')
-        url="https://registry.npmjs.org/$npm_package_name/-/$base_name-$latest_version.tgz"
+update_package() (
+    local file="$1" kind="$2" pname version url rev='' unpack=() lock=''
+    local tmpdir staged prefetch src_hash output deps_hash
+    pname=$(nix_field "$file" pname)
+    [[ -n "$pname" ]] || fail "No pname in $file"
+    tmpdir=$(mktemp -d)
+    trap 'rm -rf "$tmpdir"' EXIT
+    staged="$tmpdir/${file##*/}"
+    cp "$file" "$staged"
+
+    if [[ "$kind" == github ]]; then
+        local owner repo tag tag_ref
+        owner=$(nix_field "$file" owner)
+        repo=$(nix_field "$file" repo)
+        [[ -n "$owner" && -n "$repo" ]] || fail "No GitHub owner/repo in $file"
+        local api="https://api.github.com/repos/$owner/$repo"
+        tag=$(curl -fsSL "$api/releases/latest" | jq -er '.tag_name | strings | select(length > 0)')
+        tag_ref=$(jq -rn --arg tag "$tag" '"refs/tags/\($tag)" | @uri')
+        # The commits endpoint resolves both lightweight and annotated tags.
+        rev=$(curl -fsSL "$api/commits/$tag_ref" | jq -er '.sha | strings | select(test("^[a-f0-9]{40}$"))')
+        version="${tag#v}"
+        url="https://github.com/$owner/$repo/archive/$rev.tar.gz"
+        unpack=(--unpack)
     else
-        url="https://registry.npmjs.org/$npm_package_name/-/$npm_package_name-$latest_version.tgz"
-    fi
-    
-    # Compute source hash using nix-prefetch-url
-    local hash_base32
-    hash_base32=$(nix-prefetch-url --type sha256 --unpack "$url" 2>&1 | grep -v "path is" | tail -1)
-    local hash_base64
-    hash_base64=$(nix hash convert sha256:$hash_base32 --to base64 2>/dev/null | tail -1)
-    local src_hash="sha256-$hash_base64"
-    
-    echo "  🔢 New source hash: $src_hash"
-    
-    # For npm packages with lockfile, update the lockfile and compute npmDepsHash
-    if [[ -f "$lockfile" ]]; then
-        echo "  📝 Updating lockfile..."
-        local tmp_lockfile="${lockfile}.tmp"
-        
-        # Update version in lockfile - root and main package
-        jq --arg version "$latest_version" '.version = $version | .packages[""].version = $version' "$lockfile" > "$tmp_lockfile"
-        mv "$tmp_lockfile" "$lockfile"
-        
-        # Create a temporary directory to unpack the source and regenerate lockfile
-        local tmpdir
-        tmpdir=$(mktemp -d)
-        trap "rm -rf $tmpdir" RETURN
-        
-        echo "  📦 Unpacking source..."
-        # Use a safe name without @ or / for scoped packages
-        local safe_name="${npm_package_name//\@/_}" 
-        safe_name="${safe_name//\//_}"
-        local src_output
-        src_output=$(nix-prefetch-url --unpack "$url" --name "$safe_name-$latest_version" 2>&1)
-        local src_path
-        src_path=$(echo "$src_output" | grep -oP "/nix/store/[a-z0-9_.-]+" | head -1)
-        
-        if [[ -z "$src_path" ]] || [[ ! -d "$src_path" ]]; then
-            echo "  ❌ Failed to unpack source"
-            echo "  Output: $src_output"
-            return 1
-        fi
-        
-        # Copy source to writable temp directory (preserve permissions)
-        local work_dir="$tmpdir/source"
-        cp -rp "$src_path" "$work_dir"
-        
-        # Make files writable so we can modify them
-        chmod -R u+w "$work_dir"
-        
-        # Copy the updated lockfile to the working directory
-        cp "$lockfile" "$work_dir/package-lock.json"
-        
-        # Remove devDependencies from package.json (same as prePatch in the Nix file)
-        jq 'del(.devDependencies)' "$work_dir/package.json" > "$work_dir/package.json.tmp"
-        mv "$work_dir/package.json.tmp" "$work_dir/package.json"
-        
-        # Regenerate lockfile with npm install (dry-run to avoid actually installing)
-        echo "  📝 Regenerating lockfile with npm..."
-        local nodejs_pkg="${PI_UPDATE_NODEJS:-nodejs_24}"
-        if ! nix shell "nixpkgs#${nodejs_pkg}" -c sh -c "cd '$work_dir' && npm install --package-lock-only --omit=dev --omit=peer --legacy-peer-deps" 2>&1; then
-            echo "  ⚠️  npm install failed, using existing lockfile"
-        fi
-        
-        # Copy the regenerated lockfile back
-        if [[ -f "$work_dir/package-lock.json" ]]; then
-            cp "$work_dir/package-lock.json" "$lockfile"
-            echo "  ✅ Lockfile regenerated"
-        fi
-        
-        echo "  🔢 Computing npmDepsHash via build verification..."
-        # The build system computes npmDepsHash differently than prefetch-npm-deps
-        # We need to do a build to get the correct hash
-        
-        # First, temporarily set a placeholder hash so the build will fail with the correct hash
-        local placeholder_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-        local tmp_file="${file}.tmp"
-        awk -v hash="$placeholder_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
-        
-        echo "  🔍 Building to extract correct npmDepsHash..."
-        local target_host="${PI_UPDATE_TARGET_HOST:-fbartik@NC312237}"
-        local build_output
-        build_output=$(cd "$SCRIPT_DIR/../../../../../.." && nix build ".#homeConfigurations.${target_host}.activationPackage" --no-link 2>&1) || true
-        
-        # Extract the correct hash from the build error
-        local npm_deps_hash
-        npm_deps_hash=$(echo "$build_output" | grep -oP 'got:\s*sha256-[A-Za-z0-9+/=]+' | grep -oP 'sha256-[A-Za-z0-9+/=]+' | head -1)
-        
-        if [[ -z "$npm_deps_hash" ]]; then
-            echo "  ⚠️  Could not extract npmDepsHash from build output."
-            echo "  Build output: $build_output"
-            return 1
-        fi
-        
-        echo "  🆕 npmDepsHash: $npm_deps_hash"
-        
-        # Update the Nix file with all hashes
-        local current_hash
-        current_hash=$(get_current_hash "$file")
-        local current_npm_deps_hash
-        current_npm_deps_hash=$(get_npm_deps_hash "$file")
-        
-        if [[ "$src_hash" != "$current_hash" ]] || [[ "$latest_version" != "$current_version" ]] || [[ "$npm_deps_hash" != "$current_npm_deps_hash" ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i'' "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
-                sed -i'' "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                # Use awk for npmDepsHash since it can contain / characters
-                awk -v hash="$npm_deps_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
-            else
-                sed -i.bak "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
-                sed -i.bak "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                awk -v hash="$npm_deps_hash" '/npmDepsHash/ {gsub(/"[^"]*"/, "\"" hash "\"")} 1' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
-                rm -f "$file".bak
-            fi
-            echo "  ✅ Updated $file"
-            return 0
+        local npm_name npm_url release
+        lock="locks/${file##*/}"
+        lock="${lock%.nix}.json"
+        if [[ -f "$lock" ]]; then
+            npm_name=$(jq -er '.name | strings | select(length > 0)' "$lock")
         else
-            echo "  ✅ Already up to date"
-            return 0
+            npm_url=$(nix_field "$file" url)
+            [[ "$npm_url" == https://registry.npmjs.org/*/-/* ]] || fail "No npm registry URL in $file"
+            npm_name="${npm_url#https://registry.npmjs.org/}"
+            npm_name="${npm_name%/-/*}"
+            lock=''
         fi
-    else
-        # No lockfile - just update source hash
-        local current_hash
-        current_hash=$(get_current_hash "$file")
-        
-        if [[ "$src_hash" != "$current_hash" ]] || [[ "$latest_version" != "$current_version" ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i'' "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
-                sed -i'' "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-            else
-                sed -i.bak "s| version = \"[^\"]*\";| version = \"$latest_version\";|" "$file"
-                sed -i.bak "s| hash = \"[^\"]*\";| hash = \"$src_hash\";|" "$file"
-                rm -f "$file".bak
-            fi
-            echo "  ✅ Updated $file"
-            return 0
+        release=$(curl -fsSL "https://registry.npmjs.org/$npm_name/latest")
+        version=$(jq -er '.version | strings | select(length > 0)' <<< "$release")
+        url=$(jq -er '.dist.tarball | strings | select(startswith("https://"))' <<< "$release")
+        if [[ "$kind" == fetchzip ]]; then
+            unpack=(--unpack)
+        fi
+    fi
+
+    printf 'Updating %s: %s -> %s\n' "$pname" "$(nix_field "$file" version)" "$version"
+    # The fixed-output hash is recursive for fetchzip/fetchFromGitHub, but
+    # flat for fetchurl. --print-path keeps the hash and store path on stdout.
+    prefetch=$(nix-prefetch-url --type sha256 --print-path ${unpack[@]+"${unpack[@]}"} "$url")
+    src_hash=$(nix hash convert --hash-algo sha256 --to sri "${prefetch%%$'\n'*}")
+    set_nix_field "$staged" version "$version"
+    set_nix_field "$staged" hash "$src_hash"
+    if [[ -n "$rev" ]]; then
+        set_nix_field "$staged" rev "$rev"
+    fi
+
+    if [[ -n "$lock" ]]; then
+        local src_path="${prefetch##*$'\n'}" work="$tmpdir/npm"
+        # Use the same manifest and npm flags as the package's prePatch/build.
+        mkdir -p "$work" "$tmpdir/locks"
+        if [[ "$kind" == fetchurl ]]; then
+            tar -xzf "$src_path" --strip-components=1 -C "$work" package/package.json
         else
-            echo "  ✅ Already up to date"
-            return 0
+            cp "$src_path/package.json" "$work/package.json"
         fi
+        jq 'del(.devDependencies)' "$work/package.json" > "$work/manifest.json"
+        mv "$work/manifest.json" "$work/package.json"
+        cp "$lock" "$work/package-lock.json"
+        (
+            cd "$work"
+            nix shell --inputs-from "$REPO_ROOT" "nixpkgs#${PI_UPDATE_NODEJS:-nodejs_24}" -c \
+                npm install --package-lock-only --ignore-scripts --omit=dev --omit=peer --legacy-peer-deps
+        )
+        cp "$work/package-lock.json" "$tmpdir/$lock"
     fi
-}
 
-# Update GitHub package
-update_github_package() {
-    local file="$1"
-    local owner
-    owner=$(grep -oP 'owner\s*=\s*"\K[^"]+' "$file" | head -1)
-    local repo
-    repo=$(grep -oP 'repo\s*=\s*"\K[^"]+' "$file" | head -1)
-    
-    if [[ -z "$owner" ]] || [[ -z "$repo" ]]; then
-        echo "  ⚠️  Could not determine owner/repo from $file"
-        return 1
+    if [[ -n "$(nix_field "$staged" npmDepsHash)" ]]; then
+        # Probe only this package's npm-deps derivation. Reject mismatches
+        # for its source or other inputs instead of taking the first `got:`.
+        set_nix_field "$staged" npmDepsHash "$FAKE_HASH"
+        if output=$(build_npm_deps "$staged" 2>&1); then
+            fail "Expected an npmDepsHash mismatch for $pname, but the build succeeded"
+        fi
+        deps_hash=$(awk -v name="-$pname-$version-npm-deps.drv" -v fake="$FAKE_HASH" '
+            /hash mismatch in fixed-output derivation/ { target = index($0, name); probe = 0 }
+            target && $1 == "specified:" { probe = ($2 == fake) }
+            target && probe && $1 == "got:" && $2 ~ /^sha256-[A-Za-z0-9+\/]+=*$/ { print $2; exit }
+        ' <<< "$output")
+        if [[ -z "$deps_hash" ]]; then
+            printf '%s\n' "$output" >&2
+            fail "Could not determine npmDepsHash for $pname"
+        fi
+        printf '  npmDepsHash: %s\n' "$deps_hash"
+        set_nix_field "$staged" npmDepsHash "$deps_hash"
+        build_npm_deps "$staged"
     fi
-    
-    echo "  📦 Processing GitHub package: $owner/$repo"
-    
-    # Get latest release
-    local latest_release
-    latest_release=$(curl -s "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.tag_name')
-    
-    if [[ -z "$latest_release" ]]; then
-        echo "  ❌ Failed to get latest release"
-        return 1
+
+    # Do not publish new pins or a lockfile until all of the above succeeds.
+    local changed=0
+    if [[ -n "$lock" ]] && ! cmp -s "$lock" "$tmpdir/$lock"; then
+        cp "$tmpdir/$lock" "$lock"
+        changed=1
     fi
-    
-    # Remove 'v' prefix for version
-    local version="${latest_release#v}"
-    
-    # Get the commit hash for this tag
-    local rev
-    rev=$(curl -s "https://api.github.com/repos/$owner/$repo/git/ref/tags/$latest_release" | jq -r '.object.sha')
-    
-    # Get current values
-    local current_version
-    current_version=$(get_current_version "$file")
-    local current_rev
-    current_rev=$(get_current_rev "$file")
-    
-    echo "  📋 Current version: $current_version"
-    echo "  🆕 Latest version: $latest_release"
-    echo "  📋 Current rev: $current_rev"
-    echo "  🆕 Latest rev: $rev"
-    
-    # Fetch new hash
-    local url="https://github.com/$owner/$repo/archive/$rev.tar.gz"
-    local hash_base32
-    hash_base32=$(nix-prefetch-url --type sha256 --unpack "$url" 2>&1 | grep -v "path is" | tail -1)
-    local hash_base64
-    hash_base64=$(nix hash convert sha256:$hash_base32 --to base64 2>/dev/null | tail -1)
-    local hash="sha256-$hash_base64"
-    
-    echo "  🔢 Current hash: $(get_current_hash "$file")"
-    echo "  🆕 New hash: $hash"
-    
-    # Update the file
-    if [[ "$hash" != "$(get_current_hash "$file")" ]] || [[ "$latest_release" != "$current_version" ]] || [[ "$rev" != "$current_rev" ]]; then
-        sed -i.bak "s| version = \"[^\"]*\";| version = \"$version\";|" "$file"
-        sed -i.bak "s| rev = \"[^\"]*\";| rev = \"$rev\";|" "$file"
-        sed -i.bak "s| hash = \"[^\"]*\";| hash = \"$hash\";|" "$file"
-        rm -f "$file".bak
-        echo "  ✅ Updated $file"
-        return 0
+    if ! cmp -s "$file" "$staged"; then
+        cp "$staged" "$file"
+        changed=1
+    fi
+    if [[ "$changed" == 1 ]]; then
+        printf '  Updated %s\n' "$pname"
     else
-        echo "  ✅ Already up to date"
-        return 0
+        printf '  Already up to date\n'
     fi
-}
+)
 
-# Main logic
-echo "=== pi package auto-update script ==="
-echo ""
-
-# Find all .nix files in the directory (excluding update scripts and default.nix)
-nix_files=()
-while IFS= read -r -d '' file; do
-    filename=$(basename "$file")
-    if [[ "$filename" != update*.sh ]] && [[ "$filename" != default.nix ]]; then
-        nix_files+=("$file")
-    fi
-done < <(find . -maxdepth 1 -name "*.nix" -print0 2>/dev/null)
-
-if [[ ${#nix_files[@]} -eq 0 ]]; then
-    echo "No .nix files found in $SCRIPT_DIR"
-    exit 0
+if [[ $# -gt 1 ]]; then
+    fail "Usage: $0 [package-name]"
 fi
-
-echo "Found ${#nix_files[@]} package file(s) to check:"
-for file in "${nix_files[@]}"; do
-    echo "  - $(basename "$file")"
-done
-echo ""
-
-updated_count=0
-
-for file in "${nix_files[@]}"; do
-    echo "→ Processing $(basename "$file")"
-    
-    if grep -q "fetchFromGitHub" "$file"; then
-        if update_github_package "$file"; then
-            ((updated_count++)) || true
-        fi
-    elif grep -q "fetchzip\|fetchurl" "$file"; then
-        if update_npm_package "$file"; then
-            ((updated_count++)) || true
-        fi
+selection="${1:-}"
+matched=0
+for file in ./*.nix; do
+    name="${file##*/}"
+    [[ -z "$selection" || "$name" == "$selection.nix" ]] || continue
+    if grep -q 'src = pkgs.fetchFromGitHub' "$file"; then
+        update_package "$file" github
+    elif grep -q 'src = pkgs.fetchzip' "$file"; then
+        update_package "$file" fetchzip
+    elif grep -q 'src = pkgs.fetchurl' "$file"; then
+        update_package "$file" fetchurl
     else
-        echo "  ⚠️  Unknown fetch method, skipping"
+        continue
     fi
-    echo ""
+    matched=1
 done
-
-echo "=== Summary ==="
-echo "Updated: $updated_count file(s)"
-echo ""
-echo "Next steps:"
-echo "1. Review the changes with: git diff"
-echo "2. Build the configuration to verify: nix build .#homeConfigurations.fbartik@NC312237.activationPackage"
+[[ "$matched" == 1 ]] || fail "No supported package found${selection:+: $selection}"

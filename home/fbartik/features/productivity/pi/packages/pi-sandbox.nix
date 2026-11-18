@@ -1,12 +1,12 @@
 { pkgs, ... }:
 let
-  version = "0.7.1";
+  version = "0.8.2";
   piSandbox = pkgs.buildPiPackage {
     pname = "pi-sandbox";
     inherit version;
     src = pkgs.fetchzip {
       url = "https://registry.npmjs.org/pi-sandbox/-/pi-sandbox-${version}.tgz";
-      hash = "sha256-pERmbl7TJJpzvi3VZE58zbfQPCjo7hAQWW+zSSTGMOA=";
+      hash = "sha256-Bx13/pDvMLgdr2k3sUmr1yHVL3WLGdFTp3ITXQ9/bbk=";
     };
     prePatch = ''
       ${pkgs.lib.getExe pkgs.jq} 'del(.devDependencies)' package.json > package.json.tmp
@@ -18,7 +18,7 @@ let
       "--omit=peer"
       "--legacy-peer-deps"
     ];
-    npmDepsHash = "sha256-tgTAd8OrWpm0woHstAcbK1HYJMA1mcfPVjuUobqcCAI=";
+    npmDepsHash = "sha256-6PZryT7I1Hk4hRMIzjUwo03zO+P+dot3wXrTNdLaYHY=";
   };
 in
 {

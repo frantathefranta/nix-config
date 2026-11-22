@@ -946,11 +946,11 @@
     "nix-cloud-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1794279626,
-        "narHash": "sha256-wkgeQgASX8diNVHd9PuYBEZotuhUbl6jTr0Cz+Lodj4=",
+        "lastModified": 1795313620,
+        "narHash": "sha256-I0SE8zQxvuzsSiqqyBUgVNc8aZvpuLMsMiYL+2O11HM=",
         "ref": "refs/heads/main",
-        "rev": "bbf4b23dac067f65b6b6ddfe077051d22916990d",
-        "revCount": 747,
+        "rev": "daea0eb640839d21fb34bb55db2f847d117ee9bc",
+        "revCount": 762,
         "type": "git",
         "url": "https://git.franta.us/franta/nix-cloud"
       },

@@ -929,11 +929,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794692537,
-        "narHash": "sha256-VMug2jV6Ixb/rosbRpFdhwziuhC4h3uFfnJOKuo19sc=",
+        "lastModified": 1795299643,
+        "narHash": "sha256-ofoSHbSWiP+muOkvTD/moBIAwYeo2m4rQoAGLaW34IA=",
         "owner": "xddxdd",
         "repo": "nix-cachyos-kernel",
-        "rev": "c9620070e884d55c5b5566e3fd46611ee24c4d3b",
+        "rev": "3547834022c7faca65918abbd8645c855d20cc35",
         "type": "github"
       },
       "original": {

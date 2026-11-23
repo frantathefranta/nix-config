@@ -4,7 +4,7 @@ terraform {
   required_providers {
     uptimekuma = {
       source  = "breml/uptimekuma"
-      version = "~> 0.5"
+      version = "~> 0.6"
     }
     akeyless = {
       source  = "akeyless-community/akeyless"

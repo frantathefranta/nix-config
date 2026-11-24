@@ -45,7 +45,7 @@ in
         inputs.oh-my-pi.packages.${pkgs.stdenv.hostPlatform.system}.omp
         pkgs.python3
         pkgs.paseo
-        pkgs.herdr
+        pkgs.herdr-core
 
         # Frequent primitives only; fetch task-specific tools through Nix.
         pkgs.curl

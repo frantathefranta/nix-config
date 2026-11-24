@@ -38,7 +38,7 @@ in
       after = [ "hook" ];
       rules = [
         # Xbox port
-        "iifname wan0 tcp dport 3074 dnat ip to 10.0.50.93" 
+        "iifname wan0 tcp dport 3074 dnat ip to 10.0.50.93"
         "iifname wan0 udp dport 3074 dnat ip to 10.0.50.93"
         # Plex port
         "iifname wan0 tcp dport 32400 dnat ip to 10.32.10.210"
@@ -137,8 +137,11 @@ in
           ipv4Addresses = [ "10.33.40.65" ];
           ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:65" ];
         };
-        envoy_external = {
-          ipv6Addresses = [ "2600:1702:6630:3fef:4040:2:0:14" ];
+        envoy_forgejo = {
+          ipv6Addresses = [
+            "2600:1702:6630:3fef:4040:2:0:14" # TODO: delete when https://github.com/frantathefranta/home-ops/pull/4345 is reconciled
+            "2600:1702:6630:3fef:4040:2:0:15"
+          ];
         };
         hass = {
           ipv4Addresses = [
@@ -282,9 +285,9 @@ in
           to = [ "transmission_music" ];
           allowedTCPPorts = [ 51414 ];
         };
-        allow_envoy_external = {
+        allow_envoy_forgejo = {
           from = [ "untrusted" ];
-          to = [ "envoy_external" ];
+          to = [ "envoy_forgejo" ];
           allowedTCPPorts = [
             22
             80

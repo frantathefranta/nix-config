@@ -29,14 +29,20 @@ recorder:
 
 PostgreSQL uses peer authentication over the mounted Unix socket. Recorder history collected in SQLite before the switch is not migrated.
 
-Check startup on neon with `journalctl -u podman-home-assistant -b`. NixOS installs `ha-vlan20` as a Netavark JSON file. If VLAN 20's static IPv6 prefix changes, update the subnet, gateway and container address in `default.nix` and switch to the new configuration. The network definition change triggers a container restart.
+Quadlet manages the `ha-vlan20` macvlan and the `home-assistant` pod. The pod
+owns the dual-stack addresses and shared loopback; restarting Home Assistant
+does not restart Matter or Caddy. Check the pod with
+`systemctl status home-assistant-pod` and the application with
+`journalctl -u podman-home-assistant -b`. If VLAN 20's IPv6 prefix changes,
+update the network and pod in `default.nix` and the Caddy bind and DNS record
+in `proxy.nix`.
 
 ## Matter
 
 In the new Home Assistant instance, add the Matter integration, select the
 existing-server option, and enter `ws://127.0.0.1:5580/ws`. The Matter Server
-container shares Home Assistant's macvlan network namespace, so the WebSocket
-is loopback-only while Matter discovery uses VLAN 20 directly. The
+container shares the pod's macvlan network namespace, so the WebSocket is
+loopback-only while Matter discovery uses VLAN 20 directly. The
 `matter-server` volume stores a fresh fabric; the native server's fabric is
 not imported.
 

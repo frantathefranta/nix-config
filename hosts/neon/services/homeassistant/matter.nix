@@ -1,19 +1,16 @@
+{ config, ... }:
 {
-  virtualisation.oci-containers.containers.matter-server = {
-    image = "ghcr.io/matter-js/matterjs-server:1.5.5";
-    autoStart = false; # Started and kept running by podman-home-assistant.
-    networks = [ "container:home-assistant" ];
-    environment = {
-      LISTEN_ADDRESS = "127.0.0.1";
-      PRIMARY_INTERFACE = "eth0";
+  virtualisation.quadlet.containers.podman-matter-server = {
+    autoStart = false; # Started by the pod.
+    containerConfig = {
+      name = "matter-server";
+      pod = config.virtualisation.quadlet.pods.home-assistant.ref;
+      image = "ghcr.io/matter-js/matterjs-server:1.5.5";
+      environments = {
+        LISTEN_ADDRESS = "127.0.0.1";
+        PRIMARY_INTERFACE = "eth0";
+      };
+      volumes = [ "matter-server:/data" ];
     };
-    volumes = [ "matter-server:/data" ];
-  };
-
-  # The network namespace is recreated whenever the HA container is replaced.
-  systemd.services.podman-matter-server = {
-    after = [ "podman-home-assistant.service" ];
-    bindsTo = [ "podman-home-assistant.service" ];
-    partOf = [ "podman-home-assistant.service" ];
   };
 }

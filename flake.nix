@@ -62,6 +62,7 @@
 
     };
     nnf.url = "github:thelegy/nixos-nftables-firewall";
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
     nixos-dns = {
       url = "github:Janik-Haag/nixos-dns";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -1,7 +1,7 @@
 {
   disko.devices.disk.main = {
     type = "disk";
-    device = "/dev/disk/by-id/ata-ADATA_SU635_2K43291DN11D";
+    device = "/dev/disk/by-id/ata-CT500MX500SSD1_2002E2330DE6";
     content = {
       type = "gpt";
       partitions = {

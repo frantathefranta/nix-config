@@ -63,7 +63,6 @@ in
       dnssec.validation = "off";
       recordcache.max_negative_ttl = 60;
       recursor = {
-        lua_dns_script = ./neon-split-dns.lua;
         forward_zones_recurse = [
           {
             zone = ".";

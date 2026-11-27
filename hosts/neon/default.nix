@@ -105,24 +105,13 @@
 
     "20-eno3.20" = {
       matchConfig.Name = "eno3.20";
-      address = [ "10.0.20.92/24" ];
+      linkConfig.RequiredForOnline = false;
       networkConfig = {
         DHCP = "no";
-        IPv6AcceptRA = true;
-        IPv6PrivacyExtensions = false;
+        IPv6AcceptRA = false;
+        LinkLocalAddressing = "no";
         IPv4Forwarding = false;
         IPv6Forwarding = false;
-        DNSDefaultRoute = false;
-        MulticastDNS = "resolve";
-      };
-      # Learn Thread border-router routes, but no default gateways.
-      ipv6AcceptRAConfig = {
-        Token = "::10:0:20:92";
-        UseGateway = false;
-        UseRoutePrefix = true;
-        UseDNS = false;
-        UseDomains = false;
-        DHCPv6Client = false;
       };
     };
   };

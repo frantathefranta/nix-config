@@ -75,7 +75,7 @@ let
 in
 {
   services.home-assistant = {
-    enable = true;
+    enable = false;
     package =
       (pkgs.home-assistant.override {
         extraPackages =

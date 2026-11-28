@@ -1,7 +1,7 @@
 # Home Assistant Container on neon
 
-The native Home Assistant service is disabled, but its Nix settings,
-`/var/lib/hass`, and `hass` database are retained.
+The native Home Assistant configuration has been retired. This deployment does
+not delete `/var/lib/hass` or the old `hass` database.
 
 Onboard directly at <http://10.0.20.30:8123> on VLAN 20. In **Settings → System
 → Network → HTTP server**, enable **Trust X-Forwarded-For** and add `127.0.0.1`
@@ -36,6 +36,29 @@ does not restart Matter or Caddy. Check the pod with
 `journalctl -u podman-home-assistant -b`. If VLAN 20's IPv6 prefix changes,
 update the network and pod in `default.nix` and the Caddy bind and DNS record
 in `proxy.nix`.
+
+## MQTT
+
+Mosquitto starts with a fresh `mosquitto` named volume; old broker data is not
+imported. Add the MQTT integration in Home Assistant with broker `127.0.0.1`
+and port `1883`.
+Point external MQTT clients at `10.0.20.30:1883` (or
+`[2600:1702:6630:3fe1:10:0:20:30]:1883`). Anonymous access is unchanged;
+do not expose port `1883` to untrusted networks.
+
+## go2rtc
+
+go2rtc runs in the pod. For Home Assistant's external go2rtc integration, use
+`http://127.0.0.1:1984`. HomeKit clients discover the cameras on VLAN 20; WebRTC
+uses port `8555` on the pod addresses. The pod must be able to reach the camera
+addresses on VLAN 50.
+
+Before deploying, run `sudo podman volume create --ignore go2rtc` on neon.
+Use `sudo podman volume inspect --format '{{.Mountpoint}}' go2rtc` to find
+the directory and place your writable `go2rtc.yaml` there. The image reads it
+at `/config/go2rtc.yaml`. Copy any HomeKit pairings you want to keep from
+`/var/lib/private/go2rtc/state.yaml`. Nix does not seed or overwrite either file.
+`${REOLINK_PASSWORD}` is still supplied through the SOPS environment file.
 
 ## Matter
 

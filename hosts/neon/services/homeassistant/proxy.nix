@@ -47,11 +47,6 @@ in
     sopsFile = ../../secrets.yaml;
   };
 
-  services.home-assistant.config.http = {
-    use_x_forwarded_for = true;
-    trusted_proxies = [ "127.0.0.1" ];
-  };
-
   networking.domains.subDomains.${hostname} = {
     a.data = [ "10.0.20.30" ];
     aaaa.data = [ "2600:1702:6630:3fe1:10:0:20:30" ];

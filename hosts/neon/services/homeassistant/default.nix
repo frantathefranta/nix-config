@@ -2,15 +2,13 @@
 {
   imports = [
     inputs.quadlet-nix.nixosModules.quadlet
-    ./service.nix
-
     ./matter.nix
     ./mosquitto.nix
-    ./postgres.nix
     ./proxy.nix
   ];
 
   services.postgresql = {
+    enable = true;
     ensureDatabases = [ "homeassistant" ];
     ensureUsers = [
       {

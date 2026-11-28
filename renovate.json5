@@ -46,6 +46,17 @@
       ],
       datasourceTemplate: 'github-tags',
     },
+    {
+      customType: 'regex',
+      description: 'Update container image tags in Nix files',
+      managerFilePatterns: [
+        '/\\.nix$/',
+      ],
+      matchStrings: [
+        '(?:^|\\n)[ \\t]*image\\s*=\\s*"(?<depName>(?:[a-zA-Z0-9.-]+(?::[0-9]+)?/)?[a-z0-9._/-]+):(?<currentValue>[\\w.-]+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"\\s*;',
+      ],
+      datasourceTemplate: 'docker',
+    },
   ],
   gitAuthor: 'Lord of Lighting [bot] <lol@franta.us>',
 }
